@@ -53,7 +53,7 @@ this context, the goods that the Ports import and export are also defined.
 
 ### 1.6. System Sequence Diagram (SSD)
 
-![System Sequence Diagram](svg/us003-system-sequence-diagram.svg)
+![System Sequence Diagram](svg/us002-system-sequence-diagram.svg)
 
 ### 1.7 Other Relevant Remarks
 
