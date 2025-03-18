@@ -6,7 +6,6 @@
 
 As a Player, I want to buy a train.
 
-
 ### 1.2. Customer Specifications and Clarifications
 
 **From the specifications document:**

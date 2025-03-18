@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Train{
+    Locomotive
+    date
+}
+class Locomotive {
+}
+
+'the player possibly has much more characteristics
+class Player {
+    name
+    user
+}
+Train "1" - "*" Locomotive : has
+Player "1" -- "*" Train : creates
+
+
+
+@enduml
