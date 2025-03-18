@@ -1,4 +1,4 @@
-# US003 - As an Editor, I want to add a city
+# US003 - Add a city
 
 ## 1. Requirements Engineering
 
