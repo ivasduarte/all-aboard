@@ -5,25 +5,39 @@ skinparam shadowing false
 
 autonumber
 
-actor "Editor" as Editor
+actor "Player" as Player
 participant ":System" as System
 
-activate Editor
+activate Player
 
-    Editor -> System : asks to add a city
+Player -> System : Request to buy a train
+activate System
+deactivate Player
+
+System --> Player : Display list of available locomotives
+deactivate System
+activate Player
+
+loop Selecting locomotives
+    Player -> System : Selects a locomotive
     activate System
-    deactivate Editor
+    deactivate Player
 
-    System --> Editor : requests data (position XY in the map, \nname and number of house blocks)
+    System --> Player : Ask if they want to add another locomotive
     deactivate System
-    activate Editor
+    activate Player
 
-    Editor -> System : types requested data
-    activate System
-    deactivate Editor
+    alt Player adds another locomotive
+        Player -> System : Selects another locomotive
+        activate System
+    else Player finalizes selection
+        System --> Player : Confirms selection
+        deactivate System
+    end
+end
 
-    System --> Editor : shows all data and displays operation success
-    deactivate System
-    activate Editor
+activate System
+System -> Player : Show purchase details (selected locomotives\n and current date)
+deactivate System
 
 @enduml
