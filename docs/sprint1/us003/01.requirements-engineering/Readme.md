@@ -52,4 +52,4 @@ food, textiles, cars).
 
 ### 1.7 Other Relevant Remarks
 
-* 
+* No other relevant remarks 
