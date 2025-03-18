@@ -4,12 +4,12 @@
 
 The team is formed by the students identified in the following table.
 
-| Student Number | Name              |
-|----------------|-------------------|
-| **1XXXXXX**    | Name of student 1 |
-| **1XXXXXX**    | Name of student 2 |
-| **1XXXXXX**    | Name of student 3 |
-| **1XXXXXX**    | Name of student 4 |
+| Student Number | Name          |
+|----------------|---------------|
+| **1241323**    | José Cardoso  |
+| **1241285**    | Rafael Capão  |
+| **1241166**    | João Ferreira |
+| **1241176**    | Iva Silva     |
 
 # 2. Task Distribution ###
 
@@ -27,14 +27,21 @@ At last, remember that each User Story does not stand alone... it needs to be in
 
 **This table must be always up-to-date.**
 
-| Task                                                                                                                           | Sprint 1                             | Sprint 2 | Sprint 3 |
-|--------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|----------|----------|
-| [Glossary](system-documentation/global-artifacts/01.requirements-engineering/glossary.md)                                      | all                                  | all      | all      |
-| [Use Case Diagram (UCD)](system-documentation/global-artifacts/01.requirements-engineering/use-case-diagram.md)                | all                                  | all      | all      |
-| [Supplementary Specification](system-documentation/global-artifacts/01.requirements-engineering/suplementary-specification.md) | all                                  | all      | all      |
-| [Domain Model](system-documentation/global-artifacts/01.requirements-engineering/domain-model.md)                              | all                                  | all      | all      |
-| US01 (SDP Activities)                                                                                                          | [1XXXXXX](system-documentation/US01) |          |          |
-| US02 (SDP Activities)                                                                                                          | [1XXXXXX](system-documentation/US02) |          |          |
-| US03 (SDP Activities)                                                                                                          | [1XXXXXX](system-documentation/US03) |          |          |
-| ...                                                                                                                            | ...                                  | ...      | ...      |
-| ...                                                                                                                            | ...                                  | ...      | ...      |
+| Task                                                                                                                           | Sprint 1 | Sprint 2 | Sprint 3 |
+|--------------------------------------------------------------------------------------------------------------------------------|----------|----------|----------|
+| [Glossary](system-documentation/global-artifacts/01.requirements-engineering/glossary.md)                                      | all      | all      | all      |
+| [Use Case Diagram (UCD)](system-documentation/global-artifacts/01.requirements-engineering/use-case-diagram.md)                | all      | all      | all      |
+| [Supplementary Specification](system-documentation/global-artifacts/01.requirements-engineering/suplementary-specification.md) | all      | all      | all      |
+| [Domain Model](system-documentation/global-artifacts/01.requirements-engineering/domain-model.md)                              | all      | all      | all      |
+| US01 (SDP Activities)                                                                                                          | 1241176  |          |          |
+| US02 (SDP Activities)                                                                                                          | 1241166  |          |          |
+| US03 (SDP Activities)                                                                                                          | 1220804  |          |          |
+| US04 (SDP Activities)                                                                                                          | 1241176  |          |          |
+| US05 (SDP Activities)                                                                                                          | 1241285  |          |          |
+| US06 (SDP Activities)                                                                                                          | 1241323  |          |          |
+| US07 (SDP Activities)                                                                                                          | 1241323  |          |          |
+| US08 (SDP Activities)                                                                                                          | 1241166  |          |          |
+| US09 (SDP Activities)                                                                                                          | 1220804  |          |          |
+| US10 (SDP Activities)                                                                                                          | 1241285  |          |          |
+| US11 (SDP Activities)                                                                                                          | 1241323  |          |          |
+| US12 (SDP Activities)                                                                                                          | 1241285  |          |          |
