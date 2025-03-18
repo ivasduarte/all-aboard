@@ -5,25 +5,25 @@ skinparam shadowing false
 
 autonumber
 
-actor "Editor" as Editor
+actor "Player" as Player
 participant ":System" as System
 
-activate Editor
+activate Player
 
-    Editor -> System : asks to add a station
+    Player -> System : asks to add a station
     activate System
-    deactivate Editor
+    deactivate Player
 
-    System --> Editor : requests data (station type)
+    System --> Player : requests data (station type)
     deactivate System
-    activate Editor
+    activate Player
 
-    Editor -> System : types requested data
+    Player -> System : types requested data
     activate System
-    deactivate Editor
+    deactivate Player
 
-    System --> Editor : shows all data and displays operation success
+    System --> Player : shows all data and displays operation success
     deactivate System
-    activate Editor
+    activate Player
 
 @enduml

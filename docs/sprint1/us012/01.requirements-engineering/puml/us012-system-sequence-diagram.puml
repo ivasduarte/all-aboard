@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Product Owner" as ProductOwner
+participant ":System" as System
+
+activate ProductOwner
+
+    ProductOwner -> System : asks to create a simulator
+    activate System
+    deactivate ProductOwner
+
+    System --> ProductOwner : simulator starts
+    deactivate System
+    activate ProductOwner
+
+@enduml
