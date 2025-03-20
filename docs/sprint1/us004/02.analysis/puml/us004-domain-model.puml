@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Scenario {
+  - timeRestrictions: String
+  - technologicalRestrictions: String
+  - historicalRestrictions: String
+}
+
+class Map {
+  - name: String
+  - width: Integer
+  - height: Integer
+}
+
+Scenario "1" -- "1" Map : applies to
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Map {
+
+}
+
+class Industry {
+    position XY on the map
+    industry type
+}
+
+class Editor {
+}
+
+
+Map "1" - "*" Industry : has
+Editor "1" -- "*" Industry : creates
+
+
+
+@enduml
