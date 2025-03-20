@@ -25,25 +25,25 @@ rectangle "Use Cases" as usecases{
     note right of Player
         Who plays the game
     end note
-    usecase "UC1 - (add title here)" as UC1
+    usecase "UC1 - Create a map" as UC1
         Editor --> UC1
     usecase "UC2 - Add an industry" as UC2
         Editor --> UC2
     usecase "UC3 - Add a city" as UC3
         Editor --> UC3
-    usecase "UC4 - (add title here)" as UC4
+    usecase "UC4 - Create a scenario" as UC4
          Editor --> UC4
-    usecase "UC5 - (add title here)" as UC5
+    usecase "UC5 - Build a Station" as UC5
          Player --> UC5
-    usecase "UC6 - (add title here)" as UC6
+    usecase "UC6 - Upgrade a selected station with a building" as UC6
          Player --> UC6
     usecase "UC7 - (add title here)" as UC7
          Player --> UC7
-    usecase "UC8 - (add title here)" as UC8
+    usecase "UC8 - Build a railway station between two stations" as UC8
          Player --> UC8
     usecase "UC9 - Buy a train" as UC9
          Player --> UC9
-    usecase "UC10 - (add title here)" as UC10
+    usecase "UC10 - Assign a train to a route" as UC10
          Player --> UC10
     usecase "UC11 - (add title here)" as UC11
          Player --> UC11
