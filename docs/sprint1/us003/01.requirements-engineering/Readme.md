@@ -20,7 +20,17 @@ food, textiles, cars).
 
 **From the client clarifications:**
 
+> **Question:** What is the purpose and meaning of the "City Tag"?
+> **Answer:**
 > 
+>
+> **Question:** Does the city have a specific radius for some functionality or is the city creation just figurative?
+> **Answer:**
+> 
+>
+> **Question:** Does that influence passenger statistics or will there be no statistics for a specific city?
+> **Answer:**
+
 ### 1.3. Acceptance Criteria
 
 * **AC1:** A city name cannot have special characters or digits.
