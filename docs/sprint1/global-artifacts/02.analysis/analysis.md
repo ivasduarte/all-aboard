@@ -10,103 +10,128 @@ To identify domain conceptual classes, start by making a list of candidate conce
 
 **Business Transactions**
 
-*
+* Cargo Transport
+* Train Purchase
 
 ---
 
 **Transaction Line Itemss**
 
-*
+* Cargo Shipment
 
 ---
 
 **Product/Service related to a Transaction or Transaction Line Item**
 
-*
+* Cargo
+* Train Service
 
 ---
 
 **Transaction Records**
 
-*
+* Train Journey
+* Cargo Delivery
 
 ---  
 
 **Roles of People or Organizations**
 
-*
+* Editor
+* Player
 
 ---
 
 **Places**
 
-*
+* Map
+* City
+* Station
+* Industry Location
 
 ---
 
 **Noteworthy Events**
 
-*
+* Cargo Generation
+* Train Journey
+* Historical Events
 
 ---
 
 **Physical Objects**
 
-*
+* Train
+* Locomotive
+* Carriage
+* Railway Line
+* Station Building
 
 ---
 
 **Descriptions of Things**
 
-*
+* City Description
+* Industry Description
+* Locomotive Specifications
 
 ---
 
 **Catalogs**
 
-*
+* Locomotive Catalog
+* Station Building Catalog
+* Industry Types Catalog
 
 ---
 
 **Containers**
 
-*
+* Map (contains cities and industries)
+* Station (stores cargo)
+* Train (carries cargo)
 
 ---
 
 **Elements of Containers**
 
-*
+* City
+* Industry
+* Carriage
+* Cargo
 
 ---
 
 **Organizations**
 
-*
+* Industry
 
 ---
 
 **Other External/Collaborating Systems**
 
-*
+* Simulator
 
 ---
 
 **Records of finance, work, contracts, legal matters**
 
-*
+* Player Budget
+* Train Cost
+* Station Building Cost
 
 ---
 
 **Financial Instruments**
 
-*
+* Player Budget
 
 ---
 
 **Documents mentioned/used to perform some work/**
 
-*
+* Scenario
+* Route Plan
 
 ---
 
@@ -126,8 +151,30 @@ An association is a relationship between instances of objects that indicates a r
 
 | Concept (A) 		|  Association   	|  Concept (B) |
 |----------	   		|:-------------:		|------:       |
-| C1  	| verb1    		 	| C2  |
-| ...  	| ...    		 	| ...  |
+| Editor  	| creates    		 	| Map  |
+| Editor  	| creates    		 	| Scenario  |
+| Map  	| contains    		 	| City  |
+| Map  	| contains    		 	| Industry  |
+| Scenario  	| uses    		 	| Map  |
+| Industry  	| is a    		 	| PrimarySectorIndustry  |
+| Industry  	| is a    		 	| TransformingIndustry  |
+| Industry  	| is a    		 	| MixedIndustry  |
+| Station  	| is a    		 	| Depot  |
+| Station  	| is a    		 	| RegularStation  |
+| Station  	| is a    		 	| Terminal  |
+| Station  	| has    		 	| StationBuilding  |
+| Station  	| stores    		 	| Cargo  |
+| RailwayLine  	| connects    		 	| Station  |
+| Player  	| builds    		 	| Station  |
+| Player  	| builds    		 	| RailwayLine  |
+| Player  	| buys    		 	| Train  |
+| Train  	| has    		 	| Locomotive  |
+| Train  	| has    		 	| Carriage  |
+| Train  	| assigned to    		 	| Route  |
+| Route  	| includes    		 	| Station  |
+| City  	| generates/consumes    		 	| Cargo  |
+| Industry  	| generates/processes    		 	| Cargo  |
+| Simulator  	| generates    		 	| Cargo  |
 
 
 
@@ -137,4 +184,4 @@ An association is a relationship between instances of objects that indicates a r
 
 **Insert below the Domain Model Diagram in a SVG format**
 
-![Domain Model](svg/DM.svg)
+![Domain Model](svg/project-domain-model.svg)

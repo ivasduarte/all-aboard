@@ -1,0 +1,148 @@
+@startuml "domain-model"
+
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+hide circle
+hide methods
+
+' Users
+class Editor {
+}
+
+class Player {
+  -budget
+}
+
+' Maps and Scenarios
+class Map {
+  -name
+  -size
+}
+
+class Scenario {
+  -timeRestrictions
+  -technologicalRestrictions
+  -historicalRestrictions
+}
+
+' Static elements on map
+class City {
+  -name
+  -location
+  -houseBlocks
+}
+
+class Industry {
+}
+
+class PrimarySectorIndustry {
+  -resourceType
+}
+
+class TransformingIndustry {
+  -inputResources
+  -outputProducts
+}
+
+class MixedIndustry {
+  -importExportCapacity
+}
+
+' Railway Network Components
+class Station {
+  -cost
+  -economicRadius
+  -supply
+  -demand
+}
+
+class Depot {
+}
+
+class RegularStation {
+}
+
+class Terminal {
+}
+
+class StationBuilding {
+  -type
+  -effect
+}
+
+class RailwayLine {
+  -length
+  -isDouble
+  -isElectrified
+}
+
+' Trains and Components
+class Train {
+  -name
+}
+
+class Locomotive {
+  -type
+  -power
+  -acceleration
+  -topSpeed
+  -startYear
+  -price
+}
+
+class Carriage {
+  -cargoType
+}
+
+class Route {
+  -stationsList
+}
+
+class Cargo {
+  -type
+  -quantity
+  -lifespan
+}
+
+' Simulator
+class Simulator {
+  -status
+}
+
+' Relationships
+Editor -- Map : creates >
+Editor -- Scenario : creates >
+Map *-- "0..*" City : contains >
+Map *-- "0..*" Industry : contains >
+Scenario -- Map : uses >
+
+Industry <|-- PrimarySectorIndustry
+Industry <|-- TransformingIndustry
+Industry <|-- MixedIndustry
+
+Station <|-- Depot
+Station <|-- RegularStation
+Station <|-- Terminal
+Station o-- "0..*" StationBuilding : has >
+Station -- "0..*" Cargo : stores >
+
+RailwayLine -- "2" Station : connects >
+
+Player -- Station : builds >
+Player -- RailwayLine : builds >
+Player -- Train : buys >
+
+Train *-- "1" Locomotive : has >
+Train *-- "0..*" Carriage : has >
+Train -- Route : assigned to >
+Route *-- "2..*" Station : includes >
+
+City -- "0..*" Cargo : generates/consumes >
+Industry -- "0..*" Cargo : generates/processes >
+
+Simulator -- Cargo : generates >
+
+@enduml
