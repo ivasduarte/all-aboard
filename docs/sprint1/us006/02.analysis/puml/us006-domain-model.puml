@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model - US006 (Upgrade Station with Building)
+
+class Player {
+  - name: String
+}
+
+class Station {
+  - id: int
+  - name: String
+  - buildings: List<Building>
+}
+
+class Building {
+  - id: int
+  - type: String
+}
+
+Player "1" --> "1..*" Station : upgrades
+Station "1" --> "*" Building : contains
+
+@enduml
