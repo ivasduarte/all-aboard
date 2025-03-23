@@ -12,18 +12,18 @@ However, be aware, this is a pedagogical simplification. On further projects and
 
 # Use Cases / User Stories
 
-| UC/US | Description                              |                   
-|:------|:-----------------------------------------|
-| US001 | [](../../us001/Readme.md)                |
-| US002 | [Add an industry](../../us002/Readme.md) |
-| US003 | [Add a city](../../us003/Readme.md)      |
-| US004 | [](../../us004/Readme.md)                |
-| US005 | [](../../us005/Readme.md)                |
-| US006 | [](../../us006/Readme.md)                |
-| US007 | [](../../us007/Readme.md)                |
-| US008 | [](../../us008/Readme.md)                |
-| US009 | [Buy a train](../../us009/Readme.md)     |
-| US010 | [](../../us010/Readme.md)                |
-| US011 | [](../../us011/Readme.md)                |
-| US012 | [](../../us012/Readme.md)                |
+| UC/US | Description                                                           |                   
+|:------|:----------------------------------------------------------------------|
+| US001 | [Create a map](../../us001/ReadMe.md)                                 |
+| US002 | [Add an industry](../../us002/Readme.md)                              |
+| US003 | [Add a city](../../us003/Readme.md)                                   |
+| US004 | [Create a scenario](../../us004/ReadMe.md)                            |
+| US005 | [Build a Station](../../us005/Readme.md)                              |
+| US006 | [Upgrade a selected station with a building](../../us006/Readme.md)   |
+| US007 | [List all the stations](../../us007/Readme.md)                        |
+| US008 | [Build a railway station between two stations](../../us008/Readme.md) |
+| US009 | [Buy a train](../../us009/Readme.md)                                  |
+| US010 | [Assign a train to a route](../../us010/Readme.md)                    |
+| US011 | [List all Trains](../../us011/Readme.md)                              |
+| US012 | [Create a simulator](../../us012/Readme.md)                           |
 

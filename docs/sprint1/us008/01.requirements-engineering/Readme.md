@@ -44,7 +44,7 @@ A line has a certain length, can be single or double, and can be electrified
 
 ### 1.6. System Sequence Diagram (SSD)
 
-![System Sequence Diagram](svg/us002-system-sequence-diagram.svg)
+![System Sequence Diagram](svg/us008-system-sequence-diagram.svg)
 
 ### 1.7 Other Relevant Remarks
 
