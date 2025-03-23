@@ -17,6 +17,23 @@ conditions for using a given map, namely:
 • Historical Restrictions - historical events that make sense in the scenario and change the operating conditions of the simulator. For instance, a war increases the steel demand, and a vaccination campaign
 or a schooling program encourages mail and/or passenger traffic. In
 this context, the goods that the Ports import and export are also defined.
+
+
+**From the client clarifications:**
+
+> **Question:** Should a scenario have a name and description, or is it only linked to a map?
+> **Answer:**
+>
+>
+> **Question:** Will scenarios be importable/exportable between different maps?
+> **Answer:**
+>
+>
+> **Question:** Can scenarios be modified after creation, or are they immutable?
+> **Answer:**
+> 
+> **Question:** Should scenarios define specific rules for resource generation and demand in cities and industries?
+> **Answer:** 
  
 
 ### 1.3. Acceptance Criteria

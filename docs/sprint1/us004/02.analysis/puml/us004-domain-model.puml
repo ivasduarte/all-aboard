@@ -13,15 +13,15 @@ hide methods
 'title Domain Model
 
 class Scenario {
-  - timeRestrictions: String
-  - technologicalRestrictions: String
-  - historicalRestrictions: String
+  - timeRestrictions
+  - technologicalRestrictions
+  - historicalRestrictions
 }
 
 class Map {
-  - name: String
-  - width: Integer
-  - height: Integer
+  - name
+  - width
+  - height
 }
 
 Scenario "1" -- "1" Map : applies to
