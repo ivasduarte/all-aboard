@@ -1,0 +1,35 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Map {
+}
+
+class Railway{
+}
+
+class Train{
+}
+
+class Station {
+}
+
+class Player {
+}
+
+Player "1" - "1" Train : selects
+Player "1" -- "1" Station : selects
+
+Map "1" - "*" Railway : has
+Player "1" -- "1" Railway : assigns
+@enduml
