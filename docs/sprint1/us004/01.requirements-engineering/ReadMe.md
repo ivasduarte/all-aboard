@@ -101,6 +101,7 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 **Output Data:**
 
 - Message of success indicating that the city has been added
+- - Error message, in case of failed scenario creation, indicating failure cause.
 
 
 ### 1.6. System Sequence Diagram (SSD)
