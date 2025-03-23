@@ -38,10 +38,21 @@ this context, the goods that the Ports import and export are also defined.
 
 ### 1.3. Acceptance Criteria
 
+> The system must allow the Editor to create a scenario for a selected map.
+> A scenario can't be created without an existing map.
+> The scenario must require are restrictions (time, historical, technological).
+> Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an acceptable range).
+> Each scenario must have a unique name (avoid duplicates), and prevent special characters and empy values in the name.
+> Each scenario must be linked to exactly one map.
+> Upon successful creation, the system must display a confirmation message.
+> If creation fails, the system must provide a descriptive error message indicating the cause.
+> Only users with "Editor" privileges can create, modify, and manage scenarios.
 
 ### 1.4. Found out Dependencies
 
-* There is a dependency with US001 - "Create map", given that to create a scenario, there needs to be a map first.
+* There is a dependency with US001 - "Create map" - since a scenario is created for a selected map,
+there must be at least one existing map before a scenario can be created. This dependency ensures 
+that scenarios are correctly linked to a valid map and prevents orphaned scenarios without a map context.
 
 ### 1.5 Input and Output Data
 
