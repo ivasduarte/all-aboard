@@ -18,8 +18,7 @@ As an Editor, I want to create a map with a size and a name.
 > **Question:** The map's size must be infinite or should it have a limit?
 > **Answer:** The map should have a maximum size limit.
 > 
-> 
-> **Answer:** The map must have 
+>
 > **Question:** Are there specific formats required (square, rectangular), or can any dimensions be used?
 > **Answer:**
 >
@@ -30,9 +29,7 @@ As an Editor, I want to create a map with a size and a name.
 >
 > **Question:** Will there be predefined maps, or will all maps be created by editors?
 > **Answer:**
-> 
-> **Question:** Should maps be stored in a specific format?
-> **Answer:** 
+
 
 
 ### 1.3. Acceptance Criteria

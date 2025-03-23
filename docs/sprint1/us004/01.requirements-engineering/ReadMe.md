@@ -32,8 +32,43 @@ this context, the goods that the Ports import and export are also defined.
 > **Question:** Can scenarios be modified after creation, or are they immutable?
 > **Answer:**
 > 
+> 
 > **Question:** Should scenarios define specific rules for resource generation and demand in cities and industries?
 > **Answer:** 
+> 
+> 
+> **Question:** How should the editor apply the restrictions for the scenario?
+> **Answer:** 
+> 
+> 
+> **Question:** How should be scenario be identified (i.e name, brief description)?
+> **Answer:**
+> 
+> 
+> **Question:** Can the editor select multiple restrictions in the same scenario?
+> **Answer:**
+>
+>
+> **Question:** What happens if an Editor tries to set conflicting restrictions (i.e. allowing a locomotive that hasn't 
+been invented yet)?
+> **Answer:**
+>
+>
+> **Question:** Can a scenario have multiple versions/be updated after creation, or should it only have the debut 
+version?
+> **Answer:**
+>
+>
+> **Question:** In one scenario, the editor can choose to import multiple products into the ports?
+> **Answer:**
+>
+>
+> **Question:** Regarding the creation of a scenario, does the editor first choose a map to create a scenario on,
+or does he create the scenario first and then associate it with a map?
+> **Answer:**
+>
+>
+>
  
 
 ### 1.3. Acceptance Criteria
@@ -41,7 +76,8 @@ this context, the goods that the Ports import and export are also defined.
 > The system must allow the Editor to create a scenario for a selected map.
 > A scenario can't be created without an existing map.
 > The scenario must require are restrictions (time, historical, technological).
-> Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an acceptable range).
+> Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an 
+acceptable range).
 > Each scenario must have a unique name (avoid duplicates), and prevent special characters and empy values in the name.
 > Each scenario must be linked to exactly one map.
 > Upon successful creation, the system must display a confirmation message.
