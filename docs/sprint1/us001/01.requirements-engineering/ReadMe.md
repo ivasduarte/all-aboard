@@ -29,6 +29,17 @@ As an Editor, I want to create a map with a size and a name.
 >
 > **Question:** Will there be predefined maps, or will all maps be created by editors?
 > **Answer:**
+> 
+>
+> **Question:** Should maps be stored in a specific format?
+> **Answer:**
+>
+>
+> **Question:** Can the map size be a real number, or should it only be an integer?
+> **Answer:**
+>
+>
+
 
 
 
