@@ -37,6 +37,12 @@ As an Editor, I want to create a map with a size and a name.
 
 ### 1.3. Acceptance Criteria
 
+> The system must allow the Editor to create a map by providing a name and size.
+> The map name must be unique and cannot contain special characters or be left empy.
+> The map size must be within a predefined range.
+> Upon successful creation, the system mjust display a confirmation message.
+> If creation fails, the system must provide a descriptive error message indicating the cause.
+
 ### 1.4. Found out Dependencies
 
 ### 1.5 Input and Output Data
