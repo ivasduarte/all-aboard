@@ -12,17 +12,15 @@ class Player {
 }
 
 class Train {
-  - name: String
-  - locomotive: Data
-  - carriages: List<Carriage>
+
 }
 
 class Locomotive {
-  - type: Data
+
 }
 
 class Carriage {
-  - type: String
+
 }
 
 Player "1" --> "1..*" Train : lists

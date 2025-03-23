@@ -9,18 +9,15 @@ hide circle
 hide methods
 
 class Player {
-  - name: String
+
 }
 
 class Station {
-  - id: int
-  - name: String
-  - buildings: List<Building>
+
 }
 
 class Building {
-  - id: int
-  - type: String
+
 }
 
 Player "1" --> "1..*" Station : upgrades

@@ -10,15 +10,11 @@ hide circle
 hide methods
 
 class Player {
-  - name: String
+
 }
 
 class Station {
-  - id: int
-  - name: String
-  - buildings: List<Building>
-  - cargoSupply: List<Cargo>
-  - cargoDemand: List<Cargo>
+
 }
 
 Player "1" --> "1..*" Station : lists
