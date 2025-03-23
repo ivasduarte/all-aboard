@@ -1,4 +1,4 @@
-# US003 - Add a city
+# US007 - List all the stations
 
 ## 1. Requirements Engineering
 
@@ -15,36 +15,43 @@ details, including the existing building and the demand/supply cargoes.
 > When viewing a station, in addition to the buildings present, the cargo that is ready for collection
 and the cargo that needs to be delivered should also be
 displayed.
+> There are three types of stations: Depots (50k, 3x3 radius), 
+Stations (100k, 4x4 radius), and Terminals (200k, 5x5 radius). Their cost and economic radius distinguish the stations.
+> All industrial and population sites within the radius of a station send (supply) and receive (demand) business through the station. 
+By adding the supply and demand for cargoes from the industry and population in a range, the supply and demand for the station are determined.
+> When built, a station consists of just one building, which can be upgraded with other buildings that can increase the station’s performance,
+improve train operation, facilitate train manoeuvrers, and increase the lifespan of cargo stored at the station.
+> Some of the buildings that can be used to upgrade stations are: telegraph (later telephone), café (small or large), 
+customs, post office, hotel (small or large), silo, liquid storage.
 
 **From the client clarifications:**
 
 > 
 ### 1.3. Acceptance Criteria
 
-* **AC1:** A city name cannot have special characters or digits.
-* **AC2:** The house blocks can be assigned manually or automatically (randomly around the city tag position)
-* **AC3:** The number of house blocks needs to be positive 
+**There's no Acceptance Criteria**
 
 ### 1.4. Found out Dependencies
 
-* There is a dependency with US001 - "Create map", given that to create a city, there needs to be a map first. 
+* There is a dependency with US005 - "Create a Station", it's necessary to have stations to list them.
+* There is a dependency with US006 - "Upgrade a selected Station", in order to verify the details from a station, it's necessary to have a option that can modify it.
 
 ### 1.5 Input and Output Data
 
 **Input Data:**
 
-- Position XY of the city in the map
-- Name 
-- Number of house blocks 
+- List all stations
+- Select one
 
 **Output Data:**
 
-- Message of success indicating that the city has been added 
+- All stations listed
+- The details of the selected station
 
 
 ### 1.6. System Sequence Diagram (SSD)
 
-![System Sequence Diagram](svg/us003-system-sequence-diagram.svg)
+![System Sequence Diagram](svg/us007-system-sequence-diagram.svg)
 
 
 

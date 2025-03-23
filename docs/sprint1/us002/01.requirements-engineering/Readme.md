@@ -46,6 +46,7 @@ this context, the goods that the Ports import and export are also defined.
 **Input Data:**
 
 - Position XY of the industry in the map
+- Type of Industry
 
 **Output Data:**
 
