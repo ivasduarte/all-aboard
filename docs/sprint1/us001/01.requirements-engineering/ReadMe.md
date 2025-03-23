@@ -63,6 +63,7 @@ As an Editor, I want to create a map with a size and a name.
 **Output Data:**
 
 - Message of success indicating that the city has been added
+- Error message, in case of failed map creation, indicating failure cause.
 
 
 ### 1.6. System Sequence Diagram (SSD)
