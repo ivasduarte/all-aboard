@@ -13,7 +13,6 @@ hide methods
 'title Domain Model
 
 class Map {
-
 }
 
 class RailwayLine {
@@ -25,8 +24,11 @@ class RailwayLine {
 class Player {
 }
 
+class Stations {
+}
 
 Map "1" - "*" RailwayLine : has
 Player "1" -- "*" RailwayLine : build
+RailwayLine "1" - "*" Stations : connects
 
 @enduml
