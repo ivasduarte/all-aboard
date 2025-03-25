@@ -26,12 +26,8 @@ class Railway{
 
 class Train{
     - name
-    - locomotiveType
-    - power
-    - acceleration
-    - topSpeed
-    - startYear
-    - acquisitionType
+    - ID
+    - date of purchase
 }
 
 class Station {
