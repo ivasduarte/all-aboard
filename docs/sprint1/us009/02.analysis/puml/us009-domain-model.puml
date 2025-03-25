@@ -45,11 +45,13 @@ class CargoType{
 class Player {
     - name
     - ID
+    - password
 }
 
 Train "1" - "*" Locomotive : has
 Player "1" -- "*" Train : creates
-Locomotive "1" - "1" LocomotiveType : has
-Carriage "1" - "1" CargoType : has
+Locomotive "1" - "*" LocomotiveType : has
+Carriage "1" - "*" CargoType : has
+Train "1" - "*" Carriage : has
 
 @enduml
