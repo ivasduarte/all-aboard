@@ -20,6 +20,8 @@ class Station {
     - name
     - type
     - building
+    - cargoDemand
+    - cargoSupply
 }
 
 class Building {
@@ -28,7 +30,8 @@ class Building {
 }
 
 class Cargo {
-    -
+    - id
+    - type
 }
 
 Player "1" --> "1..*" Station : lists

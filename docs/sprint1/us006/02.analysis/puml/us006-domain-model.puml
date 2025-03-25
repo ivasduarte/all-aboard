@@ -19,6 +19,8 @@ class Station {
     - name
     - type
     - building
+    - cargoDemand
+    - cargoSupply
 }
 
 class Building {

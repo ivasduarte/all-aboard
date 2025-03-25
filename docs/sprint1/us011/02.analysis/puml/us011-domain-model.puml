@@ -9,18 +9,30 @@ hide circle
 hide methods
 
 class Player {
+    - name
+    - ID
+    - password
 }
 
 class Train {
-
+    - name
+    - ID
+    - date of purchase
 }
 
 class Locomotive {
-
+    - name
+    - locomotiveType
+    - power
+    - acceleration
+    - topSpeed
+    - startYear
+    - acquisitionType
 }
 
 class Carriage {
-
+    - name
+    - ID
 }
 
 Player "1" --> "1..*" Train : lists
