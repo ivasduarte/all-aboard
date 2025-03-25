@@ -13,16 +13,21 @@ hide methods
 'title Domain Model
 
 class Map {
+    - name
+    - width
+    - height
 
 }
 
 class City {
-    position XY
-    name
-    number of house blocks
+    - position XY
+    - name
+    - number of house blocks
 }
 
 class Editor {
+    - name
+    - ID
 }
 
 

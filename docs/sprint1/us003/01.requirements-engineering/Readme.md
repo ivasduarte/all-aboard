@@ -20,22 +20,17 @@ food, textiles, cars).
 
 **From the client clarifications:**
 
-> **Question:** What is the purpose and meaning of the "City Tag"?
+> **Question:** Does the position XY in the map need to be positive?
 > **Answer:**
 > 
->
-> **Question:** Does the city have a specific radius for some functionality or is the city creation just figurative?
-> **Answer:**
-> 
->
-> **Question:** Does that influence passenger statistics or will there be no statistics for a specific city?
-> **Answer:**
+
+
 
 ### 1.3. Acceptance Criteria
 
 * **AC1:** A city name cannot have special characters or digits.
 * **AC2:** The house blocks can be assigned manually or automatically (randomly around the city tag position)
-* **AC3:** The number of house blocks needs to be positive 
+* **AC3:** The number of house blocks needs to be positive
 
 ### 1.4. Found out Dependencies
 
