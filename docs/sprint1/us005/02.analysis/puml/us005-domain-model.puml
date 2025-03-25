@@ -13,22 +13,24 @@ hide methods
 'title Domain Model
 
 class Map {
-    id
-    name
-    size
+    - id
+    - name
+    - size
 }
 
 class Station {
-    id
-    name
-    type
-    building
+    - id
+    - name
+    - type
+    - building
+    - cargoDemand
+    - cargoSupply
 }
 
 class Player {
-    id
-    name
-    password
+    - id
+    - name
+    - password
 }
 
 

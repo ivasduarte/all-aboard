@@ -9,15 +9,21 @@ hide circle
 hide methods
 
 class Player {
-
+    - name
+    - ID
+    - password
 }
 
 class Station {
-
+    - id
+    - name
+    - type
+    - building
 }
 
 class Building {
-
+    - id
+    - type
 }
 
 Player "1" --> "1..*" Station : upgrades
