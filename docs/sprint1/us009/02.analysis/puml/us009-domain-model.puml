@@ -13,20 +13,43 @@ hide methods
 'title Domain Model
 
 class Train{
-    Locomotive
-    date
+    - name
+    - ID
+    - date of purchase
 }
 class Locomotive {
+    - name
+    - locomotiveType
+    - power
+    - acceleration
+    - topSpeed
+    - startYear
+    - acquisitionType
 }
 
+class LocomotiveType{
+    - name
+    - ID
+}
+
+class Carriage{
+    - name
+    - cargoType
+}
+
+class CargoType{
+    - name
+    - ID
+}
 'the player possibly has much more characteristics
 class Player {
-    name
-    user
+    - name
+    - ID
 }
+
 Train "1" - "*" Locomotive : has
 Player "1" -- "*" Train : creates
-
-
+Locomotive "1" - "1" LocomotiveType : has
+Carriage "1" - "1" CargoType : has
 
 @enduml
