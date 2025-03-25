@@ -13,18 +13,36 @@ hide methods
 'title Domain Model
 
 class Map {
+    - id
+    - name
+    - size
 }
 
 class Railway{
+    - id
+    - name
+    - size
 }
 
 class Train{
+    - name
+    - ID
+    - date of purchase
 }
 
 class Station {
+    - id
+    - name
+    - type
+    - building
+    - cargoDemand
+    - cargoSupply
 }
 
 class Player {
+    - id
+    - name
+    - password
 }
 
 Player "1" - "1" Train : selects
