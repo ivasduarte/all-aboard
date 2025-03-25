@@ -73,16 +73,16 @@ or does he create the scenario first and then associate it with a map?
 
 ### 1.3. Acceptance Criteria
 
-> The system must allow the Editor to create a scenario for a selected map.
-> A scenario can't be created without an existing map.
-> The scenario must require are restrictions (time, historical, technological).
-> Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an 
+> **AC1:** The system must allow the Editor to create a scenario for a selected map.
+> **AC2:** A scenario can't be created without an existing map.
+> **AC3:** The scenario must require are restrictions (time, historical, technological).
+> **AC4:** Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an 
 acceptable range).
-> Each scenario must have a unique name (avoid duplicates), and prevent special characters and empy values in the name.
-> Each scenario must be linked to exactly one map.
-> Upon successful creation, the system must display a confirmation message.
-> If creation fails, the system must provide a descriptive error message indicating the cause.
-> Only users with "Editor" privileges can create, modify, and manage scenarios.
+> **AC5:** Each scenario must have a unique name (avoid duplicates), and prevent special characters and empy values in the name.
+> **AC6:** Each scenario must be linked to exactly one map.
+> **AC7:** Upon successful creation, the system must display a confirmation message.
+> **AC8:** If creation fails, the system must provide a descriptive error message indicating the cause.
+> **AC9:** Only users with "Editor" privileges can create, modify, and manage scenarios.
 
 ### 1.4. Found out Dependencies
 
