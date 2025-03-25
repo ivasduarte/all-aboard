@@ -38,18 +38,19 @@ As an Editor, I want to create a map with a size and a name.
 > **Question:** Can the map size be a real number, or should it only be an integer?
 > **Answer:**
 >
->
+> **Question:** If desired, can the editor have access to the list of previously created maps for future editing?
+> **Answer:** 
 
 
 
 
 ### 1.3. Acceptance Criteria
 
-> The system must allow the Editor to create a map by providing a name and size.
-> The map name must be unique and cannot contain special characters or be left empy.
-> The map size must be within a predefined range.
-> Upon successful creation, the system mjust display a confirmation message.
-> If creation fails, the system must provide a descriptive error message indicating the cause.
+> **AC1:** The system must allow the Editor to create a map by providing a name and size.
+> **AC2:** The map name must be unique and cannot contain special characters or be left empy.
+> **AC3:** The map size must be within a predefined range.
+> **AC4:** Upon successful creation, the system mjust display a confirmation message.
+> **AC5** If creation fails, the system must provide a descriptive error message indicating the cause.
 
 ### 1.4. Found out Dependencies
 
