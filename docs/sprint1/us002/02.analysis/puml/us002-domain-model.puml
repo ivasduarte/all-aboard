@@ -13,23 +13,30 @@ hide methods
 'title Domain Model
 
 class Map {
+    - name
+    - width
+    - height
 }
 
 class Industry {
-    position XY on the map
+    - position XY on the map
+    - name
+    - id
 }
 
 class Editor {
+    - name
+    - ID
 }
 
 class IndustryType {
-    primary sector industry
-    transforming industry
-    mixed industry
+    - name
+    - id
+    - description
 }
 
 Map "1" - "*" Industry : has
 Editor "1" -- "*" Industry : creates
-Industry "1" - "*" IndustryType : is
+Industry "1" - "*" IndustryType : has
 
 @enduml
