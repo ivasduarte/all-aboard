@@ -8,126 +8,96 @@ skinparam shadowing false
 hide circle
 hide methods
 
-' Users
-class Editor {
+class Editor{
+- name
+    - ID
+    - password
 }
 
-class Player {
-  -budget
+class Player{
+- name
+    - ID
+    - password
 }
 
-' Maps and Scenarios
-class Map {
-  -name
-  -size
+class Simulation{
 }
 
-class Scenario {
-  -timeRestrictions
-  -technologicalRestrictions
-  -historicalRestrictions
+class Map{
+- name
+- width
+- height
 }
 
-' Static elements on map
-class City {
-  -name
-  -location
-  -houseBlocks
+class City{
+- position XY
+    - name
+    - number of house blocks
 }
 
-class Industry {
+class Industry{
+ - position XY on the map
+    - name
+    - id
 }
 
-class PrimarySectorIndustry {
-  -resourceType
+class Scenario{
 }
 
-class TransformingIndustry {
-  -inputResources
-  -outputProducts
+class Station{
+    - id
+        - name
+        - type
+        - building
 }
 
-class MixedIndustry {
-  -importExportCapacity
+class Building{
+    - id
+    - type
 }
 
-' Railway Network Components
-class Station {
-  -cost
-  -economicRadius
-  -supply
-  -demand
+class Cargo{
 }
 
-class Depot {
+class RailwayLine{
+- name
+    - id
+    - selected stations
+    - length
+    - type
 }
 
-class RegularStation {
+
+class Train{
+- name
+    - ID
+    - date of purchase
 }
 
-class Terminal {
+class Locomotive{
+- name
+    - locomotiveType
+    - power
+    - acceleration
+    - topSpeed
+    - startYear
+    - acquisitionType
 }
 
-class StationBuilding {
-  -type
-  -effect
+class Carriage{
+- name
+    - cargoType
 }
 
-class RailwayLine {
-  -length
-  -isDouble
-  -isElectrified
-}
 
-' Trains and Components
-class Train {
-  -name
-}
-
-class Locomotive {
-  -type
-  -power
-  -acceleration
-  -topSpeed
-  -startYear
-  -price
-}
-
-class Carriage {
-  -cargoType
-}
-
-class Route {
-  -stationsList
-}
-
-class Cargo {
-  -type
-  -quantity
-  -lifespan
-}
-
-' Simulator
-class Simulator {
-  -status
-}
-
-' Relationships
 Editor -- Map : creates >
 Editor -- Scenario : creates >
 Map *-- "0..*" City : contains >
 Map *-- "0..*" Industry : contains >
 Scenario -- Map : uses >
 
-Industry <|-- PrimarySectorIndustry
-Industry <|-- TransformingIndustry
-Industry <|-- MixedIndustry
+Station o-- "0..*" Building : has >
 
-Station <|-- Depot
-Station <|-- RegularStation
-Station <|-- Terminal
-Station o-- "0..*" StationBuilding : has >
-Station -- "0..*" Cargo : stores >
 
 RailwayLine -- "2" Station : connects >
 
@@ -138,11 +108,12 @@ Player -- Train : buys >
 Train *-- "1" Locomotive : has >
 Train *-- "0..*" Carriage : has >
 Train -- Route : assigned to >
+'should this be included? the route?
 Route *-- "2..*" Station : includes >
 
 City -- "0..*" Cargo : generates/consumes >
 Industry -- "0..*" Cargo : generates/processes >
 
-Simulator -- Cargo : generates >
+
 
 @enduml
