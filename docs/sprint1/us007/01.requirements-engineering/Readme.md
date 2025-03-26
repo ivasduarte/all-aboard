@@ -29,7 +29,7 @@ customs, post office, hotel (small or large), silo, liquid storage.
 > 
 ### 1.3. Acceptance Criteria
 
-**There's no Acceptance Criteria**
+**AC1:** Stations must be listed in alphabetical order by name.
 
 ### 1.4. Found out Dependencies
 
