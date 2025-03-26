@@ -22,7 +22,7 @@ activate Player
     activate System
     deactivate Player
 
-    System --> Player : shows all data and displays operation success
+    System --> Player : shows all data and displays operation success or operation failure
     deactivate System
     activate Player
 

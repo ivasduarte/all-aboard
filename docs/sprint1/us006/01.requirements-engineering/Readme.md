@@ -16,6 +16,10 @@ train operation, facilitate train manoeuvrers, and increase the lifespan of
 cargo stored at the station.
 > Some of the buildings that can be used to upgrade stations are: telegraph (later telephone), café (small or large), customs, post
 office, hotel (small or large), silo, liquid storage.
+> Each type of station improvement has a date from which it is available.
+> Some equipments are mutually exclusive and some equipments/buildings replace others (the telegraph was initially used to facilitate the operation of trains at stations, and was later
+replaced by the telephone, so after the advent of telephone, telegraph
+is no more available).
 
     
 **From the client clarifications:**
@@ -31,12 +35,16 @@ office, hotel (small or large), silo, liquid storage.
 
 **Input Data:**
 
+- Request to upgrade a station
 - The name of the station to be upgrade
 - The name of the building that will upgrade the station
 
 **Output Data:**
 
+- Request the station to upgrade
+- Shows the buildings available to buy
 - Message of success indicating that the building has been added
+- Message of failure indicating that the building hasn't been added.
 
 
 ### 1.6. System Sequence Diagram (SSD)
@@ -47,4 +55,4 @@ office, hotel (small or large), silo, liquid storage.
 
 ### 1.7 Other Relevant Remarks
 
-* 
+* The price list of the upgrades must be established in advance by the system, which the player can request the values of each building to add in the station.
