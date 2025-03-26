@@ -14,7 +14,7 @@ activate Player
     activate System
     deactivate Player
 
-    System --> Player : requests data (station type)
+    System --> Player : requests data (station type, location, centre)
     deactivate System
     activate Player
 

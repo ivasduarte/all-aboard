@@ -31,7 +31,8 @@ cargo stored at the station.
 **Input Data:**
 
 - Station type
-- Station name
+- Location
+- Centre
 
 **Output Data:**
 

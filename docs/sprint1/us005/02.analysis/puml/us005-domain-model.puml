@@ -20,11 +20,9 @@ class Map {
 
 class Station {
     - id
-    - name
     - type
-    - building
-    - cargoDemand
-    - cargoSupply
+    - location
+    - centre
 }
 
 class Player {
