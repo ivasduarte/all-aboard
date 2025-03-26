@@ -12,7 +12,7 @@ left to right direction
 rectangle "System Actors" as actors {
     actor Editor
     actor "Player" as Player
-    'actor "Product Owner" as PO
+    actor "Product Owner" as PO
 }
 
 
@@ -24,6 +24,10 @@ rectangle "Use Cases" as usecases{
 
     note right of Player
         Who plays the game
+    end note
+
+    note right of PO
+        the person representing the organization that intends to develop the game.
     end note
     usecase "UC1 - Create a map" as UC1
         Editor --> UC1
@@ -47,8 +51,8 @@ rectangle "Use Cases" as usecases{
          Player --> UC10
     usecase "UC11 - List all Trains" as UC11
          Player --> UC11
-    'usecase "UC12 - (add title here)" as UC12
-         'PO --> UC12
+    usecase "UC12 - Create a simulator" as UC12
+         PO --> UC12
 }
 
 

@@ -24,6 +24,8 @@ electrified lines. The locomotives are characterized by several technical aspect
 acquisition price. The carriages2 are distinguished by the type of cargo they
 can transport (e.g., passengers, mail, coal, iron ore, steel, cars) and, in the
 context of the simulator, they have no acquisition cost.
+> In the simulator, the player/user acquires trains within the available budget
+and can put the train into service on a specific route.
 
 
 **From the client clarifications:**
