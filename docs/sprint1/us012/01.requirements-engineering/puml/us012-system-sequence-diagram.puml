@@ -10,7 +10,7 @@ participant ":System" as System
 
 activate ProductOwner
 
-    ProductOwner -> System : asks to create a simulator
+    ProductOwner -> System : selects a station to start simulator
     activate System
     deactivate ProductOwner
 

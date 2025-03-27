@@ -32,6 +32,7 @@ end).
 **Input Data:**
 
 - Start button
+- Desired station
 
 **Output Data:**
 

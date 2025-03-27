@@ -38,8 +38,7 @@ station.
 
 **Output Data:**
 
-- Message of success indicating that the route has been assigned 
-
+- Message of success indicating that the route has been assigned
 
 ### 1.6. System Sequence Diagram (SSD)
 
