@@ -12,20 +12,16 @@ activate Player
 
 Player -> System : Request to buy a train
 activate System
-deactivate Player
 
 System --> Player : Display list of available locomotives
 deactivate System
-activate Player
 
 loop Selecting locomotives
     Player -> System : Selects a locomotive
     activate System
-    deactivate Player
 
     System --> Player : Ask if they want to add another locomotive
     deactivate System
-    activate Player
 
     alt Player adds another locomotive
         Player -> System : Selects another locomotive

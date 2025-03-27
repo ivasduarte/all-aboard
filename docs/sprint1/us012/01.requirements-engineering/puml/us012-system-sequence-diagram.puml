@@ -12,10 +12,8 @@ activate ProductOwner
 
     ProductOwner -> System : selects a station to start simulator
     activate System
-    deactivate ProductOwner
 
     System --> ProductOwner : simulator starts
     deactivate System
-    activate ProductOwner
 
 @enduml

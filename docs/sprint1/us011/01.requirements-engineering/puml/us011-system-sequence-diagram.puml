@@ -12,11 +12,9 @@ activate Player
 
     Player -> System : asks to list all trains
     activate System
-    deactivate Player
 
     System --> Player : displays grouped and sorted train list
     deactivate System
-    activate Player
 
 
 

@@ -12,18 +12,14 @@ activate Player
 
     Player -> System : Request to list all stations
     activate System
-    deactivate Player
 
     System --> Player : Display the stations Listed
     deactivate System
-    activate Player
 
     Player -> System : Selects one station
     activate System
-    deactivate Player
 
     System --> Player : Display station's details
     deactivate System
-    activate Player
 
 @enduml
