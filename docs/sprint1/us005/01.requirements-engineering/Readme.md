@@ -41,7 +41,7 @@ cargo stored at the station.
 
 ### 1.6. System Sequence Diagram (SSD)
 
-![System Sequence Diagram](svg/us005-system-sequence-diagram.svg)
+![System Sequence Diagram](svg\us005-system-sequence-diagram.svg)
 
 
 

@@ -71,6 +71,6 @@ As an Editor, I want to create a map with a size and a name.
 
 _Insert here a SSD depicting the envisioned Actor-System interactions and throughout which data is inputted and outputted to fulfill the requirement. All interactions must be numbered._
 
-![System Sequence Diagram](svg/us001-system-sequence-diagram.svg)
+![System Sequence Diagram](svg\us001-system-sequence-diagram.svg)
 
 ### 1.7 Other Relevant Remarks

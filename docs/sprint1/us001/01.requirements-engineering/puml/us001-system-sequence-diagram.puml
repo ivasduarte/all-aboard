@@ -12,18 +12,18 @@ activate Editor
 
     Editor -> System : asks to create a map
     activate System
-    deactivate Editor
+
 
     System --> Editor : requests data (size and name of the map)
     deactivate System
-    activate Editor
+
 
     Editor -> System : types requested data
     activate System
-    deactivate Editor
+
 
     System --> Editor : shows all data and displays operation success
     deactivate System
-    activate Editor
+
 
 @enduml

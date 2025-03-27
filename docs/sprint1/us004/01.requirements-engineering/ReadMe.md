@@ -107,6 +107,6 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 ### 1.6. System Sequence Diagram (SSD)
 
 
-![USXXX-SSD](svg/USXXX-SSD.svg)
+![USXXX-SSD](svg/us004-system-sequence-diagram.svg)
 
 ### 1.7 Other Relevant Remarks

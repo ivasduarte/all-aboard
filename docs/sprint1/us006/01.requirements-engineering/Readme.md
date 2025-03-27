@@ -25,6 +25,7 @@ is no more available).
 **From the client clarifications:**
 
 > 
+
 ### 1.3. Acceptance Criteria
 
 **AC1**: The player must select an existing station to upgrade.
