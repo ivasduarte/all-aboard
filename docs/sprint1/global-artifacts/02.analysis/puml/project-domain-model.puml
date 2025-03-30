@@ -87,9 +87,19 @@ class Locomotive{
     - acquisitionType
 }
 
+class LocomotiveType{
+    - name
+    - ID
+    - description
+}
+
 class Carriage{
 - name
     - cargoType
+}
+class CargoType{
+    - name
+    - ID
 }
 
 
@@ -111,6 +121,8 @@ Player -- Train : buys >
 Player -- Simulation: starts >
 
 Train *-- "1" Locomotive : has >
+Locomotive "1" - "*" LocomotiveType : has
+Carriage "1" - "*" CargoType : has
 Train *-- "0..*" Carriage : has >
 Train -- Route : assigned to >
 'should this be included? the route?

@@ -30,6 +30,7 @@ class Locomotive {
 class LocomotiveType{
     - name
     - ID
+    - description
 }
 
 class Carriage{
@@ -41,7 +42,7 @@ class CargoType{
     - name
     - ID
 }
-'the player possibly has much more characteristics
+
 class Player {
     - name
     - ID

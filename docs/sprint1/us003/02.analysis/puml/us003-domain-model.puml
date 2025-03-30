@@ -28,6 +28,7 @@ class City {
 class Editor {
     - name
     - ID
+    - password
 }
 
 

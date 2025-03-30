@@ -20,12 +20,6 @@ food, textiles, cars).
 
 **From the client clarifications:**
 
-> **Question:** Does the position XY in the map need to be positive?
-> **Answer:**
-> 
-
-
-
 ### 1.3. Acceptance Criteria
 
 * **AC1:** A city name cannot have special characters or digits.
