@@ -35,6 +35,10 @@ and can put the train into service on a specific route.
 >
 > **Question:** Is there a limit to how many trains a player can own, like a inventory that can get full?
 > **Answer:** there is no physical limit, just the available memory.
+> 
+> **Question:** How is the selection list of locomotives determined?
+> **Answer:** The locomotives that will be presented in the selection list are restricted to the current date and any restrictions that may have been defined in the scenario.
+The presentation of the list of locomotives is part of US09.
 ### 1.3. Acceptance Criteria
 
 * **AC1:** The player should 
