@@ -20,6 +20,13 @@ food, textiles, cars).
 
 **From the client clarifications:**
 
+> **Question:** Is there a minimum or maximum number of house blocks that can be assigned?
+> **Answer:** The number needs to be a positive on; there is no maximum, it's up to the editor to decide.
+> 
+> **Question:** Is it possible for a city to be destroyed by a natural disaster or a war? If so, is it necessary to create a mechanism to remove the city from the map and create a new one to transfer the active elements from the first one(people, mail, ...)?
+> **Answer:** A city can be removed in edit mode, but not in simulation mode.
+
+
 ### 1.3. Acceptance Criteria
 
 * **AC1:** A city name cannot have special characters or digits.

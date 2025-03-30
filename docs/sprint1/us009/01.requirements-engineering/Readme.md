@@ -30,7 +30,11 @@ and can put the train into service on a specific route.
 
 **From the client clarifications:**
 
+> **Question:** Can a player buy the same train multiple times?
+> **Answer:** the same type of locomitve, yes; but these locomotives will have unique identification (like a plate or a serial number)
 >
+> **Question:** Is there a limit to how many trains a player can own, like a inventory that can get full?
+> **Answer:** there is no physical limit, just the available memory.
 ### 1.3. Acceptance Criteria
 
 * **AC1:** The player should 
