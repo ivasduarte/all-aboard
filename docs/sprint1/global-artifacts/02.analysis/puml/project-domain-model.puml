@@ -42,6 +42,9 @@ class Industry{
 }
 
 class Scenario{
+   - timeRestrictions
+  - technologicalRestrictions
+  - historicalRestrictions
 }
 
 class Station{
@@ -104,6 +107,8 @@ RailwayLine -- "2" Station : connects >
 Player -- Station : builds >
 Player -- RailwayLine : builds >
 Player -- Train : buys >
+
+Player -- Simulation: starts >
 
 Train *-- "1" Locomotive : has >
 Train *-- "0..*" Carriage : has >
