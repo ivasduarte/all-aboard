@@ -25,6 +25,12 @@ class Station {
     - centre
 }
 
+class StationType extends Station{
+    - Depot
+    - Station
+    - Terminal
+}
+
 class Player {
     - id
     - name
