@@ -12,13 +12,7 @@ hide methods
 
 'title Domain Model
 
-class Map {
-    - id
-    - name
-    - size
-}
-
-class Railway{
+class RailwayLine{
     - id
     - name
     - size
@@ -48,6 +42,5 @@ class Player {
 Player "1" - "1" Train : selects
 Player "1" -- "1" Station : selects
 
-Map "1" - "*" Railway : has
-Player "1" -- "1" Railway : assigns
+Player "1" -- "1" RailwayLine : assigns
 @enduml
