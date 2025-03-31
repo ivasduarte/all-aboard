@@ -37,6 +37,10 @@ this context, the goods that the Ports import and export are also defined.
 >
 ### 1.3. Acceptance Criteria
 
+* **AC1:** The selected map has to already exist.
+* **AC2:** The position XY selected must be building-free.
+* **AC3:** The industry type selected must be available.
+
 ### 1.4. Found out Dependencies
 
 * There is a dependency with US001 - "Create map", given that to create an industry, there needs to be a map first.
