@@ -26,6 +26,11 @@ class RailwayLine {
     - type
 }
 
+class RailwayLineType {
+    - name
+    - id
+}
+
 class Player {
     - name
     - ID
@@ -46,7 +51,8 @@ class Building {
 
 Map "1" - "*" RailwayLine : has
 Player "1" -- "*" RailwayLine : build
-RailwayLine "2" - "*" Station : connects
+RailwayLine "*" - "2" Station : connects
 Station "1" - "*" Building : is
+RailwayLine "*" -- "1" RailwayLineType : has
 
 @enduml
