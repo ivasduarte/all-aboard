@@ -20,7 +20,8 @@ station.
 > 
 ### 1.3. Acceptance Criteria
 
-
+* **AC1:** There needs to be at least two available stations
+* **AC2:** There can't be a train already assigned to the selected route
 
 ### 1.4. Found out Dependencies
 
