@@ -20,7 +20,7 @@ As an Editor, I want to create a map with a size and a name.
 > 
 >
 > **Question:** Are there specific formats required (square, rectangular), or can any dimensions be used?
-> **Answer:**
+> **Answer:** It's up to the editor to decide.
 >
 >
 > **Question:** Are there any naming conventions for maps (no special characters, character limit)?
@@ -36,7 +36,7 @@ As an Editor, I want to create a map with a size and a name.
 >
 >
 > **Question:** Can the map size be a real number, or should it only be an integer?
-> **Answer:**
+> **Answer:** It should be a positive integer.
 >
 > 
 > **Question:** If desired, can the editor have access to the list of previously created maps for future editing?
@@ -44,7 +44,11 @@ As an Editor, I want to create a map with a size and a name.
 > 
 > 
 > **Question:** Is there a predefined list of sizes, or should users be able to input custom dimensions?
-> **Anser:** Custom dimensions but suggesting predefined sizes could be a good idea.
+> **Answer:** Custom dimensions but suggesting predefined sizes could be a good idea.
+> 
+> 
+> **Question:** Should map names be unique within the system?
+> **Answer:** Yes.
 
 
 
