@@ -118,7 +118,8 @@ Player -- Station : builds >
 Player -- RailwayLine : builds >
 Player -- Train : buys >
 
-Player -- Simulation: starts >
+Simulation -- Player: creates >
+Simulation -- Editor: creates >
 
 Train *-- "1" Locomotive : has >
 Locomotive "1" - "*" LocomotiveType : has
