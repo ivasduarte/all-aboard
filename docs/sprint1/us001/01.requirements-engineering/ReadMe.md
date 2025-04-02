@@ -20,11 +20,11 @@ As an Editor, I want to create a map with a size and a name.
 > 
 >
 > **Question:** Are there specific formats required (square, rectangular), or can any dimensions be used?
-> **Answer:**
+> **Answer:** It's up to the editor to decide.
 >
 >
 > **Question:** Are there any naming conventions for maps (no special characters, character limit)?
-> **Answer:**
+> **Answer:** File name like restrictions.
 >
 >
 > **Question:** Will there be predefined maps, or will all maps be created by editors?
@@ -36,10 +36,19 @@ As an Editor, I want to create a map with a size and a name.
 >
 >
 > **Question:** Can the map size be a real number, or should it only be an integer?
-> **Answer:**
+> **Answer:** It should be a positive integer.
 >
+> 
 > **Question:** If desired, can the editor have access to the list of previously created maps for future editing?
 > **Answer:** 
+> 
+> 
+> **Question:** Is there a predefined list of sizes, or should users be able to input custom dimensions?
+> **Answer:** Custom dimensions but suggesting predefined sizes could be a good idea.
+> 
+> 
+> **Question:** Should map names be unique within the system?
+> **Answer:** Yes.
 
 
 
@@ -51,6 +60,7 @@ As an Editor, I want to create a map with a size and a name.
 > **AC3:** The map size must be within a predefined range.
 > **AC4:** Upon successful creation, the system mjust display a confirmation message.
 > **AC5** If creation fails, the system must provide a descriptive error message indicating the cause.
+> **AC6:** Names of scenarios and maps must be different.
 
 ### 1.4. Found out Dependencies
 
