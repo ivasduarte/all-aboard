@@ -39,6 +39,14 @@ and can put the train into service on a specific route.
 > **Question:** How is the selection list of locomotives determined?
 > **Answer:** The locomotives that will be presented in the selection list are restricted to the current date and any restrictions that may have been defined in the scenario.
 The presentation of the list of locomotives is part of US09.
+> 
+> 
+> **Question:** How is the availability of locomotives determined?
+> **Answer:** Each locomotive model has a one-year entry into service period, after which it becomes available for purchase.
+> 
+> 
+> **Question:**  Is there a limit to the number of locomotives a player can buy?
+> **Answer:** No limit.
 ### 1.3. Acceptance Criteria
 
 * **AC1:** The player should 
