@@ -18,12 +18,14 @@ A line has a certain length, can be single or double, and can be electrified
 
 **From the client clarifications:**
 
->
+> There can't be more than one railway line connecting two stations.
+> It is possible to upgrade a railway line that already exists, if the price difference is spent.
 
 ### 1.3. Acceptance Criteria
 
 * **AC1:** The player should choose the stations from a list of registered
   stations.
+* **AC2:** The length of the railway line can't be less than the Euclidean distance between the stations.
 
 ### 1.4. Found out Dependencies
 
