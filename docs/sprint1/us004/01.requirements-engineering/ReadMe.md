@@ -73,16 +73,21 @@ or does he create the scenario first and then associate it with a map?
 
 ### 1.3. Acceptance Criteria
 
-> **AC1:** The system must allow the Editor to create a scenario for a selected map.
-> **AC2:** A scenario can't be created without an existing map.
-> **AC3:** The scenario must require are restrictions (time, historical, technological).
-> **AC4:** Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an 
+> **AC1**: Definition of the behaviour of ports, which cargoes they import/export and/or transform;
+> **AC2**: Definition of the available locomotion types (steam, diesel, and/or electric).
+> **AC3**: (Re)Definition of the factors that alter the generation (frequency)
+of generating industries
+> **AC4:** The system must allow the Editor to create a scenario for a selected map.
+> **AC5:** A scenario can't be created without an existing map.
+> **AC6:** The scenario must require are restrictions (time, historical, technological).
+> **AC7:** Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an 
 acceptable range).
-> **AC5:** Each scenario must have a unique name (avoid duplicates), and prevent special characters and empy values in the name.
-> **AC6:** Each scenario must be linked to exactly one map.
-> **AC7:** Upon successful creation, the system must display a confirmation message.
-> **AC8:** If creation fails, the system must provide a descriptive error message indicating the cause.
-> **AC9:** Only users with "Editor" privileges can create, modify, and manage scenarios.
+> **AC8:** Each scenario must have a unique name (avoid duplicates), and prevent special characters and empty values in the name.
+> **AC9:** Each scenario must be linked to exactly one map.
+> **AC10:** Upon successful creation, the system must display a confirmation message.
+> **AC11:** If creation fails, the system must provide a descriptive error message indicating the cause.
+> **AC12:** Only users with "Editor" privileges can create, modify, and manage scenarios.
+
 
 ### 1.4. Found out Dependencies
 
