@@ -36,7 +36,8 @@ As an Editor, I want to create a map with a size and a name.
 >
 >
 > **Question:** Can the map size be a real number, or should it only be an integer?
-> **Answer:** It should be a positive integer.
+> **Answer:** The map is a set of cells, similar to a spreadsheet. The coordinates are integers (row and column, 
+> or alternatively X and Y).
 >
 > 
 > **Question:** If desired, can the editor have access to the list of previously created maps for future editing?
@@ -58,7 +59,7 @@ As an Editor, I want to create a map with a size and a name.
 > **AC1:** The system must allow the Editor to create a map by providing a name and size.
 > **AC2:** The map name must be unique and cannot contain special characters or be left empy.
 > **AC3:** The map size must be within a predefined range.
-> **AC4:** Upon successful creation, the system mjust display a confirmation message.
+> **AC4:** Upon successful creation, the system must display a confirmation message.
 > **AC5** If creation fails, the system must provide a descriptive error message indicating the cause.
 > **AC6:** Names of scenarios and maps must be different.
 
