@@ -17,7 +17,13 @@ station.
 
 **From the client clarifications:**
 
+> **Question:** Can multiple cargo types be assigned to the same train?
 > 
+> **Answer:** yes;
+> 
+> **Question:** Does a route have a limit of stations that can be assigned?
+> 
+> **Answer:** no;
 ### 1.3. Acceptance Criteria
 
 * **AC1:** There needs to be at least two available stations
