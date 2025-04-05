@@ -51,7 +51,8 @@ The presentation of the list of locomotives is part of US09.
 
 * **AC1:** The player should 
 choose the locomotive from a list of available locomotives for the scenario as well as a current date.
-
+* **AC2:** The locomotives have to have a serial number (an ID)
+* **AC3:** The locomotives should have registered the date for the one-year entry into service period
 ### 1.4. Found out Dependencies
 
 * No dependency was found with other User Stories 

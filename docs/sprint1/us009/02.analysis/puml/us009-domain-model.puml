@@ -19,6 +19,7 @@ class Train{
 }
 class Locomotive {
     - name
+    - serialNumber
     - locomotiveType
     - power
     - acceleration
