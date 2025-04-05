@@ -34,7 +34,9 @@ this context, the goods that the Ports import and export are also defined.
 
 **From the client clarifications:**
 
->
+> **Question:** As an editor, when adding a new factory, do I need to check for overbuild?
+> **Answer:** Yes.
+
 ### 1.3. Acceptance Criteria
 
 * **AC1:** The selected map has to already exist.
