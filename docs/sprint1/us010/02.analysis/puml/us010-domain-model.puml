@@ -39,8 +39,13 @@ class Player {
     - password
 }
 
+class Route{
+    - id
+}
+
 Player "1" - "1" Train : selects
 Player "1" -- "1" Station : selects
 
 Player "1" -- "1" RailwayLine : assigns
+Train "1" - "1" Route : has
 @enduml
