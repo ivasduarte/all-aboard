@@ -23,8 +23,8 @@ class Editor {
     - password
 }
 
-Editor - Simulation
-Player -- Simulation
+Editor "1" - "1" Simulation : creates
+Player "1" -- "1" Simulation : creates
 
 
 @enduml

@@ -25,10 +25,9 @@ class Station {
     - centre
 }
 
-class StationType extends Station{
-    - Depot
-    - Station
-    - Terminal
+class StationType{
+    - id
+    - name
 }
 
 class Player {
@@ -40,6 +39,7 @@ class Player {
 
 Map "1" - "*" Station : has
 Player "1" -- "*" Station : creates
+Station "1" -- "1" StationType : has
 
 
 
