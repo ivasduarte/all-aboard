@@ -60,8 +60,14 @@ class Building{
 }
 
 class Cargo{
+- id
+    - type
 }
 
+class Route{
+- listStations
+- cargo
+}
 class RailwayLine{
 - name
     - id
@@ -126,7 +132,6 @@ Locomotive "1" - "*" LocomotiveType : has
 Carriage "1" - "*" CargoType : has
 Train *-- "0..*" Carriage : has >
 Train -- Route : assigned to >
-'should this be included? the route?
 Route *-- "2..*" Station : includes >
 
 City -- "0..*" Cargo : generates/consumes >
