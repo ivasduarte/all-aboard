@@ -17,9 +17,17 @@ cargo stored at the station.
 
 **From the client clarifications:**
 
-> **Question:** "Is the budget the only concern to build a station, or does the player also needs to have other specific resources, like steel, etc.? Are resources included on the budget, or the budget represent only the player's monetary value?"
+> **Question:** Is the budget the only concern to build a station, or does the player also needs to have other specific resources, like steel, etc.? Are resources included on the budget, or the budget represent only the player's monetary value?
 > 
-> **Answer:** "just the budget in a generic currency."
+> **Answer:** just the budget in a generic currency.
+> 
+> **Question:** What is the input data for the user story 5? Is there any input besides the type of the station?
+> 
+> **Answer:** Position; Station type (Terminal, Station or Depot) and, in the case of the station, the center must be filled in. If the proposed is not accepted an alternative one must be entered.
+> 
+> **Question:** If overbuilding occurs, the program stops running and the game ends or simply gives an error message and asks again for the station construction place?
+> 
+> **Answer:** Overbuilding in the Editor is possible, the existing building is replaced for the new one; Overbuilding in the Simulator is NOT possible, the player gets a warning and games continues.
 
 ### 1.3. Acceptance Criteria
 
