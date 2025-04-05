@@ -18,8 +18,11 @@ A line has a certain length, can be single or double, and can be electrified
 
 **From the client clarifications:**
 
-> There can't be more than one railway line connecting two stations.
-> It is possible to upgrade a railway line that already exists, if the price difference is spent.
+> **Question:** Does the type of station affect the type of railway lines that can be built?
+> **Answer:** No.
+> 
+> **Question:** Can there be railway lines of the same type between the same stations?
+> **Answer:** There cannot be more than one line between a pair of stations, but the existing line can be upgraded.
 
 ### 1.3. Acceptance Criteria
 
