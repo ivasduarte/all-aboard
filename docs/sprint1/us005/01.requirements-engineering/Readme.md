@@ -17,7 +17,8 @@ cargo stored at the station.
 
 **From the client clarifications:**
 
-> 
+> The only limit to building a station is the player's budget.
+
 ### 1.3. Acceptance Criteria
 
 * **AC1:** Overbuilding is not possible
