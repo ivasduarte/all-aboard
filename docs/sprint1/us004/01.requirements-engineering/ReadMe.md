@@ -14,61 +14,12 @@ As an Editor, I want to create a scenario for a selected map.
 conditions for using a given map, namely:
 • Time Restrictions - the period in which the simulation will take place;
 • Technological Restrictions - for example, which locomotives or industries are available in the scenario;
-• Historical Restrictions - historical events that make sense in the scenario and change the operating conditions of the simulator. For instance, a war increases the steel demand, and a vaccination campaign
-or a schooling program encourages mail and/or passenger traffic. In
-this context, the goods that the Ports import and export are also defined.
+• Historical Restrictions - historical events that make sense in the scenario and change the operating conditions of 
+the simulator. For instance, a war increases the steel demand, and a vaccination campaign or a schooling program
+encourages mail and/or passenger traffic. In this context, the goods that the Ports import and export are also defined.
 
 
 **From the client clarifications:**
-
-> **Question:** Should a scenario have a name and description, or is it only linked to a map?
-> **Answer:**
->
->
-> **Question:** Will scenarios be importable/exportable between different maps?
-> **Answer:**
->
->
-> **Question:** Can scenarios be modified after creation, or are they immutable?
-> **Answer:**
-> 
-> 
-> **Question:** Should scenarios define specific rules for resource generation and demand in cities and industries?
-> **Answer:** 
-> 
-> 
-> **Question:** How should the editor apply the restrictions for the scenario?
-> **Answer:** 
-> 
-> 
-> **Question:** How should be scenario be identified (i.e name, brief description)?
-> **Answer:**
-> 
-> 
-> **Question:** Can the editor select multiple restrictions in the same scenario?
-> **Answer:**
->
->
-> **Question:** What happens if an Editor tries to set conflicting restrictions (i.e. allowing a locomotive that hasn't 
-been invented yet)?
-> **Answer:**
->
->
-> **Question:** Can a scenario have multiple versions/be updated after creation, or should it only have the debut 
-version?
-> **Answer:**
->
->
-> **Question:** In one scenario, the editor can choose to import multiple products into the ports?
-> **Answer:**
->
->
-> **Question:** Regarding the creation of a scenario, does the editor first choose a map to create a scenario on,
-or does he create the scenario first and then associate it with a map?
-> **Answer:**
->
->
->
  
 
 ### 1.3. Acceptance Criteria
