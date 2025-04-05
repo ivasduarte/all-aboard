@@ -18,7 +18,14 @@ end).
 
 **From the client clarifications:**
 
+> **Question:** There is a limit to cargo storage?
 > 
+> **Answer:** 24
+> 
+> **Question:** should cargo generation dynamically update as the railway network expands or changes?
+> 
+> **Answer:** yes; the generation is done for the industries and house blocks served by the stations present in the network.
+
 ### 1.3. Acceptance Criteria
 
 * **AC1:** This simulator should provide options for start/pause.
