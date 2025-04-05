@@ -36,6 +36,9 @@ this context, the goods that the Ports import and export are also defined.
 
 > **Question:** As an editor, when adding a new factory, do I need to check for overbuild?
 > **Answer:** Yes.
+> 
+> **Question:** Is it possible to add more than one industry to the map, at the same time?
+> **Answer:** As it is a UI issue, the teams have the freedom to decide. 
 
 ### 1.3. Acceptance Criteria
 

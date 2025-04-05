@@ -17,7 +17,10 @@ cargo stored at the station.
 
 **From the client clarifications:**
 
+> **Question:** "Is the budget the only concern to build a station, or does the player also needs to have other specific resources, like steel, etc.? Are resources included on the budget, or the budget represent only the player's monetary value?"
 > 
+> **Answer:** "just the budget in a generic currency."
+
 ### 1.3. Acceptance Criteria
 
 * **AC1:** Overbuilding is not possible
