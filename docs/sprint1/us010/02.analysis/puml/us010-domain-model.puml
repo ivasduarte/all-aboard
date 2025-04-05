@@ -41,6 +41,7 @@ class Player {
 
 class Route{
     - id
+    - ListOfStations
 }
 
 Player "1" - "1" Train : selects
