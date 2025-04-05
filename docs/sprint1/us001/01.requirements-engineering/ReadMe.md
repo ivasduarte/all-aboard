@@ -13,6 +13,7 @@ As an Editor, I want to create a map with a size and a name.
 > The Map Editor allows you to create rectangular maps and place static elements on the map. 
 > Elements can be cities or industries.
 
+
 **From the client clarifications:**
 
 > **Question:** The map's size must be infinite or should it have a limit?
@@ -26,22 +27,10 @@ As an Editor, I want to create a map with a size and a name.
 > **Question:** Are there any naming conventions for maps (no special characters, character limit)?
 > **Answer:** File name like restrictions.
 >
->
-> **Question:** Will there be predefined maps, or will all maps be created by editors?
-> **Answer:**
 > 
->
-> **Question:** Should maps be stored in a specific format?
-> **Answer:**
->
->
 > **Question:** Can the map size be a real number, or should it only be an integer?
 > **Answer:** The map is a set of cells, similar to a spreadsheet. The coordinates are integers (row and column, 
 > or alternatively X and Y).
->
-> 
-> **Question:** If desired, can the editor have access to the list of previously created maps for future editing?
-> **Answer:** 
 > 
 > 
 > **Question:** Is there a predefined list of sizes, or should users be able to input custom dimensions?
@@ -50,8 +39,6 @@ As an Editor, I want to create a map with a size and a name.
 > 
 > **Question:** Should map names be unique within the system?
 > **Answer:** Yes.
-
-
 
 
 ### 1.3. Acceptance Criteria
@@ -64,6 +51,7 @@ As an Editor, I want to create a map with a size and a name.
 > **AC6:** Names of scenarios and maps must be different.
 
 ### 1.4. Found out Dependencies
+
 
 ### 1.5 Input and Output Data
 

@@ -12,22 +12,20 @@ hide methods
 
 'title Domain Model
 
+class Editor{
+    - name
+    - ID
+    - password
+}
+
 class Map {
   - name
   - width
   - height
 }
 
-abstract class Element {
-  - x
-  - y
-}
 
-class City {
-  cityName
-}
+Editor "1" -- "*" Map : creates
 
-Map "1" -- "*" Element : contains
-Element <|-- City
 
 @enduml
