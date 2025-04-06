@@ -24,7 +24,13 @@ is no more available).
     
 **From the client clarifications:**
 
-> 
+> **Question:** Is there a limit on the number of buildings a station can be upgraded with?
+
+> **Answer:** No.
+
+> **Question:** Does the upgrade from telegraph to telephone occur automatically once a certain year is reached?
+
+> **Answer:** There are no automatic updates; When a new building is available, the player can buy it and then the previous building is replaced. 
 
 ### 1.3. Acceptance Criteria
 
