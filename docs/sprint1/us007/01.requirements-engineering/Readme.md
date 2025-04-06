@@ -26,7 +26,22 @@ customs, post office, hotel (small or large), silo, liquid storage.
 
 **From the client clarifications:**
 
-> 
+> **Question:** Should the list be sorted in any particular way? (e.g., by name, by cargo volume, etc.)?
+
+> **Answer:** To be determined.
+
+> **Question:** Will the player be able to apply filters to the list? If so, which ones would be useful? (e.g., only active ones, by type, by region…)?
+
+> **Answer:** To be determined.
+
+> **Question:** What information should be visible directly in the list? Just the station name, or also other details like type, location, and operation status (active/inactive), etc.? 
+
+> **Answer**: Name and a summary of available cargos to be collected and the ones that are demanded.
+
+> **Question**: Besides the existing buildings and demand/supply cargo, are there any other details that sould be shown when viewwing a station's information? For example, location, capacity, or operational status?
+
+> **Answer**: Available cargos to be collected and the ones that are demanded.
+
 ### 1.3. Acceptance Criteria
 
 **AC1:** Stations must be listed in alphabetical order by name.
