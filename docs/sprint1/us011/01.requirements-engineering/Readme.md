@@ -23,6 +23,10 @@ and, in the simulator, they have no acquisition cost.
 
 **From the client clarifications:**
 
+> **Question:** On these US I want to list all the trains available on the game to buy, or I want to list all the trains that I had already bought?
+
+> **Answer:** The ones you bought.
+
 ### 1.3. Acceptance Criteria
 
 **AC1**: The display of trains must include the locomotive and the current cargoes.
