@@ -1,0 +1,41 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+class Station {
+    - id
+    - name
+    - type
+    - building
+    - cargoDemand
+    - cargoSupply
+}
+
+class Building {
+    - id
+    - type
+}
+
+class Cargo {
+    - id
+    - type
+}
+
+Player "1" --> "1..*" Station : lists
+Station "1" --> "*" Building : contains
+Station "1" --> "*" Cargo : manages
+
+@enduml
