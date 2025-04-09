@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant ":System" as System
+
+activate Player
+
+    Player -> System : Request to list all stations
+    activate System
+
+    System --> Player : Display the stations Listed
+    deactivate System
+
+    Player -> System : Selects one station
+    activate System
+
+    System --> Player : Display station's details
+    deactivate System
+
+@enduml

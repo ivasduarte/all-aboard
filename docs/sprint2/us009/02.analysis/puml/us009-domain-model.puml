@@ -1,0 +1,59 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Train{
+    - name
+    - ID
+    - date of purchase
+}
+class Locomotive {
+    - name
+    - serialNumber
+    - locomotiveType
+    - power
+    - acceleration
+    - topSpeed
+    - startYear
+    - acquisitionType
+}
+
+class LocomotiveType{
+    - name
+    - ID
+    - description
+}
+
+class Carriage{
+    - name
+    - cargoType
+}
+
+class CargoType{
+    - name
+    - ID
+}
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+Train "1" - "*" Locomotive : has
+Player "1" -- "*" Train : creates
+Locomotive "1" - "*" LocomotiveType : has
+Carriage "1" - "*" CargoType : has
+Train "1" - "*" Carriage : has
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Editor
+participant "System" as System
+
+activate Editor
+
+    Editor -> System : asks to build a railway line between two stations
+    activate System
+
+    System --> Editor : requests data (Length of Railway Line, \nType of Railway Line and Two Stations)
+    deactivate System
+
+    Editor -> System : types requested data
+    activate System
+
+    System --> Editor : shows all data and displays operation success
+    deactivate System
+
+@enduml
