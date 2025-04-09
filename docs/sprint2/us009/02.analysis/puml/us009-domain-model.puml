@@ -28,10 +28,10 @@ class Locomotive {
     - acquisitionType
 }
 
-class LocomotiveType{
-    - name
-    - ID
-    - description
+enum LocomotiveType{
+    - Steam
+    - Diesel
+    - Electricity
 }
 
 class Carriage{
@@ -39,9 +39,13 @@ class Carriage{
     - cargoType
 }
 
-class CargoType{
-    - name
-    - ID
+enum CargoType{
+    - Passengers
+    - Mail
+    - Coal
+    - Iron ore
+    - Steel
+    - Cars
 }
 
 class Player {
