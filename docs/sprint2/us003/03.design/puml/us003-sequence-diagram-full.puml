@@ -5,59 +5,72 @@ skinparam shadowing false
 
 autonumber
 
+'hide footbox
 actor "Editor" as Editor
 participant ":AddCityUI" as UI
 participant ":AddCityController" as CTRL
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
-participant "CityRepository:\nCityRepository" as CityRepository
+participant "cityRepository:\nCityRepository" as cityRepository
 participant "City:\nCity" as City
 
-' Begin
+
 activate Editor
 
-    Editor -> UI : asks to register a new City
-    activate UI
+        Editor -> UI : asks to add a new city
 
-        UI -> CTRL ** : create Controller instance
-        activate CTRL
+        activate UI
+            UI -> CTRL** : create
 
-        UI -> Editor : requests data (City name, XY coordinates, \nnumber of house blocks)
-        Editor -> UI : provides data (City name, XY, house blocks)
+         UI -> Editor : requests data(city name)
+         Editor -> UI : types requested data (city name)
+         UI -> Editor : requests data(position XY in the map)
+         Editor -> UI : types requested data (position XY in the map)
+        UI -> Editor : requests data(number of house blocks)
+         Editor -> UI : types requested data (number of house blocks)
 
-        UI -> CTRL : registerCity(name, XY, blocks)
+            UI -> CTRL : addCity(city name, position XY in the map, number of house blocks)
 
-            CTRL -> CTRL : verifyCityName(name)
+            activate CTRL
+            CTRL -> CTRL : verifyCity(city name, position XY in the map, number of house blocks))
 
-            CTRL -> RepositorySingleton : getInstance()
-            activate RepositorySingleton
-                RepositorySingleton --> CTRL : repositories
-            deactivate RepositorySingleton
 
-            CTRL -> PLAT : getCityRepository()
-            activate PLAT
-                PLAT --> CTRL : CityRepository
-            deactivate PLAT
+                CTRL -> RepositorySingleton : getInstance()
+                activate RepositorySingleton
 
-            activate CityRepository
+                    RepositorySingleton --> CTRL: repositories
+                deactivate RepositorySingleton
 
-                CTRL -> CityRepository : registerCity(name, XY, blocks)
+                CTRL -> PLAT : getCityRepository()
+                activate PLAT
 
-                CityRepository -> City ** : create(name, XY, blocks)
-                activate City
-                deactivate City
+                    PLAT --> CTRL: cityRepository
+                deactivate PLAT
 
-                CityRepository -> CityRepository : verifyIfExistAndSave(name, XY, blocks)
 
-                CityRepository --> CTRL : updated CityList
+                activate cityRepository
 
-            deactivate CityRepository
 
-        CTRL --> UI : operation result + CityList
-        deactivate CTRL
+                    CTRL -> cityRepository : addCity (city name, position XY in the map, number of house blocks)
 
-    UI --> Editor : displays operation success + shows CityList
+                    cityRepository -> City** : create()
+
+
+                    cityRepository -> cityRepository : verifyIfExistAndSave(city name, position XY in the map, number of house blocks)
+
+
+
+
+                cityRepository -> CTRL : cityData
+
+
+                CTRL --> UI : cityData
+            deactivate CTRL
+
+
+            UI --> Editor : displays operation success and \n show cityData
     deactivate UI
 
 deactivate Editor
+
 @enduml

@@ -17,19 +17,29 @@ class ApplicationSession{
 class UserSession{
 }
 
-class HRM {
+class Editor {
+    - String name
+    - String ID
+    - String password
 }
 
 class City {
     - String name
-    + City(name)
+    - int posX
+    - int posY
+    - int numHouseBlocks
+    + City(name, posX, posY, numHouseBlocks)
+    + getCityName()
+    + getCityPositionX()
+    + getCityPositionY()
+    + getCityNumHouseBlocks()
 }
 
 
 
-class skillRepository {
+class cityRepository {
     - List <City>
-    + getCityList()
+    + getCitiesList()
 }
 
 
@@ -40,46 +50,46 @@ class Repositories {
 
 }
 
-class RegisterCityController{
-    + registerCity(skillRepository)
-    + getJCityList()
+class AddCityController{
+    + addCity(cityRepository)
+    + getCityList()
     + getCityRepository
 }
 
-note right of RegisterCityController
-    - skillName
-    is achieved with skill repository
+note right of AddCityController
+    - cityName
+    is achieved with city repository
 end note
 
-note bottom of skillRepository
+note bottom of cityRepository
     - used for displaying
-    the skill list
+    the cities list
 end note
 
-class RegisterCityUI {
+class AddCityUI {
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-RegisterCityUI .> RegisterCityController
+AddCityUI .> AddCityController
 
-RegisterCityController .> Repositories : repositories
+AddCityController .> Repositories : repositories
 
-Repositories -> "1" skillRepository
-RegisterCityController ..> City
-RegisterCityController ..> skillRepository : skillRepository
+Repositories -> "1" cityRepository
+AddCityController ..> City
+AddCityController ..> cityRepository : cityRepository
 
 
 ApplicationSession --> "1" UserSession : userSession
 
-RegisterCityController ..> ApplicationSession
-RegisterCityController ..> UserSession
+AddCityController ..> ApplicationSession
+AddCityController ..> UserSession
 
-skillRepository "1" --> "*" City : Citys
+cityRepository "1" --> "*" City : Citys
 
 City--> HRM : createdBy
 
-skillRepository --> "*" HRM : employs
+cityRepository --> "*" HRM : employs
 
 @enduml
