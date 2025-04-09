@@ -1,0 +1,63 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant ":AddCityUI" as UI
+participant ":AddCityController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "CityRepository:\nCityRepository" as CityRepository
+participant "City:\nCity" as City
+
+' Begin
+activate Editor
+
+    Editor -> UI : asks to register a new City
+    activate UI
+
+        UI -> CTRL ** : create Controller instance
+        activate CTRL
+
+        UI -> Editor : requests data (City name, XY coordinates, \nnumber of house blocks)
+        Editor -> UI : provides data (City name, XY, house blocks)
+
+        UI -> CTRL : registerCity(name, XY, blocks)
+
+            CTRL -> CTRL : verifyCityName(name)
+
+            CTRL -> RepositorySingleton : getInstance()
+            activate RepositorySingleton
+                RepositorySingleton --> CTRL : repositories
+            deactivate RepositorySingleton
+
+            CTRL -> PLAT : getCityRepository()
+            activate PLAT
+                PLAT --> CTRL : CityRepository
+            deactivate PLAT
+
+            activate CityRepository
+
+                CTRL -> CityRepository : registerCity(name, XY, blocks)
+
+                CityRepository -> City ** : create(name, XY, blocks)
+                activate City
+                deactivate City
+
+                CityRepository -> CityRepository : verifyIfExistAndSave(name, XY, blocks)
+
+                CityRepository --> CTRL : updated CityList
+
+            deactivate CityRepository
+
+        CTRL --> UI : operation result + CityList
+        deactivate CTRL
+
+    UI --> Editor : displays operation success + shows CityList
+    deactivate UI
+
+deactivate Editor
+@enduml
