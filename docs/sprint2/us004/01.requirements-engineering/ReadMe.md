@@ -94,8 +94,13 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 ### 1.7. System Sequence Diagram (SSD)
 
 **Acceptance Sequence Diagram:**
-
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-acceptance.svg)
+
+**Map not selected:**
+![System Sequence Diagram](svg\us004-system-sequence-diagram-map.svg)
+
+**Invalid Restrictions:**
+![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-restrictions.svg)
 
 
 
