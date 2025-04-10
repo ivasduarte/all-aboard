@@ -26,7 +26,6 @@ class Industry {
 
 class Editor {
     - name
-    - ID
 }
 
 class IndustryType {
