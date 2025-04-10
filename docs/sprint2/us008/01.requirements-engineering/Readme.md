@@ -38,10 +38,15 @@ A line has a certain length, can be single or double, and can be electrified
 ### 1.5 Input and Output Data
 
 **Input Data:**
-
-- Two stations selected from a list of registered stations.
+* **Typed data:**
 - Length of the railway line.
-- Type of railway line.
+
+* **Selected data:**
+- Map
+- Scenario
+- City
+- Two stations
+- Type of railway line
 
 **Output Data:**
 

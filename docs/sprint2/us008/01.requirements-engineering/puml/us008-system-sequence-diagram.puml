@@ -10,16 +10,46 @@ participant "System" as System
 
 activate Editor
 
-    Editor -> System : asks to build a railway line between two stations
+    Editor -> System : starts the simulation
     activate System
 
-    System --> Editor : requests data (Length of Railway Line, \nType of Railway Line and Two Stations)
+    System --> Editor : shows a list of the available maps
     deactivate System
 
-    Editor -> System : types requested data
+    Editor -> System : selects the map
     activate System
 
-    System --> Editor : shows all data and displays operation success
+    System --> Editor : shows a list of the available scenarios
+    deactivate System
+
+    Editor -> System : selects the scenario
+    activate System
+
+    System --> Editor : shows a list of the cities
+    deactivate System
+
+    Editor -> System : selects a city
+    activate System
+
+    System --> Editor : shows a list of the actions the player can do
+    deactivate System
+
+    Editor -> System : selects to add a railway line
+    activate System
+
+    System --> Editor : shows a list of the available stations
+    deactivate System
+
+    Editor -> System : selects the stations
+    activate System
+
+    System --> Editor : requests the type of the railway line
+    deactivate System
+
+    Editor -> System : inserts the type of railway line
+    activate System
+
+    System --> Editor : shows a message about the success of the operation, including the data received
     deactivate System
 
 @enduml
