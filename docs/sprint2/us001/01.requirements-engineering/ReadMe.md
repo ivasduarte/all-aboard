@@ -57,8 +57,12 @@ As an Editor, I want to create a map with a size and a name.
 
 **Input Data:**
 
-- Size
+*Select Data:*
+- Size list, with "Custom Sizes", so that users can create personalized maps.
+
+*Type Data:*
 - Name
+- Size, if chosen said option on predefined size list.
 
 **Output Data:**
 
@@ -66,10 +70,25 @@ As an Editor, I want to create a map with a size and a name.
 - Error message, in case of failed map creation, indicating failure cause.
 
 
-### 1.6. System Sequence Diagram (SSD)
+### 1.6. Output Data Messages Assumptions
 
-_Insert here a SSD depicting the envisioned Actor-System interactions and throughout which data is inputted and outputted to fulfill the requirement. All interactions must be numbered._
+> **Possible Error Case:**
+>
+> - *Invalid name input:*
+>
+> ERROR. Invalid name.
+> Name shouldn't start with a space, hyphen, or underline.
+> Must be under 15 characters.
+> Must have, at least, one upper case character.
+>
+>
+> - *Invalid size input:*
+>
+> ERROR: Invalid size of map.
+> Must be integers.
+> Map size must be under 256x256.
+
+
+### 1.7. System Sequence Diagram (SSD)
 
 ![System Sequence Diagram](svg\us001-system-sequence-diagram.svg)
-
-### 1.7 Other Relevant Remarks

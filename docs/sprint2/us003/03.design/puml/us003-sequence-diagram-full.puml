@@ -22,17 +22,14 @@ activate Editor
         activate UI
             UI -> CTRL** : create
 
-         UI -> Editor : requests data(city name)
-         Editor -> UI : types requested data (city name)
-         UI -> Editor : requests data(position XY in the map)
-         Editor -> UI : types requested data (position XY in the map)
-        UI -> Editor : requests data(number of house blocks)
-         Editor -> UI : types requested data (number of house blocks)
-
-            UI -> CTRL : addCity(city name, position XY in the map, number of house blocks)
+        UI -> Editor: requests to select the map
+        Editor -> UI: selects the map
+         UI -> Editor : requests data(city name, position X, position Y, number of house blocks)
+         Editor -> UI : types requested data (city name, position X, position Y, number of house blocks)
+            UI -> CTRL : addCity(mapID, city name, position X, position Y, number of house blocks)
 
             activate CTRL
-            CTRL -> CTRL : verifyCity(city name, position XY in the map, number of house blocks))
+
 
 
                 CTRL -> RepositorySingleton : getInstance()
@@ -51,12 +48,12 @@ activate Editor
                 activate cityRepository
 
 
-                    CTRL -> cityRepository : addCity (city name, position XY in the map, number of house blocks)
+                    CTRL -> cityRepository : addCity (mapID, city name, position X, position Y, number of house blocks)
 
                     cityRepository -> City** : create()
 
 
-                    cityRepository -> cityRepository : verifyIfExistAndSave(city name, position XY in the map, number of house blocks)
+                    cityRepository -> cityRepository : verifyIfExistsAndSave(mapID, city name, position X, position Y, number of house blocks)
 
 
 
