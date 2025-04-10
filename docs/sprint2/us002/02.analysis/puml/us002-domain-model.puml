@@ -2,30 +2,33 @@
 skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
-
-'left to right direction
-
 skinparam classAttributeIconSize 0
 
 hide circle
 hide methods
 
-'title Domain Model
-
 class Map {
     - name
-    - width
-    - height
+    - width: int
+    - height: int
 }
 
-class Industry {
-    - position XY on the map
+class Scenario {
     - name
-    - id
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
 }
 
 class Editor {
     - name
+    - password
+}
+
+class Industry {
+    - name
+    - id
+    - position
 }
 
 class IndustryType {
@@ -34,8 +37,9 @@ class IndustryType {
     - description
 }
 
-Map "1" - "*" Industry : has
 Editor "1" -- "*" Industry : creates
-Industry "1" - "*" IndustryType : has
+Industry "*" -- "1" IndustryType : has
+Map "1" -- "1" Scenario : defines
+Scenario "1" - "*" Industry : has
 
 @enduml

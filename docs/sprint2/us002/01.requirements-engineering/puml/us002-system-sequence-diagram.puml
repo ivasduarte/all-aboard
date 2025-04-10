@@ -25,12 +25,6 @@ activate Editor
     Editor -> System : selects the scenario
     activate System
 
-    System --> Editor : shows a list of the cities
-    deactivate System
-
-    Editor -> System : selects a city
-    activate System
-
     System --> Editor : requests the position XY
     deactivate System
 
