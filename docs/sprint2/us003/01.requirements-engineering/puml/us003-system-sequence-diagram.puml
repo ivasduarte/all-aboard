@@ -13,6 +13,12 @@ activate Editor
     Editor -> System : asks to add a city
     activate System
 
+    System --> Editor : requests to select a map
+    deactivate System
+
+    Editor -> System : selects the map
+    activate System
+
     System --> Editor : requests data (position XY in the map, \nname and number of house blocks)
     deactivate System
 
