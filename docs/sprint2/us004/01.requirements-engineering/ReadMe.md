@@ -102,5 +102,12 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 **Invalid Restrictions:**
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-restrictions.svg)
 
+**Dupliate Name:**
+![System Sequence Diagram](svg\us004-system-sequence-diagram-name.svg)
+
+
+**Invalid name:**
+![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-name.svg)
+
 
 
