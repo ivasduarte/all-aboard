@@ -15,28 +15,28 @@ class UserSession {
 }
 
 class Player {
-    - name
-    - ID
-    - password
+    - String name
+    - String ID
+    - String password
 }
 
 class Train {
-    - name
-    - ID
-    - dateOfPurchase
+    - String name
+    - String ID
+    - Date dateOfPurchase
     + getTrainName()
     + getDateOfPurchase()
 }
 
 class Locomotive {
-    - name
-    - serialNumber
-    - locomotiveType
-    - power
-    - acceleration
-    - topSpeed
-    - startYear
-    - acquisitionType
+    - String name
+    - String serialNumber
+    - LocomotiveType locomotiveType
+    - int power
+    - int acceleration
+    - int topSpeed
+    - int startYear
+    - String acquisitionType
 }
 
 enum LocomotiveType {
@@ -72,7 +72,7 @@ class Repositories {
 }
 
 class BuyTrainController {
-    + buyTrain(...)
+    + buyTrain()
     + getTrainList()
     + getTrainRepository()
 }
