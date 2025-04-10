@@ -91,4 +91,5 @@ As an Editor, I want to create a map with a size and a name.
 
 ### 1.7. System Sequence Diagram (SSD)
 
-![System Sequence Diagram](svg\us001-system-sequence-diagram.svg)
+**Acceptance Sequence Diagram:**
+![System Sequence Diagram](svg\us001-system-sequence-diagram-acceptance.svg)
