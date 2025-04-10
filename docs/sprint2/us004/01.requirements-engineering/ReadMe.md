@@ -64,9 +64,31 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 - Error message, in case of failed scenario creation, indicating failure cause.
 
 
-### 1.6. System Sequence Diagram (SSD)
+### 1.6. Output Data Messages Assumptions
 
+> **Possible Error Case:**
+>
+> - *Map not selected:*
+>
+> ERROR. Must select a map for scenario.
+>
+>
+> - *Invalid restrictions:*
+> 
+> ERROR: Time, historical, or technological restrictions are invalid. Please enter again.
+>
+>
+> - *Duplicate name:*
+> 
+> ERROR: Scenario Name already exists.
+> 
+> - *Invalid name:*
+>
+> ERROR: Invalid name. Must be under 15 characters, have, at least, one upper case character, and can´t be null.
+
+
+
+### 1.7. System Sequence Diagram (SSD)
 
 ![USXXX-SSD](svg/us004-system-sequence-diagram.svg)
 
-### 1.7 Other Relevant Remarks
