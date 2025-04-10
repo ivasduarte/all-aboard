@@ -14,7 +14,6 @@ hide methods
 
 class Train{
     - name
-    - ID
     - date of purchase
 }
 class Locomotive {
