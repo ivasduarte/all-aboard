@@ -57,12 +57,8 @@ As an Editor, I want to create a map with a size and a name.
 
 **Input Data:**
 
-*Selected Data:*
-- Size list, with "Custom Sizes," so that users can create personalized maps.
-
-*Typed Data:*
+- Size
 - Name
-- Size, if chosen said option on predefined size list.
 
 **Output Data:**
 
