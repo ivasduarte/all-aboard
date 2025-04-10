@@ -1,0 +1,72 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant ":BuyTrainUI" as UI
+participant ":BuyTrainController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "trainRepository:\nTrainRepository" as TrainRepository
+participant "Train:\nTrain" as Train
+participant "Locomotive:\nLocomotive" as Locomotive
+
+activate Player
+
+    Player -> UI : requests to buy a new train
+    activate UI
+
+        UI -> CTRL** : create
+
+        UI -> Player : displays available locomotives
+
+        loop Selecting locomotives
+            Player -> UI : selects a locomotive
+            UI -> CTRL : selectLocomotive(locomotiveId)
+
+            CTRL -> CTRL : validateLocomotive(locomotiveId)
+
+            UI -> Player : asks to add another locomotive?
+
+            alt Player adds another locomotive
+                Player -> UI : selects another locomotive
+                UI -> CTRL : selectLocomotive(locomotiveId)
+            else Player finalizes selection
+                UI -> CTRL : finalizeSelection()
+            end
+        end
+
+        activate CTRL
+
+            CTRL -> RepositorySingleton : getInstance()
+            activate RepositorySingleton
+                RepositorySingleton --> CTRL : repositories
+            deactivate RepositorySingleton
+
+            CTRL -> PLAT : getTrainRepository()
+            activate PLAT
+                PLAT --> CTRL : TrainRepository
+            deactivate PLAT
+
+            activate TrainRepository
+
+                CTRL -> TrainRepository : createTrain(selectedLocomotives, date)
+
+                TrainRepository -> Train** : create()
+
+                TrainRepository -> TrainRepository : save(train)
+
+                TrainRepository --> CTRL : trainData
+            deactivate TrainRepository
+
+        CTRL --> UI : trainData
+        deactivate CTRL
+
+    UI --> Player : displays purchase success + trainData
+    deactivate UI
+
+deactivate Player
+@enduml

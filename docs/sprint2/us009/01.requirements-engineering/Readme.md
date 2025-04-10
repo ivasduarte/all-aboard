@@ -20,8 +20,9 @@ cargo between stations, according to a route defined by the manager
 > Trains are composed of locomotives and carriages. The locomotives provide
 traction to the composition (train) and can be of different types, namely,
 run by steam, diesel, and electricity. Note that electric locomotives require
-electrified lines. The locomotives are characterized by several technical aspects, such as power, acceleration, top speed, start year of operation, and
-acquisition price. The carriages2 are distinguished by the type of cargo they
+electrified lines. The locomotives are characterized by several technical aspects, 
+such as power, acceleration, top speed, start year of operation, and
+acquisition price. The carriages are distinguished by the type of cargo they
 can transport (e.g., passengers, mail, coal, iron ore, steel, cars) and, in the
 context of the simulator, they have no acquisition cost.
 > In the simulator, the player/user acquires trains within the available budget

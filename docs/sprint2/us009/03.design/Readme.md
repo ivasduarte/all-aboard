@@ -17,7 +17,7 @@
 | Step 7         | ...confirming the selection?                                            | BuyTrainUI         | **Pure Fabrication**: UI confirms to the player that their selection is acknowledged.  |
 | Step 8         | ...coordinating the whole flow (buy train use case)?                    | BuyTrainController | **Controller**: Orchestrates the interaction between UI, domain classes, and logic.    |
 | Step 9         | ...showing purchase details (selected locomotives + current date)?      | BuyTrainUI         | **Pure Fabrication**: Responsible for displaying the final summary of the transaction. |
-| Step 10        | ...storing the final train purchase or assembling the train from parts? | Train / TrainOrder | **Information Expert**: Domain class knows how to store/manage train composition data. |
+| Step 10        | ...storing the final train purchase or assembling the train from parts? | Train              | **Information Expert**: Domain class knows how to store/manage train composition data. |
 
 
 ### Systematization ##
@@ -25,7 +25,7 @@
 **According to the taken rationale, the conceptual classes promoted to software classes are:**
 
 * Train
-* **Locomotive
+* Locomotive
 * Player
 
 **Other software classes (i.e., Pure Fabrication) identified:**

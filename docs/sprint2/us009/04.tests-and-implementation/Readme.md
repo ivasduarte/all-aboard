@@ -1,27 +1,59 @@
-# USXXX - YYY
-
-_XXX stands for User Story number and YYY for User Story description (e.g. US006 - Create a Task)_
+# US009 - Buy a Train
 
 ## 4. Tests
-_In this section, it is suggested to systematize how the tests were designed to allow a correct measurement of requirements fulfilling._
 
 **_DO NOT COPY ALL DEVELOPED TESTS HERE_**
 
-**Test 1:** Check that it is not possible to create an instance of the Example class with null values.
+**Test 1:** Check that it is not possible to create a `Locomotive` with null or invalid parameters
 
-	@Test(expected = IllegalArgumentException.class)
-		public void ensureNullIsNotAllowed() {
-		Exemplo instance = new Exemplo(null, null);
-	}
+```java
+@Test(expected = IllegalArgumentException.class)
+public void ensureNullIsNotAllowed() {
+    Locomotive loco = new Locomotive(null, null, null, 0, 0, 0, 0, null);
+}
+```
 
-_It is also recommended to organize this content by subsections._
+**Test 2:** Check that a locomotive has a valid (non-null and non-empty) serial number
+
+```java
+@Test(expected = IllegalArgumentException.class)
+public void ensureLocomotiveHasSerialNumber() {
+    Locomotive loco = new Locomotive("Express", "", LocomotiveType.Steam, 4000, 80, 150, 1920, AcquisitionType.PURCHASED);
+}
+```
+
+**Test 3:** Check that the player can select a locomotive from a list of available locomotives
+
+```java
+@Test
+public void ensureLocomotiveCanBeSelected() {
+    List<Locomotive> availableLocomotives = scenario.getAvailableLocomotives();
+    Locomotive selected = availableLocomotives.get(0);
+    assertNotNull(selected);
+}
+```
+
+**Test 4:** Check that the selected locomotive has a valid entry into service period (1 year from purchase)
+
+```java
+@Test
+public void ensureValidEntryIntoServicePeriod() {
+    LocalDate purchaseDate = LocalDate.of(2025, 1, 1);
+    Locomotive loco = new Locomotive("Alpha", "SN-001", LocomotiveType.Diesel, 5000, 90, 180, 2025, AcquisitionType.PURCHASED);
+    
+    LocalDate expectedEndOfService = purchaseDate.plusYears(1);
+    assertEquals(expectedEndOfService, loco.getEntryIntoServiceEndDate(purchaseDate));
+}
+```
 
 
 ## 5. Construction (Implementation)
 
-_In this section, it is suggested to provide, if necessary, some evidence that the construction/implementation is in accordance with the previously carried out design. Furthermore, it is recommeded to mention/describe the existence of other relevant (e.g. configuration) files and highlight relevant commits._
+**Class BuyTrainController**
 
-_It is also recommended to organize this content by subsections._
+**Class TrainRepository**
+
+**Class Locomotive**
 
 
 ## 6. Integration and Demo

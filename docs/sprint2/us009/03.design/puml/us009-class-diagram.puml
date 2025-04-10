@@ -1,0 +1,112 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+skinparam classAttributeIconSize 0
+
+'class diagram for Buy a Train (US009)
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+class UserSession {
+}
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+class Train {
+    - name
+    - ID
+    - dateOfPurchase
+    + getTrainName()
+    + getDateOfPurchase()
+}
+
+class Locomotive {
+    - name
+    - serialNumber
+    - locomotiveType
+    - power
+    - acceleration
+    - topSpeed
+    - startYear
+    - acquisitionType
+}
+
+enum LocomotiveType {
+    Steam
+    Diesel
+    Electricity
+}
+
+class Carriage {
+    - name
+    - cargoType
+}
+
+enum CargoType {
+    Passengers
+    Mail
+    Coal
+    Iron ore
+    Steel
+    Cars
+}
+
+class TrainRepository {
+    - List<Train> trains
+    + getTrainsList()
+    + saveTrain(train)
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getTrainRepository()
+}
+
+class BuyTrainController {
+    + buyTrain(...)
+    + getTrainList()
+    + getTrainRepository()
+}
+
+class BuyTrainUI {
+}
+
+' Software-layer relationships
+BuyTrainUI .> BuyTrainController
+BuyTrainController .> Repositories : accesses
+BuyTrainController ..> TrainRepository : uses
+BuyTrainController ..> Train : creates
+BuyTrainController ..> Locomotive : selects
+BuyTrainController ..> Carriage : optionally adds
+
+ApplicationSession -> ApplicationSession : instance
+ApplicationSession --> "1" UserSession : userSession
+BuyTrainController ..> ApplicationSession
+BuyTrainController ..> UserSession
+
+Repositories -> "1" TrainRepository
+
+' Domain-layer relationships
+Train "1" -- "*" Locomotive : has
+Train "1" -- "*" Carriage : has
+Player "1" -- "*" Train : creates
+
+Locomotive "1" -- "1" LocomotiveType
+Carriage "1" -- "1" CargoType
+
+Train --> Player : createdBy
+
+note bottom of TrainRepository
+    Holds and manages train objects
+end note
+
+@enduml

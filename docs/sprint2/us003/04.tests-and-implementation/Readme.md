@@ -1,9 +1,6 @@
-# USXXX - YYY
-
-_XXX stands for User Story number and YYY for User Story description (e.g. US006 - Create a Task)_
+# US003 - Add a city 
 
 ## 4. Tests
-_In this section, it is suggested to systematize how the tests were designed to allow a correct measurement of requirements fulfilling._
 
 **_DO NOT COPY ALL DEVELOPED TESTS HERE_**
 
@@ -14,14 +11,39 @@ _In this section, it is suggested to systematize how the tests were designed to 
 		Exemplo instance = new Exemplo(null, null);
 	}
 
-_It is also recommended to organize this content by subsections._
+**Test 2:** Check if a city's name does not have any special characters
+
+    @Test(expected = IllegalArgumentException.class)
+        public void ensureCityNameHasNoSpecialCharacters() {
+            City city = new City("São@Paulo", 10, 15, 12);
+        }
+
+
+**Test 3:** Check if a city's name does not contain any digits
+    
+    @Test(expected = IllegalArgumentException.class)
+        public void ensureCityNameHasNoDigits() {
+            City city = new City("City123", 5, 10, 20);
+        }
+
+**Test 4:** Check if the position where this city is located is valid 
+
+    @Test(expected = IllegalArgumentException.class)
+        public void ensureUniqueCityPosition() {
+            CityRepository repo = new CityRepository();
+            repo.addCity(new City("Porto", 10, 20, 5));
+            repo.addCity(new City("Braga", 10, 20, 6)); 
+        }
+
+
+
 
 
 ## 5. Construction (Implementation)
 
-_In this section, it is suggested to provide, if necessary, some evidence that the construction/implementation is in accordance with the previously carried out design. Furthermore, it is recommeded to mention/describe the existence of other relevant (e.g. configuration) files and highlight relevant commits._
+**Class AddCityController**
 
-_It is also recommended to organize this content by subsections._
+**Class CityRepository**
 
 
 ## 6. Integration and Demo

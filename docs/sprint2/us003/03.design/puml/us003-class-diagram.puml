@@ -86,10 +86,9 @@ ApplicationSession --> "1" UserSession : userSession
 AddCityController ..> ApplicationSession
 AddCityController ..> UserSession
 
-cityRepository "1" --> "*" City : Citys
+cityRepository "1" --> "*" City : Cities
 
-City--> HRM : createdBy
+City--> Editor : createdBy
 
-cityRepository --> "*" HRM : employs
 
 @enduml
