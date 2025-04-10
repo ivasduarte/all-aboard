@@ -66,6 +66,9 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 
 ### 1.6. Output Data Messages Assumptions
 
+> **Acceptance Message:**
+> Scenario created successfully.
+> 
 > **Possible Error Case:**
 >
 > - *Map not selected:*
@@ -90,5 +93,9 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 
 ### 1.7. System Sequence Diagram (SSD)
 
-![USXXX-SSD](svg/us004-system-sequence-diagram.svg)
+**Acceptance Sequence Diagram:**
+
+![System Sequence Diagram](svg\us004-system-sequence-diagram-acceptance.svg)
+
+
 
