@@ -13,14 +13,37 @@ activate Editor
     Editor -> System : asks to add an industry
     activate System
 
-
-    System --> Editor : requests data (position XY in the map, industry type)
+    System --> Editor : shows a list of the available maps
     deactivate System
 
-    Editor -> System : types requested data
+    Editor -> System : selects the map
     activate System
 
-    System --> Editor : shows all data and displays operation success
+    System --> Editor : shows a list of the available scenarios
+    deactivate System
+
+    Editor -> System : selects the scenario
+    activate System
+
+    System --> Editor : shows a list of the cities
+    deactivate System
+
+    Editor -> System : selects a city
+    activate System
+
+    System --> Editor : requests the position XY
+    deactivate System
+
+    Editor -> System : inserts the position
+    activate System
+
+    System --> Editor : shows a list of the type of industries available
+    deactivate System
+
+    Editor -> System : selects a type of industry
+    activate System
+
+    System --> Editor : shows a message about the success of the operation, including the data received
     deactivate System
 
 @enduml
