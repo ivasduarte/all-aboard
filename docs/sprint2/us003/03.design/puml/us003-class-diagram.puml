@@ -21,23 +21,29 @@ class Editor {
     - String name
     - String ID
     - String password
+    + getEditorName()
+    + getEditorID()
+    + getEditorPassword()
 }
 
 class City {
+    - String mapID
     - String name
+    - String cityID
     - int posX
     - int posY
     - int numHouseBlocks
-    + City(name, posX, posY, numHouseBlocks)
+    + City(mapID, name, posX, posY, numHouseBlocks)
     + getCityName()
     + getCityPositionX()
     + getCityPositionY()
     + getCityNumHouseBlocks()
+    + getCityMapID()
 }
 
 
 
-class cityRepository {
+class CityRepository {
     - List <City>
     + getCitiesList()
 }
@@ -55,16 +61,6 @@ class AddCityController{
     + getCityList()
     + getCityRepository
 }
-
-note right of AddCityController
-    - cityName
-    is achieved with city repository
-end note
-
-note bottom of cityRepository
-    - used for displaying
-    the cities list
-end note
 
 class AddCityUI {
 }

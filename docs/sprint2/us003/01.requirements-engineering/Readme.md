@@ -40,14 +40,21 @@ food, textiles, cars).
 ### 1.5 Input and Output Data
 
 **Input Data:**
-
-- Position XY of the city in the map
-- Name 
-- Number of house blocks 
-
+* **Typed Data:**
+    - Position XY of the city in the map
+    - Name 
+    - Number of house blocks
+* **Selected Data:**
+    - Map to add the city 
 **Output Data:**
+* **Confirmation of Operation:**
+    - A message confirming that the operation has been completed successfully
 
-- Message of success indicating that the city has been added 
+* **Warnings or Errors (if applicable):**
+    - Notifications of any input errors
+
+* **Operational Feedback:**
+    - A message containing all the data of the added city 
 
 
 ### 1.6. System Sequence Diagram (SSD)
