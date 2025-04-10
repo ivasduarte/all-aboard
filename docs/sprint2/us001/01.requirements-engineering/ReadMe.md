@@ -93,3 +93,7 @@ As an Editor, I want to create a map with a size and a name.
 
 **Acceptance Sequence Diagram:**
 ![System Sequence Diagram](svg\us001-system-sequence-diagram-acceptance.svg)
+
+
+**Invalid Name Input Sequence Diagram:**
+![System Sequence Diagram](svg\us001-system-sequence-diagram-invalid-name.svg)
