@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant "System" as System
+
+activate Editor
+
+    Editor -> System : request to create a scenario
+    activate System
+
+    System --> Editor : display available maps
+    deactivate System
+
+    Editor -> System : no map selected
+    activate System
+
+    System --> Editor : return error message (ERROR: Must select a map for scenario.)
+    deactivate System
+
+@enduml
