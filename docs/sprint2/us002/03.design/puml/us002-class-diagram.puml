@@ -1,0 +1,79 @@
+@startuml
+skinparam packageeStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Editor {
+    - String name
+    - String ID
+    - String password
+    + getEditorName()
+    + getEditorID()
+    + getEditorPassword()
+}
+
+class UserSession {
+}
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+class Industry {
+    - String mapID
+    - String scenarioID
+    - String industryType
+    - int posX
+    - int posY
+    + Industry(mapID, scenarioID, posX, posY, industryType)
+    + getIndustryMapID()
+    + getIndustryScenarioID()
+    + getIndustryPositionX()
+    + getIndustryPositionY()
+    + getIndustryType()
+}
+
+class AddIndustryUI {
+}
+
+class AddIndustryController {
+    + getIndustryRepository
+    + addIndustry(industryRepository)
+    + getIndustryList()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : repositories
+    + getIndustryRepository()
+}
+
+class IndustryRepository {
+    - List <Industry>
+    + getIndustriesList()
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+AddIndustryUI .> AddIndustryController
+
+AddIndustryController .> Repositories : repositories
+
+Repositories -> "1" industryRepository
+AddIndustryController ..> Industry
+AddIndustryController ..> industryRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+AddIndustryController ..> ApplicationSession
+AddIndustryController ..> UserSession
+
+industryRepository "1" --> "*" Industry : Industries
+
+Industry --> Editor : createdBy
+
+@enduml
