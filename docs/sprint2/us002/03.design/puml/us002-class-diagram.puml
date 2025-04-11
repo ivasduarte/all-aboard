@@ -63,16 +63,16 @@ AddIndustryUI .> AddIndustryController
 
 AddIndustryController .> Repositories : repositories
 
-Repositories -> "1" industryRepository
+Repositories -> "1" IndustryRepository
 AddIndustryController ..> Industry
-AddIndustryController ..> industryRepository
+AddIndustryController ..> IndustryRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
 AddIndustryController ..> ApplicationSession
 AddIndustryController ..> UserSession
 
-industryRepository "1" --> "*" Industry : Industries
+IndustryRepository "1" --> "*" Industry : Industries
 
 Industry --> Editor : createdBy
 
