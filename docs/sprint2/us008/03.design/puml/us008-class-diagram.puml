@@ -1,0 +1,103 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+skinparam classAttributeIconSize 0
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+class UserSession {
+}
+
+class Player {
+    - String name
+    - String ID
+    - String password
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getStationsRepository()
+}
+
+class BuildRalwayLineUI {
+}
+
+class BuildRalwayLineController {
+    + buildRailwayLine()
+    + getRailwayLineList()
+    + getRailwayLineRepository()
+}
+
+class StationsRepository {
+    - List<Station> stations
+    + getStationsList()
+    + getStationsRepository()
+}
+
+class RailwayLineRepository {
+    - List<RailwayLine> railwayLines
+    + getRailwayLineList()
+    + getRailwayLineRepository()
+}
+
+class RailwayLine {
+    - String station1
+    - String station2
+    - String railwayLineType
+    + getRailwayLineType()
+    + getRailwayLineType()
+}
+
+class Station {
+    - String name
+    - String type
+    - String id
+    + getStationType()
+    + getStationName()
+}
+
+class RailwayLineType {
+    Single
+    Double
+    Electrified
+    Non-electrified
+}
+
+class StationType {
+    Terminal
+    Depot
+    Station
+}
+
+BuildRalwayLineUI .> BuildRalwayLineController
+
+BuildRalwayLineController ..> Repositories : accesses
+
+BuildRalwayLineController ..> StationsRepository : uses
+Repositories --> "1" StationsRepository
+
+BuildRalwayLineController ..> RailwayLineRepository : uses
+Repositories --> "1" RailwayLineRepository
+
+BuildRalwayLineController ..> ApplicationSession
+BuildRalwayLineController ..> UserSession
+ApplicationSession --> "1" UserSession : userSession
+ApplicationSession -> ApplicationSession : instance
+
+BuildRalwayLineController ..> RailwayLine : builds
+
+RailwayLine --> Player : createdBy
+Player "1" -- "*" RailwayLine : creates
+
+BuildRalwayLineController ..> "2" Station : selects
+RailwayLine "1" --> "2" Station : connects
+
+RailwayLine "1" - "1" RailwayLineType
+Station "1" -- "1" StationType
+
+@enduml
