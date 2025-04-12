@@ -47,14 +47,14 @@ is no more available).
 
 **Input Data:**
 
-- Request to upgrade a station
-- The name of the station to be upgrade
-- The name of the building that will upgrade the station
+- Map
+- Station
+- Building
 
 **Output Data:**
 
-- Request the station to upgrade
-- Shows the buildings available to buy
+- Display's the map, with all current stations
+- Display's the station, with the buildings available
 - Message of success indicating that the building has been added
 - Message of failure indicating that the building hasn't been added.
 
