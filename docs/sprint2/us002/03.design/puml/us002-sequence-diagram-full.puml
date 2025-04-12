@@ -21,16 +21,26 @@ activate UI
 UI -> CTRL : create
 
 UI --> Editor : shows a list of the available maps
+deactivate UI
+
 Editor -> UI : selects the map
+activate UI
 
 UI --> Editor : shows a list of the available scenarios
+deactivate UI
+
 Editor -> UI : selects the scenario
-
+activate UI
 UI --> Editor : requests the position XY
-Editor -> UI : inserts the position
+deactivate UI
 
+Editor -> UI : inserts the position
+activate UI
 UI --> Editor : shows a list of the type of industries available
+deactivate UI
+
 Editor -> UI : selects the type of industry
+activate UI
 
 UI -> CTRL : addIndustry(mapID, scenarioID, position XY, type of industry)
 activate CTRL
