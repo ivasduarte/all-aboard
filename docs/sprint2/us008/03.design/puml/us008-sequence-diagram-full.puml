@@ -8,11 +8,6 @@ autonumber
 
 actor "Player" as Editor
 participant "BuildRailwayLineUI" as UI
-participant "BuildRailwayLineController" as CTRL
-participant ":Repositories" as RepositorySingleton
-participant "repositories\n:Repositories" as PLAT
-participant "railwayLineRepository\n:RailwayLineRepository" as railwayLineRepository
-participant "railwayLine\n:RailwayLine" as RailwayLine
 
 activate Editor
 
@@ -28,14 +23,19 @@ Editor -> UI : selects a city
 UI --> Editor : shows a list of the actions the player can do
 Editor -> UI : selects to add a railway line
 
-UI -> CTRL : create
+create ":BuildRailwayLineController" as CTRL
+UI --> CTRL : create
+
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "railwayLineRepository\n:RailwayLineRepository" as railwayLineRepository
 
 UI --> Editor : shows a list of the available stations
 Editor -> UI : selects stations
 UI --> Editor : requests the type of railway line
 Editor -> UI : inserts the type of railway line
 
-UI -> CTRL : buildRailwayLine(first station, second station, type of railway line)
+UI --> CTRL : buildRailwayLine(first station, second station, type of railway line)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
@@ -48,14 +48,20 @@ activate PLAT
 PLAT --> CTRL : railwayLineRepository
 deactivate PLAT
 
-activate railwayLineRepository
 CTRL -> railwayLineRepository : buildRailwayLine(first station, second station, type of railway line)
+activate railwayLineRepository
 
+create "railwayLine\n:RailwayLine" as RailwayLine
 railwayLineRepository -> RailwayLine : create()
 railwayLineRepository -> railwayLineRepository : verifyIfExistsAndSave(first station, second station, type of railway line)
 
-RailwayLine --> CTRL : railwayLineData
+railwayLineRepository --> CTRL : railwayLineData
+deactivate railwayLineRepository
+
 CTRL --> UI : railwayLineData
+deactivate CTRL
+
 UI --> Editor : displays operation success and railwayLineData
+deactivate UI
 
 @enduml
