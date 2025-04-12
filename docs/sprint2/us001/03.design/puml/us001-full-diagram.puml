@@ -1,0 +1,40 @@
+@startuml
+actor Editor
+
+participant Editor
+participant CreateMapUI
+participant CreateMapController
+participant UserSession
+participant Map
+participant MapRepository
+
+== Step 1: UI gathers data ==
+Editor -> CreateMapUI : enter map name and size
+
+== Step 2: UI delegates to Controller ==
+CreateMapUI -> CreateMapController : createMap(name, width, height)
+
+== Step 3: Controller gets user context ==
+CreateMapController -> UserSession : getCurrentUser()
+UserSession --> CreateMapController : Editor
+
+== Step 4: Validate inputs ==
+CreateMapController -> Map : new(name, width, height)
+Map -> Map : validateName()
+Map -> Map : validateSize()
+
+== Step 5: Global validation ==
+CreateMapController -> MapRepository : isNameUnique(name)
+MapRepository --> CreateMapController : true/false
+
+alt if name is not unique or data is invalid
+    CreateMapController -> CreateMapUI : showError("Invalid name or size")
+else
+    == Step 6: Create and save map ==
+    CreateMapController -> Editor : createMap(name, width, height)
+    Editor -> MapRepository : save(map)
+
+    == Step 7: Success feedback ==
+    CreateMapController -> CreateMapUI : showSuccess("Map created!")
+end
+@enduml

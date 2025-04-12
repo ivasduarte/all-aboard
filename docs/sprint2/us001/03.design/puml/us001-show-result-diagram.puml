@@ -1,0 +1,10 @@
+@startuml
+participant CreateMapController
+participant CreateMapUI
+
+alt if success
+    CreateMapController -> CreateMapUI : showSuccess("Map created!")
+else if error
+    CreateMapController -> CreateMapUI : showError("Invalid name or size")
+end
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+actor Editor
+participant CreateMapUI
+
+Editor -> CreateMapUI : enter name, width, height
+@enduml

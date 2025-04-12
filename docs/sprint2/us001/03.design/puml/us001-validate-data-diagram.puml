@@ -1,0 +1,10 @@
+@startuml
+participant CreateMapController
+participant Map
+participant MapRepository
+
+CreateMapController -> Map : new(name, width, height)
+Map -> Map : validateName()
+Map -> Map : validateSize()
+CreateMapController -> MapRepository : isNameUnique(name)
+@enduml
