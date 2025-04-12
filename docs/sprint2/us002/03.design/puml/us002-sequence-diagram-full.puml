@@ -18,7 +18,7 @@ activate Editor
 Editor -> UI : asks to add an industry
 activate UI
 
-UI -> CTRL : create
+UI --> CTRL : create
 
 UI --> Editor : shows a list of the available maps
 deactivate UI
@@ -42,7 +42,7 @@ deactivate UI
 Editor -> UI : selects the type of industry
 activate UI
 
-UI -> CTRL : addIndustry(mapID, scenarioID, position XY, type of industry)
+UI --> CTRL : addIndustry(mapID, scenarioID, position XY, type of industry)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
@@ -55,14 +55,16 @@ activate PLAT
 PLAT --> CTRL : industryRepository
 deactivate PLAT
 
-activate industryRepository
 CTRL -> industryRepository : addIndustry(mapID, scenarioID, position XY, type of industry)
+activate industryRepository
 
 industryRepository -> Industry : create()
 
 industryRepository -> industryRepository : verifyIfExistsAndSave(mapID, scenarioID, position XY, type of industry)
 
 industryRepository --> CTRL : industryData
+deactivate industryRepository
+
 CTRL --> UI : industryData
 deactivate CTRL
 
