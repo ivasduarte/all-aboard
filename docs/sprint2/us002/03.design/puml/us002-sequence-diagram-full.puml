@@ -7,18 +7,18 @@ autonumber
 
 actor "Editor" as Editor
 participant ":AddIndustryUI" as UI
-participant ":AddIndustryController" as CTRL
-participant ":Repositories" as RepositorySingleton
-participant "repositories\n:Repositories" as PLAT
-participant "industryRepository\n:IndustryRepository" as industryRepository
-participant "industry\n:Industry" as Industry
 
 activate Editor
 
 Editor -> UI : asks to add an industry
 activate UI
 
+create ":AddIndustryController" as CTRL
 UI --> CTRL : create
+
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "industryRepository\n:IndustryRepository" as industryRepository
 
 UI --> Editor : shows a list of the available maps
 deactivate UI
@@ -58,6 +58,7 @@ deactivate PLAT
 CTRL -> industryRepository : addIndustry(mapID, scenarioID, position XY, type of industry)
 activate industryRepository
 
+create "industry\n:Industry" as Industry
 industryRepository -> Industry : create()
 
 industryRepository -> industryRepository : verifyIfExistsAndSave(mapID, scenarioID, position XY, type of industry)
