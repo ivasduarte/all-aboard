@@ -4,7 +4,7 @@ skinparam shadowing false
 skinparam linetype polyline
 skinparam classAttributeIconSize 0
 
-'class diagram for Buy a Train (US009)
+'title: Class diagram for Buy a Train (US009)
 
 class ApplicationSession {
     + static getInstance()
@@ -29,7 +29,6 @@ class Train {
 }
 
 class Locomotive {
-    - String name
     - String serialNumber
     - LocomotiveType locomotiveType
     - int power
@@ -46,15 +45,15 @@ enum LocomotiveType {
 }
 
 class Carriage {
-    - name
-    - cargoType
+    - String id
+    - CargoType cargoType
 }
 
 enum CargoType {
     Passengers
     Mail
     Coal
-    Iron ore
+    IronOre
     Steel
     Cars
 }
@@ -62,17 +61,17 @@ enum CargoType {
 class TrainRepository {
     - List<Train> trains
     + getTrainsList()
-    + saveTrain(train)
+    + saveTrain(train: Train)
 }
 
 class Repositories {
     - Repositories()
-    + getInstance() : Repositories
-    + getTrainRepository()
+    + getInstance(): Repositories
+    + getTrainRepository(): TrainRepository
 }
 
 class BuyTrainController {
-    + buyTrain()
+    + buyTrainWithLocomotiveAndCarriages()
     + getTrainList()
     + getTrainRepository()
 }
@@ -80,7 +79,7 @@ class BuyTrainController {
 class BuyTrainUI {
 }
 
-' Software-layer relationships
+
 BuyTrainUI .> BuyTrainController
 BuyTrainController .> Repositories : accesses
 BuyTrainController ..> TrainRepository : uses
@@ -95,8 +94,8 @@ BuyTrainController ..> UserSession
 
 Repositories -> "1" TrainRepository
 
-' Domain-layer relationships
-Train "1" -- "*" Locomotive : has
+
+Train "1" --> "1" Locomotive : locomotive
 Train "1" -- "*" Carriage : has
 Player "1" -- "*" Train : creates
 

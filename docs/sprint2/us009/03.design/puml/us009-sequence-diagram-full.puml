@@ -23,17 +23,20 @@ activate Player
 
         UI -> Player : displays available locomotives
 
-        loop Selecting locomotives
+        loop Selecting locomotives and carriages
             Player -> UI : selects a locomotive
-            UI -> CTRL : selectLocomotive(locomotiveId)
-
-            CTRL -> CTRL : validateLocomotive(locomotiveId)
+            UI -> CTRL : selectLocomotive(serialNumberLocomotive))
+            Player -> UI : selects a carriage
+            UI -> CTRL : selectCarriage(carriageId)
 
             UI -> Player : asks to add another locomotive?
+            UI -> Player : asks to add another carriage?
 
-            alt Player adds another locomotive
+            alt Player adds another locomotive/carriage
                 Player -> UI : selects another locomotive
-                UI -> CTRL : selectLocomotive(locomotiveId)
+                UI -> CTRL : selectLocomotive(serialNumberLocomotive)
+                Player -> UI : selects another carriage
+                UI -> CTRL : selectCarriage(carriageId)
             else Player finalizes selection
                 UI -> CTRL : finalizeSelection()
             end
@@ -53,7 +56,7 @@ activate Player
 
             activate TrainRepository
 
-                CTRL -> TrainRepository : createTrain(selectedLocomotives, date)
+                CTRL -> TrainRepository : createTrain(selectedLocomotives, selectedCarriages, date)
 
                 TrainRepository -> Train** : create()
 
