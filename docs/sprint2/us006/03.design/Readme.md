@@ -6,43 +6,33 @@
 
 **The rationale grounds on the SSD interactions and the identified input/output data.**
 
-| Interaction ID | Question: Which class is responsible for...       | Answer                 | Justification (with patterns)                                                                                                       |
-|:---------------|:--------------------------------------------------|:-----------------------|:------------------------------------------------------------------------------------------------------------------------------------|
-| Step 1         | ... requesting to upgrade a station?              | UpgradeAStationUI      | Pure Fabrication: UI layer is responsible for managing the interaction with the user.                                               |
-|                | ... showing a list of available stations?         | UpgradeAStationUI      | Pure Fabrication: UI layer is responsible for showing the available building to upgrade.                                            |
-|                | ... select a station to upgrade?                  | Player                 | Role Assignment: The player is responsible to choose a station to upgrade (construct a building).                                   |
-|                |                                                   |                        |                                                                                                                                     |
-|                |                                                   |                        |                                                                                                                                     |
-| Step 2         | ... knowing all existing task categories to show? | Repositories           | IE: Repositories maintains Task Categories.                                                                                         |
-|                |                                                   | TaskCategoryRepository | By applying High Cohesion (HC) + Low Coupling (LC) on class Repositories, it delegates the responsibility on TaskCategoryContainer. |
-| Step 3         | ... saving the selected category?                 | CreateTaskUI           | IE: is responsible for keeping the selected category.                                                                               |
-| Step 4         | ... requesting data?                              | CreateTaskUI           | IE: is responsible for user interactions.                                                                                           |
-| Step 5         | ... saving the inputted data?                     | CreateTaskUI           | IE: is responsible for keeping the inputted data.                                                                                   |
-| Step 6         | ... showing all data and requesting confirmation? | CreateTaskUI           | IE: is responsible for user interactions.                                                                                           |              
-| Step 7         | ... instantiating a new Task?                     | Organization           | Creator (Rule 1): in the DM Organization has a Task.                                                                                |
-|                | ... validating all data (local validation)?       | Task                   | IE: owns its data.                                                                                                                  | 
-|                | ... validating all data (global validation)?      | Organization           | IE: knows all its tasks.                                                                                                            | 
-|                | ... saving the created task?                      | Organization           | IE: owns all its tasks.                                                                                                             | 
-| Step 8         | ... informing operation success?                  | CreateTaskUI           | IE: is responsible for user interactions.                                                                                           | 
+| Interaction ID | Question: Which class is responsible for...                       | Answer                    | Justification (with patterns)                                                                                             |
+|:---------------|:------------------------------------------------------------------|:--------------------------|:--------------------------------------------------------------------------------------------------------------------------|
+| Step 1         | ... requesting to upgrade a station?                              | UpgradeAStationUI         | Pure Fabrication: UI layer is responsible for managing the interaction with the user.                                     |
+| Step 2         | ... showing a list of available stations?                         | UpgradeAStationUI         | Pure Fabrication: UI layer is responsible for showing the available stations to upgrade.                                  |
+| Step 3         | ... select a station to upgrade?                                  | Player                    | Role Assignment: The player is responsible to choose a station to upgrade (construct a building).                         |
+| Step 4         | ... showing a list of existing buildings and available buildings? | UpgradeAStationUI         | Pure Fabrication: UI layer is responsible for showing the available buildings and existing buildings in the station.      |                                                    |                        |                                                                                                                                     |
+| Step 5         | ... asking the type of the building?                              | UpgradeAStationUI         | Pure Fabrication: UI layer is responsible for requesting an available type of building.                                   |
+| Step 6         | ... typing the type of the building?                              | Player                    | Role Assignment: The player is responsible to choose a type of building.                                                  |
+| Step 7         | ... finalizing the selection of building?                         | UpgradeAStationController | Controller: Coordinates the completion of selection process.                                                              |
+| Step 8         | ... completion of the selection?                                  | UpgradeAStationUI         | Pure Fabrication: UI layer confirms the completion of the selection process.                                              |
+| Step 9         | ... coordinating the whole flow?                                  | UpgradeAStationController | Controller: Orchestrates the interaction between UI, domain classes, and logic.                                           |
+| Step 10        | ... showing details of the purchase of the building?              | UpgradeAStationUI         | Pure Fabrication: UI layer is responsible to display the purchase details.                                                |              
+| Step 11        | ... storing the details of the building?                          | Station                   | Information Expert: Domain class is responsible to storage all information about the building (the effects and the type). |
 
 ### Systematization ##
 
 According to the taken rationale, the conceptual classes promoted to software classes are: 
 
-* Organization
-* Task
-* TaskCategory
-* Employee
+* Player
+* Station
+* Building
+
 
 Other software classes (i.e. Pure Fabrication) identified: 
 
-* CreateTaskUI  
-* CreateTaskController
-* Repositories
-* TaskCategoryRepository
-* OrganizationRepository
-* ApplicationSession
-* UserSession
+* UpgradeAStationUI  
+* UpgradeAStationController
 
 
 ## 3.2. Sequence Diagram (SD)
