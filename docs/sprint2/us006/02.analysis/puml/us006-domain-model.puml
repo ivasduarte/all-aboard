@@ -8,6 +8,25 @@ skinparam classAttributeIconSize 0
 hide circle
 hide methods
 
+class Map {
+    - name
+    - width: int
+    - height: int
+}
+
+class Scenario {
+    - name
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
+}
+
+class City {
+    - name
+    - position
+    - houseBlocks
+}
+
 class Player {
     - name
     - ID
@@ -33,6 +52,9 @@ class Building {
     - type
 }
 
+Map "1" -- "1" Scenario : defines
+Scenario "1" -- "*" City : contains
+City "1" - "*" Station : has
 Player "1" --> "1..*" Station : upgrades
 Station "1" --> "*" Building : contains
 Station "1  " --> "*" Cargo: contains
