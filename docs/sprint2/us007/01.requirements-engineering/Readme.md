@@ -55,12 +55,12 @@ customs, post office, hotel (small or large), silo, liquid storage.
 
 **Input Data:**
 
-- List all stations
+- Select to list all stations
 
 
 **Output Data:**
 
-- All stations listed
+- Display all stations sorted by alphabetical name, with the name and a summary of available cargos to be collected and the ones that are demanded. 
 
 
 

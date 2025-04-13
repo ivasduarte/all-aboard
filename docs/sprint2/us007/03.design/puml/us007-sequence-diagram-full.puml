@@ -1,0 +1,69 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Editor
+participant "ListStationsUI" as UI
+
+activate Editor
+
+Editor -> UI : start the simulation
+activate UI
+
+UI --> Editor : shows a list of the available maps
+Editor -> UI : selects a map
+UI --> Editor : shows a list of the available scenarios
+Editor -> UI : selects a scenario
+UI --> Editor : shows a list of the cities
+Editor -> UI : selects a city
+UI --> Editor : shows a list of the actions the player can do
+Editor -> UI : selects to list all stations
+
+create "ListStationsController" as CTRL
+UI --> CTRL : create
+
+participant "Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as REPO
+
+UI --> Editor : shows a list of the available stations
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> REPO : getStationRepository()
+activate REPO
+REPO --> CTRL : StationRepository
+deactivate REPO
+
+participant "StationRepository\n:StationRepository" as StationRepo
+CTRL -> StationRepo : getAllStations()
+activate StationRepo
+StationRepo --> CTRL : list of stations
+deactivate StationRepo
+
+participant "CargoService\n:CargoService" as CargoService
+
+loop for each station
+    CTRL -> CargoService : getCargoSummary(station)
+    activate CargoService
+    CargoService --> CTRL : CargoSummary (available & demanded)
+    deactivate CargoService
+end loop
+
+CTRL -> CTRL : sortStationsByName()
+
+CTRL --> UI : list of stations with summaries
+deactivate CTRL
+
+UI --> Editor : displays list of stations
+deactivate UI
+
+
+
+@enduml
