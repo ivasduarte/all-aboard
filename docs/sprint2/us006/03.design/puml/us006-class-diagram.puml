@@ -5,13 +5,13 @@ skinparam linetype polyline
 
 skinparam classAttributeIconSize 0
 
-class Editor {
+class Player {
     - String name
     - String ID
     - String password
-    + getEditorName()
-    + getEditorID()
-    + getEditorPassword()
+    + getPlayerName()
+    + getPlayerID()
+    + getPlayerPassword()
 }
 
 class UserSession {
@@ -22,58 +22,62 @@ class ApplicationSession {
     + getCurrentSession()
 }
 
-class Industry {
-    - String mapID
-    - String scenarioID
-    - String industryType
-    - int posX
-    - int posY
-    + Industry(mapID, scenarioID, posX, posY, industryType)
-    + getIndustryMapID()
-    + getIndustryScenarioID()
-    + getIndustryPositionX()
-    + getIndustryPositionY()
-    + getIndustryType()
+
+class Station {
+    - String name
+    - String stationType
+    - String id
+    + getStationType()
+    + getStationName()
 }
 
-class AddIndustryUI {
+class Building {
+    - String buildingType
+    + Building(buildingType)
+    + getBuildingType()
 }
 
-class AddIndustryController {
-    + getIndustryRepository
-    + addIndustry(industryRepository)
-    + getIndustryList()
+class UpgradeAStationUI {
+}
+
+class UpgradeAStationController {
+    + getBuildUpgradeRepository()
+    + upgradeStation(stationToBeUpgraded, buildingType)
+    + getStationList()
 }
 
 class Repositories {
     - Repositories()
     + getInstance() : repositories
-    + getIndustryRepository()
+    + getBuildUpgradeRepository()
 }
 
-class IndustryRepository {
-    - List <Industry>
-    + getIndustriesList()
+class BuildUpgradeRepository {
+    - List <Station>
+    + getStationsList()
+    + verifyIfExistsAndSave(stationToBeUpgraded, buildingType)
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-AddIndustryUI .> AddIndustryController
+UpgradeAStationUI .> UpgradeAStationController
 
-AddIndustryController .> Repositories : repositories
+UpgradeAStationController .> Repositories : repositories
 
-Repositories -> "1" IndustryRepository
-AddIndustryController ..> Industry
-AddIndustryController ..> IndustryRepository
+Repositories -> "1" BuildUpgradeRepository
+UpgradeAStationController ..> Station
+UpgradeAStationController ..> Building
+UpgradeAStationController ..> BuildUpgradeRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-AddIndustryController ..> ApplicationSession
-AddIndustryController ..> UserSession
+UpgradeAStationController ..> ApplicationSession
+UpgradeAStationController ..> UserSession
 
-IndustryRepository "1" --> "*" Industry : Industries
+BuildUpgradeRepository "1" --> "*" Station : stations
 
-Industry --> Editor : createdBy
+Station --> Player : createdBy
+Station --> "*" Building : buildings
 
 @enduml
