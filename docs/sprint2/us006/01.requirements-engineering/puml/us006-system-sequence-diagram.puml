@@ -43,7 +43,10 @@ activate Player
     Player -> System : selects the station
     activate System
 
-    System --> Player : requests the type of the building
+    System --> Player : shows a list of existing buildings in the station and those who are available to build.
+
+
+    System --> Player : requests the type of the building.
     deactivate System
 
     Player -> System : inserts the type of the building
