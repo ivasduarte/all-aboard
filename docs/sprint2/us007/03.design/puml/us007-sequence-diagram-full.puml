@@ -29,6 +29,7 @@ UI --> CTRL : create
 participant "Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as REPO
 
+
 UI --> Editor : shows a list of the available stations
 
 CTRL -> RepositorySingleton : getInstance()

@@ -23,6 +23,11 @@ class Station {
     - cargoSupply
 }
 
+class Cargo{
+    - id
+    - type
+}
+
 class Building {
     - id
     - type
@@ -30,5 +35,6 @@ class Building {
 
 Player "1" --> "1..*" Station : upgrades
 Station "1" --> "*" Building : contains
+Station "1  " --> "*" Cargo: contains
 
 @enduml
