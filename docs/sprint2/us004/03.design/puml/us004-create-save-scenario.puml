@@ -1,0 +1,8 @@
+@startuml
+participant CreateScenarioController
+participant Editor
+participant ScenarioRepository
+
+CreateScenarioController -> Editor : createScenario(name,\nrestrictions, mapId)
+Editor -> ScenarioRepository : save(scenario)
+@enduml

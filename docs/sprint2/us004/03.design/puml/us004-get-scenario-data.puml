@@ -1,0 +1,6 @@
+@startuml
+actor Editor
+participant CreateScenarioUI
+
+Editor -> CreateScenarioUI : enter scenario name, restrictions (time,\nhistorical, technological) and select map
+@enduml
