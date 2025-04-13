@@ -1,0 +1,69 @@
+@startuml
+
+class Editor {
+  +createScenario(name: String, restrictions:\nRestrictions, map: Map): Scenario
+}
+
+class Scenario {
+  -name: String
+  -restrictions: Restrictions
+  -map: Map
+
+  +validateName(): void
+  +validateRestrictions(): void
+}
+
+class Map {
+  -id: int
+  -name: String
+}
+
+class Restrictions {
+  -time: DateRange
+  -technological: List<String>
+  -historical: List<String>
+}
+
+class DateRange {
+  -startDate: Date
+  -endDate: Date
+}
+
+
+class CreateScenarioUI {
+  +getInput(): void
+  +showSuccess(message: String): void
+  +showError(message: String): void
+}
+
+class CreateScenarioController {
+  +createScenario(name: String, restrictions:\nRestrictions, mapId: int): void
+}
+
+class ScenarioRepository {
+  +isNameUnique(name: String): boolean
+  +save(scenario: Scenario): void
+}
+
+class MapRepository {
+  +findById(mapId: int): Map
+  +exists(mapId: int): boolean
+}
+
+class UserSession {
+  +getCurrentUser(): Editor
+}
+
+
+Editor --> Scenario : creates
+Scenario --> Restrictions : has
+Scenario --> Map : linked to
+Restrictions --> DateRange : includes
+CreateScenarioUI --> CreateScenarioController : delegates to
+CreateScenarioController --> UserSession : gets user
+CreateScenarioController --> ScenarioRepository : accesses
+CreateScenarioController --> MapRepository : accesses
+CreateScenarioController --> Scenario : instantiates
+UserSession --> Editor : returns
+
+@enduml
