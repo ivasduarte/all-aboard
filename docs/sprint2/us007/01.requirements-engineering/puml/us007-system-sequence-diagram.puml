@@ -6,20 +6,39 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Player
-participant ":System" as System
+participant "System" as System
 
 activate Player
 
-    Player -> System : Request to list all stations
+    Player -> System : starts the simulation
     activate System
 
-    System --> Player : Display the stations Listed
+    System --> Player : shows a list of the available maps
     deactivate System
 
-    Player -> System : Selects one station
+    Player -> System : selects the map
     activate System
 
-    System --> Player : Display station's details
+    System --> Player : shows a list of the available scenarios
     deactivate System
+
+    Player -> System : selects the scenario
+    activate System
+
+    System --> Player : shows a list of the cities
+    deactivate System
+
+    Player -> System : selects a city
+    activate System
+
+    System --> Player : shows a list of the actions the player can do
+    deactivate System
+
+    Player -> System : selects to list all stations
+    activate System
+
+    System --> Player : shows a list of the available stations
+    deactivate System
+
 
 @enduml

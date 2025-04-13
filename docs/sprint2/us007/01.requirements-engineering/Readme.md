@@ -56,12 +56,12 @@ customs, post office, hotel (small or large), silo, liquid storage.
 **Input Data:**
 
 - List all stations
-- Select one
+
 
 **Output Data:**
 
 - All stations listed
-- The details of the selected station
+
 
 
 ### 1.6. System Sequence Diagram (SSD)
