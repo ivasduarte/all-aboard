@@ -51,30 +51,6 @@ This diagram shows the full sequence of interactions between the classes involve
 
 ![Sequence Diagram - Full](svg/us007-sequence-diagram-full.svg)
 
-### Split Diagrams
-
-The following diagram shows the same sequence of interactions between the classes involved in the realization of this user story, but it is split in partial diagrams to better illustrate the interactions between the classes.
-
-It uses Interaction Occurrence (a.k.a. Interaction Use).
-
-![Sequence Diagram - split](svg/US006-SD-split.svg)
-
-**Get Task Category List Partial SD**
-
-![Sequence Diagram - Partial - Get Task Category List](svg/US006-SD-partial-get-task-category-list.svg)
-
-**Get Task Category Object**
-
-![Sequence Diagram - Partial - Get Task Category Object](svg/US006-SD-partial-get-task-category.svg)
-
-**Get Employee**
-
-![Sequence Diagram - Partial - Get Employee](svg/US006-SD-partial-get-employee.svg)
-
-**Create Task**
-
-![Sequence Diagram - Partial - Create Task](svg/US006-SD-partial-create-task.svg)
-
 ## 3.3. Class Diagram (CD)
 
-![Class Diagram](svg/US006-CD.svg)
+![Class Diagram](svg/us007-class-diagram.svg)

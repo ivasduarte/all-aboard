@@ -1,84 +1,84 @@
 @startuml
-skinparam packageeStyle rectangle
+skinparam packageStyle rectangle
 skinparam shadowing false
 skinparam linetype polyline
-
 skinparam classAttributeIconSize 0
 
-class Player {
-    - String name
-    - String ID
-    - String password
-    + getPlayerName()
-    + getPlayerID()
-    + getPlayerPassword()
+
+class ListStationsUI {
+    + displayStationsList()
+    + selectStationToViewDetails()
 }
 
-class UserSession {
+class ListStationsController {
+    + listAllStations() : List<Station>
+    + getStationDetails(stationId: String) : StationDetails
 }
 
-class ApplicationSession {
-    + static getInstance()
-    + getCurrentSession()
+
+class Repositories {
+    + getStationRepository() : StationRepository
+    + getBuildingRepository() : BuildingRepository
+    + getCargoService() : CargoService
+}
+
+class StationRepository {
+    - List<Station> stations
+    + getAllStations() : List<Station>
+    + findById(id: String) : Station
+}
+
+class BuildingRepository {
+    + getBuildingsForStation(stationId: String) : List<Building>
 }
 
 
 class Station {
-    - String name
-    - String stationType
     - String id
-    + getStationType()
-    + getStationName()
+    - String name
+    - String type
+    - double x
+    - double y
+    + getName() : String
+    + getType() : StationType
+
 }
 
 
 class Building {
-    - String buildingType
-    + Building(buildingType)
-    + getBuildingType()
+    - String name
+    - BuildingType type
+    + getName()
+    + getType()
 }
 
-class UpgradeAStationUI {
+class CargoService {
+    + getCargoSummary(station: Station) : CargoSummary
 }
 
-class UpgradeAStationController {
-    + getBuildUpgradeRepository()
-    + upgradeStation(stationToBeUpgraded, buildingType)
-    + getStationList()
+class CargoSummary {
+    - int supply
+    - int demand
+    + getSupply()
+    + getDemand()
 }
 
-class Repositories {
-    - Repositories()
-    + getInstance() : repositories
-    + getBuildUpgradeRepository()
-}
 
-class BuildUpgradeRepository {
-    - List <Station>
-    + getStationsList()
-    + verifyIfExistsAndSave(stationToBeUpgraded, buildingType)
-}
+ListStationsUI .> ListStationsController : uses
+ListStationsController ..> Repositories : accesses
+Repositories --> StationRepository
+Repositories --> BuildingRepository
+Repositories --> CargoService
 
-Repositories -> Repositories : instance
-ApplicationSession -> ApplicationSession : instance
+ListStationsController ..> StationRepository : uses
+ListStationsController ..> CargoService : gets summary
+ListStationsController ..> BuildingRepository : fetches buildings
 
-UpgradeAStationUI .> UpgradeAStationController
 
-UpgradeAStationController .> Repositories : repositories
+StationDetails --> Station
+StationDetails --> CargoSummary
+StationDetails --> "0..*" Building
 
-Repositories -> "1" BuildUpgradeRepository
-UpgradeAStationController ..> Station
-UpgradeAStationController ..> Building
-UpgradeAStationController ..> BuildUpgradeRepository
 
-ApplicationSession --> "1" UserSession : userSession
-
-UpgradeAStationController ..> ApplicationSession
-UpgradeAStationController ..> UserSession
-
-BuildUpgradeRepository "1" --> "*" Station : stations
-
-Station --> Player : createdBy
-Station --> "*" Building : buildings
 
 @enduml
