@@ -41,31 +41,6 @@ This diagram shows the full sequence of interactions between the classes involve
 
 ![Sequence Diagram - Full](svg/us004-full-diagram.svg)
 
-### Split Diagrams
-
-The following diagram shows the same sequence of interactions between the classes involved in the realization of this user story, but it is split in partial diagrams to better illustrate the interactions between the classes.
-
-It uses Interaction Occurrence (a.k.a. Interaction Use).
-
-**Get Scenario Data**
-
-![Sequence Diagram - Partial - Get Scenario Data](svg/us004-get-scenario-data.svg)
-
-**Validate Selected Map**
-
-![Sequence Diagram - Partial - Validate Selected Map](svg/us004-validate-map.svg)
-
-**Validate Scenario Data**
-
-![Sequence Diagram - Partial - Validate Scenario Data](svg/us004-validate-scenario.svg)
-
-**Create and Save Scenario**
-
-![Sequence Diagram - Partial - Create and Save Scenario](svg/us004-create-save-scenario.svg)
-
-**Show Confirmation or Error**
-
-![Sequence Diagram - Partial - Show Confirmation or Error](svg/us004-show-result.svg)
 
 ## 3.3. Class Diagram (CD)
 

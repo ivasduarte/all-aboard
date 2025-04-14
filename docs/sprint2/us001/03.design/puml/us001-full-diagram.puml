@@ -1,40 +1,50 @@
 @startuml
-actor Editor
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
 
-participant Editor
-participant CreateMapUI
-participant CreateMapController
-participant UserSession
-participant Map
-participant MapRepository
+autonumber
+actor "Editor" as Editor
+participant ":CreateMapUI" as UI
+participant ":CreateMapController" as CTRL
+participant ":UserSession" as US
+participant ":Editor" as EditorDom
+participant ":MapRepository" as Repo
+participant "Map" as Map
 
-== Step 1: UI gathers data ==
-Editor -> CreateMapUI : enter map name and size
+activate Editor
 
-== Step 2: UI delegates to Controller ==
-CreateMapUI -> CreateMapController : createMap(name, width, height)
+Editor -> UI : requests to create a map
 
-== Step 3: Controller gets user context ==
-CreateMapController -> UserSession : getCurrentUser()
-UserSession --> CreateMapController : Editor
+activate UI
+UI -> CTRL : create()
 
-== Step 4: Validate inputs ==
-CreateMapController -> Map : new(name, width, height)
-Map -> Map : validateName()
-Map -> Map : validateSize()
+UI -> Editor : prompt for name and dimensions
+Editor -> UI : provides name and dimensions
+UI -> CTRL : submit(name, width, height)
 
-== Step 5: Global validation ==
-CreateMapController -> MapRepository : isNameUnique(name)
-MapRepository --> CreateMapController : true/false
+activate CTRL
 
-alt if name is not unique or data is invalid
-    CreateMapController -> CreateMapUI : showError("Invalid name or size")
-else
-    == Step 6: Create and save map ==
-    CreateMapController -> Editor : createMap(name, width, height)
-    Editor -> MapRepository : save(map)
+CTRL -> US : getCurrentUser()
+US --> CTRL : user
 
-    == Step 7: Success feedback ==
-    CreateMapController -> CreateMapUI : showSuccess("Map created!")
-end
+CTRL -> Repo : checkNameUniqueness(name)
+Repo --> CTRL : isUnique
+
+CTRL -> EditorDom : createMap(name, width, height)
+activate EditorDom
+EditorDom -> Map : new(name, width, height)
+Map --> EditorDom : mapInstance
+deactivate EditorDom
+
+CTRL -> Repo : save(mapInstance)
+Repo --> CTRL : success
+
+CTRL --> UI : operation result (success/failure)
+UI --> Editor : display result
+
+deactivate CTRL
+deactivate UI
+deactivate Editor
+
 @enduml

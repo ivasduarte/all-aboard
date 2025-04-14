@@ -1,4 +1,19 @@
 @startuml
+skinparam classAttributeIconSize 0
+
+class CreateMapUI {
+    +getInput()
+    +showSuccess()
+    +showError()
+}
+
+class CreateMapController {
+    +createMap(name, width, height)
+}
+
+class MapRepository {
+    +save(map)
+}
 
 class Editor {
     +createMap(name, width, height)
@@ -12,31 +27,19 @@ class Map {
     +validateSize()
 }
 
-class MapRepository {
-    +isNameUnique(name)
-    +save(map)
-}
-
-class CreateMapUI {
-    +getInput()
-    +showSuccess()
-    +showError()
-}
-
-class CreateMapController {
-    +createMap(name, width, height)
-}
+class ApplicationSession
 
 class UserSession {
     +getCurrentUser(): Editor
 }
 
-Editor --> Map : creates >
-CreateMapController --> Map : creates >
-CreateMapController --> MapRepository : uses
-CreateMapController --> UserSession : uses
-CreateMapController --> Editor : gets current user
-CreateMapUI --> CreateMapController : interacts
-UserSession --> Editor : returns
+CreateMapUI --> CreateMapController
+CreateMapController --> UserSession
+CreateMapController --> MapRepository
+CreateMapController --> Editor
+Editor --> Map
+Map --> MapRepository
+
+UserSession --> ApplicationSession
 
 @enduml

@@ -1,8 +1,0 @@
-@startuml
-participant CreateMapController
-participant Editor
-participant MapRepository
-
-CreateMapController -> Editor : createMap(name, width, height)
-Editor -> MapRepository : save(map)
-@enduml

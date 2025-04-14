@@ -1,8 +1,19 @@
 @startuml
-participant CreateScenarioController
-participant Editor
-participant ScenarioRepository
+Editor -> EditorController : createScenario()
+EditorController -> UserSession : getCurrentUser()
+activate UserSession
 
-CreateScenarioController -> Editor : createScenario(name,\nrestrictions, mapId)
-Editor -> ScenarioRepository : save(scenario)
+deactivate UserSession
+EditorController -> ScenarioController : createScenario()
+activate ScenarioController
+
+ScenarioController -> ScenarioValidator : validateScenarioData()
+activate ScenarioValidator
+
+deactivate ScenarioValidator
+ScenarioController -> ScenarioRepository : saveScenario()
+
+activate ScenarioRepository
+deactivate ScenarioRepository
+deactivate ScenarioController
 @enduml
