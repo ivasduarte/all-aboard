@@ -1,47 +1,51 @@
 @startuml
-actor Editor
-participant CreateScenarioUI
-participant CreateScenarioController
-participant UserSession
-participant Editor
-participant Scenario
-participant ScenarioRepository
-participant MapRepository
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
 
-== Step 1: UI collects scenario data ==
-Editor -> CreateScenarioUI : enter scenario name, restrictions,\nand select map
+autonumber
+actor "Editor" as Editor
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":UserSession" as US
+participant ":ScenarioRepository" as Repo
+participant ":Editor" as EditorDom
+participant "Scenario" as Scenario
+participant "Map" as Map
 
-== Step 2: UI delegates request to controller ==
-CreateScenarioUI -> CreateScenarioController : createScenario(name, restrictions,\nmapId)
+activate Editor
 
-== Step 3: Controller gets current user ==
-CreateScenarioController -> UserSession : getCurrentUser()
-UserSession --> CreateScenarioController : Editor
+Editor -> UI : starts creating a scenario
 
-== Step 4: Validate mandatory map selection ==
-CreateScenarioController -> MapRepository : exists(mapId)
-MapRepository --> CreateScenarioController : true/false
+activate UI
+UI -> CTRL : create()
 
-alt if Map NOT selected
-    CreateScenarioController -> CreateScenarioUI : showError("Must select a map for scenario")
-else if Map selected
-    == Step 5: Validate scenario data locally ==
-    CreateScenarioController -> Scenario : new(name, restrictions, mapId)
-    Scenario -> Scenario : validateName()
-    Scenario -> Scenario : validateRestrictions()
+UI -> Editor : prompts for scenario data (name, restrictions, map)
+Editor -> UI : provides data
+UI -> CTRL : submit(name, restrictions, selectedMap)
 
-    == Step 6: Global validation for uniqueness ==
-    CreateScenarioController -> ScenarioRepository : isNameUnique(name)
-    ScenarioRepository --> CreateScenarioController : true/false
+activate CTRL
 
-    alt if validation fails (invalid restrictions or\nduplicate/invalid name)
-        CreateScenarioController -> CreateScenarioUI : showError("Invalid name,\nrestrictions, or duplicate scenario")
-    else if validation succeeds
-        == Step 7: Create scenario ==
-        CreateScenarioController -> Editor : createScenario(name, restrictions, mapId)
-        Editor -> ScenarioRepository : save(scenario)
-        == Step 8: Success feedback ==
-        CreateScenarioController -> CreateScenarioUI : showSuccess("Scenario created successfully")
-    end
-end
+CTRL -> US : getCurrentUser()
+US --> CTRL : user
+
+CTRL -> Repo : checkScenarioNameUniqueness(name)
+Repo --> CTRL : isUnique
+
+CTRL -> EditorDom : createScenario(name, restrictions, selectedMap)
+activate EditorDom
+EditorDom -> Scenario : new(name, restrictions, selectedMap)
+Scenario --> EditorDom : scenarioInstance
+deactivate EditorDom
+
+CTRL -> Repo : save(scenarioInstance)
+Repo --> CTRL : success
+
+CTRL --> UI : operation result (success/failure)
+UI --> Editor : show success or error
+
+deactivate CTRL
+deactivate UI
+deactivate Editor
+
 @enduml

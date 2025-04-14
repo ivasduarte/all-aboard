@@ -1,7 +1,0 @@
-@startuml
-participant CreateScenarioController
-participant MapRepository
-
-CreateScenarioController -> MapRepository : exists(mapId)
-MapRepository --> CreateScenarioController : true/false
-@enduml
