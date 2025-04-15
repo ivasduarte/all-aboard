@@ -6,14 +6,32 @@ skinparam shadowing false
 autonumber
 
 actor "Product Owner" as ProductOwner
-participant ":System" as System
+participant "System" as System
 
 activate ProductOwner
 
     ProductOwner -> System : selects a station to start simulator
     activate System
 
-    System --> ProductOwner : simulator starts
+    System --> ProductOwner : shows a list of the available maps
+    deactivate System
+
+    ProductOwner -> System : selects the map
+    activate System
+
+    System --> ProductOwner : shows a list of the available scenarios
+    deactivate System
+
+    ProductOwner -> System : selects the scenario
+    activate System
+
+    System --> ProductOwner : starts the simulation
+    deactivate System
+
+    ProductOwner -> System : requests to pause simulation
+    activate System
+
+    System --> ProductOwner : pauses simulation
     deactivate System
 
 @enduml
