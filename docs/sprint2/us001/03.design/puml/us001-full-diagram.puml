@@ -7,9 +7,9 @@ autonumber
 actor "Editor" as Editor
 participant ":CreateMapUI" as UI
 participant ":CreateMapController" as CTRL
-participant ":UserSession" as US
-participant ":Editor" as EditorDom
-participant ":MapRepository" as Repo
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "mapRepository\n:MapRepository" as Repo
 participant "Map" as Map
 
 activate Editor
@@ -17,7 +17,7 @@ activate Editor
 Editor -> UI : requests to create a map
 
 activate UI
-UI -> CTRL : create()
+UI -> CTRL** : create
 
 UI -> Editor : prompt for name and dimensions
 Editor -> UI : provides name and dimensions
@@ -25,25 +25,37 @@ UI -> CTRL : submit(name, width, height)
 
 activate CTRL
 
-CTRL -> US : getCurrentUser()
-US --> CTRL : user
+CTRL -> reps : getInstance()
+activate reps
+
+reps --> CTRL : repositories
+deactivate reps
+
+CTRL -> PLAT : getMapRepository()
+activate PLAT
+
+PLAT --> CTRL: mapRepository
+deactivate PLAT
 
 CTRL -> Repo : checkNameUniqueness(name)
+activate Repo
+
 Repo --> CTRL : isUnique
+CTRL -> Repo : createMap(name, width, height)
 
-CTRL -> EditorDom : createMap(name, width, height)
-activate EditorDom
-EditorDom -> Map : new(name, width, height)
-Map --> EditorDom : mapInstance
-deactivate EditorDom
+Repo -> Map : createVerifyMap(name, width, height)
+activate Map
 
-CTRL -> Repo : save(mapInstance)
-Repo --> CTRL : success
+Map --> Repo: isSuccessful
+deactivate Map
 
-CTRL --> UI : operation result (success/failure)
-UI --> Editor : display result
+Repo --> CTRL : isSuccessful
+deactivate Repo
 
+CTRL --> UI : isSucessful
 deactivate CTRL
+
+UI --> Editor : display result
 deactivate UI
 deactivate Editor
 
