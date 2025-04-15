@@ -14,6 +14,9 @@ activate Editor
 Editor -> UI : start the simulation
 activate UI
 
+create ":BuildRailwayLineController" as CTRL
+UI --> CTRL : create
+
 UI --> Editor : shows a list of the available maps
 Editor -> UI : selects a map
 UI --> Editor : shows a list of the available scenarios
@@ -22,9 +25,6 @@ UI --> Editor : shows a list of the cities
 Editor -> UI : selects a city
 UI --> Editor : shows a list of the actions the player can do
 Editor -> UI : selects to add a railway line
-
-create ":BuildRailwayLineController" as CTRL
-UI --> CTRL : create
 
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
