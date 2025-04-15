@@ -5,33 +5,33 @@ skinparam shadowing false
 
 autonumber
 
-actor "Product Owner" as ProductOwner
+actor "Player" as Player
 participant "System" as System
 
-activate ProductOwner
+activate Player
 
-    ProductOwner -> System : selects a station to start simulator
+    Player -> System : selects a station to start simulator
     activate System
 
-    System --> ProductOwner : shows a list of the available maps
+    System --> Player : shows a list of the available maps
     deactivate System
 
-    ProductOwner -> System : selects the map
+    Player -> System : selects the map
     activate System
 
-    System --> ProductOwner : shows a list of the available scenarios
+    System --> Player : shows a list of the available scenarios
     deactivate System
 
-    ProductOwner -> System : selects the scenario
+    Player -> System : selects the scenario
     activate System
 
-    System --> ProductOwner : starts the simulation
+    System --> Player : starts the simulation
     deactivate System
 
-    ProductOwner -> System : requests to pause simulation
+    Player -> System : requests to pause simulation
     activate System
 
-    System --> ProductOwner : pauses simulation
+    System --> Player : pauses simulation
     deactivate System
 
 @enduml
