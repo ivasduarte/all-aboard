@@ -1,0 +1,83 @@
+@startuml
+skinparam packageeStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Player {
+    - String name
+    - String ID
+    - String password
+    + getPlayerName()
+    + getPlayerID()
+    + getPlayerPassword()
+}
+
+class UserSession {
+}
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+
+class Station {
+    - String name
+    - String stationType
+    - String id
+    + getStationType()
+    + getStationName()
+}
+
+class Building {
+    - String buildingType
+    + Building(buildingType)
+    + getBuildingType()
+}
+
+class UpgradeAStationUI {
+}
+
+class UpgradeAStationController {
+    + getBuildUpgradeRepository()
+    + upgradeStation(stationToBeUpgraded, buildingType)
+    + getStationList()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : repositories
+    + getBuildUpgradeRepository()
+}
+
+class BuildUpgradeRepository {
+    - List <Station>
+    + getStationsList()
+    + verifyIfExistsAndSave(stationToBeUpgraded, buildingType)
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+UpgradeAStationUI .> UpgradeAStationController
+
+UpgradeAStationController .> Repositories : repositories
+
+Repositories -> "1" BuildUpgradeRepository
+UpgradeAStationController ..> Station
+UpgradeAStationController ..> Building
+UpgradeAStationController ..> BuildUpgradeRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+UpgradeAStationController ..> ApplicationSession
+UpgradeAStationController ..> UserSession
+
+BuildUpgradeRepository "1" --> "*" Station : stations
+
+Station --> Player : createdBy
+Station --> "*" Building : buildings
+
+@enduml
