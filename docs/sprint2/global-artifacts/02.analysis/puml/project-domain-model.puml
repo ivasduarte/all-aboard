@@ -157,7 +157,7 @@ Editor -- Map : creates >
 Editor -- Scenario : creates >
 Map *-- "0..*" City : contains >
 Map *-- "0..*" Industry : contains >
-Scenario -- Map : uses >
+Scenario -- Map : is created for >
 
 Station o-- "0..*" Building : has >
 
@@ -171,7 +171,7 @@ Simulation -- Player: creates >
 Simulation -- Editor: creates >
 
 Train *-- "1" Locomotive : has >
-Locomotive "1" - "*" LocomotiveType : has
+Locomotive "*" -- "1" LocomotiveType : has
 Carriage "1" - "*" CargoType : has
 Train *-- "0..*" Carriage : has >
 Train -- Route : assigned to >
@@ -179,5 +179,15 @@ Route *-- "2..*" Station : includes >
 
 City -- "0..*" Cargo : generates/consumes >
 Industry -- "0..*" Cargo : generates/processes >
+
+Cargo "*" - "1" CargoType : has
+
+Scenario "1" -- "1" TimeRestriction : has
+Scenario "1" -- "1" TechnologicalRestriction : has
+Scenario "1" -- "1" HistoricalRestriction : has
+
+Industry "*" -- "1" IndustryType : has
+Station "*" - "1" StationType : has
+RailwayLine "*" - "1" RailwayLineType : has
 
 @enduml
