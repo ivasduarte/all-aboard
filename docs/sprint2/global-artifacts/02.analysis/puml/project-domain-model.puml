@@ -8,83 +8,129 @@ skinparam shadowing false
 hide circle
 hide methods
 
-class Editor{
-- name
+class Editor {
+    - name
     - ID
     - password
 }
 
-class Player{
-- name
+class Player {
+    - name
     - ID
     - password
 }
 
-class Simulation{
+class Simulator {
 }
 
-class Map{
-- name
-- width
-- height
+class Simulation {
 }
 
-class City{
-- position XY
+class Map {
     - name
-    - number of house blocks
+    - id
+    - width
+    - height
 }
 
-class Industry{
- - position XY on the map
+class City {
+    - name
+    - position XY
+    - numberHouseBlocks
+}
+
+class Industry {
+    - name
+    - id
+    - position XY
+}
+
+class IndustryType {
+    - name
+    - id
+    - description
+}
+
+class Scenario {
+    - name
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
+}
+
+class TimeRestriction {
+    - startDate
+    - endDate
+}
+
+class TechnologicalRestriction {
+    - locomotiveTypes
+    - industriesAvailable
+}
+
+class HistoricalRestriction {
+    - historicalEvents
+    - goodsImportedExported
+}
+
+class Station {
+    - name
+    - id
+    - type
+    - position XY
+    - center
+}
+
+class StationType {
     - name
     - id
 }
 
-class Scenario{
-   - timeRestrictions
-  - technologicalRestrictions
-  - historicalRestrictions
-}
-
-class Station{
-    - id
-        - name
-        - type
-        - building
-}
-
-class Building{
+class Building {
     - id
     - type
 }
 
-class Cargo{
-- id
+class Cargo {
+    - id
     - type
 }
 
-class Route{
-- listStations
-- cargo
+class CargoType {
+    - passengers
+    - mail
+    - coal
+    - ironOre
+    - steel
+    - cars
 }
-class RailwayLine{
-- name
+
+class Route {
     - id
-    - selected stations
+    - stationsList
+}
+
+class RailwayLine {
+    - name
+    - id
     - length
     - type
 }
 
-
-class Train{
-- name
-    - ID
-    - date of purchase
+class RailwayLineType {
+    - name
+    - id
 }
 
-class Locomotive{
-- name
+class Train {
+    - name
+    - ID
+    - purchaseDate
+}
+
+class Locomotive {
+    - name
+    - serialNumber
     - locomotiveType
     - power
     - acceleration
@@ -93,21 +139,19 @@ class Locomotive{
     - acquisitionType
 }
 
-class LocomotiveType{
-    - name
-    - ID
-    - description
+class LocomotiveType {
+    - steam
+    - diesel
+    - electricity
 }
 
-class Carriage{
-- name
+class Carriage {
+    - name
+    - id
     - cargoType
 }
-class CargoType{
-    - name
-    - ID
-}
 
+Simulator -- Simulation : starts >
 
 Editor -- Map : creates >
 Editor -- Scenario : creates >
@@ -116,7 +160,6 @@ Map *-- "0..*" Industry : contains >
 Scenario -- Map : uses >
 
 Station o-- "0..*" Building : has >
-
 
 RailwayLine -- "2" Station : connects >
 
@@ -136,7 +179,5 @@ Route *-- "2..*" Station : includes >
 
 City -- "0..*" Cargo : generates/consumes >
 Industry -- "0..*" Cargo : generates/processes >
-
-
 
 @enduml
