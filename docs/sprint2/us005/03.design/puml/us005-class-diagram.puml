@@ -37,45 +37,44 @@ class Building {
     + getBuildingType()
 }
 
-class UpgradeAStationUI {
+class AddAStationUI {
 }
 
-class UpgradeAStationController {
-    + getBuildUpgradeRepository()
-    + upgradeStation(stationToBeUpgraded, buildingType)
+class AddAStationController {
+    + getAddRepository()
+    + AddStation(stationToBeAdded)
     + getStationList()
 }
 
 class Repositories {
     - Repositories()
     + getInstance() : repositories
-    + getBuildUpgradeRepository()
+    + getAddRepository()
 }
 
-class BuildUpgradeRepository {
-    - List <Station>
-    + getStationsList()
-    + verifyIfExistsAndSave(stationToBeUpgraded, buildingType)
+class AddRepository {
+    - Station
+    + addStation(stationToBeAdded)
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-UpgradeAStationUI .> UpgradeAStationController
+AddAStationUI .> AddAStationController
 
-UpgradeAStationController .> Repositories : repositories
+AddAStationController .> Repositories : repositories
 
-Repositories -> "1" BuildUpgradeRepository
-UpgradeAStationController ..> Station
-UpgradeAStationController ..> Building
-UpgradeAStationController ..> BuildUpgradeRepository
+Repositories -> "1" AddRepository
+AddAStationController ..> Station
+AddAStationController ..> Building
+AddAStationController ..> AddRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-UpgradeAStationController ..> ApplicationSession
-UpgradeAStationController ..> UserSession
+AddAStationController ..> ApplicationSession
+AddAStationController ..> UserSession
 
-BuildUpgradeRepository "1" --> "*" Station : stations
+AddRepository "1" --> "*" Station : stations
 
 Station --> Player : createdBy
 Station --> "*" Building : buildings
