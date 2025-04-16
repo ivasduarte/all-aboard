@@ -42,7 +42,7 @@ class AddAStationUI {
 
 class AddAStationController {
     + getAddRepository()
-    + AddStation(stationToBeAdded)
+    + AddStation(stationCoordinates, stationType)
     + getStationList()
 }
 
@@ -52,7 +52,7 @@ class Repositories {
     + getAddRepository()
 }
 
-class AddRepository {
+class BuildAddRepository {
     - Station
     + addStation(stationToBeAdded)
 }
@@ -64,17 +64,17 @@ AddAStationUI .> AddAStationController
 
 AddAStationController .> Repositories : repositories
 
-Repositories -> "1" AddRepository
+Repositories -> "1" BuildAddRepository
 AddAStationController ..> Station
 AddAStationController ..> Building
-AddAStationController ..> AddRepository
+AddAStationController ..> BuildAddRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
 AddAStationController ..> ApplicationSession
 AddAStationController ..> UserSession
 
-AddRepository "1" --> "*" Station : stations
+BuildAddRepository "1" --> "*" Station : stations
 
 Station --> Player : createdBy
 Station --> "*" Building : buildings

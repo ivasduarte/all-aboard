@@ -7,7 +7,7 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Editor
-participant "UpgradeAStationUI" as UI
+participant "AddAStationUI" as UI
 
 activate Editor
 
@@ -21,22 +21,20 @@ Editor -> UI : selects a scenario
 UI --> Editor : shows a list of the cities
 Editor -> UI : selects a city
 UI --> Editor : shows a list of the actions the player can do
-Editor -> UI : selects to upgrade a station
+Editor -> UI : selects to add a station
 
-create "UpgradeAStationController" as CTRL
+create "AddAStationController" as CTRL
 UI --> CTRL : create
 
 participant "Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
 
-UI --> Editor : shows a list of the available stations
-Editor -> UI : selects the station
-UI --> Editor : shows a list of existing buildings in the station and those who are available to build.
-UI --> Editor : requests the type of the building
-Editor -> UI : inserts the type of the building
+UI --> Editor : shows a list of the available station types
+Editor -> UI : selects the station type
+UI --> Editor : adds the requested station
 
 
-UI --> CTRL : UpgradeAStation(station to be upgraded, type of the building)
+UI --> CTRL : AddAStation(station coordinates, type of station)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
@@ -44,25 +42,25 @@ activate RepositorySingleton
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getBuildUpgradeRepository()
+CTRL -> PLAT : getBuildAddRepository()
 activate PLAT
-PLAT --> CTRL : BuildUpgradeRepository
+PLAT --> CTRL : BuildAddRepository
 deactivate PLAT
 
-CTRL -> BuildUpgradeRepository : BuildUpgrade(station to be upgraded, type of the building)
-activate BuildUpgradeRepository
+CTRL -> BuildAddRepository : BuildAdd(station to be upgraded, type of the building)
+activate BuildAddRepository
 
-create "BuildUpgradeRepository\n:BuildUpgradeRepository" as BuildUpgradeRepository
-BuildUpgradeRepository -> BuildUpgrade : create()
-BuildUpgradeRepository -> BuildUpgradeRepository : verifyIfExistsAndSave(station, type of building)
+create "BuildAddRepository\n:BuildAddRepository" as BuildAddRepository
+BuildAddRepository -> BuildAdd : create()
+BuildAddRepository -> BuildAddRepository : AddStation(stationCoordinates, stationType)
 
-BuildUpgradeRepository --> CTRL : BuildUpgradeData
-deactivate BuildUpgradeRepository
+BuildAddRepository --> CTRL : BuildAddData
+deactivate BuildAddRepository
 
-CTRL --> UI : BuildUpgradeData
+CTRL --> UI : BuildAddData
 deactivate CTRL
 
-UI --> Editor : displays operation success and upgradeData
+UI --> Editor : displays operation success and AddData
 deactivate UI
 
 @enduml
