@@ -17,32 +17,30 @@ class Player {
 class UserSession {
 }
 
+class Route{
+    - id
+    - ListOfStations
+}
+
+class Train{
+    - name
+    - ID
+    - date of purchase
+}
+
+
 class ApplicationSession {
     + static getInstance()
     + getCurrentSession()
 }
 
 
-class Station {
-    - String name
-    - String stationType
-    - String id
-    + getStationType()
-    + getStationName()
+class AssignARouteUI {
 }
 
-class Building {
-    - String buildingType
-    + Building(buildingType)
-    + getBuildingType()
-}
-
-class AddAStationUI {
-}
-
-class AddAStationController {
+class AssignARouteController {
     + getAddRepository()
-    + AddStation(stationCoordinates, stationType)
+    + AssignRoute(train, route)
     + getStationList()
 }
 
@@ -52,31 +50,30 @@ class Repositories {
     + getAddRepository()
 }
 
-class BuildAddRepository {
-    - Station
-    + addStation(stationToBeAdded)
+class BuildAssignRepository {
+    - Train
+    - Route
+    + AssignRoute(train, route)
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-AddAStationUI .> AddAStationController
+AssignARouteUI .> AssignARouteController
 
-AddAStationController .> Repositories : repositories
+AssignARouteController .> Repositories : repositories
 
-Repositories -> "1" BuildAddRepository
-AddAStationController ..> Station
-AddAStationController ..> Building
-AddAStationController ..> BuildAddRepository
+Repositories -> "1" BuildAssignRepository
+AssignARouteController ..> Train
+AssignARouteController ..> Route
+AssignARouteController ..> BuildAssignRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-AddAStationController ..> ApplicationSession
-AddAStationController ..> UserSession
+AssignARouteController ..> ApplicationSession
+AssignARouteController ..> UserSession
 
-BuildAddRepository "1" --> "*" Station : stations
+BuildAssignRepository "1" --> "*" Trains : trains
 
-Station --> Player : createdBy
-Station --> "*" Building : buildings
 
 @enduml
