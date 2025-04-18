@@ -1,0 +1,82 @@
+@startuml
+skinparam packageeStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Player {
+    - String name
+    - String ID
+    - String password
+    + getPlayerName()
+    + getPlayerID()
+    + getPlayerPassword()
+}
+
+class UserSession {
+}
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+
+class Station {
+    - String name
+    - String stationType
+    - String id
+    + getStationType()
+    + getStationName()
+}
+
+class Building {
+    - String buildingType
+    + Building(buildingType)
+    + getBuildingType()
+}
+
+class AddAStationUI {
+}
+
+class AddAStationController {
+    + getAddRepository()
+    + AddStation(stationCoordinates, stationType)
+    + getStationList()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : repositories
+    + getAddRepository()
+}
+
+class BuildAddRepository {
+    - Station
+    + addStation(stationToBeAdded)
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+AddAStationUI .> AddAStationController
+
+AddAStationController .> Repositories : repositories
+
+Repositories -> "1" BuildAddRepository
+AddAStationController ..> Station
+AddAStationController ..> Building
+AddAStationController ..> BuildAddRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+AddAStationController ..> ApplicationSession
+AddAStationController ..> UserSession
+
+BuildAddRepository "1" --> "*" Station : stations
+
+Station --> Player : createdBy
+Station --> "*" Building : buildings
+
+@enduml
