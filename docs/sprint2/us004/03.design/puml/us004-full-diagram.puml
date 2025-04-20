@@ -7,18 +7,17 @@ autonumber
 actor "Editor" as Editor
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
-participant ":UserSession" as US
-participant ":ScenarioRepository" as Repo
-participant ":Editor" as EditorDom
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "scenarioRepository\n:ScenarioRepository" as Repo
 participant "Scenario" as Scenario
-participant "Map" as Map
 
 activate Editor
 
 Editor -> UI : starts creating a scenario
 
 activate UI
-UI -> CTRL : create()
+UI -> CTRL** : create
 
 UI -> Editor : prompts for scenario data (name, restrictions, map)
 Editor -> UI : provides data
@@ -26,25 +25,37 @@ UI -> CTRL : submit(name, restrictions, selectedMap)
 
 activate CTRL
 
-CTRL -> US : getCurrentUser()
-US --> CTRL : user
+CTRL -> reps : getInstance()
+activate reps
 
-CTRL -> Repo : checkScenarioNameUniqueness(name)
+reps --> CTRL : repositories
+deactivate reps
+
+CTRL -> PLAT : getScenarioRepository()
+activate PLAT
+
+PLAT --> CTRL : scenarioRepository
+deactivate PLAT
+
+CTRL -> Repo : checkNameUniqueness(name)
+activate Repo
+
 Repo --> CTRL : isUnique
+CTRL -> Repo : createScenario(name, restrictions, map)
 
-CTRL -> EditorDom : createScenario(name, restrictions, selectedMap)
-activate EditorDom
-EditorDom -> Scenario : new(name, restrictions, selectedMap)
-Scenario --> EditorDom : scenarioInstance
-deactivate EditorDom
+Repo -> Scenario : createVerifyScenario(name, restrictions, map)
+activate Scenario
 
-CTRL -> Repo : save(scenarioInstance)
-Repo --> CTRL : success
+Scenario --> Repo :isSuccessful
+deactivate Scenario
 
-CTRL --> UI : operation result (success/failure)
-UI --> Editor : show success or error
+Repo --> CTRL : isSuccessful
+deactivate Repo
 
+CTRL --> UI : isSuccessful
 deactivate CTRL
+
+UI --> Editor : display result
 deactivate UI
 deactivate Editor
 
