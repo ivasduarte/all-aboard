@@ -12,12 +12,20 @@ class CreateScenarioController {
 }
 
 class ScenarioRepository {
-  +isNameUnique(name: String): boolean
-  +save(scenario: Scenario): void
+    -List <Scenario>
+    +getScenarioList()
+
+    +save(scenario: Scenario): void
 }
 
 class Editor {
-  +createScenario(name: String, restrictions:\nRestrictions, map: Map): Scenario
+    -name: String
+    -ID: String
+    -password: String
+    +getEditorName(): void
+    +getEditorID(): void
+    +getEditorPassword(): void
+    +createScenario(name: String, restrictions:\nRestrictions, map: Map): Scenario
 }
 
 class Scenario {
@@ -30,20 +38,46 @@ class Scenario {
 }
 
 class Map {
-  -id: int
-  -name: String
+    -name: String
+    -width: int
+    -height: int
+    +Map(name, width, height)
+    +getMapName()
+    +validateName()
+    +validateSize()
 }
 
-class UserSession {
-  +getCurrentUser(): Editor
+class Repositories {
+    -Repositories()
+    +getInstance() : repositories
+    +getScenarioRepository()
 }
 
-CreateScenarioUI --> CreateScenarioController
-CreateScenarioController --> UserSession
-CreateScenarioController --> ScenarioRepository
-CreateScenarioController --> Editor
-Editor --> Scenario
-Scenario --> ScenarioRepository
+class ApplicationSession {
+    +getInstance() : static
+    +getCurrentSession()
+}
+
+class UserSession {}
+
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+CreateScenarioUI .> CreateScenarioController
+CreateScenarioController .> Repositories : repositories
+
+Repositories -> "1" scenarioRepository
+CreateScenarioController ..> Scenario
+CreateScenarioController ..> scenarioRepository : scenarioRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+CreateScenarioController ..> ApplicationSession
+CreateScenarioController ..> UserSession
+
+scenarioRepository "1" --> "*" Scenario
 Scenario o-- Map : uses
 
+Map --> Editor : createdBy
 @enduml
