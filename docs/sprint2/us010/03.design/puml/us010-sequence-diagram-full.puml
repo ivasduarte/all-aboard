@@ -7,7 +7,7 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Editor
-participant "AddAStationUI" as UI
+participant "AssignARouteUI" as UI
 
 activate Editor
 
@@ -20,21 +20,22 @@ UI --> Editor : shows a list of the available scenarios
 Editor -> UI : selects a scenario
 UI --> Editor : shows a list of the cities
 Editor -> UI : selects a city
-UI --> Editor : shows a list of the actions the player can do
-Editor -> UI : selects to add a station
+UI --> Editor : shows a list of the railroads
+Editor -> UI : selects a railroads
 
-create "AddAStationController" as CTRL
+
+create "AssignARouteController" as CTRL
 UI --> CTRL : create
 
 participant "Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
 
-UI --> Editor : shows a list of the available station types
-Editor -> UI : selects the station type
-UI --> Editor : adds the requested station
+UI --> Editor : shows a list of the available trains
+Editor -> UI : selects a train to assign to a route
+UI --> Editor : assign the selected train to the route
 
 
-UI --> CTRL : AddAStation(station coordinates, type of station)
+UI --> CTRL : AssignRoute(train, route)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
@@ -42,22 +43,22 @@ activate RepositorySingleton
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getBuildAddRepository()
+CTRL -> PLAT : getBuildAssignRepository()
 activate PLAT
-PLAT --> CTRL : BuildAddRepository
+PLAT --> CTRL : BuildAssignRepository
 deactivate PLAT
 
-CTRL -> BuildAddRepository : BuildAdd(station to be upgraded, type of the building)
-activate BuildAddRepository
+CTRL -> BuildAssignRepository : BuildAssign(train, route)
+activate BuildAssignRepository
 
-create "BuildAddRepository\n:BuildAddRepository" as BuildAddRepository
-BuildAddRepository -> BuildAdd : create()
-BuildAddRepository -> BuildAddRepository : AddStation(stationCoordinates, stationType)
+create "BuildAssignRepository\n:BuildAssignRepository" as BuildAssignRepository
+BuildAssignRepository -> BuildAssign : create()
+BuildAssignRepository -> BuildAssignRepository : AssignRoute(train, route)
 
-BuildAddRepository --> CTRL : BuildAddData
-deactivate BuildAddRepository
+BuildAssignRepository --> CTRL : BuildAssignData
+deactivate BuildAssignRepository
 
-CTRL --> UI : BuildAddData
+CTRL --> UI : BuildAssignData
 deactivate CTRL
 
 UI --> Editor : displays operation success and AddData
