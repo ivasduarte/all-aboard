@@ -8,7 +8,7 @@ class CreateMapUI {
 }
 
 class CreateMapController {
-    +createMap(name, width, height)
+    +createMap(mapRepository)
 }
 
 class MapRepository {
@@ -16,30 +16,59 @@ class MapRepository {
 }
 
 class Editor {
-    +createMap(name, width, height)
+    -name: String
+    -ID: String
+    -password: String
+    +getEditorName()
+    +getEditorID()
+    +getEditorPassword()
 }
 
 class Map {
     -name: String
     -width: int
     -height: int
+    +Map(name, width, height)
+    +getMapName()
     +validateName()
     +validateSize()
 }
 
-class ApplicationSession
-
-class UserSession {
-    +getCurrentUser(): Editor
+class MapRepository {
+    -List <Map>
+    +getMapList()
 }
 
-CreateMapUI --> CreateMapController
-CreateMapController --> UserSession
-CreateMapController --> MapRepository
-CreateMapController --> Editor
-Editor --> Map
-Map --> MapRepository
+class Repositories {
+    -Repositories()
+    +getInstance() : repositories
+    +getMapRepository()
+}
 
-UserSession --> ApplicationSession
+class ApplicationSession {
+    +getInstance() : static
+    +getCurrentSession()
+}
+
+class UserSession {}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+CreateMapUI .> CreateMapController
+CreateMapController .> Repositories : repositories
+
+Repositories -> "1" mapRepository
+CreateMapController ..> Map
+CreateMapController ..> mapRepository : mapRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+CreateMapController ..> ApplicationSession
+CreateMapController ..> UserSession
+
+mapRepository "1" --> "*" Map
+
+Map --> Editor : createdBy
 
 @enduml
