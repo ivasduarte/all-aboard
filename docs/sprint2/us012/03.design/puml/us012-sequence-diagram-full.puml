@@ -1,0 +1,63 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Editor
+participant "SimulatorUI" as UI
+
+activate Editor
+
+Editor -> UI : start the project
+activate UI
+
+UI --> Editor : shows a list of the available maps
+Editor -> UI : selects a map
+UI --> Editor : shows a list of the available scenarios
+Editor -> UI : selects a scenario
+UI --> Editor : creates the simulator
+
+
+create "SimulatorController" as CTRL
+UI --> CTRL : create
+
+participant "Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+
+UI --> Editor : shows the option to start simulation
+Editor -> UI : starts simulation
+
+
+UI --> CTRL : StartSimulation(scenario)
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getBuildCreateRepository()
+activate PLAT
+PLAT --> CTRL : BuildCreateRepository
+deactivate PLAT
+
+CTRL -> BuildCreateRepository : BuildAssign(train, route)
+activate BuildCreateRepository
+
+create "BuildCreateRepository\n:BuildCreateRepository" as BuildCreateRepository
+BuildCreateRepository -> BuildAssign : create()
+BuildCreateRepository -> BuildCreateRepository : StartSimulation(scenario)
+
+BuildCreateRepository --> CTRL : BuildCreateData
+deactivate BuildCreateRepository
+
+CTRL --> UI : BuildCreateData
+deactivate CTRL
+
+UI --> Editor : displays operation success and AddData
+deactivate UI
+
+@enduml

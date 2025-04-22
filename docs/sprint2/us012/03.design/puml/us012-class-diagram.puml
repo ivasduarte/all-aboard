@@ -17,30 +17,25 @@ class Player {
 class UserSession {
 }
 
-class Route{
-    - id
-    - ListOfStations
-}
-
-class Train{
-    - name
-    - ID
-    - date of purchase
-}
-
 
 class ApplicationSession {
     + static getInstance()
     + getCurrentSession()
 }
 
-
-class AssignARouteUI {
+class Scenario {
+    - name
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
 }
 
-class AssignARouteController {
+class SimulatorUI {
+}
+
+class SimulatorController {
     + getAddRepository()
-    + AssignRoute(train, route)
+    + StartSimulation(scenario)
     + getStationList()
 }
 
@@ -50,30 +45,28 @@ class Repositories {
     + getAddRepository()
 }
 
-class BuildAssignRepository {
-    - Train
-    - Route
-    + AssignRoute(train, route)
+class BuildCreateRepository {
+    - Scenario
+    + StartSimulation(scenario)
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-AssignARouteUI .> AssignARouteController
+SimulatorUI .> SimulatorController
 
-AssignARouteController .> Repositories : repositories
+SimulatorController .> Repositories : repositories
 
-Repositories -> "1" BuildAssignRepository
-AssignARouteController ..> Train
-AssignARouteController ..> Route
-AssignARouteController ..> BuildAssignRepository
+Repositories -> "1" BuildCreateRepository
+SimulatorController ..> Scenario
+SimulatorController ..> BuildCreateRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-AssignARouteController ..> ApplicationSession
-AssignARouteController ..> UserSession
+SimulatorController ..> ApplicationSession
+SimulatorController ..> UserSession
 
-BuildAssignRepository "1" --> "*" Trains : trains
+BuildCreateRepository "1" --> "*" Simulator : simulator
 
 
 @enduml
