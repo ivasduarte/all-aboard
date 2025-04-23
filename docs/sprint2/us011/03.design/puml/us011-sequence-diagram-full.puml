@@ -1,0 +1,62 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant "ListTrainsUI" as UI
+
+activate Player
+
+Player -> UI : start the simulation
+activate UI
+
+UI --> Player : shows a list of the available maps
+Player -> UI : selects a map
+UI --> Player : shows a list of the available scenarios
+Player -> UI : selects a scenario
+UI --> Player : shows a list of the cities
+Player -> UI : selects a city
+UI --> Player : shows a list of the actions the player can do
+Player -> UI : selects to list all trains
+
+create "ListTrainsController" as CTRL
+UI -> CTRL : create
+deactivate UI
+activate CTRL
+
+CTRL -> Repositories : getInstance()
+activate Repositories
+Repositories --> CTRL : RepositorySingleton
+deactivate Repositories
+
+CTRL -> RepositorySingleton : getTrainRepository()
+activate RepositorySingleton
+RepositorySingleton --> CTRL : TrainRepository
+deactivate RepositorySingleton
+
+participant "TrainRepository" as Train_REPO
+CTRL -> Train_REPO : getAllTrains()
+activate Train_REPO
+Train_REPO --> CTRL : list of trains
+deactivate Train_REPO
+
+loop for each train
+    CTRL -> Train : getLocomotiveType()
+    CTRL -> Train : getCarriages()
+    CTRL -> Train : getCurrentCargoSummary()
+end loop
+
+CTRL -> CTRL : groupByLocomotiveTypeAndSortByName()
+
+CTRL --> UI : list of trains sorted
+deactivate CTRL
+activate UI
+
+UI --> Player : displays list of trains
+deactivate UI
+
+@enduml

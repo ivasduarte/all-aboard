@@ -24,7 +24,7 @@ UI --> Player : shows a list of the actions the player can do
 Player -> UI : selects to list all stations
 
 create "ListStationsController" as CTRL
-UI -> CTRL : new()
+UI -> CTRL : create
 deactivate UI
 activate CTRL
 

@@ -1,0 +1,87 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+skinparam classAttributeIconSize 0
+
+' === UI Layer ===
+class ListTrainsUI {
+    + displayTrainList()
+    + selectTrainToViewDetails()
+}
+
+' === Controller ===
+class ListTrainsController {
+    + listAllTrains() : List<Train>
+}
+
+' === Repositories Access ===
+class Repositories {
+    + getTrainRepository() : TrainRepository
+}
+
+class TrainRepository {
+    - List<Train> trains
+    + getAllTrains() : List<Train>
+}
+
+' === Domain ===
+class Train {
+    - String id
+    - String name
+    - Locomotive locomotive
+    - List<Carriage> carriages
+    + getLocomotiveType() : LocomotiveType
+    + getCarriages() : List<Carriage>
+    + getCurrentCargoSummary() : CargoSummary
+}
+
+class Locomotive {
+    - String id
+    - LocomotiveType type
+    - int power
+    - int topSpeed
+    - int acceleration
+    - int startYear
+    - double acquisitionPrice
+    + getType() : LocomotiveType
+}
+
+enum LocomotiveType {
+    STEAM
+    DIESEL
+    ELECTRIC
+}
+
+class Carriage {
+    - String id
+    - CargoType type
+}
+
+enum CargoType {
+    PASSENGERS
+    MAIL
+    COAL
+    IRON_ORE
+    STEEL
+    CARS
+}
+
+class CargoSummary {
+    - int currentLoad
+    + getCurrentLoad()
+}
+
+' === Relationships ===
+ListTrainsUI .> ListTrainsController : uses
+ListTrainsController ..> Repositories : accesses
+Repositories --> TrainRepository
+ListTrainsController ..> TrainRepository : uses
+
+Train --> Locomotive
+Train --> "0..*" Carriage
+Train --> CargoSummary
+Locomotive --> LocomotiveType
+Carriage --> CargoType
+
+@enduml
