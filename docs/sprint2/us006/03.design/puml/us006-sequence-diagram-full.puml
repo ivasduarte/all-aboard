@@ -7,7 +7,7 @@ autonumber
 
 actor "Player" as Player
 participant "UpgradeAStationUI" as UI
-participant "UpgradeAStationController" as CTRL
+
 
 activate Player
 
@@ -23,11 +23,16 @@ Player -> UI : selects a city
 UI --> Player : shows a list of the actions the player can do
 Player -> UI : selects to upgrade a station
 
-UI -> CTRL : new()
+create "UpgradeAStationController" as CTRL
+
+UI -> CTRL : create
+
 deactivate UI
+
 activate CTRL
 
 CTRL -> Repositories : getInstance()
+
 activate Repositories
 Repositories --> CTRL : RepositorySingleton
 deactivate Repositories
@@ -91,12 +96,12 @@ alt Building not valid or already exists
 else Success
     Station_UPG --> CTRL : BuildUpgradeData
     CTRL --> UI : BuildUpgradeData
+    deactivate CTRL
     UI --> Player : Display success
     deactivate UI
 end
 
 deactivate Station_UPG
-deactivate CTRL
 activate UI
 deactivate UI
 
