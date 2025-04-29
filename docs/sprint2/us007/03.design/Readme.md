@@ -1,46 +1,35 @@
-# US006 - Create a Task
+# US007 - List all the stations
 
 ## 3. Design
 
 ### 3.1. Rationale
 
-| Interaction ID | Question: Which class is responsible for...        | Answer                 | Justification (with patterns)                                                                                                       |
-|:---------------|:---------------------------------------------------|:-----------------------|:------------------------------------------------------------------------------------------------------------------------------------|
-| Step 1         | ... interacting with the actor?                    | CreateTaskUI           | Pure Fabrication: there is no reason to assign this responsibility to any existing class in the Domain Model.                       |
-|                | ... coordinating the US?                           | CreateTaskController   | Controller                                                                                                                          |
-|                | ... knowing the user using the system?             | UserSession            | IE: cf. A&A component documentation.                                                                                                |
-|                |                                                    | Organization           | IE: knows/has its own Employees                                                                                                     |
-|                |                                                    | Employee               | IE: knows its own data (e.g. email)                                                                                                 |
-| Step 2         | ... knowing all existing task categories to show?  | Repositories           | IE: Repositories maintains Task Categories.                                                                                         |
-|                |                                                    | TaskCategoryRepository | By applying High Cohesion (HC) + Low Coupling (LC) on class Repositories, it delegates the responsibility on TaskCategoryContainer. |
-| Step 3         | ... saving the selected category?                  | CreateTaskUI           | IE: is responsible for keeping the selected category.                                                                               |
-| Step 4         | ... requesting data?                               | CreateTaskUI           | IE: is responsible for user interactions.                                                                                           |
-| Step 5         | ... saving the inputted data?                      | CreateTaskUI           | IE: is responsible for keeping the inputted data.                                                                                   |
-| Step 6         | ... showing all data and requesting confirmation?  | CreateTaskUI           | IE: is responsible for user interactions.                                                                                           |              
-| Step 7         | ... instantiating a new Task?                      | Organization           | Creator (Rule 1): in the DM Organization has a Task.                                                                                |
-|                | ... validating all data (local validation)?        | Task                   | IE: owns its data.                                                                                                                  | 
-|                | ... validating all data (global validation)?       | Organization           | IE: knows all its tasks.                                                                                                            | 
-|                | ... saving the created task?                       | Organization           | IE: owns all its tasks.                                                                                                             | 
-| Step 8         | ... informing operation success?                   | CreateTaskUI           | IE: is responsible for user interactions.                                                                                           | 
+| Interaction ID | Question: Which class is responsible for...           | Answer                 | Justification (with patterns)                                                                                                       |
+|:---------------|:------------------------------------------------------|:-----------------------|:------------------------------------------------------------------------------------------------------------------------------------|
+| Step 1         | ... requesting to list all stations?                  | ListStationsUI         | Pure Fabrication: UI layer is responsible for managing the interaction with the user.                                               |
+| Step 2         | ... showing a list of available stations?             | ListStationsUI         | Pure Fabrication: UI layer is responsible for displaying the available stations listed.                                             |
+| Step 3         | ... coordinating the flow to obtain the station data? | ListStationsController | Controller: Coordinates between the UI and the domain logic, encapsulating the use case logic                                       |
+| Step 4         | ... storing all existing stations?                    | StationRepository      | Information Expert: Responsible for managing and returning all station data.                                                        |
+| Step 5         | ... obtaining the summary of each station?            | CargoService           | Information Expert: Knows and manages station data.                                                                                 |
+| Step 6         | ... sorting stations by name?                         | ListStationsController | Controller: Responsible for preparing data before passing it to the UI.                                                             |
 
 ### Systematization ##
 
 According to the taken rationale, the conceptual classes promoted to software classes are: 
 
-* Organization
-* Task
-* TaskCategory
-* Employee
+* Player
+* Station
+* Building
+* Cargo Summary
 
 Other software classes (i.e. Pure Fabrication) identified: 
 
-* CreateTaskUI  
-* CreateTaskController
+* ListStationsUI  
+* ListStationsController
 * Repositories
-* TaskCategoryRepository
-* OrganizationRepository
-* ApplicationSession
-* UserSession
+* RepositorySingleton
+* StationRepository
+* CargoService
 
 
 ## 3.2. Sequence Diagram (SD)
