@@ -27,7 +27,6 @@ create "UpgradeAStationController" as CTRL
 
 UI -> CTRL : create
 
-deactivate UI
 
 activate CTRL
 
@@ -51,12 +50,10 @@ deactivate Station_REPO
 
 CTRL --> UI : Send Stations
 deactivate CTRL
-activate UI
 
 UI --> Player : shows a list of the available stations
 Player -> UI : selects the station
 UI -> CTRL : Check buildings available
-deactivate UI
 activate CTRL
 
 CTRL -> Repositories : getBuildingRepository()
@@ -72,13 +69,11 @@ deactivate Station_BUILD
 
 CTRL --> UI: Send Available Buildings
 deactivate CTRL
-activate UI
 
 UI --> Player : shows list of existing + available buildings
 UI --> Player : requests the type of the building to add
 Player -> UI : inserts the type of the building
 UI -> CTRL : Upgrade a Station (station, building type)
-deactivate UI
 
 participant "BuildUpgradeRepository" as Station_UPG
 activate CTRL
@@ -90,7 +85,6 @@ activate Station_UPG
 alt Building not valid or already exists
     Station_UPG --> CTRL : Error Detected
     CTRL --> UI : ErrorMessage
-    activate UI
 
     UI --> Player : Display error
 else Success
@@ -98,7 +92,6 @@ else Success
     CTRL --> UI : BuildUpgradeData
     deactivate CTRL
     UI --> Player : Display success
-    deactivate UI
 end
 
 deactivate Station_UPG

@@ -25,7 +25,6 @@ Player -> UI : selects to list all stations
 
 create "ListStationsController" as CTRL
 UI -> CTRL : create
-deactivate UI
 activate CTRL
 
 CTRL -> Repositories : getInstance()
@@ -56,7 +55,6 @@ CTRL -> CTRL : sortStationsByName()
 
 CTRL --> UI : list of stations with summaries
 deactivate CTRL
-activate UI
 
 UI --> Player : displays list of stations
 deactivate UI
