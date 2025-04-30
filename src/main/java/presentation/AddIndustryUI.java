@@ -1,4 +1,6 @@
-package code;
+package presentation;
+
+import controller.AddIndustryController;
 
 import java.util.Scanner;
 

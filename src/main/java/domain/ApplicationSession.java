@@ -1,4 +1,4 @@
-package code;
+package domain;
 
 public class ApplicationSession {
     private static ApplicationSession instance = new ApplicationSession();

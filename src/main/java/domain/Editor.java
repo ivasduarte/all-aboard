@@ -1,4 +1,4 @@
-package code;
+package domain;
 
 public class Editor {
     private String name;

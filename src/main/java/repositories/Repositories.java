@@ -1,4 +1,4 @@
-package code;
+package repositories;
 
 public class Repositories {
     private static Repositories instance = new Repositories();

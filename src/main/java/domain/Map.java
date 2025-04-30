@@ -1,4 +1,4 @@
-package code;
+package domain;
 
 public class Map {
     private String name;

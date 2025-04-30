@@ -1,4 +1,10 @@
-package code;
+package controller;
+
+import domain.ApplicationSession;
+import domain.Editor;
+import domain.Industry;
+import repositories.IndustryRepository;
+import repositories.Repositories;
 
 public class AddIndustryController {
     public String addIndustry(int mapID, int scenarioID, int positionX, int positionY, String industryType) {

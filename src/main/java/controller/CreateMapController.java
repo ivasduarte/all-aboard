@@ -1,4 +1,10 @@
-package code;
+package controller;
+
+import domain.ApplicationSession;
+import domain.Editor;
+import domain.Map;
+import repositories.MapRepository;
+import repositories.Repositories;
 
 public class CreateMapController {
     public String createMap(String name, int width, int height){

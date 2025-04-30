@@ -1,4 +1,6 @@
-package code;
+package repositories;
+
+import domain.Map;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,6 @@
-package code;
+package repositories;
+
+import domain.Industry;
 
 import java.util.ArrayList;
 import java.util.List;

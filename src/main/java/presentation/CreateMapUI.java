@@ -1,4 +1,6 @@
-package code;
+package presentation;
+
+import controller.CreateMapController;
 
 import java.util.Scanner;
 

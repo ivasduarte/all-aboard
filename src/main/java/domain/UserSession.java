@@ -1,4 +1,4 @@
-package code;
+package domain;
 
 public class UserSession {
     private Editor currentEditor;
