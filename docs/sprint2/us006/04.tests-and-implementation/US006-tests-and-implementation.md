@@ -1,12 +1,12 @@
-# US006 - Create a Task 
+# US006 - Upgrade a selected station with a building
 
 ## 4. Tests 
 
-**Test 1:** Check that it is not possible to create an instance of the Task class with null values. 
+**Test 1:** Check that is not possible to upgrade a station with null values.
 
 	@Test(expected = IllegalArgumentException.class)
-		public void ensureNullIsNotAllowed() {
-		Task instance = new Task(null, null, null, null, null, null, null);
+		public void ensureBuildingIsNotCreatedWithNullType() {
+		Building instance = new Building(null);
 	}
 	
 
@@ -24,13 +24,14 @@ _It is also recommended to organize this content by subsections._
 
 ## 5. Construction (Implementation)
 
-### Class CreateTaskController 
+### Class  
 
 ```java
 public Task createTask(String reference, String description, String informalDescription, String technicalDescription,
                        Integer duration, Double cost, String taskCategoryDescription) {
 
-	TaskCategory taskCategory = getTaskCategoryByDescription(taskCategoryDescription);
+	TaskCategory taskCategory = 
+            (taskCategoryDescription);
 
 	Employee employee = getEmployeeFromSession();
 	Organization organization = getOrganizationRepository().getOrganizationByEmployee(employee);

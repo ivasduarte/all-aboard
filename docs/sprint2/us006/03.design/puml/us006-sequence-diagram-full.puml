@@ -14,6 +14,7 @@ activate Player
 Player -> UI : start the simulation
 activate UI
 
+<<<<<<< Updated upstream
 UI --> Player : shows a list of the available maps
 Player -> UI : selects a map
 UI --> Player : shows a list of the available scenarios
@@ -24,6 +25,21 @@ UI --> Player : shows a list of the actions the player can do
 Player -> UI : selects to upgrade a station
 
 create "UpgradeAStationController" as CTRL
+=======
+create "UpgradeAStationController" as CTRL
+UI --> CTRL : create
+
+UI --> Editor : shows a list of the available maps
+Editor -> UI : selects a map
+UI --> Editor : shows a list of the available scenarios
+Editor -> UI : selects a scenario
+UI --> Editor : shows a list of the cities
+Editor -> UI : selects a city
+UI --> Editor : shows a list of the actions the player can do
+Editor -> UI : selects to upgrade a station
+
+
+>>>>>>> Stashed changes
 
 UI -> CTRL : create
 
