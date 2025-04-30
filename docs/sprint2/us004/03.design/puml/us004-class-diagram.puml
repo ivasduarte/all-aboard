@@ -67,9 +67,9 @@ ApplicationSession -> ApplicationSession : instance
 CreateScenarioUI .> CreateScenarioController
 CreateScenarioController .> Repositories : repositories
 
-Repositories -> "1" scenarioRepository
+Repositories -> "1" ScenarioRepository
 CreateScenarioController ..> Scenario
-CreateScenarioController ..> scenarioRepository : scenarioRepository
+CreateScenarioController ..> ScenarioRepository : scenarioRepository
 
 ApplicationSession --> "1" UserSession : userSession
 

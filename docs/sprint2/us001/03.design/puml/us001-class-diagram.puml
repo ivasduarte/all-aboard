@@ -12,6 +12,10 @@ class CreateMapController {
 }
 
 class MapRepository {
+    -List <Map>
+    +getMapList()
+    +validateName()
+    +validateSize()
     +save(map)
 }
 
@@ -30,14 +34,8 @@ class Map {
     -height: int
     +Map(name, width, height)
     +getMapName()
-    +validateName()
-    +validateSize()
 }
 
-class MapRepository {
-    -List <Map>
-    +getMapList()
-}
 
 class Repositories {
     -Repositories()
@@ -58,9 +56,9 @@ ApplicationSession -> ApplicationSession : instance
 CreateMapUI .> CreateMapController
 CreateMapController .> Repositories : repositories
 
-Repositories -> "1" mapRepository
+Repositories -> "1" MapRepository
 CreateMapController ..> Map
-CreateMapController ..> mapRepository : mapRepository
+CreateMapController ..> MapRepository : mapRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
