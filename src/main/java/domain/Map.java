@@ -16,6 +16,12 @@ public class Map {
     public String getMapName() {
         return name;
     }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
 
     //validation
     public boolean validateName() {

@@ -12,16 +12,20 @@ public class AddIndustryUI {
 
     public void getInput() {
         Scanner sc = new Scanner(System.in);
+
         System.out.println("Select a map from the following list: ");
         MapRepository mr = new MapRepository();
         mr.displayMapList();
         int mapID = sc.nextInt();
-        System.out.println("Enter the scenario id: ");
+
+        System.out.println("Enter the scenario id: "); // waiting for ScenarioRepository to present as a list
         int scenarioID = sc.nextInt();
+
         System.out.println("Enter the position X of the industry: ");
         int positionX = sc.nextInt();
         System.out.println("Enter the position Y of the industry: ");
         int positionY = sc.nextInt();
+
         System.out.println("Enter the industry type: ");
         String industryType = sc.nextLine();
 

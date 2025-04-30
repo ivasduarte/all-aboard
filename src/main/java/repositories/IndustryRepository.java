@@ -9,21 +9,24 @@ import java.util.List;
 public class IndustryRepository {
     private List<Industry> industries = new ArrayList<>();
 
-    Map mp = new Map();
-
     public void save(Industry industry) {
         industries.add(industry);
     }
+
     public List<Industry> getIndustryList() {
         return industries;
     }
 
-    public boolean validatePosition() {
-        if (Industry.get >= 0 && posX <= mp.width){
-            if (posY >= 0 && posY <= mp.height){
-                return true;
-            }
+    public void displayIndustryList() {
+        for (int i = 0; i < industries.size(); i++) {
+            System.out.println(i + ". " + industries.get(i));
         }
-        return false;
+    }
+
+    MapRepository mapList = new MapRepository();
+    List<Map> maps = mapList.getMapList();
+
+    public boolean validatePosition() {
+
     }
 }
