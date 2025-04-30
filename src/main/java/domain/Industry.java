@@ -50,5 +50,7 @@ public class Industry {
     }
 
     // validation
+    public boolean validatePosition() {
 
+    }
 }
