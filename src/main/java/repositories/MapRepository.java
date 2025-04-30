@@ -19,4 +19,9 @@ public class MapRepository{
     public boolean existsByName(String name) {
         return maps.stream().anyMatch(m -> m.getMapName().equals(name));
     }
+    public void displayMapList() {
+        for (int i = 0; i < maps.size(); i++) {
+            System.out.println(i + ". " + maps.get(i));
+        }
+    }
 }

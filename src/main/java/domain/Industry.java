@@ -48,9 +48,4 @@ public class Industry {
     public void setIndustryType(String industryType) {
         this.industryType = industryType;
     }
-
-    // validation
-    public boolean validatePosition() {
-
-    }
 }

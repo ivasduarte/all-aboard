@@ -1,6 +1,9 @@
 package presentation;
 
 import controller.AddIndustryController;
+import domain.Map;
+import repositories.IndustryRepository;
+import repositories.MapRepository;
 
 import java.util.Scanner;
 
@@ -9,7 +12,9 @@ public class AddIndustryUI {
 
     public void getInput() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the map id: ");
+        System.out.println("Select a map from the following list: ");
+        MapRepository mr = new MapRepository();
+        mr.displayMapList();
         int mapID = sc.nextInt();
         System.out.println("Enter the scenario id: ");
         int scenarioID = sc.nextInt();
