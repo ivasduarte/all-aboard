@@ -13,7 +13,9 @@ public class AddIndustryController {
 
         Industry industry = new Industry(mapID, scenarioID, positionX, positionY, industryType);
 
-        // ifs for validation
+        if (!industry.validatePosition()) {
+            return "ERROR: Invalid position";
+        }
 
         industryRepository.save(industry);
         return "Industry [" + positionX + ", " + positionY + "] saved successfully.";
