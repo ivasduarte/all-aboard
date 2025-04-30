@@ -26,7 +26,14 @@ public class AddIndustryUI {
         System.out.println("Enter the position Y of the industry: ");
         int positionY = sc.nextInt();
 
-        System.out.println("Enter the industry type: ");
+        System.out.println("Select the industry type you want: ");
+        String[] industryTypes = new String[3];
+        industryTypes[0] = "Primary sector industry";
+        industryTypes[1] = "Transforming industry";
+        industryTypes[2] = "Mixed industry";
+        for (int i = 0; i < industryTypes.length; i++) {
+            System.out.println((i+1) + ". " + industryTypes[i]);
+        }
         String industryType = sc.nextLine();
 
         String result = ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType);
