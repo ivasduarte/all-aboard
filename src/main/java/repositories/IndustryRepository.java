@@ -22,11 +22,4 @@ public class IndustryRepository {
             System.out.println(i + ". " + industries.get(i));
         }
     }
-
-    MapRepository mapList = new MapRepository();
-    List<Map> maps = mapList.getMapList();
-
-    public boolean validatePosition() {
-
-    }
 }

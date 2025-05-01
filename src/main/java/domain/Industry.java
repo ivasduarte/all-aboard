@@ -1,5 +1,7 @@
 package domain;
 
+import repositories.MapRepository;
+
 public class Industry {
     private int mapID;
     private int scenarioID;
@@ -47,5 +49,18 @@ public class Industry {
     }
     public void setIndustryType(String industryType) {
         this.industryType = industryType;
+    }
+
+    MapRepository mr = new MapRepository();
+    Map map = mr.getMapList().get(mapID);
+
+    public boolean validatePosition() {
+        if (positionX < 0 || positionX > map.getWidth()) {
+            return false;
+        }
+        if (positionY < 0 || positionY > map.getHeight()) {
+            return false;
+        }
+        return true;
     }
 }
