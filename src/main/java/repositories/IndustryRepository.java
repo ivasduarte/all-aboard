@@ -22,4 +22,9 @@ public class IndustryRepository {
             System.out.println(i + ". " + industries.get(i));
         }
     }
+
+    private boolean validateIndustry(Industry industry) {
+        boolean isValid = !industries.contains(industry);
+        return isValid;
+    }
 }
