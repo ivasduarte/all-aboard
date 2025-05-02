@@ -1,6 +1,7 @@
 package presentation;
 
 import controller.CreateMapController;
+import domain.Map;
 
 import java.util.Scanner;
 
@@ -16,22 +17,29 @@ public class CreateMapUI {
         System.out.print("Enter the height of the map: ");
         int height = sc.nextInt();
 
-        String result = controller.createMap(name, width, height);
-
-        if (result.startsWith("ERROR")){
-            showError(result);
+        MapCreationResult result = controller.createMap(name, width, height);
+        if (result.message.startsWith("ERROR")) {
+            showError(result.message);
         } else {
-            showSuccess(result);
+            showSuccess(result.message);
         }
     }
 
-    public void showError(String result){
-        System.out.println("ERROR: " + result);
+    public static class MapCreationResult {
+        public String message;
+        public Map map;
+
+        public MapCreationResult(String message, Map map) {
+            this.message = message;
+            this.map = map;
+        }
     }
 
-    public void showSuccess(String result){
-        System.out.println("SUCCESS: " + result);
-
+    public void showError(String result) {
+        System.out.println(result);
     }
 
+    public void showSuccess(String result) {
+        System.out.println(result);
+    }
 }

@@ -1,32 +1,35 @@
 package controller;
 
 import domain.ApplicationSession;
-import domain.Editor;
 import domain.Map;
+import domain.UserSession;
+import presentation.CreateMapUI;
 import repositories.MapRepository;
 import repositories.Repositories;
 
 public class CreateMapController {
-    public String createMap(String name, int width, int height){
-        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
-        Editor editor = ApplicationSession.getInstance().getCurrentSession().getCurrentEditor();
+    public CreateMapUI.MapCreationResult createMap(String name, int width, int height) {
+        try {
+            UserSession userSession = ApplicationSession.getInstance().getCurrentSession();
+            if (userSession == null || userSession.getCurrentEditor() == null) {
+                return new CreateMapUI.MapCreationResult("ERROR: No user is currently logged in.", null);
+            }
 
-        if (mapRepository.existsByName(name)){
-            return "ERROR: Name already exists";
+            MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+            if (mapRepository.existsByName(name)) {
+                return new CreateMapUI.MapCreationResult("ERROR: A map with this name already exists.", null);
+            }
+
+            Map map = new Map(name, width, height);
+            map.setCreatedBy(userSession.getCurrentEditor());
+            mapRepository.save(map);
+
+            return new CreateMapUI.MapCreationResult("Map '" + name + "' created successfully.", map);
+
+        } catch (IllegalArgumentException e) {
+            return new CreateMapUI.MapCreationResult("ERROR: " + e.getMessage(), null);
+        } catch (Exception e) {
+            return new CreateMapUI.MapCreationResult("ERROR: Unexpected error occurred.", null);
         }
-
-        Map map = new Map(name, width, height);
-
-        if (!map.validateName()){
-            return "ERROR: Invalid name";
-        }
-
-        if (!map.validateSize()){
-            return "ERROR: Invalid size";
-        }
-
-        mapRepository.save(map);
-        return "Map" + name + "saved successfully.";
     }
-
 }

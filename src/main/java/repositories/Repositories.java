@@ -6,9 +6,14 @@ public class Repositories {
     private IndustryRepository industryRepository = new IndustryRepository();
     private TrainRepository trainRepository = new TrainRepository();
 
-    private Repositories() {}
+    private Repositories() {
+        mapRepository = new MapRepository();
+    }
 
     public static Repositories getInstance() {
+        if (instance == null){
+            instance = new Repositories();
+        }
         return instance;
     }
 
