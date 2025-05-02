@@ -3,31 +3,36 @@ package domain;
 
 public class Train {
     private String name;
-    private String id;
-    // add dateOfPurchase with class Date
+    private int id;
+    private Date dateOfPurchase;
 
-    public Train(String name, String id) {   // add dateOfPurchase
+    public Train(String name, int id, Date dateOfPurchase) {
         this.name = name;
         this.id = id;
+        this.dateOfPurchase = dateOfPurchase;
     }
 
     // getters
     public String getName() {
         return name;
     }
-    public String getId() {
+    public int getId() {
         return id;
     }
-    // add getDateOfPurchase()
+    public Date getDateOfPurchase() {
+        return dateOfPurchase;
+    }
 
     // setters
     public void setName(String name) {
         this.name = name;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
-    // add setDateOfPurchase()
+    public void setDateOfPurchase(Date dateOfPurchase) {
+        this.dateOfPurchase = dateOfPurchase;
+    }
 
     // validations
 }
