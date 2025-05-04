@@ -1,14 +1,13 @@
 package repositories;
 
-import domain.UserSession;
-import ui.authorization.Authentication;
-import ui.authorization.AuthenticationUI;
+import pt.isep.lei.esoft.auth.AuthFacade;
+import pt.isep.lei.esoft.auth.UserSession;
 
 public class AuthenticationRepository {
-    private final Authentication authentication;
+    private final AuthFacade authentication;
 
     public AuthenticationRepository() {
-        authentication = new Authentication();
+        authentication = new AuthFacade();
     }
 
     public boolean doLogin(String email, String password){
@@ -16,7 +15,7 @@ public class AuthenticationRepository {
     }
 
     public void doLogout(){
-        return authentication.doLogout();
+        authentication.doLogout();
     }
 
     public UserSession getCurrentUserSession(){
