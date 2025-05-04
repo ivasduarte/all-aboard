@@ -16,4 +16,9 @@ public class UserSession {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
+    public void doLogout(){
+        this.currentEditor = null;
+        this.currentPlayer = null;
+    }
 }
