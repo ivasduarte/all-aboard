@@ -2,30 +2,34 @@
 skinparam classAttributeIconSize 0
 
 class CreateMapUI {
-    +getInput()
-    +showSuccess()
-    +showError()
+    -controller: CreateMapController
+    -message: String
+    -map: Map
+    +getInput(): void
+    +MapCreationResult(message, map)
+    +showSuccess(): void
+    +showError(): void
 }
 
 class CreateMapController {
-    +createMap(mapRepository)
+    +createMap(name, width, height): CreateMapUI.MapCreationResult
 }
 
 class MapRepository {
-    -List <Map>
+    -maps: List <Map>
     +getMapList()
-    +validateName()
-    +validateSize()
-    +save(map)
+    +save(map): void
+    +existsByName(): boolean
 }
 
 class Editor {
     -name: String
     -ID: String
     -password: String
-    +getEditorName()
-    +getEditorID()
-    +getEditorPassword()
+    +Editor(name, id, password)
+    +getName()
+    +getID()
+    +getPassword()
 }
 
 class Map {
@@ -33,19 +37,26 @@ class Map {
     -width: int
     -height: int
     +Map(name, width, height)
-    +getMapName()
+    +getMapName(): String
+    +validateName(): void
+    +validateSize(): void
 }
 
 
 class Repositories {
-    -Repositories()
-    +getInstance() : repositories
+    -instance: Repositories{static}
+    -mapRepository: MapRepository
+    +Repositories()
+    +getInstance(): repositories
     +getMapRepository()
 }
 
 class ApplicationSession {
-    +getInstance() : static
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +getInstance(): static
     +getCurrentSession()
+    +setUserSession()
 }
 
 class UserSession {}
