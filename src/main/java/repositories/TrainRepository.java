@@ -16,7 +16,7 @@ public class TrainRepository {
         return trains;
     }
 
-    public void displayTrainIndustry() {
+    public void displayTrainList() {
         for (int i = 0; i < trains.size(); i++) {
             System.out.println((i+1) + ". " + trains.get(i));
         }
