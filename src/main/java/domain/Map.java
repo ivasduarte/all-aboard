@@ -51,4 +51,13 @@ public class Map {
     public Editor getCreatedBy() {
         return createdBy;
     }
+
+    @Override
+    public String toString() {
+        return "Map{" +
+                "name='" + name + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
+    }
 }

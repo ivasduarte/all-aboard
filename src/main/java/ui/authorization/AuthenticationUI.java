@@ -1,7 +1,16 @@
 package ui.authorization;
 
-import pt.ipp.isep.dei.controller.AuthenticationController;
+import ui.authorization.AuthenticationController;
+import ui.menu.EditorUI;
+import pt.ipp.isep.dei.ui.console.menu.MenuItem;
+import pt.isep.lei.esoft.auth.mappers.dto.UserRoleDTO;
+import ui.menu.EditorUI;
 import ui.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 public class AuthenticationUI implements Runnable {
     private final AuthenticationController ctrl;
@@ -12,6 +21,23 @@ public class AuthenticationUI implements Runnable {
 
     public void run() {
         boolean success = doLogin();
+
+        if (success) {
+            List<UserRoleDTO> roles = this.ctrl.getUserRoles();
+            if ((roles == null) || (roles.isEmpty())) {
+                System.out.println("No role assigned to user.");
+            } else {
+                UserRoleDTO role = selectsRole(roles);
+                if (!Objects.isNull(role)) {
+                    List<MenuItem> rolesUI = getMenuItemForRoles();
+                    this.redirectToRoleUI(rolesUI, role);
+                } else {
+                    System.out.println("No role selected.");
+                }
+            }
+        }
+        this.logout();
+
     }
 
     private boolean doLogin() {
@@ -34,5 +60,36 @@ public class AuthenticationUI implements Runnable {
 
     private void logout() {
         ctrl.doLogout();
+    }
+
+    private void redirectToRoleUI(List<MenuItem> rolesUI, UserRoleDTO role) {
+        boolean found = false;
+        Iterator<MenuItem> it = rolesUI.iterator();
+        while (it.hasNext() && !found) {
+            MenuItem item = it.next();
+            found = item.hasDescription(role.getDescription());
+            if (found) {
+                item.run();
+            }
+        }
+        if (!found) {
+            System.out.println("There is no UI for users with role '" + role.getDescription() + "'");
+        }
+    }
+
+    private UserRoleDTO selectsRole(List<UserRoleDTO> roles) {
+        if (roles.size() == 1) {
+            return roles.get(0);
+        } else {
+            return (UserRoleDTO) pt.ipp.isep.dei.ui.console.utils.Utils.showAndSelectOne(roles, "Select the role you want to adopt in this session:");
+        }
+    }
+
+    private List<MenuItem> getMenuItemForRoles() {
+        List<MenuItem> rolesUI = new ArrayList<>();
+        rolesUI.add(new MenuItem(AuthenticationController.ROLE_EDITOR, new EditorUI()));
+
+        //TODO: Complete with other user roles and related RoleUI
+        return rolesUI;
     }
 }

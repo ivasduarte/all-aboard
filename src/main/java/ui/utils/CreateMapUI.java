@@ -6,7 +6,7 @@ import domain.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class CreateMapUI {
+public class CreateMapUI implements Runnable{
     private final CreateMapController controller;
     private String mapName;
     private int width;
@@ -30,7 +30,7 @@ public class CreateMapUI {
         Optional<presentation.CreateMapUI.MapCreationResult> map = Optional.ofNullable(getMapController().createMap(mapName, width, height));
 
         if (map.isPresent()) {
-            System.out.println("\nTask successfully created!");
+            System.out.println("\nMap successfully created!");
         } else {
             System.out.println("\nMap not created!");
         }
