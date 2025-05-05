@@ -19,7 +19,7 @@ public class IndustryRepository {
 
     public void displayIndustryList() {
         for (int i = 0; i < industries.size(); i++) {
-            System.out.println(i + ". " + industries.get(i));
+            System.out.println((i+1) + ". " + industries.get(i));
         }
     }
 

@@ -1,11 +1,13 @@
 package controller;
 
-import domain.ApplicationSession;
-import domain.Date;
-import domain.Player;
-import domain.Train;
+import domain.*;
+import repositories.CarriageRepository;
+import repositories.LocomotiveRepository;
 import repositories.Repositories;
 import repositories.TrainRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuyTrainController {
     public String addTrain(String name, int id, Date dateOfPurchase) {
@@ -18,5 +20,27 @@ public class BuyTrainController {
 
         trainRepository.save(train);
         return "Train " + name + " saved successfully.";
+    }
+
+    public Locomotive selectLocomotive(int selection) {           // add boolean variable to make the method loop while the user still wants to add more Locomotives
+        Locomotive selectedLocomotive;
+
+        LocomotiveRepository lr = new LocomotiveRepository();
+        List<Locomotive> locomotives = lr.getLocomotiveList();
+
+        selectedLocomotive = locomotives.get(selection-1);
+
+        return selectedLocomotive;
+    }
+
+    public Carriage selectCarriage(int selection) {               // add boolean variable to make the method loop while the user still wants to add more Carriages
+        Carriage selectedCarriage;
+
+        CarriageRepository cr = new CarriageRepository();
+        List<Carriage> carriages = cr.getCarriageList();
+
+        selectedCarriage = carriages.get(selection-1);
+
+        return selectedCarriage;
     }
 }

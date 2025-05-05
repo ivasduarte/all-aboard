@@ -16,7 +16,7 @@ public class AddIndustryUI {
         System.out.println("Select a map from the following list: ");
         MapRepository mr = new MapRepository();
         mr.displayMapList();
-        int mapID = sc.nextInt();
+        int mapID = sc.nextInt() - 1;
 
         System.out.println("Enter the scenario id: "); // waiting for ScenarioRepository to present as a list
         int scenarioID = sc.nextInt();
