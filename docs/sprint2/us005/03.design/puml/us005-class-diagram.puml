@@ -24,9 +24,20 @@ class ApplicationSession {
 
 
 class Station {
-    - String name
+    - int mapID
+    - int scenarioID
+    - int positionX
+    - int positionY
+    - int id
+    - String stationName
     - String stationType
-    - String id
+    - int totalStations
+
+    + getMapID()
+    + getScenarioID()
+    + getPositionX()
+    + getPositionY()
+    + getStationID()
     + getStationType()
     + getStationName()
 }
