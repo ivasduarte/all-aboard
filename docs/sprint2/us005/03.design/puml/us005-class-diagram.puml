@@ -33,6 +33,7 @@ class Station {
     - String stationType
     - int totalStations
 
+    + increaseTotalStations()
     + getMapID()
     + getScenarioID()
     + getPositionX()
@@ -48,12 +49,12 @@ class Building {
     + getBuildingType()
 }
 
-class AddAStationUI {
+class AddStationUI {
 }
 
-class AddAStationController {
+class AddStationController {
     + getAddRepository()
-    + AddStation(stationCoordinates, stationType)
+    + AddStation(station)
     + getStationList()
 }
 
@@ -63,29 +64,29 @@ class Repositories {
     + getAddRepository()
 }
 
-class BuildAddRepository {
+class AddStationRepository {
     - Station
-    + addStation(stationToBeAdded)
+    + addStation(station)
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-AddAStationUI .> AddAStationController
+AddStationUI .> AddStationController
 
-AddAStationController .> Repositories : repositories
+AddStationController .> Repositories : repositories
 
-Repositories -> "1" BuildAddRepository
-AddAStationController ..> Station
-AddAStationController ..> Building
-AddAStationController ..> BuildAddRepository
+Repositories -> "1" AddStationRepository
+AddStationController ..> Station
+AddStationController ..> Building
+AddStationController ..> AddStationRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-AddAStationController ..> ApplicationSession
-AddAStationController ..> UserSession
+AddStationController ..> ApplicationSession
+AddStationController ..> UserSession
 
-BuildAddRepository "1" --> "*" Station : stations
+AddStationRepository "1" --> "*" Station : stations
 
 Station --> Player : createdBy
 Station --> "*" Building : buildings
