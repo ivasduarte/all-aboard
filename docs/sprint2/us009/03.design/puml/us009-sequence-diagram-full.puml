@@ -36,6 +36,7 @@ activate Player
                 PLAT --> CTRL : locomotiveRepository
             deactivate PLAT
 UI -> CTRL : getAvailableLocomotives(currentDate)
+            deactivate UI
             CTRL -> LocomotiveRepo : getAvailableLocomotives(currentScenario, currentDate)
             activate LocomotiveRepo
                 LocomotiveRepo --> CTRL : availableLocomotives
@@ -43,14 +44,14 @@ UI -> CTRL : getAvailableLocomotives(currentDate)
             
             CTRL --> UI : availableLocomotives
         deactivate CTRL
-
+        activate UI
         UI --> Player : displays list of available locomotives
 
         Player -> UI : selects a locomotive (serialNumber)
         
         UI -> CTRL : buyLocomotive(serialNumber)
         activate CTRL
-            
+            deactivate UI
             CTRL -> LocomotiveRepo : getLocomotiveBySerialNumber(serialNumber)
             activate LocomotiveRepo
                 LocomotiveRepo --> CTRL : locomotive
@@ -71,7 +72,7 @@ UI -> CTRL : getAvailableLocomotives(currentDate)
                 activate PlayerObj
                 deactivate PlayerObj
             
-                CTRL -> Locomotive** : setDateOfPurchase(currentDate)
+                CTRL -> Locomotive: setDateOfPurchase(currentDate)
                 
                 CTRL -> LocomotiveRepo : saveLocomotive(locomotive)
                 activate LocomotiveRepo
