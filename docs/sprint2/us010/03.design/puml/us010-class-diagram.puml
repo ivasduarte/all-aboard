@@ -35,10 +35,10 @@ class ApplicationSession {
 }
 
 
-class AssignARouteUI {
+class AssignRouteUI {
 }
 
-class AssignARouteController {
+class AssignRouteController {
     + getAddRepository()
     + AssignRoute(train, route)
     + getStationList()
@@ -50,7 +50,7 @@ class Repositories {
     + getAddRepository()
 }
 
-class BuildAssignRepository {
+class AssignRouteRepository {
     - Train
     - Route
     + AssignRoute(train, route)
@@ -59,21 +59,21 @@ class BuildAssignRepository {
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-AssignARouteUI .> AssignARouteController
+AssignRouteUI .> AssignRouteController
 
-AssignARouteController .> Repositories : repositories
+AssignRouteController .> Repositories : repositories
 
-Repositories -> "1" BuildAssignRepository
-AssignARouteController ..> Train
-AssignARouteController ..> Route
-AssignARouteController ..> BuildAssignRepository
+Repositories -> "1" AssignRouteRepository
+AssignRouteController ..> Train
+AssignRouteController ..> Route
+AssignRouteController ..> AssignRouteRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-AssignARouteController ..> ApplicationSession
-AssignARouteController ..> UserSession
+AssignRouteController ..> ApplicationSession
+AssignRouteController ..> UserSession
 
-BuildAssignRepository "1" --> "*" Trains : trains
+AssignRouteRepository "1" --> "*" Trains : trains
 
 
 @enduml
