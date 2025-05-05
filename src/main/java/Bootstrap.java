@@ -1,12 +1,9 @@
-<<<<<<< Updated upstream
-=======
 import repositories.AuthenticationRepository;
 import repositories.TasksRepository;
 import repositories.Repositories;
 import domain.TaskCategory;
 import ui.authorization.AuthenticationController;
 
->>>>>>> Stashed changes
 public class Bootstrap implements Runnable {
 
     public void run() {
