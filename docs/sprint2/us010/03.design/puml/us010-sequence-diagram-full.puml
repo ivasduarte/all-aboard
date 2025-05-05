@@ -7,7 +7,7 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Editor
-participant "AssignARouteUI" as UI
+participant "AssignRouteUI" as UI
 
 activate Editor
 
@@ -24,7 +24,7 @@ UI --> Editor : shows a list of the railroads
 Editor -> UI : selects a railroads
 
 
-create "AssignARouteController" as CTRL
+create "AssignRouteController" as CTRL
 UI --> CTRL : create
 
 participant "Repositories" as RepositorySingleton
@@ -43,22 +43,23 @@ activate RepositorySingleton
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getBuildAssignRepository()
+CTRL -> PLAT : getAssignRouteRepository()
 activate PLAT
-PLAT --> CTRL : BuildAssignRepository
+PLAT --> CTRL : AssignRouteRepository
 deactivate PLAT
 
-CTRL -> BuildAssignRepository : BuildAssign(train, route)
-activate BuildAssignRepository
+CTRL -> AssignRouteRepository : AssignRoute(train, route)
+activate AssignRouteRepository
 
-create "BuildAssignRepository\n:BuildAssignRepository" as BuildAssignRepository
-BuildAssignRepository -> BuildAssign : create()
-BuildAssignRepository -> BuildAssignRepository : AssignRoute(train, route)
+create "AssignRouteRepository\n:AssignRouteRepository" as AssignRouteRepository
+create "AssignRoute" as AssignRoute
+AssignRouteRepository -> AssignRoute : create()
+AssignRouteRepository -> AssignRouteRepository : AssignRoute(train, route)
 
-BuildAssignRepository --> CTRL : BuildAssignData
-deactivate BuildAssignRepository
+AssignRouteRepository --> CTRL : AssignRouteData
+deactivate AssignRouteRepository
 
-CTRL --> UI : BuildAssignData
+CTRL --> UI : AssignRouteData
 deactivate CTRL
 
 UI --> Editor : displays operation success and AddData

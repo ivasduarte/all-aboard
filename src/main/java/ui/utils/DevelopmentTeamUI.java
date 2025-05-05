@@ -1,6 +1,6 @@
 package ui.utils;
 
-public class DevelopmentTeamUI {
+public class DevelopmentTeamUI implements Runnable{
 
     public DevelopmentTeamUI() {}
 
@@ -12,6 +12,5 @@ public class DevelopmentTeamUI {
         System.out.println("   José Cardoso     --- 1241323@isep.ipp.pt");
         System.out.println("   Rafael Capão     --- 1241285@isep.ipp.pt");
         System.out.println("   Susana Loureiro  --- 1220804@isep.ipp.pt");
-        System.out.println("\n");
     }
 }

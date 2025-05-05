@@ -45,7 +45,7 @@ class Repositories {
     + getAddRepository()
 }
 
-class BuildCreateRepository {
+class CreateSimulatorRepository {
     - Scenario
     + StartSimulation(scenario)
 }
@@ -57,16 +57,16 @@ SimulatorUI .> SimulatorController
 
 SimulatorController .> Repositories : repositories
 
-Repositories -> "1" BuildCreateRepository
+Repositories -> "1" CreateSimulatorRepository
 SimulatorController ..> Scenario
-SimulatorController ..> BuildCreateRepository
+SimulatorController ..> CreateSimulatorRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
 SimulatorController ..> ApplicationSession
 SimulatorController ..> UserSession
 
-BuildCreateRepository "1" --> "*" Simulator : simulator
+CreateSimulatorRepository "1" --> "*" Simulator : simulator
 
 
 @enduml

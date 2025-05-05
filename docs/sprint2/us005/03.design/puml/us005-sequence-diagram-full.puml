@@ -7,7 +7,7 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Editor
-participant "AddAStationUI" as UI
+participant "AddStationUI" as UI
 
 activate Editor
 
@@ -24,7 +24,7 @@ UI --> Editor : shows a list of the actions the player can do
 Editor -> UI : selects to add a station
 
 create "AddAStationController" as CTRL
-UI --> CTRL : create
+UI --> CTRL : create()
 
 participant "Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
@@ -34,7 +34,7 @@ Editor -> UI : selects the station type
 UI --> Editor : adds the requested station
 
 
-UI --> CTRL : AddAStation(station coordinates, type of station)
+UI --> CTRL : AddStation(station)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
@@ -42,22 +42,23 @@ activate RepositorySingleton
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getBuildAddRepository()
+CTRL -> PLAT : getAddStationRepository()
 activate PLAT
-PLAT --> CTRL : BuildAddRepository
+PLAT --> CTRL : AddStationRepository
 deactivate PLAT
 
-CTRL -> BuildAddRepository : BuildAdd(station to be upgraded, type of the building)
-activate BuildAddRepository
+CTRL -> AddStationRepository : AddStation(station)
+activate AddStationRepository
 
-create "BuildAddRepository\n:BuildAddRepository" as BuildAddRepository
-BuildAddRepository -> BuildAdd : create()
-BuildAddRepository -> BuildAddRepository : AddStation(stationCoordinates, stationType)
+create "AddStationRepository\n:AddStationRepository" as AddStationRepository
+create "AddStation" as AddStation
+AddStationRepository -> AddStation : create()
+AddStationRepository -> AddStationRepository : AddStation(station)
 
-BuildAddRepository --> CTRL : BuildAddData
-deactivate BuildAddRepository
+AddStationRepository --> CTRL : AddStationData
+deactivate AddStationRepository
 
-CTRL --> UI : BuildAddData
+CTRL --> UI : AddStationData
 deactivate CTRL
 
 UI --> Editor : displays operation success and AddData
