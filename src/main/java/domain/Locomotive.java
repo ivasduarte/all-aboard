@@ -16,7 +16,7 @@ public class Locomotive {
         this.acceleration = acceleration;
         this.topSpeed = topSpeed;
         this.startYear = startYear;
-        this. acquisitionType = acquisitionType;
+        this.acquisitionType = acquisitionType;
     }
 
     // getters
