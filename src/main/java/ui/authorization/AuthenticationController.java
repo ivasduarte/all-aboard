@@ -1,18 +1,18 @@
 package ui.authorization;
 
 import domain.ApplicationSession;
-import pt.ipp.isep.dei.repository.AuthenticationRepository;
 import repositories.Repositories;
+import pt.isep.lei.esoft.auth.mappers.dto.UserRoleDTO;
+import repositories.AuthenticationRepository;
 
-public class AuthenticationController {
-    public static final String ROLE_ADMIN = "ADMINISTRATOR";
-    public static final String ROLE_EMPLOYEE = "EMPLOYEE";
+import java.util.List;
 
-    private final ApplicationSession applicationSession;
+public class AuthenticationController{
+    public static final String ROLE_EDITOR = "EDITOR";
+    public static final String ROLE_PLAYER = "PLAYER";
     private final AuthenticationRepository authenticationRepository;
 
-    public AuthenticationController(ApplicationSession applicationSession) {
-        this.applicationSession = applicationSession;
+    public AuthenticationController() {
         this.authenticationRepository = Repositories.getInstance().getAuthenticationRepository();
     }
 
@@ -24,9 +24,14 @@ public class AuthenticationController {
         }
     }
 
+    public List<UserRoleDTO> getUserRoles() {
+        if (authenticationRepository.getCurrentUserSession().isLoggedIn()) {
+            return authenticationRepository.getCurrentUserSession().getUserRoles();
+        }
+        return null;
+    }
 
     public void doLogout() {
         authenticationRepository.doLogout();
     }
-
 }
