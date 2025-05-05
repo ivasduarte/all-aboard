@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuyTrainController {
-    public String addTrain(String name, int id, Date dateOfPurchase) {
+    public String addTrain(String name, int id, Date dateOfPurchase, List<Locomotive> selectedLocomotives, List<Carriage> selectedCarriages) {
         TrainRepository trainRepository = Repositories.getInstance().getTrainRepository();
         Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
 
-        Train train = new Train(name, id, dateOfPurchase);
+        Train train = new Train(name, id, dateOfPurchase, selectedLocomotives, selectedCarriages);
 
         // validations (ERROR messages)
 
@@ -22,7 +22,7 @@ public class BuyTrainController {
         return "Train " + name + " saved successfully.";
     }
 
-    public Locomotive selectLocomotive(int selection) {           // add boolean variable to make the method loop while the user still wants to add more Locomotives
+    public Locomotive selectLocomotive(int selection) {
         Locomotive selectedLocomotive;
 
         LocomotiveRepository lr = new LocomotiveRepository();
@@ -33,7 +33,7 @@ public class BuyTrainController {
         return selectedLocomotive;
     }
 
-    public Carriage selectCarriage(int selection) {               // add boolean variable to make the method loop while the user still wants to add more Carriages
+    public Carriage selectCarriage(int selection) {
         Carriage selectedCarriage;
 
         CarriageRepository cr = new CarriageRepository();

@@ -1,7 +1,13 @@
 package presentation;
 
 import controller.BuyTrainController;
+import domain.Carriage;
+import domain.Locomotive;
+import repositories.CarriageRepository;
+import repositories.LocomotiveRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class BuyTrainUI {
@@ -10,13 +16,21 @@ public class BuyTrainUI {
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Select the desired locomotives from the following list: ");
-        // present locomotives in the form of a list
+        System.out.println("Select a locomotive from the following list: ");
+        LocomotiveRepository lr = new LocomotiveRepository();
+        lr.displayLocomotiveList();
+        int locomotive = sc.nextInt();
+        List<Locomotive> selectedLocomotives = new ArrayList<>();
+        selectedLocomotives.add(ctrl.selectLocomotive(locomotive-1));
 
-        System.out.println("Select the desired carriage from the following list: ");
-        // present carriage in the form of a list
+        System.out.println("Select a carriage from the following list: ");
+        CarriageRepository cr = new CarriageRepository();
+        cr.displayCarriageList();
+        int carriage = sc.nextInt();
+        List<Carriage> selectedCarriages = new ArrayList<>();
+        selectedCarriages.add(ctrl.selectCarriage(carriage-1));
 
-        // ask if wants to add more locomotives - if "yes" loop
+        // loop to add more locomotives and carriages
 
         // add methods to show success and fail
     }
