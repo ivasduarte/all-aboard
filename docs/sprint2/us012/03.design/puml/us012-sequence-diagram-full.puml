@@ -39,22 +39,23 @@ activate RepositorySingleton
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getBuildCreateRepository()
+CTRL -> PLAT : getCreateSimulatorRepository()
 activate PLAT
-PLAT --> CTRL : BuildCreateRepository
+PLAT --> CTRL : CreateSimulatorRepository
 deactivate PLAT
 
-CTRL -> BuildCreateRepository : BuildAssign(train, route)
-activate BuildCreateRepository
+CTRL -> CreateSimulatorRepository : StartSimulation(scenario)
+activate CreateSimulatorRepository
 
-create "BuildCreateRepository\n:BuildCreateRepository" as BuildCreateRepository
-BuildCreateRepository -> BuildAssign : create()
-BuildCreateRepository -> BuildCreateRepository : StartSimulation(scenario)
+create "CreateSimulatorRepository\n:CreateSimulatorRepository" as CreateSimulatorRepository
+create "Simulator" as Simulator
+CreateSimulatorRepository -> Simulator : create()
+CreateSimulatorRepository -> CreateSimulatorRepository : StartSimulation(scenario)
 
-BuildCreateRepository --> CTRL : BuildCreateData
-deactivate BuildCreateRepository
+CreateSimulatorRepository --> CTRL : CreateSimulatorData
+deactivate CreateSimulatorRepository
 
-CTRL --> UI : BuildCreateData
+CTRL --> UI : CreateSimulatorData
 deactivate CTRL
 
 UI --> Editor : displays operation success and AddData
