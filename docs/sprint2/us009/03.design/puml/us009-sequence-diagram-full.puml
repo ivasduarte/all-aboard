@@ -6,69 +6,91 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Player
-participant ":BuyTrainUI" as UI
-participant ":BuyTrainController" as CTRL
+participant ":BuyLocomotiveUI" as UI
+participant ":BuyLocomotiveController" as CTRL
+participant "player:\nPlayer" as PlayerObj
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
-participant "trainRepository:\nTrainRepository" as TrainRepository
-participant "Train:\nTrain" as Train
-participant "Locomotive:\nLocomotive" as Locomotive
+participant "locomotiveRepository:\nLocomotiveRepository" as LocomotiveRepo
+participant "locomotive:\nLocomotive" as Locomotive
 
 activate Player
 
-    Player -> UI : requests to buy a new train
+    Player -> UI : requests to buy a locomotive
     activate UI
 
         UI -> CTRL** : create
-
-        UI -> Player : displays available locomotives
-
-        loop Selecting locomotives and carriages
-            Player -> UI : selects a locomotive
-            UI -> CTRL : selectLocomotive(serialNumberLocomotive))
-            Player -> UI : selects a carriage
-            UI -> CTRL : selectCarriage(carriageId)
-
-            UI -> Player : asks to add another locomotive?
-            UI -> Player : asks to add another carriage?
-
-            alt Player adds another locomotive/carriage
-                Player -> UI : selects another locomotive
-                UI -> CTRL : selectLocomotive(serialNumberLocomotive)
-                Player -> UI : selects another carriage
-                UI -> CTRL : selectCarriage(carriageId)
-            else Player finalizes selection
-                UI -> CTRL : finalizeSelection()
-            end
-        end
+        
 
         activate CTRL
 
-            CTRL -> RepositorySingleton : getInstance()
+
+            
+          CTRL -> RepositorySingleton : getInstance()
             activate RepositorySingleton
                 RepositorySingleton --> CTRL : repositories
             deactivate RepositorySingleton
 
-            CTRL -> PLAT : getTrainRepository()
+            CTRL -> PLAT : getLocomotiveRepository()
             activate PLAT
-                PLAT --> CTRL : TrainRepository
+                PLAT --> CTRL : locomotiveRepository
             deactivate PLAT
-
-            activate TrainRepository
-
-                CTRL -> TrainRepository : createTrain(selectedLocomotives, selectedCarriages, date)
-
-                TrainRepository -> Train** : create()
-
-                TrainRepository -> TrainRepository : save(train)
-
-                TrainRepository --> CTRL : trainData
-            deactivate TrainRepository
-
-        CTRL --> UI : trainData
+UI -> CTRL : getAvailableLocomotives(currentDate)
+            CTRL -> LocomotiveRepo : getAvailableLocomotives(currentScenario, currentDate)
+            activate LocomotiveRepo
+                LocomotiveRepo --> CTRL : availableLocomotives
+            deactivate LocomotiveRepo
+            
+            CTRL --> UI : availableLocomotives
         deactivate CTRL
 
-    UI --> Player : displays purchase success + trainData
+        UI --> Player : displays list of available locomotives
+
+        Player -> UI : selects a locomotive (serialNumber)
+        
+        UI -> CTRL : buyLocomotive(serialNumber)
+        activate CTRL
+            
+            CTRL -> LocomotiveRepo : getLocomotiveBySerialNumber(serialNumber)
+            activate LocomotiveRepo
+                LocomotiveRepo --> CTRL : locomotive
+            deactivate LocomotiveRepo
+            
+            CTRL -> Locomotive : getAcquisitionPrice()
+            activate Locomotive
+                Locomotive --> CTRL : price
+            deactivate Locomotive
+            
+            CTRL -> PlayerObj : getBudget()
+            activate PlayerObj
+                PlayerObj --> CTRL : budget
+            deactivate PlayerObj
+            
+            alt budget >= price
+                CTRL -> PlayerObj : updateBudget(-price)
+                activate PlayerObj
+                deactivate PlayerObj
+            
+                CTRL -> Locomotive** : setDateOfPurchase(currentDate)
+                
+                CTRL -> LocomotiveRepo : saveLocomotive(locomotive)
+                activate LocomotiveRepo
+                    LocomotiveRepo --> CTRL : success
+                deactivate LocomotiveRepo
+                
+                CTRL --> UI : purchaseSuccess
+            else budget < price
+                CTRL --> UI : insufficientFunds
+            end
+            
+        deactivate CTRL
+
+        alt successful purchase
+            UI --> Player : displays purchase success
+        else insufficient funds
+            UI --> Player : displays insufficient funds error
+        end
+    
     deactivate UI
 
 deactivate Player
