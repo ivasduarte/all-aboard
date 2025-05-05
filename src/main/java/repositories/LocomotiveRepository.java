@@ -7,9 +7,10 @@ import java.util.List;
 
 public class LocomotiveRepository {
     private List<Locomotive> locomotives = new ArrayList<>();
+    private List<Locomotive> playerLocomotives = new ArrayList<>();
 
     public void save(Locomotive locomotive) {
-        locomotives.add(locomotive);
+        playerLocomotives.add(locomotive);
     }
 
     public List<Locomotive> getLocomotiveList() {
