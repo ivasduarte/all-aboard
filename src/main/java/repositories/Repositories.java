@@ -1,6 +1,5 @@
 package repositories;
 
-import pt.ipp.isep.dei.repository.AuthenticationRepository;
 
 public class Repositories {
     private static Repositories instance = new Repositories();
@@ -8,8 +7,10 @@ public class Repositories {
     private IndustryRepository industryRepository = new IndustryRepository();
     private TrainRepository trainRepository = new TrainRepository();
     private final AuthenticationRepository authenticationRepository;
+    private final TasksRepository tasksRepository;
 
     private Repositories() {
+        tasksRepository = new TasksRepository();
         mapRepository = new MapRepository();
         authenticationRepository = new AuthenticationRepository();
     }
@@ -35,5 +36,9 @@ public class Repositories {
 
     public AuthenticationRepository getAuthenticationRepository() {
         return authenticationRepository;
+    }
+
+    public TasksRepository getTasksRepository() {
+        return tasksRepository;
     }
 }
