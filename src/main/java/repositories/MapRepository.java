@@ -27,7 +27,7 @@ public class MapRepository{
 
     public void displayMapList() {
         for (int i = 0; i < maps.size(); i++) {
-            System.out.println(i + ". " + maps.get(i).getMapName());
+            System.out.println((i+1) + ". " + maps.get(i).getMapName());
         }
     }
 
