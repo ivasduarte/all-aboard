@@ -22,7 +22,7 @@ public class CreateMapController {
 
             Map map = new Map(name, width, height);
             map.setCreatedBy(userSession.getCurrentEditor());
-            mapRepository.save(map);
+            mapRepository.add(map);
 
             return new CreateMapUI.MapCreationResult("Map '" + name + "' created successfully.", map);
 
