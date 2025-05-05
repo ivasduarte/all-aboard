@@ -13,13 +13,9 @@ public class LocomotiveRepository {
         playerLocomotives.add(locomotive);
     }
 
-    public List<Locomotive> getLocomotiveList() {
-        return locomotives;
-    }
+    // method to obtain available locomotives based on scenario restrictions and current date
 
-    public void displayLocomotiveList() {
-        for (int i = 0; i < locomotives.size(); i++) {
-            System.out.println((i+1) + ". " + locomotives.get(i));
-        }
+    public Locomotive getLocomotiveBySerialNumber(int serialNumber) {
+        return playerLocomotives.get(serialNumber);
     }
 }
