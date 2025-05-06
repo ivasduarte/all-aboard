@@ -31,7 +31,7 @@ public class Bootstrap implements Runnable {
         authenticationRepository.addUserRole(AuthenticationController.ROLE_EDITOR, AuthenticationController.ROLE_EDITOR);
         authenticationRepository.addUserRole(AuthenticationController.ROLE_PLAYER, AuthenticationController.ROLE_PLAYER);
 
-        authenticationRepository.addUserWithRole("Main Editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR);
-        authenticationRepository.addUserWithRole("Player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
+        authenticationRepository.addUserWithRole("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR);
+        authenticationRepository.addUserWithRole("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
     }
 }
