@@ -56,6 +56,10 @@ public class UserSession {
         }
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Editor getCurrentEditor() {
         return currentEditor;
     }
