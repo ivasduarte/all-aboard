@@ -50,4 +50,10 @@ public class LocomotiveRepository {
     public Locomotive getLocomotiveBySerialNumber(int serialNumber) {
         return availableLocomotives.get(serialNumber);
     }
+
+    public void displayAvailableLocomotives() {
+        for (int i = 0; i < availableLocomotives.size(); i++) {
+            System.out.println((i+1) + ". " + availableLocomotives.get(i));
+        }
+    }
 }
