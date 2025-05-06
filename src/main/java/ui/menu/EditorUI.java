@@ -3,6 +3,7 @@ package ui.menu;
 import presentation.AddIndustryUI;
 import presentation.CreateMapUI;
 import pt.ipp.isep.dei.ui.console.ShowTextUI;
+import ui.utils.CreateCityUI;
 import ui.utils.DisplayMapUI;
 import ui.utils.Utils;
 
@@ -18,6 +19,7 @@ public class EditorUI implements Runnable {
         options.add(new MenuItem("Create Map", new CreateMapUI()));
         options.add(new MenuItem("Display Map List", new DisplayMapUI()));
         options.add(new MenuItem("Add an Industry", new AddIndustryUI()));
+        options.add(new MenuItem("Add a City", new CreateCityUI()));
         options.add(new MenuItem("Create a Scenario", new ShowTextUI("You have chosen Create a Scenario.")));
         options.add(new MenuItem("Build a Station", new ShowTextUI("You have chosen Build a Station.")));
         options.add(new MenuItem("Upgrade a Station", new ShowTextUI("You have chosen Upgrade a Station.")));

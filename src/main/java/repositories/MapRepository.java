@@ -5,6 +5,7 @@ import domain.Map;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MapRepository{
     private List<Map> maps;
@@ -48,6 +49,10 @@ public class MapRepository{
         for (int i = 0; i < maps.size(); i++) {
             System.out.println((i+1) + ". " + maps.get(i).getMapName());
         }
+    }
+
+    public Optional<Map> getMap(String name) {
+        return maps.stream().filter(m -> m.getMapName().equals(name)).findFirst();
     }
 
 }

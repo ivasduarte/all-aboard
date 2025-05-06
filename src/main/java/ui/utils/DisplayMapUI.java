@@ -1,6 +1,7 @@
 package ui.utils;
 
 import controller.DisplayMapController;
+import domain.City;
 import domain.Map;
 
 import java.util.List;
@@ -77,5 +78,16 @@ public class DisplayMapUI implements Runnable{
             }
         }
         return mapArray;
+    }
+
+    private void addCitiesToMap() {
+        List<City> citiesList = ctrl.getCityList();
+        for (int i = 0; i < ctrl.getCityList().size(); i++) {
+            if(citiesList.stream().anyMatch(city -> city.getMapName().equals(mapName))) {
+                int centerX = citiesList.get(i).getCenterX();
+                int centerY = citiesList.get(i).getCenterY();
+                mapArray[centerY - 1][centerX - 1] = "🌆";
+            }
+        }
     }
 }

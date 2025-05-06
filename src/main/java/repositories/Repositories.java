@@ -8,11 +8,13 @@ public class Repositories {
     private LocomotiveRepository locomotiveRepository = new LocomotiveRepository();
     private final AuthenticationRepository authenticationRepository;
     private final TasksRepository tasksRepository;
+    private final CityRepository cityRepo;
 
     private Repositories() {
         tasksRepository = new TasksRepository();
         mapRepository = new MapRepository();
         authenticationRepository = new AuthenticationRepository();
+        cityRepo = new CityRepository();
     }
 
     public static Repositories getInstance() {
@@ -41,4 +43,6 @@ public class Repositories {
     public TasksRepository getTasksRepository() {
         return tasksRepository;
     }
+
+    public CityRepository getCityRepository() { return cityRepo; }
 }
