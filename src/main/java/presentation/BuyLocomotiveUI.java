@@ -10,6 +10,10 @@ public class BuyLocomotiveUI implements Runnable {
 
     private int serialNumber;
 
+    /**
+     * This method will be responsible to show the UI to user.
+     * This method will also collect all the related inputs of the locomotive and pass them to the controller.
+     */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
@@ -26,17 +30,28 @@ public class BuyLocomotiveUI implements Runnable {
         }
     }
 
+    /**
+     * This method returns the locomotive controller.
+     *
+     * @return locomotive controller
+     */
     public BuyLocomotiveController getLocomotiveController() {
         return ctrl;
     }
 
     @Override
+    /**
+     * This method will be responsible to show the UI related to buying a locomotive to the player when this action is selected.
+     */
     public void run() {
         System.out.println("\n\n------------------------ Buy Locomotive ------------------------");
         getInput();
         submitData();
     }
 
+    /**
+     * This method will be responsible to show the success or error message to the Player.
+     */
     public void submitData() {
         Optional<String> result = Optional.ofNullable(ctrl.buyLocomotive(serialNumber));
 

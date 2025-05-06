@@ -23,7 +23,7 @@ public class AddIndustryUI implements Runnable{
 
     /**
      * This method will be responsible to show the UI to user.
-     * This method will also collect all the related to the industry and pass them to the controller.
+     * This method will also collect all the inputs related to the industry and pass them to the controller.
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
@@ -73,7 +73,7 @@ public class AddIndustryUI implements Runnable{
 
     @Override
     /**
-     * This method will be responsible to show the UI related to adding an industry to the player when this action is selected.
+     * This method will be responsible to show the UI related to adding an industry to the editor when this action is selected.
      */
     public void run() {
         System.out.println("\n\n------------------------ Add Industry ------------------------");
