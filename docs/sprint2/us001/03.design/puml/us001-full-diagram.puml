@@ -10,7 +10,7 @@ participant ":CreateMapController" as CTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
 participant "mapRepository\n:MapRepository" as Repo
-participant "Map" as Map
+participant ":Map" as Map
 
 activate Editor
 

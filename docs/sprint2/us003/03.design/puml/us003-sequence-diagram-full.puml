@@ -5,69 +5,60 @@ skinparam shadowing false
 
 autonumber
 
-'hide footbox
+
 actor "Editor" as Editor
 participant ":AddCityUI" as UI
 participant ":AddCityController" as CTRL
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
-participant "cityRepository:\nCityRepository" as cityRepository
-participant "City:\nCity" as City
+participant "cityRepository\n:CityRepository" as cityRepository
+participant ":City" as City
 
 
 activate Editor
 
-        Editor -> UI : asks to add a new city
+Editor -> UI : asks to add a new city
 
-        activate UI
-            UI -> CTRL** : create
+activate UI
+UI -> CTRL** : create
 
-        UI -> Editor: requests to select the map
-        Editor -> UI: selects the map
-         UI -> Editor : requests data(city name, position X, position Y, number of house blocks)
-         Editor -> UI : types requested data (city name, position X, position Y, number of house blocks)
-            UI -> CTRL : addCity(mapID, city name, position X, position Y, number of house blocks)
+UI -> Editor: requests to select the map
+Editor -> UI: selects the map
+UI -> Editor : requests data(cityName, positionX, positionY, houseBlocks)
+Editor -> UI : types requested data (cityName, positionX, positionY, houseBlocks)
+UI -> CTRL : submitData(mapID, cityName, positionX, positionY, houseBlocks)
 
-            activate CTRL
+activate CTRL
 
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
 
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
 
-                CTRL -> RepositorySingleton : getInstance()
-                activate RepositorySingleton
+CTRL -> PLAT : getCityRepository()
+activate PLAT
 
-                    RepositorySingleton --> CTRL: repositories
-                deactivate RepositorySingleton
+PLAT --> CTRL: cityRepository
+deactivate PLAT
 
-                CTRL -> PLAT : getCityRepository()
-                activate PLAT
+CTRL -> cityRepository : addCity (mapID, city name, position X,\nposition Y, number of house blocks)
+activate cityRepository
 
-                    PLAT --> CTRL: cityRepository
-                deactivate PLAT
+cityRepository -> City : create(mapID, cityName,\npositionX, positionY, houseBlocks)
+activate City
 
+City --> cityRepository : isSuccessful
+deactivate City
 
-                activate cityRepository
+cityRepository --> CTRL : isSuccessful
+deactivate cityRepository
 
+CTRL --> UI : isSuccessful
+deactivate CTRL
 
-                    CTRL -> cityRepository : addCity (mapID, city name, position X, position Y, number of house blocks)
-
-                    cityRepository -> City** : create()
-
-
-                    cityRepository -> cityRepository : verifyIfExistsAndSave(mapID, city name, position X, position Y, number of house blocks)
-
-
-
-
-                cityRepository -> CTRL : cityData
-
-
-                CTRL --> UI : cityData
-            deactivate CTRL
-
-
-            UI --> Editor : displays operation success and \n show cityData
-    deactivate UI
-
+UI --> Editor : display result
+deactivate UI
 deactivate Editor
 
 @enduml

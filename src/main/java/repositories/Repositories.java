@@ -5,14 +5,16 @@ public class Repositories {
     private static Repositories instance = new Repositories();
     private MapRepository mapRepository = new MapRepository();
     private IndustryRepository industryRepository = new IndustryRepository();
-    private TrainRepository trainRepository = new TrainRepository();
+    private LocomotiveRepository locomotiveRepository = new LocomotiveRepository();
     private final AuthenticationRepository authenticationRepository;
     private final TasksRepository tasksRepository;
+    private final CityRepository cityRepo;
 
     private Repositories() {
         tasksRepository = new TasksRepository();
         mapRepository = new MapRepository();
         authenticationRepository = new AuthenticationRepository();
+        cityRepo = new CityRepository();
     }
 
     public static Repositories getInstance() {
@@ -30,8 +32,8 @@ public class Repositories {
         return industryRepository;
     }
 
-    public TrainRepository getTrainRepository() {
-        return trainRepository;
+    public LocomotiveRepository getLocomotiveRepository() {
+        return locomotiveRepository;
     }
 
     public AuthenticationRepository getAuthenticationRepository() {
@@ -41,4 +43,6 @@ public class Repositories {
     public TasksRepository getTasksRepository() {
         return tasksRepository;
     }
+
+    public CityRepository getCityRepository() { return cityRepo; }
 }

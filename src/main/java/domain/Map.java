@@ -54,10 +54,6 @@ public class Map {
 
     @Override
     public String toString() {
-        return "Map{" +
-                "name='" + name + '\'' +
-                ", width=" + width +
-                ", height=" + height +
-                '}';
+        return "" + name + " (" + width + "x" + height + ")";
     }
 }
