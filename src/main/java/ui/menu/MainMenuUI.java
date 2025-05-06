@@ -1,10 +1,7 @@
 package ui.menu;
 
-import controller.DisplayMapController;
 import ui.authorization.AuthenticationUI;
-import ui.utils.CreateMapUI;
 import ui.utils.DevelopmentTeamUI;
-import ui.utils.DisplayMapUI;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
