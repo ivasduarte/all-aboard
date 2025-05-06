@@ -1,6 +1,10 @@
 package repositories;
 
+import domain.Scenario;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ScenarioRepository {
     private List<Scenario> scenarios;
@@ -30,7 +34,7 @@ public class ScenarioRepository {
     }
 
     public List<Scenario> getScenarioList(){
-        return List.cofyOf(scenarios);
+        return List.copyOf(scenarios);
     }
 
     public Optional<Scenario> getScenario(String name){
