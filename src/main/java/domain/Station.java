@@ -113,4 +113,9 @@ public class Station {
         return buildings.size() < MAX_SLOTS;
     }
 
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+
 }
