@@ -60,7 +60,7 @@ public class AddIndustryUI implements Runnable{
             System.out.println((i+1) + ". " + industryTypes[i]);
         }
         System.out.println("Select the industry type you want: ");
-        String industryType = sc.nextLine();   // modify to get the answer as an (int) and converting it to (String)
+        String industryType = sc.nextLine();
 
         String result = ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType);
 
