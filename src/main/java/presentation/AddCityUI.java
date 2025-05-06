@@ -1,4 +1,4 @@
-package ui.utils;
+package presentation;
 
 import controller.CreateCityController;
 import controller.DisplayMapController;
@@ -8,7 +8,6 @@ import controller.CreateCityController.NameMapError;
 import controller.CreateCityController.CenterError;
 import controller.CreateCityController.BlockError;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 //change name to AddCityUI
