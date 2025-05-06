@@ -9,7 +9,7 @@ import repositories.MapRepository;
 import java.util.List;
 import java.util.Scanner;
 
-public class AddStationUI {
+public class AddStationUI implements Runnable {
 
     public void getInput()
     {
@@ -54,5 +54,10 @@ public class AddStationUI {
         } else {
             System.out.println("Station added successfully");
         }
+    }
+
+    @Override
+    public void run() {
+        getInput();
     }
 }
