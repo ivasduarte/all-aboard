@@ -28,7 +28,7 @@ public class IndustryRepository {
     }
 
     /**
-     * This method is responsible to show the industry list the form of a list.
+     * This method is responsible to show the industry list in the form of a list.
      */
     public void displayIndustryList() {
         for (int i = 0; i < industries.size(); i++) {
