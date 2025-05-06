@@ -17,7 +17,7 @@ public class CreateScenarioUI implements Runnable {
 
     private String scenarioName;
     private Restrictions restrictions;
-    private int mapId;
+    private Map map;
     private String mapName;
 
     public void getInput() {
@@ -43,9 +43,6 @@ public class CreateScenarioUI implements Runnable {
             System.out.println("\nEnter Historical Events (comma-separated descriptions): ");
             List<String> events = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
-            System.out.print("\nEnter the ID of the map to associate with the scenario: ");
-            mapId = sc.nextInt();
-
             restrictions = new Restrictions(startDate, endDate, locoTypes, events);
 
             if (!restrictions.validate()) {
@@ -53,9 +50,6 @@ public class CreateScenarioUI implements Runnable {
                 restrictions = null;
                 return;
             }
-
-            System.out.print("\nEnter the ID of the map to associate with the scenario: ");
-            mapId = sc.nextInt();
         } catch (DateTimeParseException e) {
             showError("ERROR: Invalid date format. Use yyyy-mm-dd.");
         } catch (Exception e) {
@@ -76,7 +70,7 @@ public class CreateScenarioUI implements Runnable {
             return;
         }
 
-        String result = ctrl.createScenario(scenarioName, restrictions, mapId);
+        String result = ctrl.createScenario(scenarioName, restrictions, map);
         if (result.startsWith("ERROR")) {
             showError(result);
         } else {
