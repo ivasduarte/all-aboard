@@ -2,6 +2,8 @@ package domain;
 
 import repositories.MapRepository;
 
+import java.util.List;
+
 public class Station {
     private int mapID;
     private int scenarioID;
@@ -9,18 +11,18 @@ public class Station {
     private int positionY;
 
     private int stationID;
-    private String stationName;
     private String stationType;
 
     private static int totalStations = 0;
 
-    public Station(int mapID, int scenarioID, int positionX, int positionY, String stationName, String stationType)
+    public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
+
+    public Station(int mapID, int scenarioID, int positionX, int positionY, String stationType)
     {
         this.mapID = mapID;
         this.scenarioID = scenarioID;
         this.positionX = positionX;
         this.positionY = positionY;
-        this.stationName = stationName;
         this.stationType = stationType;
         stationID = totalStations;
     }
@@ -36,6 +38,7 @@ public class Station {
         return mr.getMapList().get(mapID);
     }
 
+
     public int getMapID() {
         return mapID;
     }
@@ -49,8 +52,8 @@ public class Station {
         return positionY;
     }
     public int getStationID() { return stationID; }
-    public String getStationName() {return stationName;}
     public String getStationType() {return stationType;}
+    public String[] getStationTypes() {return stationTypes;}
 
     public void setMapID(int mapID) {
         this.mapID = mapID;
@@ -62,7 +65,6 @@ public class Station {
         this.positionX = positionX; this.positionY = positionY;
     }
     public void setStationID(int stationID) { this.stationID = stationID; }
-    public void setStationName(String stationName) {this.stationName = stationName;}
     public void setStationType(String stationType) {this.stationType = stationType;}
 
     public boolean validatePosition(Map map) {
