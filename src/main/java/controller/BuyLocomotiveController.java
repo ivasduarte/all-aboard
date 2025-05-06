@@ -10,6 +10,8 @@ import repositories.Repositories;
 import java.util.List;
 
 public class BuyLocomotiveController {
+    private LocomotiveRepository locomotiveRepository;
+
     public String buyLocomotive(int serialNumber) {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
         Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
@@ -20,5 +22,13 @@ public class BuyLocomotiveController {
         locomotiveRepository.save(locomotive);
 
         return "Locomotive " + serialNumber + " bought successfully.";
+    }
+
+    public LocomotiveRepository getLocomotiveRepository() {
+        if (locomotiveRepository == null) {
+            Repositories repositories = Repositories.getInstance();
+            locomotiveRepository = repositories.getLocomotiveRepository();
+        }
+        return locomotiveRepository;
     }
 }
