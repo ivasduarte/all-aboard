@@ -20,4 +20,6 @@ public class Player {
     public String getPassword() {
         return password;
     }
+
+    // methods to get and update players' budget
 }
