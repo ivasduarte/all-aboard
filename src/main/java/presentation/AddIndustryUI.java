@@ -1,29 +1,48 @@
 package presentation;
 
 import controller.AddIndustryController;
+import controller.DisplayMapController;
 import domain.Map;
 import repositories.IndustryRepository;
 import repositories.MapRepository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
-public class AddIndustryUI {
+public class AddIndustryUI implements Runnable{
     private AddIndustryController ctrl = new AddIndustryController();
+    private DisplayMapController controller = new DisplayMapController();
+
+    private int mapID;
+    private int scenarioID;
+    private int positionX;
+    private int positionY;
+    private String industryType;
 
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Select a map from the following list: ");
         MapRepository mr = new MapRepository();
-        mr.displayMapList();
+
+        List<Map> mapList = controller.getMapList();
+
+        for (int i = 0; i < mapList.size(); i++) {
+            Map map = mapList.get(i);
+            System.out.println((i + 1) + ". " + map.getMapName());
+            System.out.println();
+        }
+
+        System.out.println("Select a map from the list: ");
         int mapID = sc.nextInt() - 1;
 
-        System.out.println("Enter the scenario id: "); // waiting for ScenarioRepository to present as a list
+        System.out.println("\nEnter the scenario ID: "); // waiting for ScenarioRepository to present as a list
         int scenarioID = sc.nextInt();
 
-        System.out.println("Enter the position X of the industry: ");
+        System.out.println("\nEnter the position X of the industry: ");
         int positionX = sc.nextInt();
-        System.out.println("Enter the position Y of the industry: ");
+
+        System.out.println("\nEnter the position Y of the industry: ");
         int positionY = sc.nextInt();
 
         System.out.println("Select the industry type you want: ");
@@ -42,6 +61,23 @@ public class AddIndustryUI {
             showError(result);
         } else {
             showSuccess(result);
+        }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("\n\n------------------------ Add Industry ------------------------");
+        getInput();
+        submitData();
+    }
+
+    private void submitData() {
+        Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType));
+
+        if (result.isPresent()) {
+            System.out.println("\nIndustry successfully added!");
+        } else {
+            System.out.println("\nIndustry not added!");
         }
     }
 

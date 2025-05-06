@@ -3,7 +3,6 @@ package ui.utils;
 import controller.DisplayMapController;
 import domain.Map;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -12,14 +11,6 @@ public class DisplayMapUI implements Runnable{
     private final DisplayMapController ctrl = new DisplayMapController();
     private String mapName;
     private String[][] mapArray;
-
-    /*public DisplayMapUI(){
-        ctrl = new DisplayMapController();
-    }
-
-    private DisplayMapController getCtrl(){
-        return ctrl;
-    }*/
 
     public void run(){
         System.out.println("\n\n------------------------ Display Map ------------------------");
@@ -54,7 +45,7 @@ public class DisplayMapUI implements Runnable{
 
     private String requestMapName(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Select a map: ");
+        System.out.print("Select a map: ");
         return sc.nextLine().trim();
     }
 

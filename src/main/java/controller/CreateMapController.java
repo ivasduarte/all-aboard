@@ -7,13 +7,15 @@ import presentation.CreateMapUI;
 import repositories.MapRepository;
 import repositories.Repositories;
 
+import java.util.List;
+
 public class CreateMapController {
     public CreateMapUI.MapCreationResult createMap(String name, int width, int height) {
         try {
             UserSession userSession = ApplicationSession.getInstance().getCurrentSession();
-            if (userSession == null || userSession.getCurrentEditor() == null) {
+            /*if (userSession == null || userSession.getCurrentEditor() == null) {
                 return new CreateMapUI.MapCreationResult("ERROR: No user is currently logged in.", null);
-            }
+            }*/
 
             MapRepository mapRepository = Repositories.getInstance().getMapRepository();
             if (mapRepository.existsByName(name)) {
@@ -21,7 +23,7 @@ public class CreateMapController {
             }
 
             Map map = new Map(name, width, height);
-            map.setCreatedBy(userSession.getCurrentEditor());
+            //map.setCreatedBy(userSession.getCurrentEditor());
             mapRepository.add(map);
 
             return new CreateMapUI.MapCreationResult("Map '" + name + "' created successfully.", map);
