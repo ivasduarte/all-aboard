@@ -3,22 +3,16 @@ skinparam packageStyle rectangle
 skinparam shadowing false
 skinparam classAttributeIconSize 0
 
-'--- Entidades do domínio ---
-class Player {
-  - name: String
-  - id: String
-  - password: String
-  + getName(): String
-  + getId(): String
-  + getPassword(): String
-}
-
 class Station {
-  - name: String
-  - type: String
-  - id: String
-  + getName(): String
-  + getType(): String
+  - mapID: int
+  - scenarioID: int
+  - positionX: int
+  - positionY: int
+  - stationID: int
+  - stationType: String
+  - buildings: List<Building>
+  + addBuilding(b: Building, year: int): boolean
+  + getBuildings(): List<Building>
 }
 
 class Building {
@@ -26,60 +20,32 @@ class Building {
   + getBuildingType(): String
 }
 
-'--- UI & Controlador ---
+class StationUpgradeService {
+  + upgradeStation(station: Station, building: Building, currentYear: int): boolean
+}
+
 class UpgradeAStationUI
 
 class UpgradeAStationController {
-  + getStationList(): List<Station>
-  + upgradeStation(station: Station, type: String): BuildUpgradeData
+  - upgradeService: StationUpgradeService
+  - stationRepository: StationRepository
+  + getAvailableStations(): List<Station>
+  + upgradeStation(station: Station, buildingType: String, currentYear: int): boolean
 }
 
-'--- Repositórios e Serviços ---
 class Repositories {
   + getInstance(): Repositories
   + getStationRepository(): StationRepository
-  + getBuildingRepository(): BuildingRepository
-}
-
-class StationRepository {
-  - stations: List<Station>
-  + save(station: Station): void
-  + getStations(): List<Station>
-  + displayAllStations(): void
-}
-
-class BuildingRepository {
-  + getAvailableBuildings(station: Station, date: LocalDate): List<Building>
-}
-
-class StationUpgradeService {
-  + verifyIfExistsAndSave(station: Station, type: String): BuildUpgradeData
-  - validateDate(type: String, date: LocalDate): boolean
-  - replaceObsoleteBuilding(station: Station, type: String): void
-  - checkMutualExclusivity(station: Station, type: String): void
 }
 
 class StationRepository {
   + getAvailableStations(): List<Station>
 }
 
-class BuildUpgradeData
-
-'--- Relações ---
 UpgradeAStationUI ..> UpgradeAStationController
-UpgradeAStationController ..> Repositories
-UpgradeAStationController ..> StationRepository
-UpgradeAStationController ..> BuildingRepository
 UpgradeAStationController ..> StationUpgradeService
-
-Repositories --> StationRepository
-Repositories --> BuildingRepository
-
-
-StationUpgradeService ..> Station
-StationUpgradeService ..> Building
-
+UpgradeAStationController ..> StationRepository
+Repositories ..> StationRepository
 Station --> "0..*" Building
-Station --> Player : createdBy
 
 @enduml
