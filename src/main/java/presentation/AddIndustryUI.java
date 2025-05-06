@@ -21,6 +21,10 @@ public class AddIndustryUI implements Runnable{
     private int positionY;
     private String industryType;
 
+    /**
+     * This method will be responsible to show the UI to user.
+     * This method will also collect all the related to the industry and pass them to the controller.
+     */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
@@ -56,7 +60,7 @@ public class AddIndustryUI implements Runnable{
             System.out.println((i+1) + ". " + industryTypes[i]);
         }
         System.out.println("Select the industry type you want: ");
-        String industryType = sc.nextLine();
+        String industryType = sc.nextLine();   // modify to get the answer as an (int) and converting it to (String)
 
         String result = ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType);
 
@@ -68,12 +72,18 @@ public class AddIndustryUI implements Runnable{
     }
 
     @Override
+    /**
+     * This method will be responsible to show the UI related to adding an industry to the player when this action is selected.
+     */
     public void run() {
         System.out.println("\n\n------------------------ Add Industry ------------------------");
         getInput();
         submitData();
     }
 
+    /**
+     * This method will be responsible to show the success or error message to the Editor.
+     */
     private void submitData() {
         Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType));
 
