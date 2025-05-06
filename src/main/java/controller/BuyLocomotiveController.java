@@ -10,13 +10,15 @@ import repositories.Repositories;
 import java.util.List;
 
 public class BuyLocomotiveController {
-    public String buyLocomotive(Locomotive.LocomotiveType locomotiveType, Date purchaseDate, double price) {
+    public String buyLocomotive(int serialNumber) {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
         Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
 
         // validations (ERROR messages)
 
+        Locomotive locomotive = locomotiveRepository.getLocomotiveBySerialNumber(serialNumber);
         locomotiveRepository.save(locomotive);
-        return "Locomotive bought successfully.";
+
+        return "Locomotive " + serialNumber + " bought successfully.";
     }
 }

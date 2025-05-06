@@ -16,6 +16,6 @@ public class LocomotiveRepository {
     // method to obtain available locomotives based on scenario restrictions and current date
 
     public Locomotive getLocomotiveBySerialNumber(int serialNumber) {
-        return playerLocomotives.get(serialNumber);
+        return playerLocomotives.get(serialNumber); // this method must get the locomotive on the list of available ones
     }
 }
