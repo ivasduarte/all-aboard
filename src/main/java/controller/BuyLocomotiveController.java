@@ -16,7 +16,7 @@ public class BuyLocomotiveController {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
         Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
 
-        // validations (ERROR messages)
+        // validate player budget
 
         Locomotive locomotive = locomotiveRepository.getLocomotiveBySerialNumber(serialNumber);
         locomotiveRepository.save(locomotive);
