@@ -9,12 +9,14 @@ public class Repositories {
     private final AuthenticationRepository authenticationRepository;
     private final TasksRepository tasksRepository;
     private final CityRepository cityRepo;
+    private final StationRepository stationRepo;
 
     private Repositories() {
         tasksRepository = new TasksRepository();
         mapRepository = new MapRepository();
         authenticationRepository = new AuthenticationRepository();
         cityRepo = new CityRepository();
+        stationRepo = new StationRepository();
     }
 
     public static Repositories getInstance() {
@@ -45,4 +47,6 @@ public class Repositories {
     }
 
     public CityRepository getCityRepository() { return cityRepo; }
+
+    public StationRepository getStationRepository() {return stationRepo; }
 }
