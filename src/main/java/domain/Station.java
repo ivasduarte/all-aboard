@@ -2,6 +2,7 @@ package domain;
 
 import repositories.MapRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Station {
@@ -15,6 +16,10 @@ public class Station {
 
     private static int totalStations = 0;
 
+    private static final int MAX_SLOTS = 7;
+    private List<Building> buildings;
+
+
     public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
 
     public Station(int mapID, int scenarioID, int positionX, int positionY, String stationType)
@@ -25,7 +30,34 @@ public class Station {
         this.positionY = positionY;
         this.stationType = stationType;
         stationID = totalStations;
+        this.buildings = new ArrayList<>();
     }
+
+    public boolean addBuilding(Building buildingToAdd, int currentYear){
+
+        if(buildingToAdd == null){
+            throw new IllegalArgumentException("Invalid building to add");
+        }
+
+        if (buildings.size() >= MAX_SLOTS) {
+
+            System.out.println("Warning: Maximum number of buildings reached.");
+            return false;
+        }
+
+        for (int i = 0; i < buildings.size(); i++) {
+            if(buildings.get(i).getBuildingType().equalsIgnoreCase(buildingToAdd.getBuildingType())){
+                return false;
+
+            }
+        }
+
+        buildings.add(buildingToAdd);
+
+        return true;
+
+    }
+
 
     public static void IncreaseTotalStations()
     {
@@ -76,4 +108,9 @@ public class Station {
         }
         return true;
     }
+
+    public boolean isAvailable() {
+        return buildings.size() < MAX_SLOTS;
+    }
+
 }
