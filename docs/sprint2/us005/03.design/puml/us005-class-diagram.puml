@@ -45,8 +45,7 @@ class Station {
 
 class Building {
     - String buildingType
-    + Building(buildingType)
-    + getBuildingType()
+      + getBuildingType()
 }
 
 class AddStationUI {

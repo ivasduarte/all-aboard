@@ -6,18 +6,18 @@ import repositories.StationRepository;
 
 public class AddStationController {
 
-    public static String AddStation(int mapID, int scenarioID, int positionX, int positionY, String stationName, String stationType)
+    public boolean AddStation(int mapID, int scenarioID, int positionX, int positionY, String stationType)
     {
-        Station newStation = new Station(mapID, scenarioID, positionX, positionY, stationName, stationType);
+        Station newStation = new Station(mapID, scenarioID, positionX, positionY, stationType);
         Map stationMap = newStation.getMap();
 
         if(!newStation.validatePosition(stationMap))
         {
-            return "ERROR: Invalid position";
+            return false;
         }
 
         StationRepository.save(newStation);
-        return "Station added successfully";
+        return true;
     }
 
 }

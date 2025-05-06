@@ -5,6 +5,7 @@ import controller.DisplayMapController;
 import domain.Map;
 import repositories.IndustryRepository;
 import repositories.MapRepository;
+import repositories.ScenarioRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +37,10 @@ public class AddIndustryUI implements Runnable{
         System.out.println("Select a map from the list: ");
         int mapID = sc.nextInt() - 1;
 
-        System.out.println("\nEnter the scenario ID: "); // waiting for ScenarioRepository to present as a list
-        int scenarioID = sc.nextInt();
+        ScenarioRepository sr = new ScenarioRepository();
+        sr.displayScenarioList();
+        System.out.println("Enter the scenario ID: ");
+        int scenarioID = sc.nextInt() - 1;
 
         System.out.println("\nEnter the position X of the industry: ");
         int positionX = sc.nextInt();
@@ -45,7 +48,6 @@ public class AddIndustryUI implements Runnable{
         System.out.println("\nEnter the position Y of the industry: ");
         int positionY = sc.nextInt();
 
-        System.out.println("Select the industry type you want: ");
         String[] industryTypes = new String[3];
         industryTypes[0] = "Primary sector industry";
         industryTypes[1] = "Transforming industry";
@@ -53,6 +55,7 @@ public class AddIndustryUI implements Runnable{
         for (int i = 0; i < industryTypes.length; i++) {
             System.out.println((i+1) + ". " + industryTypes[i]);
         }
+        System.out.println("Select the industry type you want: ");
         String industryType = sc.nextLine();
 
         String result = ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType);
