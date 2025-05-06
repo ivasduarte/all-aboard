@@ -8,13 +8,11 @@ autonumber
 actor "Player" as Player
 participant "UpgradeAStationUI" as UI
 
-
 activate Player
 
 Player -> UI : start the simulation
 activate UI
 
-<<<<<<< Updated upstream
 UI --> Player : shows a list of the available maps
 Player -> UI : selects a map
 UI --> Player : shows a list of the available scenarios
@@ -25,29 +23,10 @@ UI --> Player : shows a list of the actions the player can do
 Player -> UI : selects to upgrade a station
 
 create "UpgradeAStationController" as CTRL
-=======
-create "UpgradeAStationController" as CTRL
-UI --> CTRL : create
-
-UI --> Editor : shows a list of the available maps
-Editor -> UI : selects a map
-UI --> Editor : shows a list of the available scenarios
-Editor -> UI : selects a scenario
-UI --> Editor : shows a list of the cities
-Editor -> UI : selects a city
-UI --> Editor : shows a list of the actions the player can do
-Editor -> UI : selects to upgrade a station
-
-
->>>>>>> Stashed changes
-
-UI -> CTRL : create
-
-
+UI -> CTRL : create controller
 activate CTRL
 
 CTRL -> Repositories : getInstance()
-
 activate Repositories
 Repositories --> CTRL : RepositorySingleton
 deactivate Repositories
@@ -58,7 +37,6 @@ RepositorySingleton --> CTRL : StationRepository
 deactivate RepositorySingleton
 
 participant "StationRepository" as Station_REPO
-
 CTRL -> Station_REPO : getAvailableStations()
 activate Station_REPO
 Station_REPO --> CTRL : List<AvailableStation>
@@ -90,18 +68,18 @@ UI --> Player : shows list of existing + available buildings
 UI --> Player : requests the type of the building to add
 Player -> UI : inserts the type of the building
 UI -> CTRL : Upgrade a Station (station, building type)
-
-participant "BuildUpgradeRepository" as Station_UPG
 activate CTRL
+
+participant "StationUpgradeService" as Station_UPG
 CTRL -> Station_UPG : verifyIfExistsAndSave(station, buildingType)
 activate Station_UPG
-    Station_UPG -> Station_UPG : validateDate(buildingType, currentDate)
-    Station_UPG -> Station_UPG : replaceObsoleteBuilding(station, buildingType)
-    Station_UPG -> Station_UPG : checkMutualExclusivity(station, buildingType)
+Station_UPG -> Station_UPG : validateDate(buildingType, currentDate)
+Station_UPG -> Station_UPG : replaceObsoleteBuilding(station, buildingType)
+Station_UPG -> Station_UPG : checkMutualExclusivity(station, buildingType)
+
 alt Building not valid or already exists
     Station_UPG --> CTRL : Error Detected
     CTRL --> UI : ErrorMessage
-
     UI --> Player : Display error
 else Success
     Station_UPG --> CTRL : BuildUpgradeData
@@ -111,7 +89,4 @@ else Success
 end
 
 deactivate Station_UPG
-activate UI
-deactivate UI
-
 @enduml
