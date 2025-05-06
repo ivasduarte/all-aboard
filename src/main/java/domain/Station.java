@@ -30,6 +30,12 @@ public class Station {
         totalStations++;
     }
 
+    public Map getMap() {
+        MapRepository mr = new MapRepository();
+
+        return mr.getMapList().get(mapID);
+    }
+
     public int getMapID() {
         return mapID;
     }
@@ -59,4 +65,13 @@ public class Station {
     public void setStationName(String stationName) {this.stationName = stationName;}
     public void setStationType(String stationType) {this.stationType = stationType;}
 
+    public boolean validatePosition(Map map) {
+        if (positionX < 0 || positionX > map.getWidth()) {
+            return false;
+        }
+        if (positionY < 0 || positionY > map.getHeight()) {
+            return false;
+        }
+        return true;
+    }
 }
