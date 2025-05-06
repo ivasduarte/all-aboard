@@ -7,86 +7,62 @@ autonumber
 
 actor "Player" as Player
 participant "UpgradeAStationUI" as UI
+participant "UpgradeAStationController" as CTRL
+participant "Repositories" as Repos
+participant "StationRepository" as Station_REPO
+participant "StationUpgradeService" as Station_UPG
+participant "Station" as Station
+participant "Building" as Building
 
-activate Player
-
-Player -> UI : start the simulation
+Player -> UI : run()
 activate UI
 
-UI --> Player : shows a list of the available maps
-Player -> UI : selects a map
-UI --> Player : shows a list of the available scenarios
-Player -> UI : selects a scenario
-UI --> Player : shows a list of the cities
-Player -> UI : selects a city
-UI --> Player : shows a list of the actions the player can do
-Player -> UI : selects to upgrade a station
-
-create "UpgradeAStationController" as CTRL
-UI -> CTRL : create controller
+UI -> CTRL : new UpgradeAStationController()
 activate CTRL
 
-CTRL -> Repositories : getInstance()
-activate Repositories
-Repositories --> CTRL : RepositorySingleton
-deactivate Repositories
+CTRL -> Repos : getInstance()
+Repos --> CTRL : Repositories instance
 
-CTRL -> RepositorySingleton : getStationRepository()
-activate RepositorySingleton
-RepositorySingleton --> CTRL : StationRepository
-deactivate RepositorySingleton
+CTRL -> Repos : getStationRepository()
+Repos --> CTRL : StationRepository
 
-participant "StationRepository" as Station_REPO
 CTRL -> Station_REPO : getAvailableStations()
-activate Station_REPO
-Station_REPO --> CTRL : List<AvailableStation>
-deactivate Station_REPO
+Station_REPO --> CTRL : List<Station>
+CTRL --> UI : List<Station>
 
-CTRL --> UI : Send Stations
-deactivate CTRL
+UI -> Player : display list of stations
+Player -> UI : selects station
+UI -> Player : prompt for building type
+Player -> UI : inputs building type
 
-UI --> Player : shows a list of the available stations
-Player -> UI : selects the station
-UI -> CTRL : Check buildings available
-activate CTRL
+UI -> CTRL : upgradeStation(station, buildingType, currentYear)
 
-CTRL -> Repositories : getBuildingRepository()
-activate Repositories
-Repositories --> CTRL : BuildingRepository
-deactivate Repositories
+CTRL -> Building : new Building(buildingType)
+activate Building
+Building --> CTRL : return Building instance
+deactivate Building
 
-participant "BuildingRepository" as Station_BUILD
-activate Station_BUILD
-CTRL -> Station_BUILD : getAvailableBuildings(station, currentDate)
-Station_BUILD --> CTRL : AvailableBuildings
-deactivate Station_BUILD
-
-CTRL --> UI: Send Available Buildings
-deactivate CTRL
-
-UI --> Player : shows list of existing + available buildings
-UI --> Player : requests the type of the building to add
-Player -> UI : inserts the type of the building
-UI -> CTRL : Upgrade a Station (station, building type)
-activate CTRL
-
-participant "StationUpgradeService" as Station_UPG
-CTRL -> Station_UPG : verifyIfExistsAndSave(station, buildingType)
+CTRL -> Station_UPG : upgradeStation(station, building, year)
 activate Station_UPG
-Station_UPG -> Station_UPG : validateDate(buildingType, currentDate)
-Station_UPG -> Station_UPG : replaceObsoleteBuilding(station, buildingType)
-Station_UPG -> Station_UPG : checkMutualExclusivity(station, buildingType)
 
-alt Building not valid or already exists
-    Station_UPG --> CTRL : Error Detected
-    CTRL --> UI : ErrorMessage
-    UI --> Player : Display error
-else Success
-    Station_UPG --> CTRL : BuildUpgradeData
-    CTRL --> UI : BuildUpgradeData
-    deactivate CTRL
-    UI --> Player : Display success
+Station_UPG -> Station_UPG : validateData(buildingType, year)
+Station_UPG -> Station_UPG : checkMutualExclusivity(existingBuildings, buildingType)
+Station_UPG -> Station_UPG : handleReplacement(existingBuildings, buildingType)
+Station_UPG -> Station : addBuilding(building, year)
+
+alt Validation failed or no slot available
+    Station --> Station_UPG : false
+    Station_UPG --> CTRL : false
+    CTRL --> UI : display error
+    UI --> Player : show error message
+else Upgrade successful
+    Station --> Station_UPG : true
+    Station_UPG --> CTRL : true
+    CTRL --> UI : display success
+    UI --> Player : show success message
 end
 
 deactivate Station_UPG
+deactivate CTRL
+deactivate UI
 @enduml
