@@ -1,26 +1,39 @@
 package controller;
 
-import domain.ApplicationSession;
-import domain.UserSession;
+import domain.*;
+import repositories.*;
 
 public class CreateScenarioController {
 
     public String createScenario(String name, Restrictions restrictions, int mapID) {
         try {
             UserSession userSession = ApplicationSession.getInstance().getCurrentSession();
-            ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
 
-            if (scenarioRepository.existsByName(name)) {
-                return "ERROR: A scenario with this name already exists.";
+            if (!(userSession.getUser() instanceof Editor)) {
+                return "ERROR: Only Editors can create scenarios.";
             }
 
-            Scenario scenario = new Scenario(name, restrictions, mapID);
-            scenarioRepository.add(map);
+            Editor editor = (Editor) userSession.getUser();
+
+            Map selectedMap = findMapById(mapID);
+            if (selectedMap == null) {
+                return "ERROR. Must select a map for scenario.";
+            }
+
+            ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+
+            if (!scenarioRepository.existsByName(name)) {
+                return "ERROR: Scenario Name already exists.";
+            }
+
+            Scenario scenario = editor.createScenario(name, restrictions, selectedMap);
+            scenarioRepository.save(scenario);
 
             return "Scenario '" + name + "' created successfully.";
-        } catch (IllegalArgumentException e){
+
+        } catch (IllegalArgumentException e) {
             return "ERROR: " + e.getMessage();
-        } catch (Exception e){
+        } catch (Exception e) {
             return "ERROR: Unexpected error occurred.";
         }
     }
