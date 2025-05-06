@@ -39,7 +39,7 @@ public class Restrictions {
     }
 
     public boolean validate(){
-        return validateTimeRestrictions() && validateLocomotiveTypes() &&& validateHistoricalRestrictions();
+        return validateTimeRestrictions() && validateLocomotiveTypes() && validateHistoricalRestrictions();
     }
 
     private boolean validateTimeRestrictions(){
@@ -54,11 +54,11 @@ public class Restrictions {
     }
 
     private boolean validateLocomotiveTypes(){
-        if(locomotiveTypes == null || locomotionTypes.isEmpty()){
+        if(locomotiveTypes == null || locomotiveTypes.isEmpty()){
             return false;
         }
 
-        for(String type : locomotionTypes){
+        for(String type : locomotiveTypes){
             if(!type.equalsIgnoreCase("steam") &&
             !type.equalsIgnoreCase("diesel") &&
             !type.equalsIgnoreCase("electric")){
