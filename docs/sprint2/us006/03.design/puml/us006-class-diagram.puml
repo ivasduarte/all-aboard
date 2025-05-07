@@ -9,14 +9,19 @@ class Station {
   - positionX: int
   - positionY: int
   - stationID: int
+  - stationName: String
   - stationType: String
   - buildings: List<Building>
+  + Station(mapID: int, scenarioID: int, positionX: int, positionY: int, stationName: String, stationType: String)
   + addBuilding(b: Building, year: int): boolean
   + getBuildings(): List<Building>
+  + getStationName(): String
+  + getStationType(): String
 }
 
 class Building {
   - buildingType: String
+  + Building(buildingType: String)
   + getBuildingType(): String
 }
 
@@ -33,7 +38,9 @@ class UpgradeAStationController {
   + upgradeStation(station: Station, buildingType: String, currentYear: int): boolean
 }
 
-class Repositories {
+class Repositories <<singleton>> {
+  - instance: Repositories
+  - stationRepo: StationRepository
   + getInstance(): Repositories
   + getStationRepository(): StationRepository
 }
