@@ -10,17 +10,24 @@ participant "UpgradeAStationUI" as UI
 participant "UpgradeAStationController" as CTRL
 participant "Repositories" as Repos
 participant "StationRepository" as Station_REPO
-participant "StationUpgradeService" as Station_UPG
-participant "Station" as Station
-participant "Building" as Building
-
+participant "BuildingRepository" as Building_REPO
+participant "StationUpgradeService" as UpgradeService
 
 activate Player
 
-Player -> UI : run()
+Player -> UI : start the simulation
 activate UI
 
-UI -> CTRL : new UpgradeAStationController()
+UI --> Player : shows a list of the available maps
+Player -> UI : selects a map
+UI --> Player : shows a list of the available scenarios
+Player -> UI : selects a scenario
+UI --> Player : shows a list of the cities
+Player -> UI : selects a city
+UI --> Player : shows a list of the actions the player can do
+Player -> UI : selects to upgrade a station
+
+UI -> CTRL : create controller
 activate CTRL
 
 CTRL -> Repos : getInstance()
@@ -30,42 +37,53 @@ CTRL -> Repos : getStationRepository()
 Repos --> CTRL : StationRepository
 
 CTRL -> Station_REPO : getAvailableStations()
-Station_REPO --> CTRL : List<Station>
-CTRL --> UI : List<Station>
+activate Station_REPO
+Station_REPO --> CTRL : List<AvailableStation>
+deactivate Station_REPO
 
-UI -> Player : display list of stations
-Player -> UI : selects station
-UI -> Player : prompt for building type
-Player -> UI : inputs building type
+CTRL --> UI : Send Stations
+deactivate CTRL
 
-UI -> CTRL : upgradeStation(station, buildingType, currentYear)
+UI --> Player : shows a list of the available stations
+Player -> UI : selects the station
+UI -> CTRL : Check buildings available
+activate CTRL
 
-CTRL -> Building : new Building(buildingType)
-activate Building
-Building --> CTRL : return Building instance
-deactivate Building
+CTRL -> Repos : getBuildingRepository()
+Repos --> CTRL : BuildingRepository
 
-CTRL -> Station_UPG : upgradeStation(station, building, year)
-activate Station_UPG
+CTRL -> Building_REPO : getAvailableBuildings(station, currentDate)
+activate Building_REPO
+Building_REPO --> CTRL : AvailableBuildings
+deactivate Building_REPO
 
-Station_UPG -> Station_UPG : validateData(buildingType, year)
-Station_UPG -> Station_UPG : checkMutualExclusivity(existingBuildings, buildingType)
-Station_UPG -> Station_UPG : handleReplacement(existingBuildings, buildingType)
-Station_UPG -> Station : addBuilding(building, year)
+CTRL --> UI : Send Available Buildings
+deactivate CTRL
 
-alt Validation failed or no slot available
-    Station --> Station_UPG : false
-    Station_UPG --> CTRL : false
-    CTRL --> UI : display error
-    UI --> Player : show error message
-else Upgrade successful
-    Station --> Station_UPG : true
-    Station_UPG --> CTRL : true
-    CTRL --> UI : display success
-    UI --> Player : show success message
+UI --> Player : shows list of existing + available buildings
+UI --> Player : requests the type of the building to add
+Player -> UI : inserts the type of the building
+UI -> CTRL : upgradeStation(station, buildingType)
+activate CTRL
+
+CTRL -> UpgradeService : verifyIfExistsAndSave(station, buildingType)
+activate UpgradeService
+UpgradeService -> UpgradeService : validateDate(buildingType, currentDate)
+UpgradeService -> UpgradeService : replaceObsoleteBuilding(station, buildingType)
+UpgradeService -> UpgradeService : checkMutualExclusivity(station, buildingType)
+
+alt Building not valid or already exists
+    UpgradeService --> CTRL : Error Detected
+    CTRL --> UI : show error message
+    UI --> Player : display error
+else Success
+    UpgradeService --> CTRL : BuildUpgradeData
+    CTRL --> UI : show success message
+    UI --> Player : display success
 end
 
-deactivate Station_UPG
+deactivate UpgradeService
 deactivate CTRL
 deactivate UI
+
 @enduml
