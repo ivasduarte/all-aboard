@@ -19,13 +19,6 @@ public class EditorUI implements Runnable {
         options.add(new MenuItem("Add an Industry", new AddIndustryUI()));
         options.add(new MenuItem("Add a City", new AddCityUI()));
         options.add(new MenuItem("Create a Scenario", new CreateScenarioUI()));
-        options.add(new MenuItem("Build a Station", new AddStationUI()));
-        options.add(new MenuItem("Upgrade a Station", new ShowTextUI("You have chosen Upgrade a Station.")));
-        options.add(new MenuItem("Check Station Details", new ShowTextUI("You have chosen Check Station Details.")));
-        options.add(new MenuItem("Build a Railway Line", new ShowTextUI("You have chosen Build a Railway Line.")));
-        options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI()));
-        options.add(new MenuItem("Assign a Train to a Route", new ShowTextUI("You have chosen Assign a Train to a Route.")));
-        options.add(new MenuItem("Display Train List", new ShowTextUI("You have chosen Display Train List.")));
 
         int option = 0;
         do {
