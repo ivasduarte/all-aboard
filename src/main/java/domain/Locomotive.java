@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Locomotive {
     /**
-     * The locomotive serial number.
+     * The locomotive model.
      */
-    private int serialNumber;
+    private String locomotiveModel;
 
     /**
-     * The locomotive type.
+     * The type of fuel the locomotive consumes.
      */
-    private LocomotiveType locomotiveType;
+    private String fuelType;
 
     /**
      * The locomotive speed.
@@ -24,19 +24,24 @@ public class Locomotive {
     private int startYear;
 
     /**
+     * The year the locomotive has stopped to be producted.
+     */
+    private int endYear;
+
+    /**
      * The acquisition price of the locomotive.
      */
-    private double price;
+    private int price;
 
     /**
      * The fuel cost the locomotive needs, per year.
      */
-    private double fuelCost;
+    private int fuelCost;
 
     /**
      * The locomotive maintenance cost, per year.
      */
-    private double maintenanceCost;
+    private int maintenanceCost;
 
     /**
      * List of stations that create the locomotive's route
@@ -44,42 +49,44 @@ public class Locomotive {
     private List<Station> route;
 
     /**
-     * This method is the constructor of the locomotive.
+     * This is the constructor of Locomotive.
      *
-     * @param serialNumber The serial number of the locomotive.
-     * @param locomotiveType The locomotive type of the locomotive.
-     * @param speed The speed of the locomotive.
-     * @param startYear The start year of production of the locomotive.
-     * @param price The acquisition price of the locomotive.
-     * @param fuelCost The cost spent on fuel, per year.
-     * @param maintenanceCost The cost for the locomotive maintenance, per year.
+     * @param locomotiveModel The locomotive model
+     * @param fuelType The type of fuel the locomotive consumes
+     * @param startYear The start year of production of the locomotive
+     * @param endYear The end year of production of the locomotive
+     * @param price The acquisition price of the locomotive
+     * @param maintenanceCost The maintenance cost of the locomotive, per year
+     * @param fuelCost The fuel cost of the locomotive, per year
+     * @param speed The speed of the locomotive
      */
-    public Locomotive(int serialNumber, LocomotiveType locomotiveType, int speed, int startYear, double price, double fuelCost, double maintenanceCost) {
-        this.serialNumber = serialNumber;
-        this.locomotiveType = locomotiveType;
-        this.speed = speed;
+    public Locomotive(String locomotiveModel, String fuelType, int startYear, int endYear, int price, int maintenanceCost, int fuelCost, int speed) {
+        this.locomotiveModel = locomotiveModel;
+        this.fuelType = fuelType;
         this.startYear = startYear;
+        this.endYear = endYear;
         this.price = price;
-        this.fuelCost = fuelCost;
         this.maintenanceCost = maintenanceCost;
+        this.fuelCost = fuelCost;
+        this.speed = speed;
     }
 
     /**
-     * This method returns the locomotive serial number.
+     * This method returns the locomotive model.
      *
-     * @return The serial number
+     * @return The locomotive model
      */
-    public int getSerialNumber() {
-        return serialNumber;
+    public String getLocomotiveModel() {
+        return locomotiveModel;
     }
 
     /**
-     * This method returns the locomotive type.
+     * This method returns the locomotive fuel type.
      *
-     * @return The locomotive type
+     * @return The locomotive fuel type
      */
-    public LocomotiveType getLocomotiveType() {
-        return locomotiveType;
+    public String getLocomotiveFuelType() {
+        return fuelType;
     }
 
     /**
@@ -108,8 +115,4 @@ public class Locomotive {
     public void setRoute(List<Station> route) { this.route = route;}
 
     // possible validations
-
-    public enum LocomotiveType {
-        Steam, Diesel, Electricity
-    }
 }

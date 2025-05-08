@@ -6,8 +6,6 @@ import repositories.Repositories;
 import domain.TaskCategory;
 import ui.authorization.AuthenticationController;
 
-import static domain.Locomotive.LocomotiveType.*;
-
 public class Bootstrap implements Runnable {
 
     public void run() {
@@ -37,11 +35,9 @@ public class Bootstrap implements Runnable {
         authenticationRepository.addUserWithRole("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
     }
 
-    public void addLocomotives() {
+    public void gameLocomotives() {
         LocomotiveRepository lr = Repositories.getInstance().getLocomotiveRepository();
 
-        lr.saveLocomotive(new Locomotive(1, Steam, 125, 1950, 25000.00, 70000.00, 250000.00));
-        lr.saveLocomotive(new Locomotive(2, Diesel, 170, 1980, 50000.00, 250000.00, 1000000.00));
-        lr.saveLocomotive(new Locomotive(3, Electricity, 200, 2006, 75000.00, 100000.00, 2500000.00));
+        lr.saveLocomotive(new Locomotive("Trevithick-1", "Steam", 1800, 1835, 10000, 6000, 7543, 10));
     }
 }

@@ -14,7 +14,7 @@ public class LocomotiveRepository {
     private List<Locomotive> playerLocomotives = new ArrayList<>();
 
     /**
-     * This method is responsible to add locomotives to the list of all locomotives.
+     * This method is responsible to add locomotives to the list of all locomotives available in the simulator.
      *
      * @param locomotive predefined locomotives
      */
@@ -49,11 +49,11 @@ public class LocomotiveRepository {
 
         for (int i = 0; i < locomotives.size(); i++) {
             for (int j = 0; j < availableLocomotiveTypes.size(); j++) {
-                if (locomotives.get(i).getLocomotiveType().equals(Locomotive.LocomotiveType.valueOf(availableLocomotiveTypes.get(j)))) {
+                if (locomotives.get(i).getLocomotiveFuelType().equals(availableLocomotiveTypes.get(j))) {   // this line has a high chance of being wrong
                     validTypeLocomotives.add(locomotives.get(i));
                 }
             }
-        }
+        }   // method needs further review
 
         for (int i = 0; i < validTypeLocomotives.size(); i++) {
             if (validTypeLocomotives.get(i).getStartYear() <= scenarioStartDate.getYear()) {
