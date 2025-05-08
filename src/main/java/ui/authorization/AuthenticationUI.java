@@ -5,6 +5,7 @@ import ui.menu.EditorUI;
 import pt.ipp.isep.dei.ui.console.menu.MenuItem;
 import pt.isep.lei.esoft.auth.mappers.dto.UserRoleDTO;
 import ui.menu.EditorUI;
+import ui.menu.PlayerUI;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ public class AuthenticationUI implements Runnable {
     private List<MenuItem> getMenuItemForRoles() {
         List<MenuItem> rolesUI = new ArrayList<>();
         rolesUI.add(new MenuItem(AuthenticationController.ROLE_EDITOR, new EditorUI()));
+        rolesUI.add(new MenuItem(AuthenticationController.ROLE_PLAYER, new PlayerUI()));
 
         //TODO: Complete with other user roles and related RoleUI
         return rolesUI;
