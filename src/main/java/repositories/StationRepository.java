@@ -7,13 +7,13 @@ import java.util.List;
 
 public class StationRepository {
 
-    private static List<Station> stations;
+    private List<Station> stations;
 
     public StationRepository() { stations = new ArrayList<>(); }
 
-    public static void save(Station station){ stations.add(station); }
+    public void save(Station station){ stations.add(station); }
 
-    public static List<Station> getStations() { return stations; }
+    public List<Station> getStations() { return stations; }
 
     public void displayAllStations(){
         for (int i = 0; i < stations.size(); i++) {
