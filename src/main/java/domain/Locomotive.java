@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.List;
+
 public class Locomotive {
     /**
      * The locomotive serial number.
@@ -35,6 +37,11 @@ public class Locomotive {
      * The locomotive maintenance cost, per year.
      */
     private double maintenanceCost;
+
+    /**
+     * List of stations that create the locomotive's route
+     */
+    private List<Station> route;
 
     /**
      * This method is the constructor of the locomotive.
@@ -92,6 +99,13 @@ public class Locomotive {
     public int getStartYear() {
         return startYear;
     }
+
+    /**
+     * This method sets the locomotive's route
+     *
+     * @param route The new route to be assigned
+     */
+    public void setRoute(List<Station> route) { this.route = route;}
 
     // possible validations
 
