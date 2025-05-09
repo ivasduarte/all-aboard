@@ -31,16 +31,16 @@ public class CreateScenarioUI implements Runnable {
         scenarioName = sc.nextLine().trim();
 
         try {
-            System.out.println("\nEnter Start Date (yyyy-mm-dd): ");
+            System.out.print("\nEnter Start Date (yyyy-mm-dd): ");
             LocalDate startDate = LocalDate.parse(sc.nextLine());
 
-            System.out.println("Enter End Date (yyyy-mm-dd): ");
+            System.out.print("Enter End Date (yyyy-mm-dd): ");
             LocalDate endDate = LocalDate.parse(sc.nextLine());
 
-            System.out.println("\nEnter Locomotive Types (comma-separated: steam, diesel, electric): ");
+            System.out.print("\nEnter Locomotive Types (comma-separated: steam, diesel, electric): ");
             List<String> locoTypes = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
-            System.out.println("\nEnter Historical Events (comma-separated descriptions): ");
+            System.out.print("\nEnter Historical Events (comma-separated descriptions): ");
             List<String> events = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
             restrictions = new Restrictions(startDate, endDate, locoTypes, events);
