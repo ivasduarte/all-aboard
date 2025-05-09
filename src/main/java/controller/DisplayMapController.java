@@ -19,7 +19,7 @@ public class DisplayMapController {
         getCityRepository();
     }
 
-    public DisplayMapController(MapRepository mapRepository){ //add CityRepository cityRepository
+    public DisplayMapController(MapRepository mapRepository, CityRepository cityRepository){
         this.mapRepository = mapRepository;
         this.cityRepository = cityRepository;
     }
@@ -47,8 +47,6 @@ public class DisplayMapController {
     public List<City> getCityList(){
         return getCityRepository().getCities();
     }
-
-
 
     public boolean verifyIfMapExists(String mapName){
         return getMapRepository().existsByName(mapName);
