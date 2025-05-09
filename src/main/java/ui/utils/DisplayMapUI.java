@@ -78,6 +78,8 @@ public class DisplayMapUI implements Runnable{
                 mapArray[i][k] = "⬛";
             }
         }
+        addCitiesToMap();
+        addHouseBlocksToMap();
         return mapArray;
     }
 
