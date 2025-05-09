@@ -16,9 +16,9 @@ public class EditorUI implements Runnable {
         List<MenuItem> options = new ArrayList<MenuItem>();
         options.add(new MenuItem("Create Map", new CreateMapUI()));
         options.add(new MenuItem("Display Map List", new DisplayMapUI()));
-        options.add(new MenuItem("Add an Industry", new AddIndustryUI()));
-        options.add(new MenuItem("Add a City", new AddCityUI()));
         options.add(new MenuItem("Create a Scenario", new CreateScenarioUI()));
+        options.add(new MenuItem("Add a City", new AddCityUI()));
+        options.add(new MenuItem("Add an Industry", new AddIndustryUI()));
 
         int option = 0;
         do {
