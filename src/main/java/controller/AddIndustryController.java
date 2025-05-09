@@ -3,6 +3,7 @@ package controller;
 import domain.ApplicationSession;
 import domain.Editor;
 import domain.Industry;
+import domain.UserSession;
 import repositories.IndustryRepository;
 import repositories.LocomotiveRepository;
 import repositories.Repositories;
@@ -23,7 +24,6 @@ public class AddIndustryController {
      */
     public String addIndustry(int mapID, int scenarioID, int positionX, int positionY, String industryType) {
         IndustryRepository industryRepository = Repositories.getInstance().getIndustryRepository();
-        Editor editor = ApplicationSession.getInstance().getCurrentSession().getCurrentEditor();
 
         Industry industry = new Industry(mapID, scenarioID, positionX, positionY, industryType);
 

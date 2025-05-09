@@ -9,6 +9,7 @@ import repositories.IndustryRepository;
 import repositories.MapRepository;
 import repositories.ScenarioRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -40,6 +41,8 @@ public class AddIndustryUI implements Runnable {
         System.out.println("Select a map from the list: ");
         int mapID = sc.nextInt() - 1;
 
+        System.out.println();
+
         List<Scenario> scenarioList = scenarioController.getScenarioList();
         for (int i = 0; i < scenarioList.size(); i++) {
             Scenario scenario = scenarioList.get(i);
@@ -51,19 +54,21 @@ public class AddIndustryUI implements Runnable {
 
         System.out.println("\nEnter the position X of the industry: ");
         int positionX = sc.nextInt();
-
-        System.out.println("\nEnter the position Y of the industry: ");
+        System.out.println("Enter the position Y of the industry: ");
         int positionY = sc.nextInt();
 
-        String[] industryTypes = new String[3];
-        industryTypes[0] = "Primary sector industry";
-        industryTypes[1] = "Transforming industry";
-        industryTypes[2] = "Mixed industry";
-        for (int i = 0; i < industryTypes.length; i++) {
-            System.out.println("[" + industryTypes[i] + "]");
+        System.out.println();
+
+        List<String> industryTypes = new ArrayList<>();
+        industryTypes.add("Primary sector industry");
+        industryTypes.add("Transforming industry");
+        industryTypes.add("Mixed industry");
+        for (int i = 0; i < industryTypes.size(); i++) {
+            System.out.println((i+1) + ". " + industryTypes.get(i));
         }
         System.out.println("Select the industry type you want: ");
-        String industryType = sc.nextLine().trim();
+        int answer = sc.nextInt() - 1;
+        String industryType = industryTypes.get(answer);
 
         String result = ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType);
 

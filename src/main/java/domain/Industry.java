@@ -1,8 +1,13 @@
 package domain;
 
+import controller.DisplayMapController;
 import repositories.MapRepository;
 
+import java.util.List;
+
 public class Industry {
+    private DisplayMapController mapController = new DisplayMapController();
+
     /**
      * The map ID.
      */
@@ -90,15 +95,19 @@ public class Industry {
         return industryType;
     }
 
-    MapRepository mr = new MapRepository();
-    Map map = mr.getMapList().get(mapID);
-
     /**
      * This method verifies if the selected position exists on the map.
      *
      * @return True if the position exists.
      */
     public boolean validatePosition() {
+        List<Map> mapList = mapController.getMapList();
+        Map map = mapList.get(mapID);
+
+        if (map == null) {
+            return false;
+        }
+
         if (positionX < 0 || positionX > map.getWidth()) {
             return false;
         }
