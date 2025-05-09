@@ -29,7 +29,7 @@ class StationUpgradeService {
   + upgradeStation(station: Station, building: Building, currentYear: int): boolean
 }
 
-class UpgradeAStationUI
+class UpgradeAStationUI <<boundary>>
 
 class UpgradeAStationController {
   - upgradeService: StationUpgradeService
@@ -53,6 +53,6 @@ UpgradeAStationUI ..> UpgradeAStationController
 UpgradeAStationController ..> StationUpgradeService
 UpgradeAStationController ..> StationRepository
 Repositories ..> StationRepository
-Station --> "0..*" Building
+Station "1" --> "0..*" Building
 
 @enduml

@@ -8,6 +8,10 @@ autonumber
 
 actor "Player" as Player
 participant "ListStationsUI" as UI
+participant "ListStationsController" as CTRL
+participant "Repositories" as Repos
+participant "StationRepository" as StationRepo
+participant "Station" as Station
 
 activate Player
 
@@ -23,40 +27,26 @@ Player -> UI : selects a city
 UI --> Player : shows a list of the actions the player can do
 Player -> UI : selects to list all stations
 
-create "ListStationsController" as CTRL
-UI -> CTRL : create
+UI -> CTRL : create controller
 activate CTRL
 
-CTRL -> Repositories : getInstance()
-activate Repositories
-Repositories --> CTRL : RepositorySingleton
-deactivate Repositories
+CTRL -> Repos : getInstance()
+Repos --> CTRL : RepositorySingleton
 
-CTRL -> RepositorySingleton : getStationRepository()
-activate RepositorySingleton
-RepositorySingleton --> CTRL : StationRepository
-deactivate RepositorySingleton
+CTRL -> Repos : getStationRepository()
+Repos --> CTRL : StationRepository
 
-participant "StationRepository" as Station_REPO
-CTRL -> Station_REPO : getAllStations()
-activate Station_REPO
-Station_REPO --> CTRL : list of stations
-deactivate Station_REPO
+CTRL -> StationRepo : getStations()
+activate StationRepo
+StationRepo --> CTRL : List<Station>
+deactivate StationRepo
 
-participant "CargoService" as CargoService
-loop for each station
-    CTRL -> CargoService : getCargoSummary(station)
-    activate CargoService
-    CargoService --> CTRL : CargoSummary (available & demanded)
-    deactivate CargoService
-end loop
+CTRL -> CTRL : sort stations (optional)
 
-CTRL -> CTRL : sortStationsByName()
-
-CTRL --> UI : list of stations with summaries
+CTRL --> UI : list of stations
 deactivate CTRL
 
-UI --> Player : displays list of stations
+UI --> Player : displays list of stations (ID, Type, Position, Buildings)
 deactivate UI
 
 @enduml

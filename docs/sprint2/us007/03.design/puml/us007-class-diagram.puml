@@ -4,81 +4,38 @@ skinparam shadowing false
 skinparam linetype polyline
 skinparam classAttributeIconSize 0
 
-
 class ListStationsUI {
-    + displayStationsList()
-    + selectStationToViewDetails()
+    + run(): void
 }
 
 class ListStationsController {
-    + listAllStations() : List<Station>
-    + getStationDetails(stationId: String) : StationDetails
-}
-
-
-class Repositories {
-    + getStationRepository() : StationRepository
-    + getBuildingRepository() : BuildingRepository
-    + getCargoService() : CargoService
+    - stationRepository: StationRepository
+    + listAllStations(): List<Station>
 }
 
 class StationRepository {
-    - List<Station> stations
-    + getAllStations() : List<Station>
-    + findById(id: String) : Station
+    - stations: List<Station>
+    + getStations(): List<Station>
 }
-
-class BuildingRepository {
-    + getBuildingsForStation(stationId: String) : List<Building>
-}
-
 
 class Station {
-    - String id
-    - String name
-    - String type
-    - double x
-    - double y
-    + getName() : String
-    + getType() : StationType
-
+    - stationID: int
+    - stationType: String
+    - positionX: int
+    - positionY: int
+    - buildings: List<Building>
+    + getStationType(): String
+    + getPositionX(): int
+    + getPositionY(): int
+    + getBuildings(): List<Building>
 }
-
 
 class Building {
-    - String name
-    - BuildingType type
-    + getName()
-    + getType()
+    - buildingType: String
+    + getBuildingType(): String
 }
 
-class CargoService {
-    + getCargoSummary(station: Station) : CargoSummary
-}
-
-class CargoSummary {
-    - int supply
-    - int demand
-    + getSupply()
-    + getDemand()
-}
-
-
-ListStationsUI .> ListStationsController : uses
-ListStationsController ..> Repositories : accesses
-Repositories --> StationRepository
-Repositories --> BuildingRepository
-Repositories --> CargoService
-
-ListStationsController ..> StationRepository : uses
-ListStationsController ..> CargoService : gets summary
-ListStationsController ..> BuildingRepository : fetches buildings
-
-
-StationDetails --> Station
-StationDetails --> CargoSummary
-StationDetails --> "0..*" Building
-
-
-
+ListStationsUI ..> ListStationsController
+ListStationsController ..> StationRepository
+Station --> "0..*" Building
 @enduml
