@@ -4,9 +4,12 @@ import domain.ApplicationSession;
 import domain.Editor;
 import domain.Industry;
 import repositories.IndustryRepository;
+import repositories.LocomotiveRepository;
 import repositories.Repositories;
 
 public class AddIndustryController {
+    private IndustryRepository industryRepository;
+
     /**
      * This method will be responsible to add the created industry to the repository.
      *
@@ -30,5 +33,18 @@ public class AddIndustryController {
 
         industryRepository.save(industry);
         return "Industry [" + positionX + ", " + positionY + "] saved successfully.";
+    }
+
+    /**
+     * This method allows the industry controller to get the industry repository.
+     *
+     * @return industry repository
+     */
+    public IndustryRepository getIndustryRepository() {
+        if (industryRepository == null) {
+            Repositories repositories = Repositories.getInstance();
+            industryRepository = repositories.getIndustryRepository();
+        }
+        return industryRepository;
     }
 }

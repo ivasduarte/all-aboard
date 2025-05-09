@@ -1,8 +1,10 @@
 package presentation;
 
 import controller.AddIndustryController;
+import controller.CreateScenarioController;
 import controller.DisplayMapController;
 import domain.Map;
+import domain.Scenario;
 import repositories.IndustryRepository;
 import repositories.MapRepository;
 import repositories.ScenarioRepository;
@@ -11,9 +13,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class AddIndustryUI implements Runnable{
+public class AddIndustryUI implements Runnable {
     private AddIndustryController ctrl = new AddIndustryController();
     private DisplayMapController controller = new DisplayMapController();
+    private CreateScenarioController scenarioController = new CreateScenarioController();
 
     private int mapID;
     private int scenarioID;
@@ -28,21 +31,21 @@ public class AddIndustryUI implements Runnable{
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
-        MapRepository mr = new MapRepository();
-
         List<Map> mapList = controller.getMapList();
-
         for (int i = 0; i < mapList.size(); i++) {
             Map map = mapList.get(i);
             System.out.println((i + 1) + ". " + map.getMapName());
             System.out.println();
         }
-
         System.out.println("Select a map from the list: ");
         int mapID = sc.nextInt() - 1;
 
-        ScenarioRepository sr = new ScenarioRepository();
-        sr.displayScenarioList();
+        List<Scenario> scenarioList = scenarioController.getScenarioList();
+        for (int i = 0; i < scenarioList.size(); i++) {
+            Scenario scenario = scenarioList.get(i);
+            System.out.println((i+1) + ". " + scenario.getScenarioName());
+            System.out.println();
+        }
         System.out.println("Enter the scenario ID: ");
         int scenarioID = sc.nextInt() - 1;
 
@@ -57,10 +60,10 @@ public class AddIndustryUI implements Runnable{
         industryTypes[1] = "Transforming industry";
         industryTypes[2] = "Mixed industry";
         for (int i = 0; i < industryTypes.length; i++) {
-            System.out.println((i+1) + ". " + industryTypes[i]);
+            System.out.println("[" + industryTypes[i] + "]");
         }
         System.out.println("Select the industry type you want: ");
-        String industryType = sc.nextLine();
+        String industryType = sc.nextLine().trim();
 
         String result = ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType);
 

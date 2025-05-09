@@ -40,10 +40,4 @@ public class ScenarioRepository {
     public Optional<Scenario> getScenario(String name){
         return scenarios.stream().filter(s -> s.getScenarioName().equals(name)).findFirst();
     }
-
-    public void displayScenarioList() {
-        for (int i = 0; i < scenarios.size(); i++) {
-            System.out.println((i+1) + ". " + scenarios.get(i));
-        }
-    }
 }
