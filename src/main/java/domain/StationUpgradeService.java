@@ -21,13 +21,14 @@ public class StationUpgradeService {
 
         List<Building> existingBuildings = station.getBuildings();
 
-        if (!checkMutualExclusivity(existingBuildings, buildingType)) {
+        if (checkMutualExclusivity(existingBuildings, buildingType) != null) {
 
-            System.out.println("The building type: " + buildingType + " is not available in the current year.");
+            System.out.println("ERROR: Cannot add building " + buildingType + " because it conflicts with existing building " + checkMutualExclusivity(existingBuildings, buildingType) + ".");
 
             return false;
 
         }
+
 
         handleReplacement(existingBuildings, buildingType);
 
@@ -47,7 +48,7 @@ public class StationUpgradeService {
 
     }
 
-    private boolean checkMutualExclusivity(List<Building> existingBuildings, String newType) {
+    private String checkMutualExclusivity(List<Building> existingBuildings, String newType) {
 
         String newLower = newType.toLowerCase();
 
@@ -57,12 +58,12 @@ public class StationUpgradeService {
 
             if (!existingBuilding.equals(newLower) && (existingBuilding.contains("hotel") && newLower.contains("hotel"))) {
 
-                return false;
+                return existingBuilding;
 
             }
         }
 
-        return true;
+        return null;
     }
 
     private void handleReplacement(List<Building> existingBuildings, String newType) {
