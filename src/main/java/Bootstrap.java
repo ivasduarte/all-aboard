@@ -84,5 +84,26 @@ public class Bootstrap implements Runnable {
         lr.saveLocomotive(new Locomotive("Dash-9", "Diesel", 1993, 99999, 478000, 18000, 68410, 70));
         lr.saveLocomotive(new Locomotive("AMD-103", "Diesel", 1993, 99999, 425000, 25000, 88068, 105));
         lr.saveLocomotive(new Locomotive("Class 232", "Diesel", 1997, 99999, 492000, 35000, 72625, 75));
+
+        lr.saveLocomotive(new Locomotive("1-3 Bobo", "Electric", 1895, 1935, 85000, 6000, 33116, 54));
+        lr.saveLocomotive(new Locomotive("Be 4/6 II", "Electric", 1920, 1950, 61000, 11000, 14701, 35));
+        lr.saveLocomotive(new Locomotive("Ee 3/3", "Electric", 1932, 1948, 47000, 7000, 11880, 30));
+        lr.saveLocomotive(new Locomotive("Class 1045", "Electric", 1927, 1950, 95000, 6000, 11636, 40));
+        lr.saveLocomotive(new Locomotive("GG1", "Electric", 1935, 1970, 285000, 19000, 42721, 100));
+        lr.saveLocomotive(new Locomotive("Class E18", "Electric", 1936, 1966, 93000, 16000, 27493, 93));
+        lr.saveLocomotive(new Locomotive("Ae 8/14", "Electric", 1939, 1955, 210000, 24000, 47906, 68));
+        lr.saveLocomotive(new Locomotive("Class 1020", "Electric", 1941, 1981, 119000, 18000, 21545, 56));
+        lr.saveLocomotive(new Locomotive("E69", "Electric", 1955, 1970, 86000, 8000, 12837, 31));
+        lr.saveLocomotive(new Locomotive("TGVx", "Electric", 1957, 1973, 850000, 80000, 71672, 155));
+        lr.saveLocomotive(new Locomotive("Penn. E44", "Electric", 1960, 1985, 370000, 22000, 37971, 70));
+        lr.saveLocomotive(new Locomotive("Shinkansen Bullet", "Electric", 1966, 2002, 650000, 66000, 66680, 130));
+        lr.saveLocomotive(new Locomotive("E60CP", "Electric", 1973, 1998, 310000, 19000, 38043, 85));
+        lr.saveLocomotive(new Locomotive("TGV", "Electric", 1973, 99999, 750000, 72000, 81664, 155));
+        lr.saveLocomotive(new Locomotive("Class E111", "Electric", 1974, 99999, 390000, 17000, 38016, 85));
+        lr.saveLocomotive(new Locomotive("E656 FS", "Electric", 1975, 1995, 226000, 17000, 37734, 93));
+        lr.saveLocomotive(new Locomotive("Thalys Bullet", "Electric", 1994, 99999, 1000000, 78000, 111756, 186));
+        lr.saveLocomotive(new Locomotive("Eurostar", "Electric", 1994, 99999, 1600000, 65000, 96135, 175));
+        lr.saveLocomotive(new Locomotive("Brenner", "Electric", 1999, 99999, 1250000, 175000, 69292, 140));
+        lr.saveLocomotive(new Locomotive("Mag-Lev TBX-1", "Electric", 2008, 99999, 2500000, 200000, 305609, 280));
     }
 }
