@@ -35,6 +35,9 @@ public class Bootstrap implements Runnable {
         authenticationRepository.addUserWithRole("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
     }
 
+    /**
+     * This method is responsible to add every locomotive available on the simulator to the repository, everytime the simulation starts.
+     */
     public void gameLocomotives() {
         LocomotiveRepository lr = Repositories.getInstance().getLocomotiveRepository();
 
