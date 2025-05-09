@@ -57,6 +57,18 @@ public class Bootstrap implements Runnable {
         lr.saveLocomotive(new Locomotive("Pacific", "Steam", 1908, 1945, 119000, 21000, 62516, 87));
         lr.saveLocomotive(new Locomotive("Class G10", "Steam", 1910, 1939, 98000, 38000, 50521, 50));
         lr.saveLocomotive(new Locomotive("Prairie", "Steam", 1912, 1953, 85000, 11000, 34157, 60));
-        lr.save
+        lr.saveLocomotive(new Locomotive("D16sb", "Steam", 1914, 1934, 65000, 9000, 21024, 45));
+        lr.saveLocomotive(new Locomotive("Class 13H", "Steam", 1917, 1942, 102000, 36000, 46209, 40));
+        lr.saveLocomotive(new Locomotive("USRA", "Steam", 1918, 1942, 90000, 13000, 29993, 40));
+        lr.saveLocomotive(new Locomotive("Mikado", "Steam", 1919, 1950, 133000, 32000, 51072, 55));
+        lr.saveLocomotive(new Locomotive("Class B12", "Steam", 1923, 1939, 146000, 14000, 32407, 71));
+        lr.saveLocomotive(new Locomotive("USRA II", "Steam", 1930, 1948, 98000, 18000, 32236, 45));
+        lr.saveLocomotive(new Locomotive("Class A4 Mallard", "Steam", 1935, 1955, 200000, 19000, 55136, 126));
+        lr.saveLocomotive(new Locomotive("Hudson", "Steam", 1937, 1953, 210000, 25000, 54017, 90));
+        lr.saveLocomotive(new Locomotive("Daylight", "Steam", 1937, 1952, 230000, 30000, 63611, 80));
+        lr.saveLocomotive(new Locomotive("J3A Streamliner", "Steam", 1938, 1955, 255000, 28000, 112234, 103));
+        lr.saveLocomotive(new Locomotive("Big Boy", "Steam", 1941, 1955, 375000, 75000, 84040, 68));
+        lr.saveLocomotive(new Locomotive("T1", "Steam", 1945, 99999, 284000, 28000, 78213, 85));
+        lr.saveLocomotive(new Locomotive("DB 18 201", "Steam", 1998, 99999, 400000, 75000, 144560, 120));
     }
 }
