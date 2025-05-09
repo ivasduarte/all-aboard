@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents a City consisting of a name, map details, a center position,
+ * and a collection of house blocks.
+ */
+
 public class City {
     private final String name;
     private final String mapName;
@@ -11,6 +16,16 @@ public class City {
     private final int centerY;
     private final List<HouseBlock> blocks = new ArrayList<>();
 
+
+    /**
+     * Constructs an instance of the City class, representing a city with a name, a map identifier,
+     * and its center coordinates on the map.
+     *
+     * @param name      Name of the city.
+     * @param mapName   Identifier or name of the map associated with the city.
+     * @param centerX   X-coordinate of the city's center position on the map.
+     * @param centerY   Y-coordinate of the city's center position on the map.
+     */
     public City(String name, String mapName, int centerX, int centerY) {
         this.name = name;
         this.mapName = mapName;
@@ -18,19 +33,53 @@ public class City {
         this.centerY = centerY;
     }
 
+    /**
+     * Retrieves the name of the city.
+     *
+     * @return  Name of the city.
+     */
     public String getName() { return name; }
+
+    /**
+     * Retrieves the name of the map associated with the city.
+     *
+     * @return  Map name.
+     */
     public String getMapName() { return mapName; }
+
+    /**
+     * Retrieves the X-coordinate of the city's center position on the map.
+     *
+     * @return X-coordinate of the city's center position.
+     */
     public int getCenterX() { return centerX; }
+
+    /**
+     * Retrieves the Y-coordinate of the city's center position on the map.
+     *
+     * @return Y-coordinate of the city's center position.
+     */
     public int getCenterY() { return centerY; }
+
+    /**
+     * Retrieves an unmodifiable list of house blocks associated with the city.
+     *
+     * @return an unmodifiable list of {@code HouseBlock} objects representing the house blocks of the city.
+     */
     public List<HouseBlock> getBlocks() { return Collections.unmodifiableList(blocks); }
 
     /**
-     * Adds a house block (manual).
+     * Adds a house block manually to the city's list of blocks.
+     *
+     * @param b the {@code HouseBlock} to be added to the city's collection of house blocks
      */
     public void addBlockManual(HouseBlock b) { blocks.add(b); }
 
     /**
-     * Clears all house blocks (cascade removal).
+     * Clears all house blocks from the city's collection of blocks.
+     *
+     * This method removes all {@code HouseBlock} objects stored in the list of
+     * house blocks associated with the city.
      */
     public void clearBlocks() { blocks.clear(); }
 }
