@@ -9,22 +9,41 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserSession {
-    private User user = null;
+
+    private static UserSession instance;
+
+    private User user;
+
     private Editor currentEditor;
     private Player currentPlayer;
 
     public UserSession() {
         this.user = null;
+        this.currentEditor = null;
+        this.currentPlayer = null;
     }
 
-    public UserSession(User user, Editor currentEditor, Player currentPlayer) {
+    public static UserSession getInstance() {
+        if (instance == null) {
+            instance = new UserSession();
+        }
+        return instance;
+    }
+
+    public void doLogin(User user, Editor editor, Player player) {
         if (user == null) {
             throw new IllegalArgumentException("Argument cannot be null.");
-        }else{
-            this.user = user;
         }
-        this.currentEditor = currentEditor;
-        this.currentPlayer = currentPlayer;
+        this.user = user;
+        this.currentEditor = editor;
+        this.currentPlayer = player;
+    }
+
+    public void doLogout(){
+        this.user = null;
+        this.currentEditor = null;
+        this.currentPlayer = null;
+        instance = null;
     }
 
     public boolean isLoggedIn() {
@@ -33,14 +52,6 @@ public class UserSession {
 
     public boolean isLoggedInWithRole(String roleId) {
         return this.isLoggedIn() ? this.user.hasRole(roleId) : false;
-    }
-
-    public String getUserName() {
-        if (this.isLoggedIn()) {
-            this.user.getName();
-        }
-
-        return null;
     }
 
     public Email getUserId() {
@@ -68,9 +79,11 @@ public class UserSession {
         return currentPlayer;
     }
 
-    public void doLogout(){
-        this.user = null;
-        this.currentEditor = null;
-        this.currentPlayer = null;
+    public void setCurrentEditor(Editor editor){
+        this.currentEditor = editor;
+    }
+
+    public void setCurrentPlayer(Player player){
+        this.currentPlayer = player;
     }
 }
