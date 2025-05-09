@@ -70,5 +70,19 @@ public class Bootstrap implements Runnable {
         lr.saveLocomotive(new Locomotive("Big Boy", "Steam", 1941, 1955, 375000, 75000, 84040, 68));
         lr.saveLocomotive(new Locomotive("T1", "Steam", 1945, 99999, 284000, 28000, 78213, 85));
         lr.saveLocomotive(new Locomotive("DB 18 201", "Steam", 1998, 99999, 400000, 75000, 144560, 120));
+
+        lr.saveLocomotive(new Locomotive("F3A+B", "Diesel", 1945, 1968, 265000, 16000, 52015, 85));
+        lr.saveLocomotive(new Locomotive("Alco PA-1", "Diesel", 1946, 1990, 210000, 16000, 52800, 90));
+        lr.saveLocomotive(new Locomotive("F9", "Diesel", 1949, 1970, 337000, 18000, 63000, 110));
+        lr.saveLocomotive(new Locomotive("GP9", "Diesel", 1954, 1980, 235000, 11000, 48028, 71));
+        lr.saveLocomotive(new Locomotive("GP18", "Diesel", 1958, 1975, 245000, 15000, 55131, 83));
+        lr.saveLocomotive(new Locomotive("V200", "Diesel", 1959, 1985, 160000, 19000, 53878, 87));
+        lr.saveLocomotive(new Locomotive("Class 55 Deltic", "Diesel", 1961, 1981, 480000, 15000, 52155, 100));
+        lr.saveLocomotive(new Locomotive("FP45", "Diesel", 1968, 99999, 366000, 14000, 65740, 106));
+        lr.saveLocomotive(new Locomotive("SD45", "Diesel", 1972, 1994, 280000, 21000, 36009, 65));
+        lr.saveLocomotive(new Locomotive("SDP40", "Diesel", 1973, 1989, 292000, 18000, 61966, 103));
+        lr.saveLocomotive(new Locomotive("Dash-9", "Diesel", 1993, 99999, 478000, 18000, 68410, 70));
+        lr.saveLocomotive(new Locomotive("AMD-103", "Diesel", 1993, 99999, 425000, 25000, 88068, 105));
+        lr.saveLocomotive(new Locomotive("Class 232", "Diesel", 1997, 99999, 492000, 35000, 72625, 75));
     }
 }

@@ -46,7 +46,7 @@ public class LocomotiveRepository {
         LocalDate scenarioEndDate = scenarioRestrictions.getEndDate();
 
         for (int i = 0; i < locomotives.size(); i++) {
-            if (locomotives.get(i).getStartYear() >= scenarioStartDate.getYear() && locomotives.get(i).getEndYear() <= scenarioEndDate.getYear()) {
+            if (locomotives.get(i).getStartYear() <= scenarioStartDate.getYear() || (locomotives.get(i).getEndYear() >= scenarioEndDate.getYear() && locomotives.get(i).getEndYear() != 99999)) {
                 availableLocomotives.add(locomotives.get(i));
             }
         }
