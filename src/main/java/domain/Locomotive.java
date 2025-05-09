@@ -107,6 +107,10 @@ public class Locomotive {
         return startYear;
     }
 
+    public int getEndYear() {
+        return endYear;
+    }
+
     /**
      * This method sets the locomotive's route
      *

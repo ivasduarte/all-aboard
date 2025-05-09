@@ -42,22 +42,12 @@ public class LocomotiveRepository {
         List<Scenario> scenarios = Repositories.getInstance().getScenarioRepository().getScenarioList();
         Scenario scenario = scenarios.get(scenarioId);
         Restrictions scenarioRestrictions = scenario.getRestrictions();
-        List<String> availableLocomotiveTypes = scenarioRestrictions.getLocomotiveTypes();
         LocalDate scenarioStartDate = scenarioRestrictions.getStartDate();
-
-        List<Locomotive> validTypeLocomotives = new ArrayList<>();
+        LocalDate scenarioEndDate = scenarioRestrictions.getEndDate();
 
         for (int i = 0; i < locomotives.size(); i++) {
-            for (int j = 0; j < availableLocomotiveTypes.size(); j++) {
-                if (locomotives.get(i).getLocomotiveFuelType().equals(availableLocomotiveTypes.get(j))) {   // this line has a high chance of being wrong
-                    validTypeLocomotives.add(locomotives.get(i));
-                }
-            }
-        }   // method needs further review
-
-        for (int i = 0; i < validTypeLocomotives.size(); i++) {
-            if (validTypeLocomotives.get(i).getStartYear() <= scenarioStartDate.getYear()) {
-                availableLocomotives.add(validTypeLocomotives.get(i));
+            if (locomotives.get(i).getStartYear() >= scenarioStartDate.getYear() && locomotives.get(i).getEndYear() <= scenarioEndDate.getYear()) {
+                availableLocomotives.add(locomotives.get(i));
             }
         }
 
@@ -65,14 +55,19 @@ public class LocomotiveRepository {
     }
 
     /**
-     * This method is responsible to get a locomotive by its serial number.
+     * This method is responsible to get a specific locomotive by its model.
      *
-     * @param serialNumber The locomotive serial number
+     * @param locomotiveModel locomotive model
      *
-     * @return locomotive
+     * @return corresponding locomotive
      */
-    public Locomotive getLocomotiveBySerialNumber(int serialNumber) {
-        return availableLocomotives.get(serialNumber);
+    public Locomotive getLocomotiveByModel(String locomotiveModel) {
+        for (Locomotive locomotive : availableLocomotives) {
+            if (locomotive.getLocomotiveModel().equalsIgnoreCase(locomotiveModel)) {
+                return locomotive;
+            }
+        }
+        throw new IllegalArgumentException("Locomotive with model " + locomotiveModel + " doesn't exist.");
     }
 
     /**

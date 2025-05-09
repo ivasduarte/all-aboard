@@ -15,20 +15,20 @@ public class BuyLocomotiveController {
     /**
      * This method will be responsible to add the bought locomotive to the repository.
      *
-     * @param serialNumber serial number of the locomotive
+     * @param locomotiveModel locomotive model
      *
      * @return Will show a success message if it is possible to buy the locomotive. Otherwise, it will show a message related to the error that occurred.
      */
-    public String buyLocomotive(int serialNumber) {
+    public String buyLocomotive(String locomotiveModel) {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
         Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
 
         // validate player budget
 
-        Locomotive locomotive = locomotiveRepository.getLocomotiveBySerialNumber(serialNumber);
+        Locomotive locomotive = locomotiveRepository.getLocomotiveByModel(locomotiveModel);
         locomotiveRepository.save(locomotive);
 
-        return "Locomotive " + serialNumber + " bought successfully.";
+        return "Locomotive " + locomotiveModel + " bought successfully.";
     }
 
     /**

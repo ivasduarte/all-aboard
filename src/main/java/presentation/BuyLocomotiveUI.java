@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class BuyLocomotiveUI implements Runnable {
     private BuyLocomotiveController ctrl = new BuyLocomotiveController();
 
-    private int serialNumber;
+    private String locomotiveModel;
 
     /**
      * This method will be responsible to show the UI to user.
@@ -18,10 +18,10 @@ public class BuyLocomotiveUI implements Runnable {
         Scanner sc = new Scanner(System.in);
 
         getLocomotiveController().getLocomotiveRepository().displayAvailableLocomotives();
-        System.out.println("Select the locomotive you want to buy: ");
-        int serialNumber = sc.nextInt() - 1;
+        System.out.println("Introduce the locomotive you want to buy: ");
+        String locomotiveModel = sc.nextLine();
 
-        String result = ctrl.buyLocomotive(serialNumber);
+        String result = ctrl.buyLocomotive(locomotiveModel);
 
         if (result.startsWith("ERROR")) {
             showError(result);
@@ -53,7 +53,7 @@ public class BuyLocomotiveUI implements Runnable {
      * This method will be responsible to show the success or error message to the Player.
      */
     public void submitData() {
-        Optional<String> result = Optional.ofNullable(ctrl.buyLocomotive(serialNumber));
+        Optional<String> result = Optional.ofNullable(ctrl.buyLocomotive(locomotiveModel));
 
         if (result.isPresent()) {
             System.out.println("\nLocomotive successfully bought!");
