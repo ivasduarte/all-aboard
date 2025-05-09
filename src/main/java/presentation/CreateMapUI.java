@@ -17,7 +17,7 @@ public class CreateMapUI implements Runnable{
         System.out.print("Enter the name of the map: ");
         String name = sc.nextLine();
 
-        System.out.print("\nEnter the width of the map: ");
+        System.out.print("Enter the width of the map: ");
         do{
             width = sc.nextInt();
             if (width <= 0 || width > 256){
@@ -25,7 +25,7 @@ public class CreateMapUI implements Runnable{
             }
         } while (width <= 0 || width > 256);
 
-        System.out.print("\nEnter the height of the map: ");
+        System.out.print("Enter the height of the map: ");
         do{
             height = sc.nextInt();
             if (height <= 0 || height > 256){
