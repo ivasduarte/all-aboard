@@ -19,8 +19,8 @@ public class Station {
     private static final int MAX_SLOTS = 7;
     private List<Building> buildings;
 
-
     public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
+    public final static int[] typesSizes = {3, 4, 5};
 
     public Station(int mapID, int scenarioID, int positionX, int positionY, String stationType)
     {
@@ -58,6 +58,10 @@ public class Station {
 
     }
 
+    public boolean ValidatePosition(Map map, int X, int Y, int size)
+    {
+        return X - size >= 0 && X <= map.getWidth() + size && Y - size >= 0 && Y <= map.getHeight() + size;
+    }
 
     public static void IncreaseTotalStations()
     {
@@ -85,7 +89,6 @@ public class Station {
     }
     public int getStationID() { return stationID; }
     public String getStationType() {return stationType;}
-    public String[] getStationTypes() {return stationTypes;}
 
     public void setMapID(int mapID) {
         this.mapID = mapID;
@@ -98,16 +101,6 @@ public class Station {
     }
     public void setStationID(int stationID) { this.stationID = stationID; }
     public void setStationType(String stationType) {this.stationType = stationType;}
-
-    public boolean validatePosition(Map map) {
-        if (positionX < 0 || positionX > map.getWidth()) {
-            return false;
-        }
-        if (positionY < 0 || positionY > map.getHeight()) {
-            return false;
-        }
-        return true;
-    }
 
     public boolean isAvailable() {
         return buildings.size() < MAX_SLOTS;
