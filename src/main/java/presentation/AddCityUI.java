@@ -67,10 +67,10 @@ public class AddCityUI implements Runnable {
         } while (centerError != CenterError.OK);
 
         City city = ctrl.createCity(cityName, mapName, centerX, centerY);
-        System.out.println("City '" + city.getName() + "'successfully created on map '" + city.getMapName() + "'.");
+        System.out.println("City '" + city.getName() + "' successfully created on map '" + city.getMapName() + "'.");
 
         do {
-            System.out.print("Choose block mode (M=Manual, A=Auto): ");
+            System.out.print("\nChoose block mode (M=Manual, A=Auto): ");
             String line = sc.nextLine().trim().toUpperCase();
             blockMode = line.isEmpty() ? ' ' : line.charAt(0);
         } while (blockMode != 'M' && blockMode != 'A');
@@ -114,12 +114,12 @@ public class AddCityUI implements Runnable {
             ctrl.assignBlocksAuto(city, n, sigma);
             System.out.println("Blocks assigned automatically.");
         }
-        System.out.println("City '" + city.getName() + "'successfully created on map '" + city.getMapName() + "'.");
+        System.out.println("City '" + city.getName() + "' successfully created on map '" + city.getMapName() + "'.");
     }
 
     @Override
     public void run() {
-        System.out.println("\n\n------------------------ Create City ------------------------");
+        System.out.println("\n\n------------------------ Add City ------------------------");
         getInput();
     }
 }
