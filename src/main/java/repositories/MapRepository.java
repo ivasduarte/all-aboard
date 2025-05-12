@@ -78,39 +78,6 @@ public class MapRepository{
 
 
     /**
-     * Retrieves a map from the repository based on the specified ID.
-     *
-     * This method checks if the provided ID is within the valid range (greater than or equal to 0
-     * and less than the total number of maps). If the ID is valid, the corresponding map is returned;
-     * otherwise, null is returned.
-     *
-     * @param mapID The ID of the map to retrieve. Must be a non-negative integer and less than the
-     *              size of the map collection.
-     * @return The Map instance corresponding to the provided ID, or null if the ID is invalid.
-     */
-    public Map getMapById(int mapID) {
-        if (mapID >= 0 && mapID < maps.size()) {
-            return maps.get(mapID);
-        }
-        return null;
-    }
-
-
-    /**
-     * Displays the list of maps stored in the repository.
-     *
-     * Each map's name is printed to the console, prefixed with an index indicating
-     * its position in the list. The indices start from 1. The method iterates through
-     * the internal collection of maps and retrieves their names for display purposes.
-     */
-    public void displayMapList() {
-        for (int i = 0; i < maps.size(); i++) {
-            System.out.println((i+1) + ". " + maps.get(i).getMapName());
-        }
-    }
-
-
-    /**
      * Retrieves a map from the repository by its name.
      *
      * This method searches through the collection of maps in the repository and

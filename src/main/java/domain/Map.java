@@ -9,8 +9,6 @@ public class Map {
     private String name;
     private int width;
     private int height;
-    private char[][] matrix;
-    private Editor createdBy;
 
 
     /**
@@ -26,7 +24,6 @@ public class Map {
         this.name = name;
         this.width = width;
         this.height = height;
-        this.matrix = new char[height][width];
         validateName();
         validateSize();
     }
@@ -91,26 +88,6 @@ public class Map {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException("Map dimensions must be positive.");
         }
-    }
-
-
-    /**
-     * Sets the Editor who created the map.
-     *
-     * @param editor The Editor instance representing the creator of the map.
-     */
-    public void setCreatedBy(Editor editor) {
-        this.createdBy = editor;
-    }
-
-
-    /**
-     * Retrieves the Editor who created the map.
-     *
-     * @return The Editor instance representing the creator of the map.
-     */
-    public Editor getCreatedBy() {
-        return createdBy;
     }
 
 
