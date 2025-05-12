@@ -5,56 +5,84 @@ skinparam shadowing false
 
 autonumber
 
-
 actor "Editor" as Editor
-participant ":AddCityUI" as UI
-participant ":AddCityController" as CTRL
-participant ":Repositories" as RepositorySingleton
+participant ":CreateCityUI" as UI
+participant ":CreateCityController" as CTRL
+participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
-participant "cityRepository\n:CityRepository" as cityRepository
+participant "mapRepo\n:MapRepository" as mapRepo
+participant "cityRepo\n:CityRepository" as cityRepo
 participant ":City" as City
-
+participant ":HouseBlock" as HouseBlock
 
 activate Editor
 
-Editor -> UI : asks to add a new city
+Editor -> UI : requests to create a new city
 
 activate UI
 UI -> CTRL** : create
 
-UI -> Editor: requests to select the map
-Editor -> UI: selects the map
-UI -> Editor : requests data(cityName, positionX, positionY, houseBlocks)
-Editor -> UI : types requested data (cityName, positionX, positionY, houseBlocks)
-UI -> CTRL : submitData(mapID, cityName, positionX, positionY, houseBlocks)
+UI -> Editor : prompt for map name and city data
+Editor -> UI : provides map name, city name, and coordinates
+UI -> CTRL : validateNameMap(name, map)
 
 activate CTRL
 
-CTRL -> RepositorySingleton : getInstance()
-activate RepositorySingleton
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : repositories
+deactivate reps
 
-RepositorySingleton --> CTRL: repositories
-deactivate RepositorySingleton
+CTRL -> PLAT : getMapRepository()
+activate PLAT
+PLAT --> CTRL : mapRepository
+deactivate PLAT
 
 CTRL -> PLAT : getCityRepository()
 activate PLAT
-
-PLAT --> CTRL: cityRepository
+PLAT --> CTRL : cityRepository
 deactivate PLAT
 
-CTRL -> cityRepository : addCity (mapID, city name, position X,\nposition Y, number of house blocks)
-activate cityRepository
+CTRL -> mapRepo : getMap(mapName)
+activate mapRepo
+mapRepo --> CTRL : Optional<Map>
+deactivate mapRepo
 
-cityRepository -> City : create(mapID, cityName,\npositionX, positionY, houseBlocks)
-activate City
+CTRL -> cityRepo : isNameUnique(name, map)
+activate cityRepo
+cityRepo --> CTRL : isUnique
+deactivate cityRepo
 
-City --> cityRepository : isSuccessful
-deactivate City
+CTRL --> UI : validationResult
+deactivate CTRL
 
-cityRepository --> CTRL : isSuccessful
-deactivate cityRepository
+UI -> CTRL : createCity(name, map, x, y)
+activate CTRL
 
-CTRL --> UI : isSuccessful
+CTRL -> City** : create(name, map, x, y)
+
+CTRL -> cityRepo : add(city)
+activate cityRepo
+deactivate cityRepo
+
+CTRL -> UI : city
+deactivate CTRL
+
+UI -> CTRL : assignBlocksAuto(city, blockCount, sigma)
+activate CTRL
+
+loop for each block to add
+  CTRL -> HouseBlock** : create(x, y) 
+  CTRL -> cityRepo : isBlockPositionUnique(map, block)
+  activate cityRepo
+  cityRepo --> CTRL : isUnique
+  deactivate cityRepo
+  CTRL -> City : addBlockManual(block)
+  activate City
+  deactivate City
+end
+
+CTRL --> UI : success
 deactivate CTRL
 
 UI --> Editor : display result

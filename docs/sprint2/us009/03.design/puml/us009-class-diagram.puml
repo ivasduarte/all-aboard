@@ -1,107 +1,118 @@
 @startuml
-skinparam packageStyle rectangle
-skinparam shadowing false
-skinparam linetype polyline
 skinparam classAttributeIconSize 0
 
-'title: Class diagram for Buy a Locomotive (US009)
-
 class ApplicationSession {
-    + static getInstance()
-    + getCurrentSession()
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +getInstance(): ApplicationSession{static}
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
 }
 
 class UserSession {
-    + getCurrentPlayer(): Player
+    -instance: UserSession{static}
+    -user: UserSession
+    +getInstance(): UserSession{static}
 }
 
 class Player {
-    - String name
-    - String ID
-    - String password
-    - double budget
-    + getBudget(): double
-    + updateBudget(double amount)
+    -name: String
+    -ID: String
+    -password: String
+    -budget: double
+    +getBudget(): double
+    +updateBudget(amount: double): void
 }
 
 class Locomotive {
-    - String serialNumber
-    - LocomotiveType locomotiveType
-    - int power
-    - int acceleration
-    - int topSpeed
-    - int startYear
-    - double acquisitionPrice
-    - double fuelCostPerYear
-    - double maintenanceCostPerYear
-    - String acquisitionType
-    - Date dateOfPurchase
-    + getSerialNumber(): String
-    + getLocomotiveType(): LocomotiveType
-    + getAcquisitionPrice(): double
-    + getDateOfPurchase(): Date
+    -locomotiveModel: String
+    -fuelType: String
+    -speed: int
+    -startYear: int
+    -endYear: int
+    -price: int
+    -fuelCost: int
+    -maintenanceCost: int
+    -route: List<Station>
+    +Locomotive(locomotiveModel, fuelType, startYear, endYear, price, maintenanceCost, fuelCost, speed)
+    +getLocomotiveModel(): String
+    +getLocomotiveFuelType(): String
+    +getPrice(): double
+    +getStartYear(): int
+    +getEndYear(): int
+    +setRoute(route: List<Station>): void
 }
 
-enum LocomotiveType {
-    STEAM
-    DIESEL
-    ELECTRIC
+class Station {
 }
 
 class LocomotiveRepository {
-    - List<Locomotive> locomotives
-    + getLocomotiveList(): List<Locomotive>
-    + getLocomotiveBySerialNumber(String serialNumber): Locomotive
-    + saveLocomotive(Locomotive locomotive)
+    -locomotives: List<Locomotive>
+    -availableLocomotives: List<Locomotive>
+    -playerLocomotives: List<Locomotive>
+    +saveLocomotive(locomotive: Locomotive): void
+    +save(locomotive: Locomotive): void
+    +getAvailableLocomotives(scenarioId: int): List<Locomotive>
+    +getLocomotiveByModel(model: String): Locomotive
+    +displayAvailableLocomotives(): void
 }
 
 class Repositories {
-    - Repositories()
-    + getInstance(): Repositories
-    + getLocomotiveRepository(): LocomotiveRepository
+    -instance: Repositories{static}
+    -locomotiveRepository: LocomotiveRepository
+    -scenarioRepository: ScenarioRepository
+    +getInstance(): Repositories{static}
+    +getLocomotiveRepository(): LocomotiveRepository
+    +getScenarioRepository(): ScenarioRepository
 }
 
 class Scenario {
-    - String name
-    - List<LocomotiveType> availableLocomotiveTypes
-    - Date startDate
-    - Date endDate
-    + getAvailableLocomotiveTypes(): List<LocomotiveType>
-    + isLocomotiveTypeAvailable(LocomotiveType type): boolean
+    -restrictions: Restrictions
+    +getRestrictions(): Restrictions
+}
+
+class Restrictions {
+    -startDate: LocalDate
+    -endDate: LocalDate
+    +getStartDate(): LocalDate
+    +getEndDate(): LocalDate
+}
+
+class ScenarioRepository {
+    -scenarios: List<Scenario>
+    +getScenarioList(): List<Scenario>
 }
 
 class BuyLocomotiveController {
-    + getAvailableLocomotives(Date currentDate): List<Locomotive>
-    + buyLocomotive(String serialNumber): boolean
-    - checkPlayerBudget(double price): boolean
+    -locomotiveRepository: LocomotiveRepository
+    +buyLocomotive(locomotiveModel: String): String
+    +getLocomotiveRepository(): LocomotiveRepository
 }
 
 class BuyLocomotiveUI {
+    +run(): void
 }
-
-BuyLocomotiveUI ..> BuyLocomotiveController
-BuyLocomotiveController ..> Repositories : accesses
-BuyLocomotiveController ..> LocomotiveRepository : uses
-BuyLocomotiveController ..> Locomotive : selects
-BuyLocomotiveController ..> ApplicationSession : gets current session
-BuyLocomotiveController ..> Player : gets and updates budget
 
 ApplicationSession -> ApplicationSession : instance
 ApplicationSession --> "1" UserSession : userSession
 
 Repositories -> Repositories : instance
-Repositories --> "1" LocomotiveRepository : locomotiveRepository
 
-Player "1" -- "*" Locomotive : purchases >
-Locomotive "1" -- "1" LocomotiveType : type
+BuyLocomotiveUI ..> BuyLocomotiveController
+BuyLocomotiveController ..> Repositories
+BuyLocomotiveController ..> LocomotiveRepository : uses
+BuyLocomotiveController ..> Locomotive : selects
+BuyLocomotiveController ..> ApplicationSession
+BuyLocomotiveController ..> Player : gets budget
 
-note bottom of LocomotiveRepository
-    Manages available locomotives
-end note
+Locomotive "*" -- "*" Station : has route
 
-note right of Scenario
-    Contains locomotive type restrictions 
-    for the current game scenario
-end note
+Repositories --> "1" LocomotiveRepository
+Repositories --> "1" ScenarioRepository
+
+Player "1" -- "*" Locomotive : purchases
+
+Scenario "1" -- "1" Restrictions : has
+ScenarioRepository "1" -- "*" Scenario : manages
 
 @enduml

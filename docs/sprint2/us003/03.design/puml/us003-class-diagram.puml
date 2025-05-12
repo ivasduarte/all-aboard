@@ -1,90 +1,113 @@
 @startuml
-'skinparam monochrome true
-skinparam packageStyle rectangle
-skinparam shadowing false
-skinparam linetype polyline
-'skinparam linetype orto
-
 skinparam classAttributeIconSize 0
 
-'left to right direction
-
-class ApplicationSession{
-    + static getInstance()
-    + getCurrentSession()
+class ApplicationSession {
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +getInstance(): ApplicationSession{static}
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
 }
 
-class UserSession{
+class UserSession {
+    -instance: UserSession{static}
+    -user: UserSession
+    +getInstance(): UserSession{static}
 }
 
 class Editor {
-    - String name
-    - String ID
-    - String password
-    + getEditorName()
-    + getEditorID()
-    + getEditorPassword()
+    -name: String
+    -ID: String
+    -password: String
+    +getEditorName(): String
+    +getEditorID(): String
+    +getEditorPassword(): String
 }
 
 class City {
-    - String mapID
-    - String name
-    - String cityID
-    - int posX
-    - int posY
-    - int numHouseBlocks
-    + City(mapID, name, posX, posY, numHouseBlocks)
-    + getCityName()
-    + getCityPositionX()
-    + getCityPositionY()
-    + getCityNumHouseBlocks()
-    + getCityMapID()
+    -name: String
+    -mapName: String
+    -centerX: int
+    -centerY: int
+    -blocks: List<HouseBlock>
+    +City(name, mapName, centerX, centerY)
+    +getName(): String
+    +getMapName(): String
+    +getCenterX(): int
+    +getCenterY(): int
+    +getBlocks(): List<HouseBlock>
+    +addBlockManual(block: HouseBlock): void
+    +clearBlocks(): void
 }
 
-
+class HouseBlock {
+    -x: int
+    -y: int
+    +HouseBlock(x, y)
+    +getX(): int
+    +getY(): int
+    +equals(obj: Object): boolean
+    +hashCode(): int
+}
 
 class CityRepository {
-    - List <City>
-    + getCitiesList()
+    -cities: List<City>
+    +add(city: City): void
+    +getCities(): List<City>
+    +isNameUnique(name: String, map: String): boolean
+    +existsAtPosition(map: String, x: int, y: int): boolean
+    +isBlockPositionUnique(map: String, block: HouseBlock): boolean
 }
 
+class MapRepository {
+    +getMap(name: String): Optional<Map>
+}
 
 class Repositories {
-    - Repositories()
-    + getInstance() : repositories
-    + getCityRepository()
-
+    -instance: Repositories{static}
+    -cityRepository: CityRepository
+    -mapRepository: MapRepository
+    +getInstance(): Repositories{static}
+    +getCityRepository(): CityRepository
+    +getMapRepository(): MapRepository
 }
 
-class AddCityController{
-    + addCity(cityRepository)
-    + getCityList()
-    + getCityRepository
+class CreateCityController {
+    -mapRepo: MapRepository
+    -cityRepo: CityRepository
+    +validateNameMap(name: String, map: String): NameMapError
+    +validateCenter(name: String, map: String, x: int, y: int): CenterError
+    +validateBlock(map: String, block: HouseBlock): BlockError
+    +createCity(name: String, map: String, x: int, y: int): City
+    +addBlockManual(city: City, block: HouseBlock): boolean
+    +assignBlocksAuto(city: City, count: int, sigma: double): void
 }
 
-class AddCityUI {
+class CreateCityUI {
+    +run(): void
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-AddCityUI .> AddCityController
+CreateCityUI ..> CreateCityController
+CreateCityController ..> City : creates
+CreateCityController ..> HouseBlock : validates
+CreateCityController ..> CityRepository : uses
+CreateCityController ..> MapRepository : uses
 
-AddCityController .> Repositories : repositories
-
-Repositories -> "1" cityRepository
-AddCityController ..> City
-AddCityController ..> cityRepository : cityRepository
-
+Repositories --> "1" CityRepository
+Repositories --> "1" MapRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
-AddCityController ..> ApplicationSession
-AddCityController ..> UserSession
+CreateCityController ..> ApplicationSession
+CreateCityController ..> UserSession
 
-cityRepository "1" --> "*" City : Cities
+City "1" *-- "*" HouseBlock : contains
+CityRepository "1" --> "*" City : manages
 
-City--> Editor : createdBy
-
+City --> Map : exists on
+City --> Editor: created by
 
 @enduml
