@@ -1,69 +1,103 @@
 @startuml
 skinparam classAttributeIconSize 0
 
+class Scenario {
+    -name: String
+    -restrictions: Restrictions
+    -map: Map
+    +Scenario(name: String, restrictions: Restrictions, map: Map)
+    +getScenarioName(): String
+    +getRestrictions(): Restrictions
+    +getMap(): Map
+    +validateName(): boolean
+    +validateRestrictions(): boolean
+    +hasValidMap(): boolean
+    +isValid(): boolean
+    +toString(): String
+}
+
+interface Runnable <<interface>>{
+    +run(): void
+}
+
 class CreateScenarioUI {
-  +getInput(): void
-  +showSuccess(message: String): void
-  +showError(message: String): void
+    -ctrl: CreateScenarioController
+    -scenarioName: String
+    -restrictions: Restrictions
+    +getInput(): void
+    +run(): void
+    +submitData(): void
+    +showError(message: String): void
+    +showSuccess(message: String): void
 }
 
 class CreateScenarioController {
-  +createScenario(name: String, restrictions:\nRestrictions, mapId: int): void
+    -scenarioRepository: ScenarioRepository
+    +createScenario(name: String, restrictions: Restrictions, map: Map): String
+    +getScenarioList(): List<Scenario>
 }
 
 class ScenarioRepository {
-    -List <Scenario>
-    +getScenarioList()
-
-    +save(scenario: Scenario): void
+    -scenarios: List<Scenarios>
+    +ScenarioRepository()
+    +add(scenario: Scenario): void
+    +validateScenario(scenario: Scenario): boolean
+    +existsByName(name: String): boolean
+    +getScenarioList(): List<Scenario>
 }
 
 class Editor {
     -name: String
     -ID: String
     -password: String
-    +getEditorName(): void
-    +getEditorID(): void
-    +getEditorPassword(): void
-    +createScenario(name: String, restrictions:\nRestrictions, map: Map): Scenario
+    +Editor(name: String, ID: String, password: String)
+    +getEditorName(): String
+    +getPassword(): String
+    +getID(): String
+    +createScenario(name: String, restrictions: Restrictions, map: Map): Scenario
 }
 
-class Scenario {
-  -name: String
-  -restrictions: Restrictions
-  -map: Map
-
-  +validateName(): void
-  +validateRestrictions(): void
-}
 
 class Map {
     -name: String
     -width: int
     -height: int
     +Map(name, width, height)
-    +getMapName()
-    +validateName()
-    +validateSize()
+    +getMapName(): String
+    +getWidth(): int
+    +getHeight(): int
+    +validateName(): void
+    +validateSize(): void
+    +toString(): String
 }
 
 class Repositories {
-    -Repositories()
-    +getInstance() : repositories
-    +getScenarioRepository()
+    -instance: Repositories{static}
+    -scenarioRepository: ScenarioRepository
+    +Repositories()
+    +getInstance(): Repositories{static}
+    +getScenarioRepository(): ScenarioRepository
 }
 
 class ApplicationSession {
-    +getInstance() : static
-    +getCurrentSession()
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +ApplicationSession()
+    +getInstance(): ApplicationSession{static}
 }
 
-class UserSession {}
+class UserSession {
+    -instance: UserSession{static}
+    -user: UserSession
+    +UserSession()
+    +getInstance(): UserSession{static}
+}
 
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
+CreateScenarioController ..|> Runnable
 CreateScenarioUI .> CreateScenarioController
 CreateScenarioController .> Repositories : repositories
 
