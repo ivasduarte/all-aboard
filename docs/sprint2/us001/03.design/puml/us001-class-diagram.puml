@@ -1,25 +1,46 @@
 @startuml
 skinparam classAttributeIconSize 0
 
+class Map {
+    -name: String
+    -width: int
+    -height: int
+    +Map(name, width, height)
+    +getMapName(): String
+    +getWidth(): int
+    +getHeight(): int
+    +validateName(): void
+    +validateSize(): void
+    +toString(): String
+}
+
 class CreateMapUI {
     -controller: CreateMapController
-    -message: String
-    -map: Map
+    -mapRepository: MapRepository
+    -mapName: String
+    -width: int
+    -height: int
+    +getController(): CreateMapController
+    +getMapRepository(): MapRepository
+    +run(): void
     +getInput(): void
-    +MapCreationResult(message, map)
-    +showSuccess(): void
-    +showError(): void
+    +requestMapName(): String
+    +requestWidth(): int
+    +requestHeight(): int
+    +submitData(): void
 }
 
 class CreateMapController {
-    +createMap(name, width, height): CreateMapUI.MapCreationResult
+    +createMap(name, width, height): Map
 }
 
 class MapRepository {
     -maps: List <Map>
-    +getMapList()
-    +save(map): void
-    +existsByName(): boolean
+    +add(map: Map): void
+    +validateMap(map: Map): boolean
+    +existsByName(name: String): boolean
+    +getMapList(): List<Map>
+    +getMap(name: String): Optional<Map>
 }
 
 class Editor {
@@ -27,57 +48,47 @@ class Editor {
     -ID: String
     -password: String
     +Editor(name, id, password)
-    +getName()
-    +getID()
-    +getPassword()
+    +getEditorName(): String
+    +getPassword(): String
+    +getID(): String
 }
-
-class Map {
-    -name: String
-    -width: int
-    -height: int
-    +Map(name, width, height)
-    +getMapName(): String
-    +validateName(): void
-    +validateSize(): void
-}
-
 
 class Repositories {
     -instance: Repositories{static}
     -mapRepository: MapRepository
     +Repositories()
-    +getInstance(): repositories
-    +getMapRepository()
+    +getInstance(): Repositories
+    +getMapRepository(): MapRepository
 }
 
 class ApplicationSession {
     -instance: ApplicationSession{static}
     -userSession: UserSession
-    +getInstance(): static
-    +getCurrentSession()
-    +setUserSession()
+    +getInstance(): ApplicationSession{static}
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
 }
 
-class UserSession {}
+class UserSession {
+    -instance: UserSession{static}
+    -user: UserSession
+    +getInstance(): UserSession{static}
+}
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
 CreateMapUI .> CreateMapController
-CreateMapController .> Repositories : repositories
-
-Repositories -> "1" MapRepository
 CreateMapController ..> Map
-CreateMapController ..> MapRepository : mapRepository
-
-ApplicationSession --> "1" UserSession : userSession
-
 CreateMapController ..> ApplicationSession
 CreateMapController ..> UserSession
+CreateMapController ..> MapRepository : mapRepository
+
+Repositories --> "1" MapRepository
+
+ApplicationSession --> "1" UserSession : userSession
+Map --> Editor : createdBy
 
 mapRepository "1" --> "*" Map
-
-Map --> Editor : createdBy
 
 @enduml
