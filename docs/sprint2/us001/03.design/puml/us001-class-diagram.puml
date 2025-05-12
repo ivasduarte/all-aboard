@@ -14,6 +14,10 @@ class Map {
     +toString(): String
 }
 
+interface Runnable <<interface>>{
+    +run(): void
+}
+
 class CreateMapUI {
     -controller: CreateMapController
     -mapRepository: MapRepository
@@ -78,6 +82,7 @@ class UserSession {
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
+CreateMapUI ..|> Runnable
 CreateMapUI .> CreateMapController
 CreateMapController ..> Map
 CreateMapController ..> ApplicationSession
