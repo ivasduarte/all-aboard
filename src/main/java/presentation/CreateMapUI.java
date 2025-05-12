@@ -32,16 +32,6 @@ public class CreateMapUI implements Runnable {
         return controller;
     }
 
-
-    /**
-     * Retrieves the instance of {@code MapRepository} associated with this class.
-     *
-     * @return  An instance of {@code MapRepository} used to manage and access the maps.
-     */
-    private MapRepository getMapRepository() {
-        return mapRepository;
-    }
-
     /**
      * Executes the main process of creating a map by interacting with the user interface.
      *
