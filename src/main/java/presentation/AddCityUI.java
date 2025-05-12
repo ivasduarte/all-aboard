@@ -26,16 +26,12 @@ import java.util.Scanner;
 public class AddCityUI implements Runnable {
     private final CreateCityController ctrl = new CreateCityController();
     private final DisplayMapController controller = new DisplayMapController();
-    private City city;
     private String mapName;
     private String cityName;
     private int centerX;
     private int centerY;
     private char blockMode;
     private int houseBlocks;
-    private HouseBlock[] blocks;
-    private int n;
-    private double sigma;
 
 
     /**
