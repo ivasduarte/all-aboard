@@ -14,7 +14,7 @@ Editor -> UI : asks to add an industry
 activate UI
 
 create ":AddIndustryController" as CTRL
-UI --> CTRL : create
+UI -> CTRL : create()
 
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
@@ -23,54 +23,58 @@ participant "industryRepository\n:IndustryRepository" as industryRepository
 UI --> Editor : shows a list of the available maps
 deactivate UI
 
-Editor -> UI : selects the map
+Editor -> UI : selects a map from the list
 activate UI
 
 UI --> Editor : shows a list of the available scenarios
 deactivate UI
 
-Editor -> UI : selects the scenario
+Editor -> UI : selects a scenario from the list
 activate UI
-UI --> Editor : requests the position XY
+
+UI --> Editor : asks to introduce the position the map will take place
 deactivate UI
 
-Editor -> UI : inserts the position
+Editor -> UI : introduces the respective position
 activate UI
-UI --> Editor : shows a list of the type of industries available
+
+UI --> Editor : shows a list of the available types of industries
 deactivate UI
 
-Editor -> UI : selects the type of industry
+Editor -> UI : selects a type of industry
 activate UI
 
-UI --> CTRL : addIndustry(mapID, scenarioID, position XY, type of industry)
+UI -> CTRL : submitData(mapId, scenarioId, positionX, positionY, industryType)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
 activate RepositorySingleton
+
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
 CTRL -> PLAT : getIndustryRepository()
 activate PLAT
+
 PLAT --> CTRL : industryRepository
 deactivate PLAT
 
-CTRL -> industryRepository : addIndustry(mapID, scenarioID, position XY, type of industry)
+CTRL -> industryRepository : addIndustry(mapId, scenarioId, positionX, positionY, industryType)
 activate industryRepository
 
-create "industry\n:Industry" as Industry
-industryRepository -> Industry : create()
+create "industry\n:Industry" as industry
+industryRepository -> industry : create()
 
-industryRepository -> industryRepository : verifyIfExistsAndSave(mapID, scenarioID, position XY, type of industry)
+industryRepository -> industryRepository : verifyIfExistsAndSave(mapId, scenarioId, positionX, positionY, industryType)
 
 industryRepository --> CTRL : industryData
 deactivate industryRepository
 
 CTRL --> UI : industryData
-deactivate CTRL
-
-UI --> Editor : displays operation success and industryData
 deactivate UI
+
+UI --> Editor : shows success message
+deactivate Editor
 
 deactivate Editor
 
