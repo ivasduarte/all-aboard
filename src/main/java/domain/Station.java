@@ -60,7 +60,10 @@ public class Station {
 
     public boolean ValidatePosition(Map map, int X, int Y, int size)
     {
-        return X - size >= 0 && X <= map.getWidth() + size && Y - size >= 0 && Y <= map.getHeight() + size;
+        if(size % 2 != 0)
+            return X - size >= 0 && X <= map.getWidth() + size && Y - size >= 0 && Y <= map.getHeight() + size;
+        else
+            return X - size >= 0 && X <= map.getWidth() + size + 1 && Y - size >= 0 && Y <= map.getHeight() + size + 1;
     }
 
     public static void IncreaseTotalStations()
@@ -89,6 +92,16 @@ public class Station {
     }
     public int getStationID() { return stationID; }
     public String getStationType() {return stationType;}
+    public int getStationTypeID()
+    {
+        for(int i = 0; i < stationTypes.length; i++)
+        {
+            if(stationType.equalsIgnoreCase(stationTypes[i]))
+                return i;
+        }
+
+        return 0;
+    }
 
     public void setMapID(int mapID) {
         this.mapID = mapID;
