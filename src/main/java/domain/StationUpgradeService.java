@@ -32,7 +32,7 @@ public class StationUpgradeService {
 
         handleReplacement(existingBuildings, buildingType);
 
-        return station.addBuilding(building, currentYear);
+        return station.addBuilding(building);
 
 
     }

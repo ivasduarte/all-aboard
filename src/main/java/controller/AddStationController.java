@@ -43,6 +43,7 @@ public class AddStationController {
 
 
         stationRepository.save(newStation);
+        Station.IncreaseTotalStations();
         return true;
     }
 }
