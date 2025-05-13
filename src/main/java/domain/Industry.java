@@ -123,6 +123,11 @@ public class Industry {
         return true;
     }
 
+    /**
+     * This method verifies if the position where the editor is trying to add the industry is already occupied by any type of building.
+     *
+     * @return True if the position is empty.
+     */
     public boolean checkOverbuilding() {
         List<Map> mapList = mapController.getMapList();
         Map map = mapList.get(mapID);

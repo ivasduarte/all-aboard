@@ -29,6 +29,8 @@ public class AddIndustryController {
 
         if (!industry.validatePosition()) {
             return "ERROR: Invalid position";
+        } else if (!industry.checkOverbuilding()) {
+            return "ERROR: Position is already occupied.";
         }
 
         industryRepository.save(industry);
