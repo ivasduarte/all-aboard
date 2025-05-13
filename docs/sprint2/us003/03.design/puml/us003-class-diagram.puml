@@ -1,6 +1,10 @@
 @startuml
 skinparam classAttributeIconSize 0
 
+interface Runnable {
+    +run(): void
+}
+
 class ApplicationSession {
     -instance: ApplicationSession{static}
     -userSession: UserSession
@@ -72,6 +76,25 @@ class Repositories {
     +getMapRepository(): MapRepository
 }
 
+enum NameMapError {
+    NONE
+    INVALID_NAME
+    NAME_EXISTS
+    MAP_NOT_FOUND
+}
+
+enum CenterError {
+    NONE
+    POSITION_OCCUPIED
+    OUTSIDE_MAP
+}
+
+enum BlockError {
+    NONE
+    POSITION_OCCUPIED
+    OUTSIDE_MAP
+}
+
 class CreateCityController {
     -mapRepo: MapRepository
     -cityRepo: CityRepository
@@ -83,18 +106,30 @@ class CreateCityController {
     +assignBlocksAuto(city: City, count: int, sigma: double): void
 }
 
-class CreateCityUI {
+class AddCityUI {
+    -controller: CreateCityController
+    -scanner: Scanner
+    -cityName: String
+    -mapName: String
+    -centerX: int
+    -centerY: int
     +run(): void
+    +getInput(): void
 }
 
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
-CreateCityUI ..> CreateCityController
+AddCityUI ..> CreateCityController
 CreateCityController ..> City : creates
 CreateCityController ..> HouseBlock : validates
 CreateCityController ..> CityRepository : uses
 CreateCityController ..> MapRepository : uses
+CreateCityController ..> NameMapError
+CreateCityController ..> CenterError
+CreateCityController ..> BlockError
+
+AddCityUI ..|> Runnable
 
 Repositories --> "1" CityRepository
 Repositories --> "1" MapRepository
