@@ -2,32 +2,24 @@ package domain;
 
 public class Building {
 
-    private String buildingType;
+    private final BuildingType type;
 
-    private final String[] buildingTypes = {"Telegraph", "Cafe", "PostOffice", "SmallHotel","LargeHotel", "Silo", "LiquidStorage", "Telephone"};
-
-
-    private boolean isValidType(String build){
-        for(int i = 0; i < buildingTypes.length; i++) {
-            if (buildingTypes[i].equalsIgnoreCase(build)) {
-                return true;
-            }
-        }
-        return false;
+    public Building(BuildingType type) {
+        if (type == null) throw new IllegalArgumentException("Invalid building type");
+        this.type = type;
     }
 
-    public Building(String buildingType) {
-        if(!isValidType(buildingType)) {
-            throw new IllegalArgumentException("Invalid building type: " + buildingType);
-        }
-        this.buildingType = buildingType;
-
+    public String getBuildingType() {
+        return type.getName();
     }
 
-    public String getBuildingType(){
-
-        return buildingType;
-
+    public int getCost() {
+        return type.getCost();
     }
+
+    public String getEffect() {
+        return type.getEffect();
+    }
+
 
 }
