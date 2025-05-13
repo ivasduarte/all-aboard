@@ -7,6 +7,15 @@ import repositories.StationRepository;
 
 public class AddStationController {
 
+    /**
+     * Add a station in a map
+     * @param mapID id of the map
+     * @param scenarioID id of the scenario
+     * @param positionX station's X position
+     * @param positionY station's Y position
+     * @param stationType station type
+     * @return return true if successfully added station, false otherwise
+     */
     public boolean AddStation(int mapID, int scenarioID, int positionX, int positionY, String stationType)
     {
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
@@ -34,6 +43,7 @@ public class AddStationController {
 
 
         stationRepository.save(newStation);
+        Station.IncreaseTotalStations();
         return true;
     }
 }

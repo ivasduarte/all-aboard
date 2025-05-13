@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
 
+
     public void getInput()
     {
         Scanner sc = new Scanner(System.in);
