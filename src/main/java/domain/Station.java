@@ -20,6 +20,7 @@ public class Station {
     private List<Building> buildings;
 
     public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
+    public final static int[] typesSizes = {3, 4, 5};
 
     public Station(int mapID, int scenarioID, int positionX, int positionY, String stationType)
     {

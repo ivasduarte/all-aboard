@@ -36,5 +36,4 @@ public class AddStationController {
         stationRepository.save(newStation);
         return true;
     }
-
 }
