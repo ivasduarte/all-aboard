@@ -1,11 +1,18 @@
 package domain;
 
+import controller.CreateCityController;
 import controller.DisplayMapController;
+import repositories.CityRepository;
+import repositories.IndustryRepository;
+import repositories.StationRepository;
 
 import java.util.List;
 
 public class Industry {
     private DisplayMapController mapController = new DisplayMapController();
+    private IndustryRepository indRepo = new IndustryRepository();
+    private CityRepository cityRepo = new CityRepository();
+    private StationRepository stRepo = new StationRepository();
 
     /**
      * The map ID.
@@ -113,6 +120,43 @@ public class Industry {
         if (positionY < 0 || positionY > map.getHeight()) {
             return false;
         }
+        return true;
+    }
+
+    public boolean checkOverbuilding() {
+        List<Map> mapList = mapController.getMapList();
+        Map map = mapList.get(mapID);
+
+        List<Industry> industries = indRepo.getIndustryList();
+        List<City> cities = cityRepo.getCities();
+        List<Station> stations = stRepo.getStations();
+
+        if (map == null) {
+            return false;
+        }
+
+        for (int i = 0; i < industries.size(); i++) {
+            if (industries.get(i).getPositionX() == positionX && industries.get(i).getPositionY() == positionY) {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < cities.size(); i++) {
+            for (int j = 0; j < cities.get(i).getBlocks().size(); j++) {
+                List<HouseBlock> hb = cities.get(i).getBlocks();
+
+                if (hb.get(j).getX() == positionX && hb.get(j).getY() == positionY) {
+                    return false;
+                }
+            }
+        }
+
+        for (int i = 0; i < stations.size(); i++) {
+            if (stations.get(i).getPositionX() == positionX && stations.get(i).getPositionY() == positionY) {
+                return false;
+            }
+        }
+
         return true;
     }
 }
