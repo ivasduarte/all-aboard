@@ -20,7 +20,6 @@ public class Station {
     private List<Building> buildings;
 
     public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
-    public final static int[] typesSizes = {3, 4, 5};
 
     public Station(int mapID, int scenarioID, int positionX, int positionY, String stationType)
     {
@@ -60,7 +59,10 @@ public class Station {
 
     public boolean ValidatePosition(Map map, int X, int Y, int size)
     {
-        return X - size >= 0 && X <= map.getWidth() + size && Y - size >= 0 && Y <= map.getHeight() + size;
+        if(size % 2 != 0)
+            return X - size >= 0 && X <= map.getWidth() + size && Y - size >= 0 && Y <= map.getHeight() + size;
+        else
+            return X - size >= 0 && X <= map.getWidth() + size + 1 && Y - size >= 0 && Y <= map.getHeight() + size + 1;
     }
 
     public static void IncreaseTotalStations()
