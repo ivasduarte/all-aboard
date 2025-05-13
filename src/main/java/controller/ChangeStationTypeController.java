@@ -2,9 +2,9 @@ package controller;
 
 import domain.Station;
 
-public class UpgradeStationController {
+public class ChangeStationTypeController {
 
-    public boolean UpgradeStation(Station station, String newType)
+    public boolean ChangeStationType(Station station, String newType)
     {
         int typeID = 0;
         for(int i = 0; i < Station.stationTypes.length; i++)

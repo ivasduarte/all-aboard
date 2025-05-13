@@ -92,6 +92,16 @@ public class Station {
     }
     public int getStationID() { return stationID; }
     public String getStationType() {return stationType;}
+    public int getStationTypeID()
+    {
+        for(int i = 0; i < stationTypes.length; i++)
+        {
+            if(stationType.equalsIgnoreCase(stationTypes[i]))
+                return i;
+        }
+
+        return 0;
+    }
 
     public void setMapID(int mapID) {
         this.mapID = mapID;
