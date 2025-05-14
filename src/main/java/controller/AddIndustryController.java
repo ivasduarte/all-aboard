@@ -1,11 +1,7 @@
 package controller;
 
-import domain.ApplicationSession;
-import domain.Editor;
 import domain.Industry;
-import domain.UserSession;
 import repositories.IndustryRepository;
-import repositories.LocomotiveRepository;
 import repositories.Repositories;
 
 public class AddIndustryController {

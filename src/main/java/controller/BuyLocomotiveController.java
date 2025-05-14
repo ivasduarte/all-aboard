@@ -1,13 +1,9 @@
 package controller;
 
-import domain.ApplicationSession;
-import domain.Date;
-import domain.Locomotive;
-import domain.Player;
+import domain.*;
 import repositories.LocomotiveRepository;
 import repositories.Repositories;
 
-import java.util.List;
 
 public class BuyLocomotiveController {
     private LocomotiveRepository locomotiveRepository;
@@ -21,12 +17,12 @@ public class BuyLocomotiveController {
      */
     public String buyLocomotive(String locomotiveModel) {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
-        Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
+        User user = UserSession.getInstance().getUser();
 
         Locomotive locomotive = locomotiveRepository.getLocomotiveByModel(locomotiveModel);
 
-        if (player.getBudget() >= locomotive.getPrice()){
-            player.subtractBudget(locomotive.getPrice());
+        if (user.getBudget1() >= locomotive.getPrice()){
+            user.subtractBudget(locomotive.getPrice());
             locomotiveRepository.save(locomotive);
         } else {
             return "ERROR: Player doesn't have enough budget";
