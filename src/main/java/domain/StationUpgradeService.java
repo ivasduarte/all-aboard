@@ -43,7 +43,7 @@ public class StationUpgradeService {
                     existing.contains("hotel") &&
                     newLower.contains("hotel")) {
                 return existing;
-            }
+            }   
         }
         return null;
     }

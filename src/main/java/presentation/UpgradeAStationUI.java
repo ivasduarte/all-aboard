@@ -1,6 +1,7 @@
 package presentation;
 
 import controller.UpgradeAStationController;
+import domain.BuildingType;
 import domain.Station;
 
 import java.time.LocalDate;
@@ -9,14 +10,13 @@ import java.util.Scanner;
 
 public class UpgradeAStationUI implements Runnable {
     private final UpgradeAStationController controller = new UpgradeAStationController();
-    private Scanner ler = new Scanner(System.in);
+    private final Scanner ler = new Scanner(System.in);
 
     @Override
     public void run() {
         System.out.println("\n\n------------------------ Upgrade Station ------------------------");
 
         List<Station> stations = controller.getAvailableStations();
-
         if (stations.isEmpty()) {
             System.out.println("There are no available stations to upgrade.");
             return;
@@ -39,16 +39,21 @@ public class UpgradeAStationUI implements Runnable {
 
         Station selectedStation = stations.get(selectedIndex);
 
-        System.out.print("Enter the type of building to add (e.g. Hotel, Telegraph, Telephone): ");
-        String buildingType = ler.nextLine().trim();
+        System.out.println("\nAvailable Building Types:");
+        for (BuildingType bt : controller.getAvailableBuildingTypes()) {
+            System.out.println("- " + bt.getName() + " (Cost: " + bt.getCost() + ", Effect: " + bt.getEffect() + ")");
+        }
+
+        System.out.print("\nEnter the type of building to add: ");
+        String buildingTypeName = ler.nextLine().trim();
 
         int currentYear = LocalDate.now().getYear();
-        boolean success = controller.upgradeStation(selectedStation, buildingType, currentYear);
+        boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
 
         if (success) {
-            System.out.println("SUCCESS: Building '" + buildingType + "' added to station.");
+            System.out.println("✅ SUCCESS: Building '" + buildingTypeName + "' added to station.");
         } else {
-            System.out.println("ERROR: Failed to upgrade the station with building '" + buildingType + "'.");
+            System.out.println("❌ ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
         }
     }
 }

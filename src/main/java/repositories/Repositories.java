@@ -19,6 +19,7 @@ public class Repositories {
     private final TasksRepository tasksRepository;
     private final CityRepository cityRepo;
     private final StationRepository stationRepo;
+    private final BuildingRepository buildingRepo;
 
 
     /**
@@ -38,6 +39,7 @@ public class Repositories {
         cityRepo = new CityRepository();
         scenarioRepository = new ScenarioRepository();
         stationRepo = new StationRepository();
+        buildingRepo = new BuildingRepository();
     }
 
 
@@ -147,4 +149,6 @@ public class Repositories {
      * @return The StationRepository instance used by the application.
      */
     public StationRepository getStationRepository() {return stationRepo; }
+
+    public BuildingRepository getBuildingRepository() {return buildingRepo; }
 }
