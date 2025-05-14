@@ -14,7 +14,7 @@ public class UpgradeAStationUI implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("\n\n------------------------ Upgrade Station ------------------------");
+        System.out.println("\n\n------------------------ Upgrade Station ----------------------");
 
         List<Station> stations = controller.getAvailableStations();
         if (stations.isEmpty()) {
@@ -51,9 +51,9 @@ public class UpgradeAStationUI implements Runnable {
         boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
 
         if (success) {
-            System.out.println("✅ SUCCESS: Building '" + buildingTypeName + "' added to station.");
+            System.out.println("SUCCESS: Building '" + buildingTypeName + "' added to station.");
         } else {
-            System.out.println("❌ ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
+            System.out.println("ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
         }
     }
 }
