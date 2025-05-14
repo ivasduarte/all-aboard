@@ -1,4 +1,4 @@
-package pt.ipp.isep.dei.ui.console.menu;
+package ui.menu;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,11 +24,11 @@ public class MenuItem {
         this.ui.run();
     }
 
-    public boolean hasDescription(String description) {
-        return this.description.equals(description);
-    }
-
     public String toString() {
         return this.description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
