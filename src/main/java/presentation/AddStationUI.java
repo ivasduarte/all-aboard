@@ -24,27 +24,29 @@ public class AddStationUI implements Runnable {
         for (int i = 0; i < mapList.size(); i++) {
             Map map = mapList.get(i);
             System.out.println((i + 1) + ". " + map.getMapName());
-            System.out.println();
         }
 
-        System.out.println("Select a map from the list: ");
-        int mapID = sc.nextInt() - 1;
+        System.out.print("Select a map from the list: ");
+        int mapID = sc.nextInt();
+        mapID--;
 
-        System.out.println("\nEnter the scenario ID: ");
+        System.out.print("\nEnter the scenario ID: ");
         int scenarioID = sc.nextInt() - 1;
+        scenarioID--;
 
-        System.out.println("\nEnter the position X of the station: ");
+        System.out.print("\nEnter the position X of the station: ");
         int positionX = sc.nextInt();
 
-        System.out.println("\nEnter the position Y of the station: ");
+        System.out.print("\nEnter the position Y of the station: ");
         int positionY = sc.nextInt();
 
-        System.out.println("\nStation types:");
+        sc.nextLine();
+        System.out.println("Station types:");
         for(int i = 0; i < Station.stationTypes.length; i++)
         {
             System.out.println((i+1) + " - " + Station.stationTypes[i]);
         }
-        System.out.println("Enter the station type: ");
+        System.out.print("Enter the station type: ");
         String stationType = sc.nextLine();
 
         boolean result = stationController.AddStation(mapID, scenarioID, positionX, positionY, stationType);

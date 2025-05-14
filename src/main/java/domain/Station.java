@@ -1,6 +1,7 @@
 package domain;
 
 import repositories.MapRepository;
+import repositories.Repositories;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,7 @@ public class Station {
      * @return station's map
      */
     public Map getMap() {
-        MapRepository mr = new MapRepository();
+        MapRepository mr = Repositories.getInstance().getMapRepository();
 
         return mr.getMapList().get(mapID);
     }
