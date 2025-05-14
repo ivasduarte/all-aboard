@@ -45,7 +45,14 @@ public class AuthenticationController{
 
 
     public boolean createNewUser(String name, String email, String password, String roleID, Optional<Budget> budget) {
-        User user = new User(name, email, password, roleID, budget.get());
+        Budget budget1;
+        if (budget.isPresent()) {
+            budget1 = budget.get();
+        }else{
+            budget1 = new Budget(0);
+        }
+
+        User user = new User(name, email, password, roleID, budget1);
         return authenticationRepository.createNewUser(user);
     }
 
