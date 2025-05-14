@@ -1,32 +1,130 @@
 package repositories;
 
-import pt.isep.lei.esoft.auth.AuthFacade;
-import pt.isep.lei.esoft.auth.UserSession;
+import domain.User;
+import domain.UserSession;
+
+import java.util.*;
 
 public class AuthenticationRepository {
-    private final AuthFacade authentication;
+    Set<User> users = new HashSet<>();
+    UserSession session = UserSession.getInstance();
 
-    public AuthenticationRepository() {
-        authentication = new AuthFacade();
+    public boolean createNewUser(User user){
+        if(!doesUserExist(user)){
+            users.add(user);
+            return true;
+        }
+        return false;
     }
 
-    public boolean doLogin(String email, String password){
-        return authentication.doLogin(email, password).isLoggedIn();
+    public List<User> getAllUsers(){
+        List<User> userList = new ArrayList<>();
+        for(User user : users){
+            userList.add(user);
+        }
+        return userList;
     }
 
-    public void doLogout(){
-        authentication.doLogout();
+    public Optional<User> getUserByEmail(String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
     }
 
-    public UserSession getCurrentUserSession(){
-        return authentication.getCurrentUserSession();
+    private boolean doesUserExist(User user){
+        for (User user1 : users) {
+            if (user1.getEmail().equals(user.getEmail())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean addUserRole(String id, String description){
-        return authentication.addUserRole(id, description);
+    private boolean doesUserExist(String email) {
+        for (User user1 : users) {
+            if (user1.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean addUserWithRole(String id, String email, String password, String roleID){
-        return authentication.addUserWithRole(id, email, password, roleID);
+    private boolean isPasswordValid(String email, String password) {
+        if (doesUserExist(email)) {
+            Optional<User> usr = getUserByEmail(email);
+            String userPwd = usr.get().getPassword();
+            return userPwd.equals(password.toString());
+        }else{
+            return false;
+        }
+    }
+
+    public boolean deleteUser(String email) {
+        if (doesUserExist(email)) {
+            Optional<User> usr = getUserByEmail(email);
+            users.remove(usr.get());
+            if (session.getUser().equals(usr.get())) {
+                doLogout();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deleteUser(User user) {
+        if (doesUserExist(user.getEmail())) {
+            users.remove(user);
+            if (session.getUser().equals(user)) {
+                doLogout();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changeRole(String email, String roleId) {
+        if (doesUserExist(email)) {
+            Optional<User> usr = getUserByEmail(email);
+            usr.get().setRoleId(roleId);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changeRole(User user, String roleId) {
+        if (doesUserExist(user)) {
+            user.setRoleId(roleId);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doLogin(String email, String password) {
+        if (isPasswordValid(email, password)){
+            Optional<User> usr = getUserByEmail(email);
+            return session.doLogin(usr.get());
+        }
+        return false;
+    }
+
+    public boolean doLogout() {
+        session.doLogout();
+        return true;
+    }
+
+    public String getRole(String email) {
+        Optional<User> usr = getUserByEmail(email);
+        return usr.map(User::getRoleId).orElse(null);
+    }
+
+    public UserSession getSession() {
+        return session;
+    }
+
+    public String getCurrentUserEmail() {
+        return session.getUser().getEmail();
     }
 }

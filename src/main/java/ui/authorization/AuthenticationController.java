@@ -1,11 +1,11 @@
 package ui.authorization;
 
-import repositories.Repositories;
-import pt.isep.lei.esoft.auth.mappers.dto.UserRoleDTO;
+import domain.Budget;
+import domain.User;
 import repositories.AuthenticationRepository;
+import repositories.Repositories;
 
-import java.util.List;
-
+import java.util.Optional;
 
 /**
  * The AuthenticationController class provides methods for managing user authentication
@@ -40,29 +40,22 @@ public class AuthenticationController{
      * @return True if the login is successful, false otherwise.
      */
     public boolean doLogin(String email, String password) {
-        try{
             return authenticationRepository.doLogin(email, password);
-        }catch(IllegalArgumentException ex){
-            return false;
-        }
     }
 
 
-    /**
-     * Retrieves the list of user roles associated with the currently authenticated user.
-     * If the user is logged in, the roles are obtained from the current user session.
-     * Otherwise, if the user is not logged in, it returns null.
-     *
-     * @return  A list of {@code UserRoleDTO} objects representing the roles assigned to the current user,
-     *          or {@code null} if the user is not logged in.
-     */
-    public List<UserRoleDTO> getUserRoles() {
-        if (authenticationRepository.getCurrentUserSession().isLoggedIn()) {
-            return authenticationRepository.getCurrentUserSession().getUserRoles();
-        }
-        return null;
+    public boolean createNewUser(String name, String email, String password, String roleID, Optional<Budget> budget) {
+        User user = new User(name, email, password, roleID, budget.get());
+        return authenticationRepository.createNewUser(user);
     }
 
+    public String getRole(String email) {
+        return authenticationRepository.getRole(email);
+    }
+
+    public String getCurrentUserEmail(){
+        return authenticationRepository.getCurrentUserEmail();
+    }
 
     /**
      * Logs out the currently authenticated user by interacting with the authentication repository.

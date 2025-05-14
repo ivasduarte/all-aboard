@@ -1,15 +1,14 @@
 package ui.authorization;
 
+import domain.Budget;
 import ui.menu.EditorUI;
-import pt.ipp.isep.dei.ui.console.menu.MenuItem;
-import pt.isep.lei.esoft.auth.mappers.dto.UserRoleDTO;
+import ui.menu.MenuItem;
 import ui.menu.PlayerUI;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 
 /**
@@ -19,18 +18,24 @@ import java.util.Objects;
  */
 public class AuthenticationUI implements Runnable {
     private final AuthenticationController ctrl;
+    private int option;
 
-
-    /**
-     * Constructs an instance of AuthenticationUI.
-     * This class serves as the user interface for handling authentication-related actions,
-     * including login, role selection, and redirection to role-specific menus.
-     * It leverages an instance of AuthenticationController to perform authentication-related operations.
-     */
-    public AuthenticationUI() {
+    public AuthenticationUI(int option) {
         ctrl = new AuthenticationController();
+        this.option = option;
     }
 
+
+    public void run(){
+        switch (option) {
+            case 0:
+                run1();
+                break;
+            case 1:
+                createUser();
+                break;
+        }
+    }
 
     /**
      * Executes the authentication process, including user login, role selection,
@@ -45,103 +50,24 @@ public class AuthenticationUI implements Runnable {
      *   <li>Performs a logout operation at the end regardless of the outcome.</li>
      * </ul>
      */
-    public void run() {
+    public void run1() {
         boolean success = doLogin();
 
         if (success) {
-            List<UserRoleDTO> roles = this.ctrl.getUserRoles();
-            if ((roles == null) || (roles.isEmpty())) {
-                System.out.println("No role assigned to user.");
-            } else {
-                UserRoleDTO role = selectsRole(roles);
-                if (!Objects.isNull(role)) {
-                    List<MenuItem> rolesUI = getMenuItemForRoles();
-                    this.redirectToRoleUI(rolesUI, role);
-                } else {
-                    System.out.println("No role selected.");
+            String userEmail = ctrl.getCurrentUserEmail();
+            String userRole = ctrl.getRole(userEmail);  // uses corrected method
+
+            List<MenuItem> roleMenus = getMenuItemForRoles();
+
+            for (MenuItem item : roleMenus) {
+                if (item.getDescription().equals(userRole)) {
+                    item.run(); // run appropriate UI
+                    break;
                 }
             }
         }
+
         this.logout();
-
-    }
-
-
-    /**
-     * Attempts to log in a user by validating their credentials. The login process allows
-     * a fixed number of attempts before failing. During each attempt, the user is prompted
-     * to enter their user ID or email and password. If authentication is successful,
-     * a success status is returned.
-     *
-     * @return  True if the user is successfully authenticated, false otherwise.
-     */
-    private boolean doLogin() {
-        System.out.println("\n\n--- LOGIN UI ---------------------------");
-
-        int maxAttempts = 3;
-        boolean success = false;
-        do{
-            maxAttempts--;
-            String id = Utils.readLineFromConsole("Enter UserId/Email: ");
-            String password = Utils.readLineFromConsole("Enter Password: ");
-
-            success = ctrl.doLogin(id, password);
-            if(!success){
-                System.out.println("Invalid UserId and/or Password. \n You have  " + maxAttempts + " more attempt(s).");
-            }
-        }while(!success && maxAttempts > 0);
-        return success;
-    }
-
-
-    /**
-     * Logs out the currently authenticated user by invoking the appropriate method
-     * from the authentication controller. Clears the user's session and
-     * terminates the authentication process.
-     */
-    private void logout() {
-        ctrl.doLogout();
-    }
-
-
-    /**
-     * Redirects the user to the appropriate UI based on their selected role.
-     * If a matching role-specific UI exists in the provided list, it is executed.
-     * Otherwise, a message is displayed indicating that no UI is available for the user's role.
-     *
-     * @param rolesUI   A list of {@code MenuItem} objects corresponding to available role-specific UIs.
-     * @param role      The {@code UserRoleDTO} representing the user's selected role.
-     */
-    private void redirectToRoleUI(List<MenuItem> rolesUI, UserRoleDTO role) {
-        boolean found = false;
-        Iterator<MenuItem> it = rolesUI.iterator();
-        while (it.hasNext() && !found) {
-            MenuItem item = it.next();
-            found = item.hasDescription(role.getDescription());
-            if (found) {
-                item.run();
-            }
-        }
-        if (!found) {
-            System.out.println("There is no UI for users with role '" + role.getDescription() + "'");
-        }
-    }
-
-
-    /**
-     * Selects a user role from the provided list of roles. If the list contains only one role,
-     * that role is automatically selected. Otherwise, it prompts the user to choose a role
-     * from the list using the provided utility method.
-     *
-     * @param roles     A list of {@code UserRoleDTO} objects representing the roles available for selection.
-     * @return          The selected {@code UserRoleDTO}, or {@code null} if no selection was made.
-     */
-    private UserRoleDTO selectsRole(List<UserRoleDTO> roles) {
-        if (roles.size() == 1) {
-            return roles.get(0);
-        } else {
-            return (UserRoleDTO) pt.ipp.isep.dei.ui.console.utils.Utils.showAndSelectOne(roles, "Select the role you want to adopt in this session:");
-        }
     }
 
 
@@ -160,4 +86,60 @@ public class AuthenticationUI implements Runnable {
         //TODO: Complete with other user roles and related RoleUI
         return rolesUI;
     }
+
+    public void createUser(){
+        System.out.println("\n\n-------------------------- REGISTRATION UI --------------------------");
+
+        boolean success = false;
+        do{
+            String name = Utils.readLineFromConsole("Enter your name: ");
+            String email = Utils.readLineFromConsole("Enter your email: ");
+            String password = Utils.readLineFromConsole("Enter your password: ");
+            String roleID = ctrl.ROLE_PLAYER;
+            Optional<Budget> budget = Optional.of(new Budget(1000));
+
+            success = ctrl.createNewUser(name, email, password, roleID, budget);
+            if(!success){
+                System.out.println("User has been previously created.");
+            }
+        }while(!success);
+    }
+
+
+
+    /**
+     * Attempts to log in a user by validating their credentials. The login process allows
+     * a fixed number of attempts before failing. During each attempt, the user is prompted
+     * to enter their user ID or email and password. If authentication is successful,
+     * a success status is returned.
+     *
+     * @return  True if the user is successfully authenticated, false otherwise.
+     */
+    private boolean doLogin() {
+        System.out.println("\n\n--------------------------- LOGIN UI ---------------------------");
+
+        int maxAttempts = 3;
+        boolean success = false;
+        do{
+            maxAttempts--;
+            String id = Utils.readLineFromConsole("Enter UserId/Email: ");
+            String password = Utils.readLineFromConsole("Enter Password: ");
+
+            success = ctrl.doLogin(id, password);
+            if(!success){
+                System.out.println("Invalid UserId and/or Password. \n You have  " + maxAttempts + " more attempt(s).");
+            }
+        }while(!success && maxAttempts > 0);
+        return success;
+    }
+
+    /**
+     * Logs out the currently authenticated user by invoking the appropriate method
+     * from the authentication controller. Clears the user's session and
+     * terminates the authentication process.
+     */
+    private void logout() {
+        ctrl.doLogout();
+    }
+
 }

@@ -16,7 +16,6 @@ public class Repositories {
     private LocomotiveRepository locomotiveRepository = new LocomotiveRepository();
     private ScenarioRepository scenarioRepository;
     private final AuthenticationRepository authenticationRepository;
-    private final TasksRepository tasksRepository;
     private final CityRepository cityRepo;
     private final StationRepository stationRepo;
     private final BuildingRepository buildingRepo;
@@ -33,7 +32,6 @@ public class Repositories {
      * and prevents external instantiation.
      */
     private Repositories() {
-        tasksRepository = new TasksRepository();
         mapRepository = new MapRepository();
         authenticationRepository = new AuthenticationRepository();
         cityRepo = new CityRepository();
@@ -105,19 +103,6 @@ public class Repositories {
     public AuthenticationRepository getAuthenticationRepository() {
         return authenticationRepository;
     }
-
-
-    /**
-     * Retrieves the instance of the TasksRepository.
-     * The TasksRepository is responsible for managing a collection of task categories
-     * and provides methods for interaction with the stored data.
-     *
-     * @return The TasksRepository instance used by the application.
-     */
-    public TasksRepository getTasksRepository() {
-        return tasksRepository;
-    }
-
 
     /**
      * Retrieves the instance of the CityRepository.
