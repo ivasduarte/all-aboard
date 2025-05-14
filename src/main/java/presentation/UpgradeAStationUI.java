@@ -14,7 +14,7 @@ public class UpgradeAStationUI implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("\n\n------------------------ Upgrade Station ------------------------");
+        System.out.println("\n\n------------------------ Upgrade Station ----------------------");
 
         List<Station> stations = controller.getAvailableStations();
         if (stations.isEmpty()) {

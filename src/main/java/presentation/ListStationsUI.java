@@ -21,7 +21,7 @@ public class ListStationsUI implements Runnable{
             return;
         }
 
-        System.out.println("\n--- List of Stations ---");
+        System.out.println("\n\n------------------------- List of Stations -------------------------");
 
         for(Station station : stations){
             System.out.println("Station ID:" + station.getStationID() + ", Type: " + station.getStationType() + ", Position: (" + station.getPositionX() +", "+station.getPositionY()+")");

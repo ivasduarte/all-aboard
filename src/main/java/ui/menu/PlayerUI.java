@@ -1,9 +1,6 @@
 package ui.menu;
 
-import presentation.AddStationUI;
-import presentation.AssignRouteUI;
-import presentation.BuyLocomotiveUI;
-import presentation.UpgradeAStationUI;
+import presentation.*;
 import pt.ipp.isep.dei.ui.console.ShowTextUI;
 import ui.utils.Utils;
 
@@ -87,6 +84,7 @@ public class PlayerUI implements Runnable{
         List<MenuItem> options = new ArrayList<MenuItem>();
         options.add(new MenuItem("Build a Station", new AddStationUI()));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI()));
+        options.add(new MenuItem("List all Station", new ListStationsUI()));
         options.add(new MenuItem("Check Station Details", new ShowTextUI("You have chosen Check Station Details.")));
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI()));
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI()));
