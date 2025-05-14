@@ -126,7 +126,6 @@ public class AuthenticationUI implements Runnable {
             String password = Utils.readLineFromConsole("Enter Password: ");
 
             success = ctrl.doLogin(id, password);
-            System.out.println(success);
             if(!success){
                 System.out.println("Invalid UserId and/or Password. \n You have  " + maxAttempts + " more attempt(s).");
             }

@@ -15,7 +15,7 @@ public class Repositories {
     private IndustryRepository industryRepository = new IndustryRepository();
     private LocomotiveRepository locomotiveRepository = new LocomotiveRepository();
     private ScenarioRepository scenarioRepository;
-    private final AuthenticationRepository authenticationRepository;
+    private final AuthenticationRepository authenticationRepository = new AuthenticationRepository();;
     private final CityRepository cityRepo;
     private final StationRepository stationRepo;
     private final BuildingRepository buildingRepo;
@@ -33,7 +33,6 @@ public class Repositories {
      */
     private Repositories() {
         mapRepository = new MapRepository();
-        authenticationRepository = new AuthenticationRepository();
         cityRepo = new CityRepository();
         scenarioRepository = new ScenarioRepository();
         stationRepo = new StationRepository();
@@ -49,9 +48,6 @@ public class Repositories {
      * @return The single instance of the Repositories class.
      */
     public static Repositories getInstance() {
-        if (instance == null){
-            instance = new Repositories();
-        }
         return instance;
     }
 

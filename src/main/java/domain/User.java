@@ -1,6 +1,9 @@
 package domain;
 
 
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * Represents an Editor capable of creating and managing scenarios.
  * This class provides functionality for retrieving editor details
@@ -9,26 +12,17 @@ package domain;
 public class User {
     private String name;
     private String email;
-    private String roleID;
+    private String roleId;
     private String password;
     private Budget budget;
 
-
-    /**
-     * Constructs an Editor instance with the specified name, ID, and password.
-     *
-     * @param name      The name of the editor. It cannot be null or empty.
-     * @param ID        A unique identifier for the editor. It cannot be null or empty.
-     * @param password  The password associated with the editor's account. It cannot be null or empty.
-     */
-    private String roleId;
 
     public User(String name, String email, String roleId, String password, Budget budget) {
         this.name = name;
         this.email = email;
         this.roleId = roleId;
         this.password = password;
-        this.budget = new Budget(0);
+        this.budget = budget;
     }
 
     public String getRoleId() {

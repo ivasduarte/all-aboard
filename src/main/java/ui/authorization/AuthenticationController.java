@@ -52,7 +52,7 @@ public class AuthenticationController{
             budget1 = new Budget(0);
         }
 
-        User user = new User(name, email, password, roleID, budget1);
+        User user = new User(name, email, roleID, password, budget1);
         return authenticationRepository.createNewUser(user);
     }
 
