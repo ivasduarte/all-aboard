@@ -12,7 +12,6 @@ public class Industry {
     private DisplayMapController mapController = new DisplayMapController();
     private IndustryRepository indRepo = new IndustryRepository();
     private CityRepository cityRepo = new CityRepository();
-    private StationRepository stRepo = new StationRepository();
 
     /**
      * The map ID.
@@ -134,7 +133,6 @@ public class Industry {
 
         List<Industry> industries = indRepo.getIndustryList();
         List<City> cities = cityRepo.getCities();
-        List<Station> stations = stRepo.getStations();
 
         if (map == null) {
             return false;
@@ -155,13 +153,6 @@ public class Industry {
                 }
             }
         }
-
-        for (int i = 0; i < stations.size(); i++) {
-            if (stations.get(i).getPositionX() == positionX && stations.get(i).getPositionY() == positionY) {
-                return false;
-            }
-        }
-
         return true;
     }
 }

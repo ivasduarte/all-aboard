@@ -94,7 +94,7 @@ public class Locomotive {
      *
      * @return The locomotive price
      */
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 

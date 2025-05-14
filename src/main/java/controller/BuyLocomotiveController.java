@@ -23,10 +23,14 @@ public class BuyLocomotiveController {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
         Player player = ApplicationSession.getInstance().getCurrentSession().getCurrentPlayer();
 
-        // validate player budget
-
         Locomotive locomotive = locomotiveRepository.getLocomotiveByModel(locomotiveModel);
-        locomotiveRepository.save(locomotive);
+
+        if (player.getBudget() >= locomotive.getPrice()){
+            player.subtractBudget(locomotive.getPrice());
+            locomotiveRepository.save(locomotive);
+        } else {
+            return "ERROR: Player doesn't have enough budget";
+        }
 
         return "Locomotive " + locomotiveModel + " bought successfully.";
     }
