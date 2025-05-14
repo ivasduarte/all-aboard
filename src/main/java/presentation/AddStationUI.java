@@ -26,7 +26,7 @@ public class AddStationUI implements Runnable {
             System.out.println((i + 1) + ". " + map.getMapName());
         }
 
-        System.out.print("Select a map from the list: ");
+        System.out.print("Select a map from the list (enter a number): ");
         int mapID = sc.nextInt();
         mapID--;
 
@@ -46,16 +46,21 @@ public class AddStationUI implements Runnable {
         {
             System.out.println((i+1) + " - " + Station.stationTypes[i]);
         }
-        System.out.print("Enter the station type: ");
-        String stationType = sc.nextLine();
+        System.out.print("Enter the station type (a number): ");
+        int stationTypeID = sc.nextInt();
 
-        boolean result = stationController.AddStation(mapID, scenarioID, positionX, positionY, stationType);
+        if(stationTypeID >= 0 && stationTypeID < Station.stationTypes.length)
+        {
+            String stationType = Station.stationTypes[stationTypeID];
+            boolean result = stationController.AddStation(mapID, scenarioID, positionX, positionY, stationType);
 
-        if (!result) {
-            System.out.println("Station not valid");
-        } else {
-            System.out.println("Station added successfully");
-        }
+            if (!result) {
+                System.out.println("Station not valid");
+            } else {
+                System.out.println("Station added successfully");
+            }
+        }else
+            System.out.println("Station type not valid");
     }
 
     @Override
