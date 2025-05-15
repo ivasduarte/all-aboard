@@ -41,9 +41,27 @@
 
 ## 5. Construction (Implementation)
 
-**Class AddCityController**
+**Class CreateCityController**
+
+```java
+public City createCity(String name, String map, int x, int y) {
+    if (validateNameMap(name, map) != NameMapError.OK || validateCenter(name, map, x, y) != CenterError.OK) {
+        throw new IllegalStateException("Cannot create city: validation failed");
+    }
+    City c = new City(name, map, x, y);
+    cityRepo.add(c);
+    return c;
+}
+```
 
 **Class CityRepository**
+
+```java
+public void add(City c) { 
+    cities.add(c); 
+}
+```
+
 
 
 ## 6. Integration and Demo
@@ -54,3 +72,5 @@ _In this section, it is suggested to describe the efforts made to integrate this
 ## 7. Observations
 
 _In this section, it is suggested to present a critical perspective on the developed work, pointing, for example, to other alternatives and or future related work._
+
+N/A

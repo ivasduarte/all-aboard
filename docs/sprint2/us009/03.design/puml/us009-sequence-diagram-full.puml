@@ -14,7 +14,6 @@ participant "locomotiveRepo\n:LocomotiveRepository" as LocomotiveRepo
 participant ":ApplicationSession" as AppSession
 participant ":UserSession" as UserSession
 participant "player:\nPlayer" as PlayerObj
-participant "locomotive:\nLocomotive" as Locomotive
 
 activate Player
 
@@ -48,11 +47,6 @@ CTRL -> AppSession : getCurrentSession()
 activate AppSession
 AppSession --> CTRL : userSession
 deactivate AppSession
-
-CTRL -> UserSession : getCurrentPlayer()
-activate UserSession
-UserSession --> CTRL : player
-deactivate UserSession
 
 CTRL -> LocomotiveRepo : getLocomotiveByModel(locomotiveModel)
 activate LocomotiveRepo

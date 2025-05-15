@@ -2,6 +2,7 @@ package presentation;
 
 import controller.AddStationController;
 import controller.DisplayMapController;
+import controller.SimulatorController;
 import domain.Map;
 import domain.Station;
 import repositories.MapRepository;
@@ -11,9 +12,7 @@ import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
 
-
-    public void getInput()
-    {
+    public void getInput() throws InterruptedException {
         Scanner sc = new Scanner(System.in);
 
         AddStationController stationController = new AddStationController();
@@ -21,18 +20,31 @@ public class AddStationUI implements Runnable {
 
         List<Map> mapList = mapController.getMapList();
 
-        for (int i = 0; i < mapList.size(); i++) {
-            Map map = mapList.get(i);
-            System.out.println((i + 1) + ". " + map.getMapName());
+        if(mapList.isEmpty())
+        {
+            System.out.println("There are no maps");
+            return;
         }
 
-        System.out.print("Select a map from the list (enter a number): ");
-        int mapID = sc.nextInt();
-        mapID--;
+        for (int i = 0; i < mapList.size(); i++) {
+            Map map = mapList.get(i);
+            System.out.println("[" + map.getMapName() + " | " + map.getWidth() + "x" + map.getWidth() + "]");
+        }
 
-        System.out.print("\nEnter the scenario ID: ");
-        int scenarioID = sc.nextInt() - 1;
-        scenarioID--;
+        System.out.print("Select a map from the list: ");
+        String mapName = sc.nextLine();
+        int mapID = -1;
+
+        for (int i = 0; i < mapList.size(); i++) {
+            if(mapList.get(i).getMapName().equalsIgnoreCase(mapName))
+                mapID = i;
+        }
+
+        if(mapID == -1)
+        {
+            System.out.println("Map does not exist");
+            return;
+        }
 
         System.out.print("\nEnter the position X of the station: ");
         int positionX = sc.nextInt();
@@ -48,11 +60,12 @@ public class AddStationUI implements Runnable {
         }
         System.out.print("Enter the station type (a number): ");
         int stationTypeID = sc.nextInt();
+        stationTypeID--;
 
         if(stationTypeID >= 0 && stationTypeID < Station.stationTypes.length)
         {
             String stationType = Station.stationTypes[stationTypeID];
-            boolean result = stationController.AddStation(mapID, scenarioID, positionX, positionY, stationType);
+            boolean result = stationController.AddStation(mapID, positionX, positionY, stationType);
 
             if (!result) {
                 System.out.println("Station not valid");
@@ -65,6 +78,10 @@ public class AddStationUI implements Runnable {
 
     @Override
     public void run() {
-        getInput();
+        try {
+            getInput();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
