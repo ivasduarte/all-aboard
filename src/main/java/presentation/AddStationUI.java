@@ -20,14 +20,31 @@ public class AddStationUI implements Runnable {
 
         List<Map> mapList = mapController.getMapList();
 
-        for (int i = 0; i < mapList.size(); i++) {
-            Map map = mapList.get(i);
-            System.out.println((i + 1) + ". " + map.getMapName());
+        if(mapList.isEmpty())
+        {
+            System.out.println("There are no maps");
+            return;
         }
 
-        System.out.print("Select a map from the list (enter a number): ");
-        int mapID = sc.nextInt();
-        mapID--;
+        for (int i = 0; i < mapList.size(); i++) {
+            Map map = mapList.get(i);
+            System.out.println("[" + map.getMapName() + " | " + map.getWidth() + "x" + map.getWidth() + "]");
+        }
+
+        System.out.print("Select a map from the list: ");
+        String mapName = sc.nextLine();
+        int mapID = -1;
+
+        for (int i = 0; i < mapList.size(); i++) {
+            if(mapList.get(i).getMapName().equalsIgnoreCase(mapName))
+                mapID = i;
+        }
+
+        if(mapID == -1)
+        {
+            System.out.println("Map does not exist");
+            return;
+        }
 
         System.out.print("\nEnter the scenario ID: ");
         int scenarioID = sc.nextInt() - 1;
