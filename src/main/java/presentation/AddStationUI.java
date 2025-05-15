@@ -46,10 +46,6 @@ public class AddStationUI implements Runnable {
             return;
         }
 
-        System.out.print("\nEnter the scenario ID: ");
-        int scenarioID = sc.nextInt() - 1;
-        scenarioID--;
-
         System.out.print("\nEnter the position X of the station: ");
         int positionX = sc.nextInt();
 
@@ -69,7 +65,7 @@ public class AddStationUI implements Runnable {
         if(stationTypeID >= 0 && stationTypeID < Station.stationTypes.length)
         {
             String stationType = Station.stationTypes[stationTypeID];
-            boolean result = stationController.AddStation(mapID, scenarioID, positionX, positionY, stationType);
+            boolean result = stationController.AddStation(mapID, positionX, positionY, stationType);
 
             if (!result) {
                 System.out.println("Station not valid");

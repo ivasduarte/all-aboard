@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Station {
     private int mapID;
-    private int scenarioID;
     private int positionX;
     private int positionY;
 
@@ -26,15 +25,13 @@ public class Station {
     /**
      * Constructs a station, in a certain map and scenario, with a certain position and a type
      * @param mapID id of the map
-     * @param scenarioID id of the scenario
      * @param positionX station's X position
      * @param positionY station's Y position
      * @param stationType station type
      */
-    public Station(int mapID, int scenarioID, int positionX, int positionY, String stationType)
+    public Station(int mapID, int positionX, int positionY, String stationType)
     {
         this.mapID = mapID;
-        this.scenarioID = scenarioID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.stationType = stationType;
@@ -115,13 +112,6 @@ public class Station {
     }
 
     /**
-     * Get the station's scenario id
-     * @return station's scenario id
-     */
-    public int getScenarioID() {
-        return scenarioID;
-    }
-    /**
      * Get the station's X position
      * @return station's X position
      */
@@ -166,14 +156,6 @@ public class Station {
      */
     public void setMapID(int mapID) {
         this.mapID = mapID;
-    }
-
-    /**
-     * Set station's scenario id
-     * @param scenarioID new scenario id
-     */
-    public void setScenarioID(int scenarioID) {
-        this.scenarioID = scenarioID;
     }
 
     /**
