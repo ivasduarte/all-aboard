@@ -1,3 +1,4 @@
+import controller.SimulatorController;
 import ui.menu.MainMenuUI;
 
 public class Main {

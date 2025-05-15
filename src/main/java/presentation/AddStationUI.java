@@ -12,7 +12,8 @@ import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
 
-    public void getInput() throws InterruptedException {
+    public void getInput() {
+
         Scanner sc = new Scanner(System.in);
 
         AddStationController stationController = new AddStationController();
@@ -78,10 +79,6 @@ public class AddStationUI implements Runnable {
 
     @Override
     public void run() {
-        try {
-            getInput();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        getInput();
     }
 }
