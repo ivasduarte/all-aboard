@@ -1,0 +1,24 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber 17
+
+participant ":CreateMapController" as ctrl
+participant ":Map" as Map
+
+-> ctrl : createMap(mapName, width, height)
+activate ctrl
+
+group Create New Map
+    autonumber 17.1
+    ctrl -> Map : create(mapName, width, height)
+    activate Map
+    Map --> ctrl : isSuccessful
+end
+    autonumber 18
+    <-- ctrl : map
+    deactivate ctrl
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant ":CreateMapUI" as UI
+participant ":CreateMapController" as ctrl
+participant ":Map" as Map
+
+activate Editor
+
+Editor -> UI : requests to create a new map
+activate UI
+UI -> ctrl** : create
+UI -> Editor : requestMapName()
+Editor -> UI : provides mapName
+UI -> Editor : requestWidth()
+Editor -> UI : provides width
+UI -> Editor : requestHeight()
+Editor -> UI : provides height
+UI -> ctrl : submit(mapName, width, height)
+activate ctrl
+
+ctrl -> Map : create(mapName, width, height)
+activate Map
+Map --> ctrl : isSuccessful
+deactivate Map
+ctrl --> UI : isSuccessful
+deactivate ctrl
+UI --> Editor : displayMap()
+deactivate UI
+deactivate Editor
+
+@enduml

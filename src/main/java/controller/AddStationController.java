@@ -10,16 +10,15 @@ public class AddStationController {
     /**
      * Add a station in a map
      * @param mapID id of the map
-     * @param scenarioID id of the scenario
      * @param positionX station's X position
      * @param positionY station's Y position
      * @param stationType station type
      * @return return true if successfully added station, false otherwise
      */
-    public boolean AddStation(int mapID, int scenarioID, int positionX, int positionY, String stationType)
+    public boolean AddStation(int mapID, int positionX, int positionY, String stationType)
     {
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
-        Station newStation = new Station(mapID, scenarioID, positionX, positionY, stationType);
+        Station newStation = new Station(mapID, positionX, positionY, stationType);
         Map stationMap = newStation.getMap();
 
         boolean validStationType = false;
