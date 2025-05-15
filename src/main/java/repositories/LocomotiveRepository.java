@@ -43,11 +43,14 @@ public class LocomotiveRepository {
         Scenario scenario = scenarios.get(scenarioId);
         Restrictions scenarioRestrictions = scenario.getRestrictions();
         LocalDate scenarioStartDate = scenarioRestrictions.getStartDate();
-        LocalDate scenarioEndDate = scenarioRestrictions.getEndDate();
 
         for (int i = 0; i < locomotives.size(); i++) {
-            if (locomotives.get(i).getStartYear() <= scenarioStartDate.getYear() || (locomotives.get(i).getEndYear() >= scenarioEndDate.getYear() && locomotives.get(i).getEndYear() != 99999)) {
-                availableLocomotives.add(locomotives.get(i));
+            if (locomotives.get(i).getStartYear() <= scenarioStartDate.getYear() && locomotives.get(i).getEndYear() >= scenarioStartDate.getYear()) {
+                for (String techRestrictions : scenarioRestrictions.getLocomotiveTypes()) {
+                    if (techRestrictions.equalsIgnoreCase(locomotives.get(i).getLocomotiveFuelType())) {
+                        availableLocomotives.add(locomotives.get(i));
+                    }
+                }
             }
         }
 
@@ -75,7 +78,7 @@ public class LocomotiveRepository {
      */
     public void displayAvailableLocomotives() {
         for (int i = 0; i < availableLocomotives.size(); i++) {
-            System.out.println((i+1) + ". " + availableLocomotives.get(i));
+            System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + ": " + availableLocomotives.get(i).getPrice() + "€");
         }
     }
 }

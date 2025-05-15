@@ -1,15 +1,21 @@
-import domain.Budget;
-import domain.Locomotive;
+import domain.*;
 import repositories.LocomotiveRepository;
+import repositories.MapRepository;
 import repositories.Repositories;
+import repositories.ScenarioRepository;
 import ui.authorization.AuthenticationController;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Bootstrap implements Runnable {
 
     public void run() {
         addUsers();
+        createScenario(createMap().get());
+        gameLocomotives();
     }
 
 
@@ -18,6 +24,23 @@ public class Bootstrap implements Runnable {
 
         ctrl.createNewUser("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR, Optional.empty());
         ctrl.createNewUser("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER, Optional.of(new Budget(1000)));
+    }
+
+    public Optional<Map> createMap() {
+        MapRepository mr = Repositories.getInstance().getMapRepository();
+        mr.add(new Map("ExampleMap", 100, 100));
+
+        return mr.getMap("ExampleMap");
+    }
+
+    public void createScenario(Map map) {
+        ScenarioRepository sr = Repositories.getInstance().getScenarioRepository();
+        List<String> locomotiveTypes = new ArrayList<>();
+        List<String> historicalEvents = new ArrayList<>();
+
+        locomotiveTypes.add("steam");
+
+        sr.add(new Scenario("ExampleScenario", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), map));
     }
 
     /**

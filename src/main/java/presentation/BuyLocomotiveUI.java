@@ -1,12 +1,18 @@
 package presentation;
 
 import controller.BuyLocomotiveController;
+import controller.CreateScenarioController;
+import domain.Locomotive;
+import domain.Scenario;
+import repositories.Repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class BuyLocomotiveUI implements Runnable {
     private BuyLocomotiveController ctrl = new BuyLocomotiveController();
+    private CreateScenarioController scenarioController = new CreateScenarioController();
 
     private String locomotiveModel;
 
@@ -17,7 +23,21 @@ public class BuyLocomotiveUI implements Runnable {
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
-        getLocomotiveController().getLocomotiveRepository().displayAvailableLocomotives();
+        List<Scenario> scenarioList = scenarioController.getScenarioList();
+        for (int i = 0; i < scenarioList.size(); i++) {
+            Scenario scenario = scenarioList.get(i);
+            System.out.println((i+1) + ". " + scenario.getScenarioName());
+            System.out.println();
+        }
+        System.out.println("Enter the scenario ID: ");
+        int scenarioID = sc.nextInt() - 1;
+
+        sc.nextLine();
+
+        List<Locomotive> availableLocomotives = getLocomotiveController().getLocomotiveRepository().getAvailableLocomotives(scenarioID);
+        for (int i = 0; i < availableLocomotives.size(); i++) {
+            System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + ": " + availableLocomotives.get(i).getPrice() + "€");
+        }
         System.out.println("Introduce the locomotive you want to buy: ");
         String locomotiveModel = sc.nextLine();
 
