@@ -10,7 +10,6 @@ public class AddStationController {
     /**
      * Add a station in a map
      * @param mapID id of the map
-     * @param scenarioID id of the scenario
      * @param positionX station's X position
      * @param positionY station's Y position
      * @param stationType station type

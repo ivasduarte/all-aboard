@@ -80,9 +80,9 @@ public class Station {
     public boolean ValidatePosition(Map map, int X, int Y, int size)
     {
         if(size % 2 != 0)
-            return X - size >= 0 && X <= map.getWidth() + size && Y - size >= 0 && Y <= map.getHeight() + size;
+            return X - size >= 0 && X + size <= map.getWidth() && Y - size >= 0 && Y + size <= map.getHeight();
         else
-            return X - size >= 0 && X <= map.getWidth() + size + 1 && Y - size >= 0 && Y <= map.getHeight() + size + 1;
+            return X - size >= 0 && X + size + 1 <= map.getWidth() && Y - size >= 0 && Y + size + 1 <= map.getHeight();
     }
 
     /**
