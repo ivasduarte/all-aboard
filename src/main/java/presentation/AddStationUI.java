@@ -2,6 +2,7 @@ package presentation;
 
 import controller.AddStationController;
 import controller.DisplayMapController;
+import controller.SimulatorController;
 import domain.Map;
 import domain.Station;
 import repositories.MapRepository;
@@ -11,9 +12,7 @@ import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
 
-
-    public void getInput()
-    {
+    public void getInput() throws InterruptedException {
         Scanner sc = new Scanner(System.in);
 
         AddStationController stationController = new AddStationController();
@@ -48,6 +47,7 @@ public class AddStationUI implements Runnable {
         }
         System.out.print("Enter the station type (a number): ");
         int stationTypeID = sc.nextInt();
+        stationTypeID--;
 
         if(stationTypeID >= 0 && stationTypeID < Station.stationTypes.length)
         {
@@ -65,6 +65,10 @@ public class AddStationUI implements Runnable {
 
     @Override
     public void run() {
-        getInput();
+        try {
+            getInput();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
