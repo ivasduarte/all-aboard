@@ -41,7 +41,10 @@ public class AddStationController {
 
         int size = Station.typesSizes[typeID] / 2;
 
-        if(!newStation.ValidatePosition(stationMap, positionX, positionY, size))
+        if(!newStation.ValidatePosition(stationMap, size))
+            return false;
+
+        if(!newStation.checkOverbuilding())
             return false;
 
         stationRepository.save(newStation);

@@ -1,7 +1,7 @@
 package domain;
 
-import repositories.MapRepository;
-import repositories.Repositories;
+import controller.DisplayMapController;
+import repositories.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,17 +72,60 @@ public class Station {
     /**
      * Validade the station's position on the map
      * @param map station's map
-     * @param X station's X position
-     * @param Y station's Y position
      * @param size size for each side of the station
      * @return true if position is valid, false otherwise
      */
-    public boolean ValidatePosition(Map map, int X, int Y, int size)
+    public boolean ValidatePosition(Map map, int size)
     {
         if(size % 2 != 0)
-            return X - size >= 0 && X + size <= map.getWidth() && Y - size >= 0 && Y + size <= map.getHeight();
+            return positionX - size >= 0 && positionX + size <= map.getWidth() && positionY - size >= 0 && positionY + size <= map.getHeight();
         else
-            return X - size >= 0 && X + size + 1 <= map.getWidth() && Y - size >= 0 && Y + size + 1 <= map.getHeight();
+            return positionX - size >= 0 && positionX + size + 1 <= map.getWidth() && positionY - size >= 0 && positionY + size + 1 <= map.getHeight();
+    }
+
+    /**
+     * Check if station overbuilds existing houseblocks, industries or other stations
+     * @return false if overbuilding occurs, true if not
+     */
+    public boolean checkOverbuilding() {
+        MapRepository mapController = Repositories.getInstance().getMapRepository();
+        IndustryRepository indRepo = Repositories.getInstance().getIndustryRepository();
+        CityRepository cityRepo = Repositories.getInstance().getCityRepository();
+        StationRepository stationRepository = Repositories.getInstance().getStationRepository();
+
+        List<Map> mapList = mapController.getMapList();
+        Map map = mapList.get(mapID);
+
+        List<Industry> industries = indRepo.getIndustryList();
+        List<City> cities = cityRepo.getCities();
+        List<Station> stations = stationRepository.getStations();
+
+        if (map == null) {
+            return false;
+        }
+
+        for (int i = 0; i < industries.size(); i++) {
+            if (industries.get(i).getPositionX() == positionX && industries.get(i).getPositionY() == positionY) {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < stations.size(); i++) {
+            if (stations.get(i).getPositionX() == positionX && stations.get(i).getPositionY() == positionY) {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < cities.size(); i++) {
+            for (int j = 0; j < cities.get(i).getBlocks().size(); j++) {
+                List<HouseBlock> hb = cities.get(i).getBlocks();
+
+                if (hb.get(j).getX() == positionX && hb.get(j).getY() == positionY) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -188,6 +231,4 @@ public class Station {
     public List<Building> getBuildings() {
         return buildings;
     }
-
-
 }
