@@ -42,6 +42,39 @@ This diagram shows the full sequence of interactions between the classes involve
 
 ![Sequence Diagram - Full](svg/us001-sequence-diagram.svg)
 
+### Split Diagrams
+
+The following diagram shows the same sequence of interactions between the classes involved in the realization of this user story, but it is split in partial diagrams to better illustrate the interactions between the classes.
+
+It uses Interaction Occurrence (a.k.a. Interaction Use).
+
+![Sequence Diagram - split](svg/us001-sd-split.svg)
+
+**Requests Map Name SD**
+
+![Sequence Diagram - Partial - Requests Map Name](svg/us001-sd-partial-requests-mapName.svg)
+
+**Get Map SD**
+
+![Sequence Diagram - Partial - Get Map](svg/us001-sd-partial-get-map.svg)
+
+**Map Exists SD**
+
+![Sequence Diagram - Partial - Map Exists](svg/us001-sd-partial-map-exists.svg)
+
+**Requests Dimensions SD**
+
+![Sequence Diagram - Partial - Requests Dimensions](svg/us001-sd-partial-request-dimensions.svg)
+
+**Create Map SD**
+
+![Sequence Diagram - Partial - Create Map](svg/us001-sd-partial-create-map.svg)
+
+**Map Creation Success SD**
+
+![Sequence Diagram - Partial - Map Creation Success](svg/us001-sd-partial-map-creation-success.svg)
+
+
 ## 3.3. Class Diagram (CD)
 
 ![Class Diagram](svg/us001-class-diagram.svg)

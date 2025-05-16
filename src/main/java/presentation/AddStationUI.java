@@ -3,22 +3,29 @@ package presentation;
 import controller.AddStationController;
 import controller.DisplayMapController;
 import controller.SimulatorController;
+import domain.Budget;
 import domain.Map;
 import domain.Station;
+import domain.UserSession;
 import repositories.MapRepository;
+import repositories.Repositories;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
 
-    public void getInput() throws InterruptedException {
+    public void getInput() {
+
         Scanner sc = new Scanner(System.in);
 
         AddStationController stationController = new AddStationController();
         DisplayMapController mapController = new DisplayMapController();
 
         List<Map> mapList = mapController.getMapList();
+
+        Budget playerBudget = UserSession.getInstance().getUser().getBudget();
+        int budget = playerBudget.getBudget();
 
         if(mapList.isEmpty())
         {
@@ -56,32 +63,43 @@ public class AddStationUI implements Runnable {
         System.out.println("Station types:");
         for(int i = 0; i < Station.stationTypes.length; i++)
         {
-            System.out.println((i+1) + " - " + Station.stationTypes[i]);
+            System.out.println(Station.stationTypes[i] + " | " + Station.typesPrices[i] + "€");
         }
-        System.out.print("Enter the station type (a number): ");
-        int stationTypeID = sc.nextInt();
-        stationTypeID--;
+        System.out.println("Your current budget is " + budget + "€");
+        System.out.print("Enter the station type you want to add: ");
+        String stationType = sc.nextLine();
 
-        if(stationTypeID >= 0 && stationTypeID < Station.stationTypes.length)
+        boolean typeExists = false;
+        int stationTypeID = -1;
+        for(int i = 0; i < Station.stationTypes.length; i++)
         {
-            String stationType = Station.stationTypes[stationTypeID];
-            boolean result = stationController.AddStation(mapID, positionX, positionY, stationType);
-
-            if (!result) {
-                System.out.println("Station not valid");
-            } else {
-                System.out.println("Station added successfully");
+            if(stationType.trim().equalsIgnoreCase(Station.stationTypes[i]))
+            {
+                typeExists = true;
+                stationTypeID = i;
             }
-        }else
+        }
+
+        if (!typeExists) {
             System.out.println("Station type not valid");
+            return;
+        }else if(budget < Station.typesPrices[stationTypeID])
+        {
+            System.out.println("User does not have sufficient budget!");
+            return;
+        }
+
+        boolean result = stationController.AddStation(mapID, positionX, positionY, stationType);
+
+        if (!result) {
+            System.out.println("Station not valid");
+        } else {
+            System.out.println("Station added successfully");
+        }
     }
 
     @Override
     public void run() {
-        try {
-            getInput();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        getInput();
     }
 }
