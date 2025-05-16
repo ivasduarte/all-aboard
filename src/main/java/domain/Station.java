@@ -21,7 +21,7 @@ public class Station {
 
     public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
     public final static int[] typesSizes = {3, 4, 5};
-
+    public final static int[] typesPrices = {50, 100, 200};
     /**
      * Constructs a station, in a certain map and scenario, with a certain position and a type
      * @param mapID id of the map

@@ -1,7 +1,9 @@
 package controller;
 
+import domain.Budget;
 import domain.Map;
 import domain.Station;
+import domain.UserSession;
 import repositories.Repositories;
 import repositories.StationRepository;
 
@@ -17,6 +19,8 @@ public class AddStationController {
      */
     public boolean AddStation(int mapID, int positionX, int positionY, String stationType)
     {
+        Budget playerBudget = UserSession.getInstance().getUser().getBudget();
+
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
         Station newStation = new Station(mapID, positionX, positionY, stationType);
         Map stationMap = newStation.getMap();
@@ -40,9 +44,10 @@ public class AddStationController {
         if(!newStation.ValidatePosition(stationMap, positionX, positionY, size))
             return false;
 
-
         stationRepository.save(newStation);
         Station.IncreaseTotalStations();
+
+        playerBudget.setBudget(playerBudget.getBudget() - Station.typesPrices[typeID]);
         return true;
     }
 }
