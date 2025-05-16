@@ -8,13 +8,17 @@
 
         private final String effect;
 
-        public BuildingType(String name, int cost, String effect){
+        private final int AvailableYear;
+
+        public BuildingType(String name, int cost, String effect, int AvailableYear) {
 
             this.name = name;
 
             this.cost = cost;
 
             this.effect = effect;
+
+            this.AvailableYear = AvailableYear;
 
         }
 
@@ -33,6 +37,12 @@
         public String getEffect() {
 
             return effect;
+
+        }
+
+        public int getAvailableYear() {
+
+            return AvailableYear;
 
         }
 

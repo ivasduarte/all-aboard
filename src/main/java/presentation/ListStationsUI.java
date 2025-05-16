@@ -26,17 +26,17 @@ public class ListStationsUI implements Runnable{
         for(Station station : stations){
             System.out.println("Station ID:" + station.getStationID() + ", Type: " + station.getStationType() + ", Position: (" + station.getPositionX() +", "+station.getPositionY()+")");
 
-        System.out.println("Buildings : ");
+        System.out.print("Buildings: ");
 
         if(station.getBuildings().isEmpty()){
 
-            System.out.print("No buildings found");
+            System.out.println("No buildings found");
 
         } else {
 
             for(Building building : station.getBuildings()){
 
-                System.out.print(building.getBuildingType());
+                System.out.print(building.getBuildingType() + ", ");
 
             }
             System.out.println();
