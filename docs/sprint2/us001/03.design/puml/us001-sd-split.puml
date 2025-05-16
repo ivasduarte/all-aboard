@@ -27,6 +27,10 @@ activate UI
 UI -> ctrl : submitData()
 activate ctrl
 
+    ref over ctrl
+      Check Name Uniqueness
+    end ref
+
 
 UI -> Editor : requestWidth()
 deactivate UI
