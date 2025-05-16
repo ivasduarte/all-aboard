@@ -38,8 +38,8 @@ public class BuyLocomotiveUI implements Runnable {
         for (int i = 0; i < availableLocomotives.size(); i++) {
             System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + ": " + availableLocomotives.get(i).getPrice() + "€");
         }
-        System.out.println("Introduce the locomotive you want to buy: ");
-        this.locomotiveModel = sc.nextLine();
+        System.out.println("Introduce the locomotive model you want to buy: ");
+        this.locomotiveModel = sc.nextLine().trim();
 
         String result = ctrl.buyLocomotive(locomotiveModel);
 
