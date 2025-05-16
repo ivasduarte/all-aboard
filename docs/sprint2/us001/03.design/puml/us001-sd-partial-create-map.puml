@@ -3,22 +3,23 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-autonumber 17
+autonumber 21
 
 participant ":CreateMapController" as ctrl
 participant ":Map" as Map
+participant "mapRepository\n:MapRepositories" as repo
 
--> ctrl : createMap(mapName, width, height)
-activate ctrl
+ctrl -> Map : new Map(mapName, width, height)
+activate Map
 
 group Create New Map
-    autonumber 17.1
-    ctrl -> Map : create(mapName, width, height)
-    activate Map
-    Map --> ctrl : isSuccessful
+    Map -> Map : validateName()
+    Map -> Map : validateSize()
+    Map --> ctrl : Map object
+    deactivate Map
+
+    ctrl -> repo : add(map)
+    activate repo
 end
-    autonumber 18
-    <-- ctrl : map
-    deactivate ctrl
 
 @enduml
