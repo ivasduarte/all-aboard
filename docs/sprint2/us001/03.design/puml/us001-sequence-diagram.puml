@@ -1,61 +1,93 @@
 @startuml
-skinparam monochrome true
-skinparam packageStyle rectangle
-skinparam shadowing false
+actor Editor
 
-autonumber
-
-actor "Editor" as Editor
 participant ":CreateMapUI" as UI
-participant ":CreateMapController" as ctrl
+
+activate Editor
+Editor -> UI : requests to create a map
+
+create ":CreateMapController" as ctrl
+
+activate UI
+UI -> ctrl : create()
+
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as repositories
 participant "mapRepository\n:MapRepositories" as repo
 participant ":Map" as Map
 
-activate Editor
-
-Editor -> UI : requests to create a map
-activate UI
-UI -> ctrl** : create
 UI -> Editor : requestMapName()
-Editor -> UI : provides mapName
-UI -> Editor : requestWidth()
-Editor -> UI : provides width
-UI -> Editor : requestHeight()
-Editor -> UI : provides height
-UI -> ctrl : submit(mapName, width, height)
+deactivate UI
+
+Editor --> UI : provides mapName
+activate UI
+
+UI -> ctrl : submitData()
 activate ctrl
 
 ctrl -> reps : getInstance()
 activate reps
-reps --> ctrl : repositories
+
+reps --> ctrl : instance
 deactivate reps
 
-ctrl -> repositories : getMapRepository()
-activate repositories
-repositories --> ctrl : mapRepository
-deactivate repositories
-
-ctrl -> repo : checkNameUniqueness(mapName)
+ctrl -> repo : getMapRepository()
 activate repo
-repo --> ctrl : isUnique
-ctrl -> repo : createMap(mapName, width, height)
 
-repo -> Map : create(mapName, width, height)
-activate Map
-Map --> repo : isSuccessful
-deactivate Map
-
-repo --> ctrl : isSuccessful
+repo --> ctrl : mapRepository
 deactivate repo
 
-ctrl --> UI : isSuccessful
+loop while mapName exists
+  ctrl -> repo : existsByName(mapName)
+  activate repo
+
+  repo --> ctrl : true
+  deactivate repo
+
+  ctrl -> UI : show error "Map name already exists"
+  deactivate ctrl
+
+  UI --> ctrl : new mapName
+  activate ctrl
+end
+
+ctrl -> repo : existsByName(mapName)
+activate repo
+
+repo --> ctrl : false
+deactivate repo
+
+UI -> Editor : requestWidth()
+deactivate UI
+
+Editor --> UI : provides width
+activate UI
+
+UI -> Editor : requestHeight()
+deactivate UI
+
+Editor --> UI : provides height
+activate UI
+
+UI -> ctrl : submitData()
+ctrl -> Map : new Map(mapName, width, height)
+activate Map
+
+Map -> Map : validateName()
+Map -> Map : validateSize()
+Map --> ctrl : Map object
+deactivate Map
+
+ctrl -> repo : add(map)
+activate repo
+
+repo -> repo : validateMap(map)
+repo --> ctrl : void
+deactivate repo
+
+ctrl --> UI : map
 deactivate ctrl
 
-UI --> Editor : displayMap()
+UI --> Editor : "Map (name) successfully created!"
 deactivate UI
-deactivate Editor
-
-
 @enduml

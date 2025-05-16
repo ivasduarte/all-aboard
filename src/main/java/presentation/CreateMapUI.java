@@ -3,6 +3,7 @@ package presentation;
 import controller.CreateMapController;
 import domain.Map;
 import repositories.MapRepository;
+import repositories.Repositories;
 
 import java.util.Scanner;
 
@@ -16,7 +17,7 @@ import java.util.Scanner;
  */
 public class CreateMapUI implements Runnable {
     private CreateMapController controller = new CreateMapController();
-    private MapRepository mapRepository = new MapRepository();
+    private MapRepository mapRepository = Repositories.getInstance().getMapRepository();
 
     private String mapName;
     private int width = 0, height = 0;
