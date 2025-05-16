@@ -1,93 +1,61 @@
 @startuml
-actor Editor
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
 
+autonumber
+
+actor "Editor" as Editor
 participant ":CreateMapUI" as UI
-
-activate Editor
-Editor -> UI : requests to create a map
-
-create ":CreateMapController" as ctrl
-
-activate UI
-UI -> ctrl : create()
-
+participant ":CreateMapController" as ctrl
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as repositories
 participant "mapRepository\n:MapRepositories" as repo
 participant ":Map" as Map
 
-UI -> Editor : requestMapName()
-deactivate UI
+activate Editor
 
-Editor --> UI : provides mapName
+Editor -> UI : requests to create a map
 activate UI
-
-UI -> ctrl : submitData()
+UI -> ctrl** : create
+UI -> Editor : requestMapName()
+Editor -> UI : provides mapName
+UI -> Editor : requestWidth()
+Editor -> UI : provides width
+UI -> Editor : requestHeight()
+Editor -> UI : provides height
+UI -> ctrl : submit(mapName, width, height)
 activate ctrl
 
 ctrl -> reps : getInstance()
 activate reps
-
-reps --> ctrl : instance
+reps --> ctrl : repositories
 deactivate reps
 
-ctrl -> repo : getMapRepository()
+ctrl -> repositories : getMapRepository()
+activate repositories
+repositories --> ctrl : mapRepository
+deactivate repositories
+
+ctrl -> repo : checkNameUniqueness(mapName)
 activate repo
+repo --> ctrl : isUnique
+ctrl -> repo : createMap(mapName, width, height)
 
-repo --> ctrl : mapRepository
-deactivate repo
-
-loop while mapName exists
-  ctrl -> repo : existsByName(mapName)
-  activate repo
-
-  repo --> ctrl : true
-  deactivate repo
-
-  ctrl -> UI : show error "Map name already exists"
-  deactivate ctrl
-
-  UI --> ctrl : new mapName
-  activate ctrl
-end
-
-ctrl -> repo : existsByName(mapName)
-activate repo
-
-repo --> ctrl : false
-deactivate repo
-
-UI -> Editor : requestWidth()
-deactivate UI
-
-Editor --> UI : provides width
-activate UI
-
-UI -> Editor : requestHeight()
-deactivate UI
-
-Editor --> UI : provides height
-activate UI
-
-UI -> ctrl : submitData()
-ctrl -> Map : new Map(mapName, width, height)
+repo -> Map : create(mapName, width, height)
 activate Map
-
-Map -> Map : validateName()
-Map -> Map : validateSize()
-Map --> ctrl : Map object
+Map --> repo : isSuccessful
 deactivate Map
 
-ctrl -> repo : add(map)
-activate repo
-
-repo -> repo : validateMap(map)
-repo --> ctrl : void
+repo --> ctrl : isSuccessful
 deactivate repo
 
-ctrl --> UI : map
+ctrl --> UI : isSuccessful
 deactivate ctrl
 
-UI --> Editor : "Map (name) successfully created!"
+UI --> Editor : displayMap()
 deactivate UI
+deactivate Editor
+
+
 @enduml
