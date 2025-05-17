@@ -5,6 +5,7 @@ skinparam shadowing false
 
 participant ":BuyLocomotiveController" as CTRL
 participant "locomotiveRepo\n:LocomotiveRepository" as LocomotiveRepo
+participant "scenario:\nScenario" as ScenarioObj
 
 
 autonumber 14
@@ -13,6 +14,16 @@ CTRL -> LocomotiveRepo : getLocomotiveByModel(locomotiveModel)
 activate LocomotiveRepo
 LocomotiveRepo --> CTRL : locomotive
 deactivate LocomotiveRepo
+
+CTRL -> ScenarioObj : getBudget()
+activate ScenarioObj
+ScenarioObj --> CTRL : budget
+deactivate ScenarioObj
+
+CTRL -> ScenarioObj : subtractBudget(locomotive.getPrice())
+activate ScenarioObj
+ScenarioObj --> CTRL : updatedBudget
+deactivate ScenarioObj
 
 CTRL -> LocomotiveRepo : save(locomotive)
 activate LocomotiveRepo
