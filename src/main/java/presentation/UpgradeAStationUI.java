@@ -10,55 +10,25 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UpgradeAStationUI implements Runnable {
-    private final UpgradeAStationController controller = new UpgradeAStationController();
-    private final Scanner ler = new Scanner(System.in);
 
-    static Scanner sc = new Scanner(System.in);
+    private Map map;
+    private Scenario scenario;
 
-    @Override
-    public void run() {
+    public UpgradeAStationUI(Map map, Scenario scenario)
+    {
+        this.map = map;
+        this.scenario = scenario;
+    }
+
+    public void getInput() {
         System.out.println("\n\n------------------------ Upgrade Station ----------------------");
+        Scanner sc = new Scanner(System.in);
 
-        DisplayMapController mapController = new DisplayMapController();
+        UpgradeAStationController controller = new UpgradeAStationController();
 
-        List<Map> mapList = mapController.getMapList();
+        int budget = scenario.getBudget().getBudget();
 
-        if(mapList.isEmpty())
-        {
-            System.out.println("There are no maps.");
-            return;
-        }
-
-        for (int i = 0; i < mapList.size(); i++) {
-            Map map = mapList.get(i);
-            System.out.println("[" + map.getMapName() + " | " + map.getWidth() + "x" + map.getWidth() + "]");
-        }
-
-        System.out.print("Select a map from the list: ");
-        String mapName = sc.nextLine();
-        int mapID = -1;
-
-        for (int i = 0; i < mapList.size(); i++) {
-            if(mapList.get(i).getMapName().equalsIgnoreCase(mapName))
-                mapID = i;
-        }
-
-        if(mapID == -1)
-        {
-            System.out.println("Map does not exist");
-            return;
-        }
-
-        Scenario activeScenario = controller.getScenarioByMapName(mapName);
-
-        if (activeScenario == null) {
-            System.out.println("No scenario found for the selected map.");
-            return;
-        }
-
-        int budget = activeScenario.getBudget().getBudget();
-
-        List<Station> stations = controller.getAvailableStations(mapName);
+        List<Station> stations = controller.getAvailableStations(map.getMapName());
 
         if (stations.isEmpty()) {
             System.out.println("There are no available stations to upgrade.");
@@ -73,7 +43,7 @@ public class UpgradeAStationUI implements Runnable {
         }
 
         System.out.print("\nSelect a station to upgrade (enter number): ");
-        int selectedIndex = Integer.parseInt(ler.nextLine()) - 1;
+        int selectedIndex = Integer.parseInt(sc.nextLine()) - 1;
 
         if (selectedIndex < 0 || selectedIndex >= stations.size()) {
             System.out.println("Invalid station selection.");
@@ -92,7 +62,7 @@ public class UpgradeAStationUI implements Runnable {
         }
 
         System.out.print("\nEnter the type of building to add: ");
-        String buildingTypeName = ler.nextLine().trim();
+        String buildingTypeName = sc.nextLine().trim();
 
         BuildingType selectedBuildingType = controller.getBuildingTypeByName(buildingTypeName);
         if (selectedBuildingType == null) {
@@ -109,11 +79,15 @@ public class UpgradeAStationUI implements Runnable {
         boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
 
         if (success) {
-            activeScenario.subtractBudget(selectedBuildingType.getCost());
+            scenario.subtractBudget(selectedBuildingType.getCost());
             System.out.println("SUCCESS: Building '" + buildingTypeName + "' added to station.");
-            System.out.println("Remaining budget: " + activeScenario.getBudget().getBudget() + "€");
         } else {
             System.out.println("ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
         }
+    }
+
+    @Override
+    public void run() {
+        getInput();
     }
 }

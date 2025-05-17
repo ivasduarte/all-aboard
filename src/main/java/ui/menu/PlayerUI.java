@@ -90,20 +90,20 @@ public class PlayerUI implements Runnable{
 
         Budget budget = currentScenario.getBudget();
 
-        System.out.println("\nCurrent map: " + currentMap.getMapName());
-        System.out.println("Current scenario: " + currentScenario.getScenarioName());
-        System.out.println("Time period: " + currentScenario.getRestrictions().getStartDate() + " to " + currentScenario.getRestrictions().getEndDate());
-        System.out.println("Your current budget: " + budget.getBudget() + "€");
-
         List<MenuItem> options = new ArrayList<>();
         options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
-        options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI()));
+        options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("List all Stations", new ListStationsUI()));
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI()));
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI()));
 
         int option;
         do{
+            System.out.println("\nCurrent map: " + currentMap.getMapName());
+            System.out.println("Current scenario: " + currentScenario.getScenarioName());
+            System.out.println("Time period: " + currentScenario.getRestrictions().getStartDate() + " to " + currentScenario.getRestrictions().getEndDate());
+            System.out.println("Your current budget: " + budget.getBudget() + "€");
+
             option = Utils.showAndSelectIndex(options, "\n\n------------------------- PLAYER MENU -------------------------");
 
             if((option >= 0) && (option < options.size())){
