@@ -39,16 +39,21 @@ public class LocomotiveRepository {
      * @return list of available locomotives
      */
     public List<Locomotive> getAvailableLocomotives(int scenarioId) {
+        availableLocomotives.clear();
         List<Scenario> scenarios = Repositories.getInstance().getScenarioRepository().getScenarioList();
         Scenario scenario = scenarios.get(scenarioId);
         Restrictions scenarioRestrictions = scenario.getRestrictions();
         LocalDate scenarioStartDate = scenarioRestrictions.getStartDate();
 
         for (int i = 0; i < locomotives.size(); i++) {
+
+            boolean alreadyAdded = false;
+
             if (locomotives.get(i).getStartYear() <= scenarioStartDate.getYear() && locomotives.get(i).getEndYear() >= scenarioStartDate.getYear()) {
                 for (String techRestrictions : scenarioRestrictions.getLocomotiveTypes()) {
-                    if (techRestrictions.equalsIgnoreCase(locomotives.get(i).getLocomotiveFuelType())) {
+                    if (!alreadyAdded && techRestrictions.equalsIgnoreCase(locomotives.get(i).getLocomotiveFuelType())) {
                         availableLocomotives.add(locomotives.get(i));
+                        alreadyAdded = true;
                     }
                 }
             }

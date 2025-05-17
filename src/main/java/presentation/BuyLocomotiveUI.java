@@ -15,6 +15,8 @@ public class BuyLocomotiveUI implements Runnable {
 
     private String locomotiveModel;
 
+    private String mapName;
+
     /**
      * This method will be responsible to show the UI to user.
      * This method will also collect all the related inputs of the locomotive and pass them to the controller.
@@ -34,20 +36,22 @@ public class BuyLocomotiveUI implements Runnable {
         System.out.println();
         sc.nextLine();
 
+        if (scenarioID < 0 || scenarioID >= scenarioList.size()) {
+            System.out.println("Invalid scenario selected.");
+            return;
+        }
+
+        mapName = scenarioList.get(scenarioID).getMap().getMapName();
+
         List<Locomotive> availableLocomotives = getLocomotiveController().getLocomotiveRepository().getAvailableLocomotives(scenarioID);
         for (int i = 0; i < availableLocomotives.size(); i++) {
             System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + ": " + availableLocomotives.get(i).getPrice() + "€");
         }
         System.out.println("Introduce the locomotive model you want to buy: ");
+
+
         this.locomotiveModel = sc.nextLine().trim();
 
-        String result = ctrl.buyLocomotive(locomotiveModel);
-
-        if (result.startsWith("ERROR")) {
-            showError(result);
-        } else {
-             showSuccess(result);
-        }
     }
 
     /**
@@ -73,12 +77,12 @@ public class BuyLocomotiveUI implements Runnable {
      * This method will be responsible to show the success or error message to the Player.
      */
     public void submitData() {
-        Optional<String> result = Optional.ofNullable(ctrl.buyLocomotive(locomotiveModel));
+        String result = ctrl.buyLocomotive(locomotiveModel, mapName);
 
-        if (result.isPresent()) {
-            System.out.println("\nLocomotive successfully bought!");
+        if (result.startsWith("ERROR")) {
+            showError(result);
         } else {
-            System.out.println("\nCouldn't buy Locomotive!");
+            showSuccess(result);
         }
     }
 
