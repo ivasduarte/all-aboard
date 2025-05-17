@@ -3,7 +3,7 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-autonumber 25
+autonumber 20
 
 actor Editor
 participant ":AddIndustryUI" as UI

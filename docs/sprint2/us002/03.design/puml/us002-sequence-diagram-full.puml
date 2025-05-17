@@ -16,66 +16,71 @@ activate UI
 create ":AddIndustryController" as CTRL
 UI -> CTRL : create()
 
-participant ":Repositories" as RepositorySingleton
-participant "repositories\n:Repositories" as PLAT
-participant "industryRepository\n:IndustryRepository" as industryRepository
+participant ":Repositories" as REPS
+participant "repositories\n:Repositories" as reps
+participant ":Industry" as IND
+participant "industryRepository\n:IndustryRepository" as repo
 
 UI --> Editor : shows a list of the available maps
 deactivate UI
 
-Editor -> UI : selects a map from the list
+Editor -> UI : selects a map
 activate UI
 
 UI --> Editor : shows a list of the available scenarios
 deactivate UI
 
-Editor -> UI : selects a scenario from the list
+Editor -> UI : selects a scenario
 activate UI
 
-UI --> Editor : asks to introduce the position the map will take place
+UI --> Editor : asks the industry position
 deactivate UI
 
-Editor -> UI : introduces the respective position
+Editor -> UI : introduces the position
 activate UI
 
-UI --> Editor : shows a list of the available types of industries
+UI --> Editor : asks to introduce the industry type
 deactivate UI
 
-Editor -> UI : selects a type of industry
+Editor -> UI : introduces the industry type
 activate UI
 
 UI -> CTRL : submitData(mapId, scenarioId, positionX, positionY, industryType)
 activate CTRL
 
-CTRL -> RepositorySingleton : getInstance()
-activate RepositorySingleton
+CTRL -> REPS : getInstance()
+activate  REPS
 
-RepositorySingleton --> CTRL : repositories
-deactivate RepositorySingleton
+REPS --> CTRL : repositories
+deactivate REPS
 
-CTRL -> PLAT : getIndustryRepository()
-activate PLAT
+CTRL -> reps : getIndustryRepository()
+activate reps
 
-PLAT --> CTRL : industryRepository
-deactivate PLAT
+reps --> CTRL : industryRepository
+deactivate reps
 
-CTRL -> industryRepository : addIndustry(mapId, scenarioId, positionX, positionY, industryType)
-activate industryRepository
+CTRL -> IND : addIndustry(mapId, scenarioId, positionX, positionY, industryType)
+activate IND
 
-create "industry\n:Industry" as industry
-industryRepository -> industry : create()
+IND -> IND : validatePosition()
+IND -> IND : checkOverbuilding()
 
-industryRepository -> industryRepository : verifyIfExistsAndSave(mapId, scenarioId, positionX, positionY, industryType)
+IND --> CTRL : Industry Object
+deactivate IND
 
-industryRepository --> CTRL : industryData
-deactivate industryRepository
+CTRL -> repo : save(industry)
+activate repo
+
+repo -> repo : validateIndustry()
+
+repo --> CTRL : industryData
+deactivate repo
 
 CTRL --> UI : industryData
+deactivate CTRL
+
+UI --> Editor : "Industry [(positionX), (positionY)] saved successfully."
 deactivate UI
-
-UI --> Editor : shows success message
-deactivate Editor
-
-deactivate Editor
 
 @enduml
