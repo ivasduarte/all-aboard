@@ -21,8 +21,8 @@ public class UpgradeAStationController {
         this.buildingRepository = Repositories.getInstance().getBuildingRepository();
     }
 
-    public List<Station> getAvailableStations() {
-        return stationRepository.getAvailableStations();
+    public List<Station> getAvailableStations(String mapName) {
+        return stationRepository.getAvailableStationsByMapName(mapName);
     }
 
     public List<BuildingType> getAvailableBuildingTypes() {
