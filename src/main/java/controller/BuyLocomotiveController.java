@@ -14,6 +14,7 @@ public class BuyLocomotiveController {
      * This method will be responsible to add the bought locomotive to the repository.
      *
      * @param locomotiveModel locomotive model
+     * @param mapName the name of the map the player is playing
      *
      * @return Will show a success message if it is possible to buy the locomotive. Otherwise, it will show a message related to the error that occurred.
      */
