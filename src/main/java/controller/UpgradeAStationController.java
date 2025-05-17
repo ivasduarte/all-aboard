@@ -43,4 +43,8 @@ public class UpgradeAStationController {
         Building building = new Building(type);
         return upgradeService.upgradeStation(station, building, currentYear);
     }
+
+    public BuildingType getBuildingTypeByName(String name) {
+        return buildingRepository.getBuildingType(name);
+    }
 }
