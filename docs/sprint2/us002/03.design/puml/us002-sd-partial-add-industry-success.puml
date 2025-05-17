@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber 25
+
+actor Editor
+participant ":AddIndustryUI" as UI
+participant ":AddIndustryController" as CTRL
+participant "industryRepository\n:IndustryRepository" as repo
+
+activate Editor
+activate UI
+activate CTRL
+
+CTRL -> repo : save(industry)
+activate repo
+
+group Add Industry Success
+    repo -> repo : validateIndustry()
+    repo -> CTRL : industryData
+    deactivate repo
+
+    CTRL -> UI : industryData
+    deactivate CTRL
+
+    UI -> Editor : "Industry [(positionX), (positionY)] saved successfully."
+    deactivate UI
+end
+
+@enduml
