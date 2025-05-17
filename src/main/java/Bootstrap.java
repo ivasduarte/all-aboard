@@ -39,8 +39,10 @@ public class Bootstrap implements Runnable {
         List<String> historicalEvents = new ArrayList<>();
 
         locomotiveTypes.add("steam");
+        Scenario scenario = new Scenario("ExampleScenario", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), map, new Budget(1000));
 
-        sr.add(new Scenario("ExampleScenario", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), map, new Budget(1000) ));
+        map.addNewScenario(scenario);
+        sr.add(scenario);
     }
 
     /**
