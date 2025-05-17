@@ -26,9 +26,6 @@ public class AddStationUI implements Runnable {
     }
 
     public void getInput() {
-        System.out.println(map.getMapName());
-        System.out.println(scenario.getScenarioName());
-
         Scanner sc = new Scanner(System.in);
 
         AddStationController stationController = new AddStationController();
