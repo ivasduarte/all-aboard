@@ -23,12 +23,6 @@ public class UpgradeAStationUI implements Runnable {
 
         List<Map> mapList = mapController.getMapList();
 
-        User currentUser = UserSession.getInstance().getUser();
-
-        Budget playerBudget = UserSession.getInstance().getUser().getBudget();
-
-        int budget = playerBudget.getBudget();
-
         if(mapList.isEmpty())
         {
             System.out.println("There are no maps.");
@@ -54,6 +48,15 @@ public class UpgradeAStationUI implements Runnable {
             System.out.println("Map does not exist");
             return;
         }
+
+        Scenario activeScenario = controller.getScenarioByMapName(mapName);
+
+        if (activeScenario == null) {
+            System.out.println("No scenario found for the selected map.");
+            return;
+        }
+
+        int budget = activeScenario.getBudget().getBudget();
 
         List<Station> stations = controller.getAvailableStations(mapName);
 
@@ -106,9 +109,9 @@ public class UpgradeAStationUI implements Runnable {
         boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
 
         if (success) {
-            currentUser.subtractBudget(selectedBuildingType.getCost());
+            activeScenario.subtractBudget(selectedBuildingType.getCost());
             System.out.println("SUCCESS: Building '" + buildingTypeName + "' added to station.");
-            System.out.println("Remaining budget: " + currentUser.getBudget().getBudget() + "€");
+            System.out.println("Remaining budget: " + activeScenario.getBudget().getBudget() + "€");
         } else {
             System.out.println("ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
         }

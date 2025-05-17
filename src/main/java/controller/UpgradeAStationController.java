@@ -1,11 +1,9 @@
 package controller;
 
-import domain.Building;
-import domain.BuildingType;
-import domain.Station;
-import domain.StationUpgradeService;
+import domain.*;
 import repositories.BuildingRepository;
 import repositories.Repositories;
+import repositories.ScenarioRepository;
 import repositories.StationRepository;
 
 import java.util.List;
@@ -46,5 +44,15 @@ public class UpgradeAStationController {
 
     public BuildingType getBuildingTypeByName(String name) {
         return buildingRepository.getBuildingType(name);
+    }
+
+    public Scenario getScenarioByMapName(String mapName) {
+        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+        for (Scenario scenario : scenarioRepository.getScenarioList()) {
+            if (scenario.getMap().getMapName().equalsIgnoreCase(mapName)) {
+                return scenario;
+            }
+        }
+        return null;
     }
 }
