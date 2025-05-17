@@ -25,11 +25,12 @@ public class AddStationUI implements Runnable {
         List<Map> mapList = mapController.getMapList();
 
         Budget playerBudget = UserSession.getInstance().getUser().getBudget();
+
         int budget = playerBudget.getBudget();
 
         if(mapList.isEmpty())
         {
-            System.out.println("There are no maps");
+            System.out.println("There are no maps.");
             return;
         }
 
