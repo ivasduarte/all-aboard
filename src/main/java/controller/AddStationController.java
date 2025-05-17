@@ -1,10 +1,8 @@
 package controller;
 
-import domain.Budget;
-import domain.Map;
-import domain.Station;
-import domain.UserSession;
+import domain.*;
 import repositories.Repositories;
+import repositories.ScenarioRepository;
 import repositories.StationRepository;
 
 public class AddStationController {
@@ -19,12 +17,17 @@ public class AddStationController {
      */
     public boolean AddStation(int mapID, int positionX, int positionY, String stationType)
     {
-        Budget playerBudget = UserSession.getInstance().getUser().getBudget();
-
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
         Station newStation = new Station(mapID, positionX, positionY, stationType);
         Map stationMap = newStation.getMap();
 
+        Scenario scenario = getScenarioByMapID(mapID);
+
+        if(scenario == null){
+         System.out.println("No scenario found for the selected map.");
+         return false;
+
+        }
         boolean validStationType = false;
         int typeID = 0;
         for(int i = 0; i < Station.stationTypes.length; i++)
@@ -50,7 +53,22 @@ public class AddStationController {
         stationRepository.save(newStation);
         Station.IncreaseTotalStations();
 
-        playerBudget.setBudget(playerBudget.getBudget() - Station.typesPrices[typeID]);
+        scenario.subtractBudget(Station.typesPrices[typeID]);
         return true;
     }
+
+    public Scenario getScenarioByMapID(int mapID) {
+        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+        Map targetMap = Repositories.getInstance().getMapRepository().getMapList().get(mapID);
+
+        for (Scenario scenario : scenarioRepository.getScenarioList()) {
+            Map scenarioMap = scenario.getMap();
+            if (scenarioMap != null && scenarioMap.equals(targetMap)) {
+                return scenario;
+            }
+        }
+        return null;
+    }
+
+
 }
