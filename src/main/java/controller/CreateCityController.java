@@ -153,4 +153,16 @@ public class CreateCityController {
             city.addBlockManual(hb);
         }
     }
+
+    /**
+     * Retrieves the {@code CityRepository} instance used for managing cities.
+     * The repository provides access to stored city information and supports
+     * operations such as adding, retrieving, and validating cities.
+     *
+     * @return the {@code CityRepository} instance for city management
+     */
+    public CityRepository getCityRepo(){
+        var repos = Repositories.getInstance();
+        return repos.getCityRepository();
+    }
 }

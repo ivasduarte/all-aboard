@@ -7,13 +7,13 @@ autonumber
 
 actor "Player" as Player
 participant ":BuyLocomotiveUI" as UI
+participant ":CreateScenarioController" as ScenarioCtrl
 participant ":BuyLocomotiveController" as CTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
 participant "locomotiveRepo\n:LocomotiveRepository" as LocomotiveRepo
-participant ":ApplicationSession" as AppSession
-participant ":UserSession" as UserSession
-participant "player:\nPlayer" as PlayerObj
+participant "scenarioRepo\n:ScenarioRepository" as ScenarioRepo
+participant "scenario:\nScenario" as ScenarioObj
 
 activate Player
 
@@ -21,11 +21,54 @@ Player -> UI : requests to buy a locomotive
 
 activate UI
 UI -> CTRL** : create
+UI -> ScenarioCtrl** : create
+
+UI -> ScenarioCtrl : getScenarioList()
+activate ScenarioCtrl
+ScenarioCtrl -> reps : getInstance()
+activate reps
+reps --> ScenarioCtrl : repositories
+deactivate reps
+
+ScenarioCtrl -> PLAT : getScenarioRepository()
+activate PLAT
+PLAT --> ScenarioCtrl : scenarioRepository
+deactivate PLAT
+
+ScenarioCtrl -> ScenarioRepo : getScenarioList()
+activate ScenarioRepo
+ScenarioRepo --> ScenarioCtrl : scenarioList
+deactivate ScenarioRepo
+
+ScenarioCtrl --> UI : scenarioList
+deactivate ScenarioCtrl
+
+UI -> Player : displays list of scenarios
+Player -> UI : selects scenario
+
+UI -> CTRL : getLocomotiveRepository()
+activate CTRL
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : repositories
+deactivate reps
+
+CTRL -> PLAT : getLocomotiveRepository()
+activate PLAT
+PLAT --> CTRL : locomotiveRepository
+deactivate PLAT
+CTRL --> UI : locomotiveRepository
+deactivate CTRL
+
+UI -> LocomotiveRepo : getAvailableLocomotives(scenarioId)
+activate LocomotiveRepo
+LocomotiveRepo --> UI : availableLocomotives
+deactivate LocomotiveRepo
 
 UI -> Player : displays available locomotives
 Player -> UI : selects locomotive model
-UI -> CTRL : buyLocomotive(locomotiveModel)
 
+UI -> CTRL : buyLocomotive(locomotiveModel, mapName)
 activate CTRL
 
 CTRL -> reps : getInstance()
@@ -38,20 +81,32 @@ activate PLAT
 PLAT --> CTRL : locomotiveRepository
 deactivate PLAT
 
-CTRL -> AppSession : getInstance()
-activate AppSession
-AppSession --> CTRL : applicationSession
-deactivate AppSession
+CTRL -> PLAT : getScenarioRepository()
+activate PLAT
+PLAT --> CTRL : scenarioRepository
+deactivate PLAT
 
-CTRL -> AppSession : getCurrentSession()
-activate AppSession
-AppSession --> CTRL : userSession
-deactivate AppSession
+CTRL -> ScenarioRepo : getScenarioList()
+activate ScenarioRepo
+ScenarioRepo --> CTRL : scenarioList
+deactivate ScenarioRepo
+
+CTRL -> CTRL : find scenario by mapName
 
 CTRL -> LocomotiveRepo : getLocomotiveByModel(locomotiveModel)
 activate LocomotiveRepo
 LocomotiveRepo --> CTRL : locomotive
 deactivate LocomotiveRepo
+
+CTRL -> ScenarioObj : getBudget()
+activate ScenarioObj
+ScenarioObj --> CTRL : budget
+deactivate ScenarioObj
+
+CTRL -> ScenarioObj : subtractBudget(locomotive.getPrice())
+activate ScenarioObj
+ScenarioObj --> CTRL : updatedBudget
+deactivate ScenarioObj
 
 CTRL -> LocomotiveRepo : save(locomotive)
 activate LocomotiveRepo
