@@ -132,4 +132,13 @@ public class Repositories {
     public StationRepository getStationRepository() {return stationRepo; }
 
     public BuildingRepository getBuildingRepository() {return buildingRepo; }
+
+    /**
+     * This method will be used just for testing purposes.
+     *
+     * @param scenarioRepository The scenario repository used for testing
+     */
+    public void setScenarioRepository(ScenarioRepository scenarioRepository) {
+        this.scenarioRepository = scenarioRepository;
+    }
 }
