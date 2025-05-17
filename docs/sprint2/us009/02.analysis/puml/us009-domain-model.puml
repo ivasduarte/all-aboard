@@ -12,39 +12,40 @@ hide methods
 
 'title Domain Model
 
-class Train{
-    - name
-    - date of purchase
-}
 class Locomotive {
-    - name
-    - serialNumber
-    - locomotiveType
-    - power
-    - acceleration
-    - topSpeed
+    - locomotiveModel
+    - fuelType
+    - speed
     - startYear
-    - acquisitionType
+    - endYear
+    - price
+    - fuelCost
+    - maintenanceCost
 }
 
-enum LocomotiveType{
-    - Steam
-    - Diesel
-    - Electricity
-}
-
-class Carriage{
+class Scenario {
     - name
-    - cargoType
+    - restrictions
 }
 
-enum CargoType{
-    - Passengers
-    - Mail
-    - Coal
-    - Iron ore
-    - Steel
-    - Cars
+class Budget {
+    - budget
+}
+
+class Map {
+    - mapName
+}
+
+class Restrictions {
+    - startDate
+    - endDate
+    - locomotiveTypes
+    - historicalEvents
+}
+
+class Station {
+    - name
+    - location
 }
 
 class Player {
@@ -53,10 +54,11 @@ class Player {
     - password
 }
 
-Train "1" - "*" Locomotive : has
-Player "1" -- "*" Train : creates
-Locomotive "1" - "*" LocomotiveType : has
-Carriage "1" - "*" CargoType : has
-Train "1" - "*" Carriage : has
+Scenario "1" -- "1" Budget : has
+Scenario "1" -- "1" Map : has
+Scenario "1" -- "1" Restrictions : has
+Scenario "1" -- "*" Locomotive : purchases
+Locomotive "*" -- "*" Station : has route
+Player "1" -- "*" Scenario : plays
 
 @enduml

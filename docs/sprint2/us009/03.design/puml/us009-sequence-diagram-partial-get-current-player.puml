@@ -3,16 +3,13 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-
 participant ":BuyLocomotiveController" as CTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
-participant "locomotiveRepo\n:LocomotiveRepository" as LocomotiveRepo
-participant ":ApplicationSession" as AppSession
-participant ":UserSession" as UserSession
+participant "scenarioRepo\n:ScenarioRepository" as ScenarioRepo
 
 autonumber 1
-
+group Get Scenario Information
 --> CTRL**: create
 activate CTRL
 CTRL -> reps : getInstance()
@@ -20,24 +17,16 @@ activate reps
 reps --> CTRL : repositories
 deactivate reps
 
-CTRL -> PLAT : getLocomotiveRepository()
+CTRL -> PLAT : getScenarioRepository()
 activate PLAT
-PLAT --> CTRL : locomotiveRepository
+PLAT --> CTRL : scenarioRepository
 deactivate PLAT
 
-CTRL -> AppSession : getInstance()
-activate AppSession
-AppSession --> CTRL : applicationSession
-deactivate AppSession
+CTRL -> ScenarioRepo : getScenarioList()
+activate ScenarioRepo
+ScenarioRepo --> CTRL : scenarioList
+deactivate ScenarioRepo
 
-CTRL -> AppSession : getCurrentSession()
-activate AppSession
-AppSession --> CTRL : userSession
-deactivate AppSession
-
-CTRL -> UserSession : getCurrentPlayer()
-activate UserSession
-UserSession --> CTRL : player
-deactivate UserSession
-
+CTRL -> CTRL : find scenario by mapName
+end
 @enduml

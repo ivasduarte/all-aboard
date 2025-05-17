@@ -24,7 +24,7 @@ public class Locomotive {
     private int startYear;
 
     /**
-     * The year the locomotive has stopped to be producted.
+     * The year the locomotive had it production suspended.
      */
     private int endYear;
 
