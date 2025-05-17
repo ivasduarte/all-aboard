@@ -1,33 +1,46 @@
 package controller;
 
 import domain.*;
+import repositories.MapRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 import repositories.StationRepository;
+
+import java.util.List;
 
 public class AddStationController {
 
     /**
      * Add a station in a map
-     * @param mapID id of the map
+     * @param map map of the station
+     * @param scenario scenario in which the budget will be subtracted from
      * @param positionX station's X position
      * @param positionY station's Y position
      * @param stationType station type
      * @return return true if successfully added station, false otherwise
      */
-    public boolean AddStation(int mapID, int positionX, int positionY, String stationType)
+    public boolean AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType)
     {
+        int mapID = -1;
+
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Map> maps = mapRepository.getMapList();
+
+        for(int i = 0; i < maps.size(); i++)
+        {
+            if(maps.get(i).equals(map))
+                mapID = i;
+        }
+
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
         Station newStation = new Station(mapID, positionX, positionY, stationType);
         Map stationMap = newStation.getMap();
 
-        Scenario scenario = getScenarioByMapID(mapID);
-
         if(scenario == null){
-         System.out.println("No scenario found for the selected map.");
-         return false;
-
+            System.out.println("No scenario found for the selected map.");
+            return false;
         }
+
         boolean validStationType = false;
         int typeID = 0;
         for(int i = 0; i < Station.stationTypes.length; i++)
@@ -55,20 +68,4 @@ public class AddStationController {
 
         scenario.subtractBudget(Station.typesPrices[typeID]);
         return true;
-    }
-
-    public Scenario getScenarioByMapID(int mapID) {
-        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
-        Map targetMap = Repositories.getInstance().getMapRepository().getMapList().get(mapID);
-
-        for (Scenario scenario : scenarioRepository.getScenarioList()) {
-            Map scenarioMap = scenario.getMap();
-            if (scenarioMap != null && scenarioMap.equals(targetMap)) {
-                return scenario;
-            }
-        }
-        return null;
-    }
-
-
-}
+    }}

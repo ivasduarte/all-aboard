@@ -96,7 +96,7 @@ public class PlayerUI implements Runnable{
         System.out.println("Your current budget: " + budget.getBudget() + "€");
 
         List<MenuItem> options = new ArrayList<>();
-        options.add(new MenuItem("Build a Station", new AddStationUI()));
+        options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI()));
         options.add(new MenuItem("List all Stations", new ListStationsUI()));
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI()));

@@ -16,48 +16,22 @@ import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
 
+    private Map map;
+    private Scenario scenario;
+
+    public AddStationUI(Map map, Scenario scenario)
+    {
+        this.map = map;
+        this.scenario = scenario;
+    }
+
     public void getInput() {
+        System.out.println(map.getMapName());
+        System.out.println(scenario.getScenarioName());
 
         Scanner sc = new Scanner(System.in);
 
         AddStationController stationController = new AddStationController();
-        DisplayMapController mapController = new DisplayMapController();
-
-        List<Map> mapList = mapController.getMapList();
-
-
-        if(mapList.isEmpty())
-        {
-            System.out.println("There are no maps.");
-            return;
-        }
-
-        for (int i = 0; i < mapList.size(); i++) {
-            Map map = mapList.get(i);
-            System.out.println("[" + map.getMapName() + " | " + map.getWidth() + "x" + map.getWidth() + "]");
-        }
-
-        System.out.print("Select a map from the list: ");
-        String mapName = sc.nextLine();
-        int mapID = -1;
-
-        for (int i = 0; i < mapList.size(); i++) {
-            if(mapList.get(i).getMapName().equalsIgnoreCase(mapName))
-                mapID = i;
-        }
-
-        if(mapID == -1)
-        {
-            System.out.println("Map does not exist");
-            return;
-        }
-
-        Scenario activeScenario = stationController.getScenarioByMapID(mapID);
-        if (activeScenario == null) {
-            System.out.println("No scenario found for the selected map.");
-            return;
-        }
-        int budget = activeScenario.getBudget().getBudget();
 
         System.out.print("\nEnter the position X of the station: ");
         int positionX = sc.nextInt();
@@ -65,13 +39,14 @@ public class AddStationUI implements Runnable {
         System.out.print("\nEnter the position Y of the station: ");
         int positionY = sc.nextInt();
 
+        int budget = scenario.getBudget().getBudget();
         sc.nextLine();
         System.out.println("Station types:");
         for(int i = 0; i < Station.stationTypes.length; i++)
         {
             System.out.println(Station.stationTypes[i] + " | " + Station.typesPrices[i] + "€");
         }
-        System.out.println("Your current budget is " + budget + "€");
+        System.out.println("Your current budget is " + scenario.getBudget().getBudget() + "€");
         System.out.print("Enter the station type you want to add: ");
         String stationType = sc.nextLine();
 
@@ -95,7 +70,7 @@ public class AddStationUI implements Runnable {
             return;
         }
 
-        boolean result = stationController.AddStation(mapID, positionX, positionY, stationType);
+        boolean result = stationController.AddStation(map, scenario, positionX, positionY, stationType);
 
         if (!result) {
             System.out.println("Station not valid");
