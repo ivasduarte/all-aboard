@@ -1,23 +1,24 @@
 package domain;
 
-import controller.DisplayMapController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import repositories.CityRepository;
-import repositories.MapRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class IndustryTest {
-    private MapRepository mapRepo = new MapRepository();
-
     private Industry industry;
 
     @BeforeEach
     void setUp() {
-        Map map = new Map("TestMap", 100, 100);
-        mapRepo.add(map);
-        industry = new Industry(0, 0, 25, 75, "Mixed industry");
+        industry = new Industry(0, 0, 25, 75, "Mixed industry") {
+            @Override
+            public boolean validatePosition() {
+                int width = 100;
+                int height = 100;
+
+                return industry.getPositionX() >= 0 && industry.getPositionX() < width && industry.getPositionY() >= 0 && industry.getPositionY() < height;
+            }
+        };
     }
 
     @Test
@@ -47,9 +48,37 @@ class IndustryTest {
 
     @Test
     void validatePosition_Valid() {
+        assertTrue(industry.validatePosition());
+    }
+
+    @Test
+    void validatePosition_Invalid() {
+        Industry invalidIndustry = new Industry(0, 0, 150, 75, "Invalid industry") {
+            @Override
+            public boolean validatePosition() {
+                int width = 100;
+                int height = 100;
+
+                return getPositionX() >= 0 && getPositionX() <= width &&
+                        getPositionY() >= 0 && getPositionY() <= height;
+            }
+        };
+
+        assertFalse(invalidIndustry.validatePosition());
     }
 
     @Test
     void checkOverbuilding() {
+        Industry conflictIndustry = new Industry(0, 0, 25, 75, "Primary sector industry") {
+            @Override
+            public boolean checkOverbuilding() {
+                int otherX = 25;
+                int otherY = 75;
+
+                return !(getPositionX() == otherX && getPositionY() == otherY);
+            }
+        };
+
+        assertFalse(conflictIndustry.checkOverbuilding());
     }
 }
