@@ -14,15 +14,13 @@ public class User {
     private String email;
     private String roleId;
     private String password;
-    private Budget budget;
 
 
-    public User(String name, String email, String roleId, String password, Budget budget) {
+    public User(String name, String email, String roleId, String password) {
         this.name = name;
         this.email = email;
         this.roleId = roleId;
         this.password = password;
-        this.budget = budget;
     }
 
     public String getRoleId() {
@@ -58,25 +56,4 @@ public class User {
         this.email = email;
     }
 
-    public Budget getBudget() {
-        return budget;
-    }
-
-    public int getBudget1() {
-        return budget.getBudget();
-    }
-
-    public void setBudget(Budget budget) {
-        this.budget = budget;
-    }
-
-    public int subtractBudget(int amount) {
-        budget.setBudget(budget.getBudget() - amount);
-        return budget.getBudget();
-    }
-
-    public int addBudget(int amount) {
-        budget.setBudget(budget.getBudget() + amount);
-        return budget.getBudget();
-    }
 }

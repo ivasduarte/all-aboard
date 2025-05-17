@@ -87,22 +87,26 @@ public class AuthenticationUI implements Runnable {
         return rolesUI;
     }
 
-    public void createUser(){
+    public void createUser() {
         System.out.println("\n\n-------------------------- REGISTRATION UI --------------------------");
 
-        boolean success = false;
-        do{
+        boolean tryAgain;
+        do {
             String name = Utils.readLineFromConsole("Enter your name: ");
             String email = Utils.readLineFromConsole("Enter your email: ");
             String password = Utils.readLineFromConsole("Enter your password: ");
             String roleID = ctrl.ROLE_PLAYER;
-            Optional<Budget> budget = Optional.of(new Budget(1000));
 
-            success = ctrl.createNewUser(name, email, password, roleID, budget);
-            if(!success){
+            boolean success = ctrl.createNewUser(name, email, password, roleID);
+            if (!success) {
                 System.out.println("User has been previously created.");
+                String answer = Utils.readLineFromConsole("Try again? (y/n): ");
+                tryAgain = answer.equalsIgnoreCase("y");
+            } else {
+                tryAgain = false;
+                System.out.println("User has been created.");
             }
-        }while(!success);
+        } while (tryAgain);
     }
 
 
