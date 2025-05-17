@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant "scenarioRepository\n:ScenarioRepository" as Repo
+participant ":Scenario" as Scenario
+
+activate UI
+activate CTRL
+
+autonumber 21
+Scenario --> CTRL : scenario
+deactivate Scenario
+
+group Add Scenario
+    CTRL -> Repo : add(scenario)
+    activate Repo
+    Repo --> CTRL : void
+    deactivate Repo
+end
+
+CTRL --> UI : result
+deactivate CTRL
+
+@enduml

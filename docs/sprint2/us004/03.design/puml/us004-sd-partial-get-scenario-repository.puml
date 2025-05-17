@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioController" as CTRL
+participant ":Repositories" as reps
+participant "scenarioRepository\n:ScenarioRepository" as Repo
+
+autonumber 6
+
+
+-> CTRL : submitData()
+activate CTRL
+
+group Get Scenario Repository
+    autonumber 6.1
+    CTRL -> reps : getInstance()
+    activate reps
+    reps --> CTRL : repositories
+    deactivate reps
+
+    CTRL -> Repo : getScenarioRepository()
+    activate Repo
+    Repo --> CTRL : scenarioRepository
+    deactivate Repo
+end
+
+@enduml

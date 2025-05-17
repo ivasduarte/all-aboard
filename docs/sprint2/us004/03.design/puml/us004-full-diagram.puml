@@ -7,56 +7,117 @@ autonumber
 actor "Editor" as Editor
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
+participant ":DisplayMapController" as mapCTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
+participant "mapRepository\n:MapRepository" as mapRep
 participant "scenarioRepository\n:ScenarioRepository" as Repo
-participant "Scenario" as Scenario
+participant ":Scenario" as Scenario
 
 activate Editor
 
-Editor -> UI : starts creating a scenario
-
+Editor -> UI : requests to create a scenario
 activate UI
-UI -> CTRL** : create
 
-UI -> Editor : prompts for scenario data (name, restrictions, map)
-Editor -> UI : provides data
-UI -> CTRL : submit(name, restrictions, selectedMap)
+UI -> CTRL** : create()
+
+UI -> mapCTRL : getMapList()
+autonumber 3.1
+activate mapCTRL
+mapCTRL -> reps : getInstance()
+activate reps
+reps --> mapCTRL : instance
+deactivate reps
+mapCTRL -> PLAT : getMapRepository()
+activate PLAT
+PLAT --> mapCTRL : mapRep
+deactivate PLAT
+mapCTRL -> mapRep : getMapList()
+activate mapRep
+mapRep --> mapCTRL : List<Map>
+deactivate mapRep
+mapCTRL --> UI : List<Map>
+deactivate mapCTRL
+
+autonumber 4
+UI -> Editor : requests to select map from list
+deactivate UI
+Editor --> UI : selects map from list
+activate UI
+
+UI -> CTRL : submitData()
+
+autonumber 6.1
 
 activate CTRL
-
 CTRL -> reps : getInstance()
 activate reps
-
 reps --> CTRL : repositories
 deactivate reps
 
-CTRL -> PLAT : getScenarioRepository()
-activate PLAT
-
-PLAT --> CTRL : scenarioRepository
-deactivate PLAT
-
-CTRL -> Repo : checkNameUniqueness(name)
+CTRL -> Repo : getScenarioRepository()
 activate Repo
-
-Repo --> CTRL : isUnique
-CTRL -> Repo : createScenario(name, restrictions, map)
-
-Repo -> Scenario : createVerifyScenario(name, restrictions, map)
-activate Scenario
-
-Scenario --> Repo :isSuccessful
-deactivate Scenario
-
-Repo --> CTRL : isSuccessful
+Repo --> CTRL : scenarioRepository
 deactivate Repo
 
-CTRL --> UI : isSuccessful
-deactivate CTRL
+loop while scenarioName already exists
+autonumber 7
+        CTRL -> Repo : existsByName(name)
+        autonumber 7.1
+        activate Repo
+        Repo --> CTRL : true
+        deactivate Repo
+        CTRL -> UI : showError()
+        deactivate CTRL
+        autonumber 8
+        UI --> CTRL : new scenarioName
+    activate CTRL
+end
 
-UI --> Editor : display result
+CTRL -> Repo : existsByName(name)
+activate Repo
+Repo --> CTRL : false
+deactivate Repo
+
+UI -> Editor : request scenario data
 deactivate UI
-deactivate Editor
+Editor --> UI : provides scenario data
+activate UI
+
+UI -> CTRL : submitData()
+CTRL -> Scenario : createScenario(name, restrictions, map)
+activate Scenario
+
+Scenario -> Scenario : validateName()
+Scenario -> Scenario : validateRestrictions()
+
+
+loop while restrictions are invalid
+autonumber 16.1
+    Scenario --> CTRL : throw IllegalArgumentException
+    deactivate Scenario
+    CTRL -> UI : showError()
+    deactivate CTRL
+    autonumber 17
+    UI --> CTRL : new map restrictions
+    activate CTRL
+end
+
+CTRL -> Scenario : createScenario(name, restrictions, map)
+activate Scenario
+Scenario -> Scenario : hasValidMap()
+Scenario -> Scenario : validateRestrictions()
+Scenario --> CTRL : scenario
+deactivate Scenario
+
+CTRL -> Repo : add(scenario)
+activate Repo
+Repo --> CTRL : void
+deactivate Repo
+
+CTRL --> UI : result
+deactivate CTRL
+UI --> Editor : showSuccess(result)
+deactivate UI
 
 @enduml

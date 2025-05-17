@@ -1,0 +1,72 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":DisplayMapController" as mapCTRL
+participant ":Scenario" as Scenario
+
+activate Editor
+Editor -> UI : requests to create a scenario
+
+activate UI
+UI -> CTRL : create()
+activate CTRL
+
+UI -> mapCTRL : getMapList()
+activate mapCTRL
+
+    ref over mapCTRL
+        Get Map List
+    end ref
+
+deactivate mapCTRL
+
+autonumber 4
+
+UI -> Editor : requests to select map from list
+deactivate UI
+Editor --> UI : selects map from list
+activate UI
+UI -> CTRL : submitData()
+
+    ref over CTRL
+        Get Scenario Repository
+    end
+
+    ref over CTRL
+        Check Name Uniqueness
+    end
+
+UI -> Editor : request scenario data
+deactivate UI
+Editor --> UI : provides scenario data
+activate UI
+
+UI -> CTRL : submitData()
+CTRL -> Scenario : createScenario(name, restrictions, map)
+activate Scenario
+
+    ref over Scenario
+        Validate Restrictions
+    end
+
+Scenario --> CTRL : scenario
+deactivate Scenario
+
+    ref over CTRL
+        Add Scenario
+    end
+
+CTRL --> UI : result
+deactivate CTRL
+UI --> Editor : showSuccess(result)
+deactivate UI
+
+@enduml

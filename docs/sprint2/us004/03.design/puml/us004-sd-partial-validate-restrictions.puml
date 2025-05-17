@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":Scenario" as Scenario
+
+autonumber 13
+
+activate UI
+
+UI -> CTRL : submitData()
+activate CTRL
+CTRL -> Scenario : createScenario(name, restrictions, map)
+activate Scenario
+
+group Validate Restrictions
+    Scenario -> Scenario : validateName()
+    Scenario -> Scenario : validateRestrictions()
+
+    loop while restrictions are invalid
+        autonumber 16.1
+            Scenario --> CTRL : throw IllegalArgumentException
+            deactivate Scenario
+            CTRL -> UI : showError()
+            deactivate CTRL
+            autonumber 17
+            UI --> CTRL : new map restrictions
+            activate CTRL
+    end
+
+    CTRL -> Scenario : createScenario(name, restrictions, map)
+    activate Scenario
+    Scenario -> Scenario : hasValidMap()
+    Scenario -> Scenario : validateRestrictions()
+end
+
+Scenario --> CTRL : scenario
+deactivate Scenario
+
+@enduml
