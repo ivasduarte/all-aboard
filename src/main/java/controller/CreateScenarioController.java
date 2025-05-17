@@ -13,14 +13,18 @@ public class CreateScenarioController {
     public String createScenario(String name, Restrictions restrictions, Map map) {
         try {
             ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+            List<Scenario> scenarios = map.getScenarios();
 
-            if (scenarioRepository.existsByName(name)) {
-                return "ERROR: A scenario with this name already exists.";
+            for(Scenario scenario : scenarios)
+            {
+                if(scenario.getScenarioName().equalsIgnoreCase(name))
+                    return "ERROR: A scenario with this name already exists.";
             }
 
             Budget defaultBudget = new Budget(1000);
             Scenario scenario = new Scenario(name, restrictions, map, defaultBudget);
             scenarioRepository.add(scenario);
+            map.addNewScenario(scenario);
 
             return "Scenario '" + name + "' created successfully.";
         } catch (IllegalArgumentException e){

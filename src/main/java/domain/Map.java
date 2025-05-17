@@ -1,6 +1,7 @@
 package domain;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class Map {
         this.name = name;
         this.width = width;
         this.height = height;
+        scenarios = new ArrayList<>();
         validateName();
         validateSize();
     }
