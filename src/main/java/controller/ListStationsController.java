@@ -22,4 +22,9 @@ public class ListStationsController {
         return StationRepo.getStations();
 
     }
+
+    public List<Station> getStationsByMapName(String mapName) {
+        return Repositories.getInstance().getStationRepository().getAvailableStationsByMapName(mapName);
+    }
+
 }
