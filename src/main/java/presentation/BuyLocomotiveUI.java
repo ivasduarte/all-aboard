@@ -3,7 +3,10 @@ package presentation;
 import controller.BuyLocomotiveController;
 import controller.CreateScenarioController;
 import domain.Locomotive;
+import domain.Map;
 import domain.Scenario;
+import repositories.Repositories;
+import repositories.ScenarioRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +14,17 @@ import java.util.Scanner;
 
 public class BuyLocomotiveUI implements Runnable {
     private BuyLocomotiveController ctrl = new BuyLocomotiveController();
-    private CreateScenarioController scenarioController = new CreateScenarioController();
 
     private String locomotiveModel;
 
-    private String mapName;
+    private Map map;
+    private Scenario scenario;
+
+    public BuyLocomotiveUI(Map map, Scenario scenario)
+    {
+        this.map = map;
+        this.scenario = scenario;
+    }
 
     /**
      * This method will be responsible to show the UI to user.
@@ -24,24 +33,15 @@ public class BuyLocomotiveUI implements Runnable {
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
-        List<Scenario> scenarioList = scenarioController.getScenarioList();
-        for (int i = 0; i < scenarioList.size(); i++) {
-            Scenario scenario = scenarioList.get(i);
-            System.out.println((i+1) + ". " + scenario.getScenarioName());
-            System.out.println();
+        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+        List<Scenario> scenarios = scenarioRepository.getScenarioList();
+        int scenarioID = -1;
+
+        for(int i = 0; i < scenarios.size(); i++)
+        {
+            if(scenarios.get(i).equals(scenario))
+                scenarioID = i;
         }
-        System.out.println("Enter the scenario ID: ");
-        int scenarioID = sc.nextInt() - 1;
-
-        System.out.println();
-        sc.nextLine();
-
-        if (scenarioID < 0 || scenarioID >= scenarioList.size()) {
-            System.out.println("Invalid scenario selected.");
-            return;
-        }
-
-        mapName = scenarioList.get(scenarioID).getMap().getMapName();
 
         List<Locomotive> availableLocomotives = getLocomotiveController().getLocomotiveRepository().getAvailableLocomotives(scenarioID);
         for (int i = 0; i < availableLocomotives.size(); i++) {
@@ -49,9 +49,7 @@ public class BuyLocomotiveUI implements Runnable {
         }
         System.out.println("Introduce the locomotive model you want to buy: ");
 
-
         this.locomotiveModel = sc.nextLine().trim();
-
     }
 
     /**
@@ -77,7 +75,7 @@ public class BuyLocomotiveUI implements Runnable {
      * This method will be responsible to show the success or error message to the Player.
      */
     public void submitData() {
-        String result = ctrl.buyLocomotive(locomotiveModel, mapName);
+        String result = ctrl.buyLocomotive(locomotiveModel, map.getMapName());
 
         if (result.startsWith("ERROR")) {
             showError(result);
