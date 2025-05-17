@@ -24,19 +24,23 @@ public class ListStationsUI implements Runnable{
         System.out.println("\n\n------------------------- List of Stations -------------------------");
 
         for(Station station : stations){
-            System.out.println("Station ID:" + station.getStationID() + ", Type: " + station.getStationType() + ", Position: (" + station.getPositionX() +", "+station.getPositionY()+")");
+            System.out.println("Station ID: " + station.getStationID() + " | Type: " + station.getStationType() + " | Position: (" + station.getPositionX() +", "+station.getPositionY()+")");
 
-        System.out.print("Buildings: ");
+        System.out.println("Buildings: ");
 
         if(station.getBuildings().isEmpty()){
 
             System.out.println("No buildings found");
 
+            System.out.println();
+
         } else {
 
             for(Building building : station.getBuildings()){
 
-                System.out.print(building.getBuildingType() + ", ");
+                System.out.print(building.getBuildingType());
+
+                System.out.println();
 
             }
             System.out.println();
