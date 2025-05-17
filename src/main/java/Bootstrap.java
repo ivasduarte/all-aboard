@@ -22,8 +22,8 @@ public class Bootstrap implements Runnable {
     public void addUsers(){
         AuthenticationController ctrl = new AuthenticationController();
 
-        ctrl.createNewUser("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR, Optional.empty());
-        ctrl.createNewUser("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER, Optional.of(new Budget(1000)));
+        ctrl.createNewUser("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR);
+        ctrl.createNewUser("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
     }
 
     public Optional<Map> createMap() {
@@ -40,7 +40,7 @@ public class Bootstrap implements Runnable {
 
         locomotiveTypes.add("steam");
 
-        sr.add(new Scenario("ExampleScenario", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), map));
+        sr.add(new Scenario("ExampleScenario", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), map, new Budget(1000) ));
     }
 
     /**
