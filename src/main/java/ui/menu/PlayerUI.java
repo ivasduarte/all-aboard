@@ -1,10 +1,12 @@
 package ui.menu;
 
 import domain.Map;
+import domain.Scenario;
 import presentation.*;
 
 import repositories.MapRepository;
 import repositories.Repositories;
+import repositories.ScenarioRepository;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
@@ -53,9 +55,11 @@ public class PlayerUI implements Runnable{
                 System.out.println("Selected map does not exist, try a new one!");
         }while (!validMap);
 
-        System.out.println("\nCurrent map: " + currentMap.getMapName() + ", " + currentMap.getWidth() + "x" + currentMap.getHeight());
 
-        List<MenuItem> options = new ArrayList<MenuItem>();
+
+        //System.out.println("\nCurrent map: " + currentMap.getMapName() + ", " + currentMap.getWidth() + "x" + currentMap.getHeight());
+
+        List<MenuItem> options = new ArrayList<>();
         options.add(new MenuItem("Build a Station", new AddStationUI()));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI()));
         options.add(new MenuItem("List all Stations", new ListStationsUI()));

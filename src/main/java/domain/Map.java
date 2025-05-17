@@ -1,6 +1,8 @@
 package domain;
 
 
+import java.util.List;
+
 /**
  * Represents a two-dimensional map with a specific name, dimensions, and optional creator.
  * The map includes a 2D character matrix that can be used to represent various layouts or configurations.
@@ -10,6 +12,7 @@ public class Map {
     private int width;
     private int height;
 
+    private List<Scenario> scenarios;
 
     /**
      * Constructs a new instance of the Map class, initializing it with a specified name,
@@ -58,6 +61,22 @@ public class Map {
         return height;
     }
 
+    /**
+     * Retrieves the list of scenarios of the map.
+     *
+     * @return all the scenarios of the map.
+     */
+    public List<Scenario> getScenarios() {return scenarios;}
+
+    /**
+     * Add a new scenario to the list.
+     *
+     * @param scenario the new scenario to be added.
+     */
+    public void addNewScenario(Scenario scenario)
+    {
+        scenarios.add(scenario);
+    }
 
     /**
      * Validates the name of the map.

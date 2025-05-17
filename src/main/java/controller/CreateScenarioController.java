@@ -12,7 +12,6 @@ public class CreateScenarioController {
 
     public String createScenario(String name, Restrictions restrictions, Map map) {
         try {
-            UserSession userSession = ApplicationSession.getInstance().getCurrentSession();
             ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
 
             if (scenarioRepository.existsByName(name)) {
