@@ -60,6 +60,15 @@ public class CreateScenarioUI implements Runnable {
         System.out.print("\nSelect a map from the list: ");
         mapName = sc.nextLine().trim();
 
+        for (Map map: controller.getMapList()) {
+
+            if(map.getMapName().equalsIgnoreCase(mapName)) {
+
+                this.map = map;
+
+            }
+        }
+
         System.out.print("Enter the name of the scenario: ");
         scenarioName = sc.nextLine().trim();
 
@@ -81,7 +90,6 @@ public class CreateScenarioUI implements Runnable {
             if (!restrictions.validate()) {
                 showError("ERROR: Invalid restrictions provided.");
                 restrictions = null;
-                return;
             }
         } catch (DateTimeParseException e) {
             showError("ERROR: Invalid date format. Use yyyy-mm-dd.");

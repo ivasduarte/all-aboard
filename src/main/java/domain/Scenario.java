@@ -9,6 +9,7 @@ public class Scenario {
     private String name;
     private Restrictions restrictions;
     private Map map;
+    private Budget budget;
 
 
     /**
@@ -22,10 +23,11 @@ public class Scenario {
      * @param restrictions The restrictions associated with the scenario. Cannot be null.
      * @param map          The map linked to the scenario. Cannot be null.
      */
-    public Scenario(String name, Restrictions restrictions, Map map){
+    public Scenario(String name, Restrictions restrictions, Map map, Budget budget){
         this.name = name;
         this.restrictions = restrictions;
         this.map = map;
+        this.budget = budget;
         validateName();
     }
 
@@ -112,6 +114,24 @@ public class Scenario {
      */
     public boolean isValid(){
         return validateName() && validateRestrictions() && hasValidMap();
+    }
+
+    public Budget getBudget() {
+        return budget;
+    }
+
+    public void setBudget(Budget budget) {
+        this.budget = budget;
+    }
+
+    public int subtractBudget(int amount) {
+        budget.setBudget(budget.getBudget() - amount);
+        return budget.getBudget();
+    }
+
+    public int addBudget(int amount) {
+        budget.setBudget(budget.getBudget() + amount);
+        return budget.getBudget();
     }
 
 

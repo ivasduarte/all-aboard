@@ -19,7 +19,8 @@ public class CreateScenarioController {
                 return "ERROR: A scenario with this name already exists.";
             }
 
-            Scenario scenario = new Scenario(name, restrictions, map);
+            Budget defaultBudget = new Budget(1000);
+            Scenario scenario = new Scenario(name, restrictions, map, defaultBudget);
             scenarioRepository.add(scenario);
 
             return "Scenario '" + name + "' created successfully.";
