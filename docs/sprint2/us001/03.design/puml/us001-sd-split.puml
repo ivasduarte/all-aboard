@@ -45,13 +45,11 @@ Editor --> UI : provides height
 activate UI
 
 UI -> ctrl : submitData()
-ctrl -> Map : new Map(mapName, width, height)
-activate Map
 
-Map -> Map : validateName()
-Map -> Map : validateSize()
-Map --> ctrl : Map object
-deactivate Map
+    ref over Map
+        Create Map
+    end
+
 
 ctrl --> UI : map
 deactivate ctrl
