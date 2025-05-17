@@ -79,10 +79,6 @@ The system allows users to:
 * Buy locomotives and assign them to routes
 * Simulate railway operations
 
-Below is a figure that illustrates an overview of the application:
-
-![Application Diagram](imagesUserManual/applicationDiagram.png)
-Image 1: General application diagram
 
 
 # System Requirements
@@ -108,7 +104,7 @@ Step 1: Select "Login" from the main menu.
 Step 2: Enter your email and password according to the syntax notes.
 
 ![Login](imagesUserManual/login.png)
-Image 2: Login screen
+Image 1: Login screen
 
 ### Registration
 
@@ -119,7 +115,7 @@ Step 1: Select "Create User" from the main menu.
 Step 2: Enter your name, email, and password according to the syntax notes.
 
 ![Registration](imagesUserManual/registration.png)
-Image 3: Registration screen
+Image 2: Registration screen
 
 #### Syntax Notes:
 + Name: Should contain at least 8 characters
@@ -131,7 +127,7 @@ Image 3: Registration screen
 After logging in as an Editor, you will have access to the Editor Menu with the following options:
 
 ![Editor Menu](imagesUserManual/editorMenu.png)
-Image 4: Editor Menu
+Image 3: Editor Menu
 
 ### Create Map
 
@@ -146,7 +142,7 @@ Step 3: Enter the width of the map (positive integer up to 256).
 Step 4: Enter the height of the map (positive integer up to 256).
 
 ![Create Map](imagesUserManual/createMap.png)
-Image 5: Create Map screen
+Image 4: Create Map screen
 
 ### Display Map List
 
@@ -157,7 +153,7 @@ Step 1: Select "Display Map List" from the Editor Menu.
 Step 2: The system will display a list of all available maps with their names and dimensions.
 
 ![Display Map List](imagesUserManual/displayMapList.png)
-Image 6: Display Map List screen
+Image 5: Display Map List screen
 
 ### Create Scenario
 
@@ -174,7 +170,7 @@ Step 4: Define the available locomotion types (steam, diesel, and/or electric).
 Step 5: Define the factors that alter the generation frequency of generating industries.
 
 ![Create Scenario](imagesUserManual/createScenario.png)
-Image 7: Create Scenario screen
+Image 6: Create Scenario screen
 
 ### Add City
 
@@ -191,7 +187,7 @@ Step 4: Enter the X and Y coordinates for the city's position on the map.
 Step 5: Enter the number of house blocks for the city, or select to generate them automatically.
 
 ![Add City](imagesUserManual/addCity.png)
-Image 8: Add City screen
+Image 7: Add City screen
 
 ### Add Industry
 
@@ -206,14 +202,14 @@ Step 3: Select the type of industry from the available options.
 Step 4: Enter the X and Y coordinates for the industry's position on the map.
 
 ![Add Industry](imagesUserManual/addIndustry.png)
-Image 9: Add Industry screen
+Image 8: Add Industry screen
 
 ## Player Role
 
 After logging in as a Player, you will have access to the Player Menu with the following options:
 
 ![Player Menu](imagesUserManual/playerMenu.png)
-Image 10: Player Menu
+Image 9: Player Menu
 
 ### Build Station
 
@@ -230,7 +226,7 @@ Step 4: If building a Station, select the center position (NE, SE, NW, SW).
 Step 5: The system will propose a name for the station based on the closest city.
 
 ![Build Station](imagesUserManual/buildStation.png)
-Image 11: Build Station screen
+Image 10: Build Station screen
 
 ### Upgrade Station
 
@@ -243,7 +239,7 @@ Step 2: Select a station from the list of available stations.
 Step 3: Select a building to add to the station from the list of available buildings.
 
 ![Upgrade Station](imagesUserManual/upgradeStation.png)
-Image 12: Upgrade Station screen
+Image 11: Upgrade Station screen
 
 ### Check Station Details
 
@@ -256,7 +252,7 @@ Step 2: Select a station from the list of available stations.
 Step 3: The system will display the station's details, including its buildings and the demand/supply cargoes.
 
 ![Check Station Details](imagesUserManual/checkStationDetails.png)
-Image 13: Check Station Details screen
+Image 12: Check Station Details screen
 
 ### Buy Locomotive
 
@@ -271,7 +267,7 @@ Step 3: The system will display the locomotive's details, including its model, f
 Step 4: Confirm the purchase.
 
 ![Buy Locomotive](imagesUserManual/buyLocomotive.png)
-Image 14: Buy Locomotive screen
+Image 13: Buy Locomotive screen
 
 ### Assign Train to Route
 
@@ -287,8 +283,8 @@ Step 4: For each station, select the cargoes to be picked up.
 
 Step 5: Confirm the route assignment.
 
-![Assign Train to Route](imagesUserManual/assignTrainToRoute.png)
-Image 15: Assign Train to Route screen
+<!--![Assign Train to Route](imagesUserManual/assignTrainToRoute.png)-->
+Image 14: Assign Train to Route screen
 
 # Troubleshooting
 
@@ -296,7 +292,7 @@ This section provides solutions to common problems that users may encounter whil
 
 ## Problem: Unable to login
 
-**Solution**: 
+**Solution**:
 - Ensure that you are entering the correct email and password.
 - Check if your password meets the requirements: seven alphanumeric characters, including three capital letters and two digits.
 - If you have forgotten your password, you will need to create a new user.
@@ -339,6 +335,37 @@ A: Yes, you can upgrade stations by adding buildings such as telegraph, café, c
 
 # Glossary
 
-[View Glossary](../sprint1/global-artifacts/01.requirements-engineering/glossary.md)
+| **Term**                       | **Description**                                                     |
+|--------------------------------|---------------------------------------------------------------------|
+| **Application**                | A software program designed to perform specific tasks for the user. |
+| **Budget**                     | Financial plans for expected revenues and expenditures over time.   |
+| **Cargo**                      | Goods or materials transported by trains.                           |
+| **Cargo Demand**               | The amount of cargo a station needs to receive.                     |
+| **Cargo Supply**               | The amount of cargo a station can provide.                          |
+| **Carriages**                  | Parts of a train that carry passengers or cargo.                    |
+| **City**                       | A populated area that can be placed on the map.                     |
+| **Diesel**                     | A locomotive powered by a diesel engine.                            |
+| **Economic Radius**            | The area around a station that supplies or demands cargo.           |
+| **Electric**                   | A locomotive powered by electricity, requiring electrified tracks.  |
+| **Historical Restrictions**    | Scenario events that change how the simulation operates.            |
+| **Industry**                   | A static element that produces or transforms resources.             |
+| **Locomotive**                 | The engine part of a train that moves the train.                    |
+| **Locomotive Types**           | Steam, diesel, and electric locomotives.                            |
+| **Map**                        | The playable area with cities, industries, and stations.            |
+| **Mixed Industries**           | Industries that combine different sectors.                          |
+| **Player**                     | The user interacting with the simulation.                           |
+| **Primary Sector Industries**  | Industries generating natural resources like mines and farms.       |
+| **Product Owner**              | The person responsible for defining features and priorities.        |
+| **Railway**                    | Tracks, stations, and trains used for transport.                    |
+| **Route**                      | The path a train follows.                                           |
+| **Simulator**                  | A software that replicates real-world systems.                      |
+| **Simulator Operation**        | Interacting with the simulator under various conditions.            |
+| **Station**                    | A place where trains stop to load or unload.                        |
+| **Steam**                      | A locomotive powered by steam.                                      |
+| **Technological Restrictions** | Restrictions based on available train technology.                   |
+| **Time Restrictions**          | Time periods that define the simulation era.                        |
+| **Track**                      | The metal rails trains run on.                                      |
+| **Train**                      | A combination of locomotives and carriages.                         |
+| **Train Simulator**            | A simulator focused on train operations.                            |
+| **Transforming Industries**    | Industries that turn raw materials into products.                   |
 
-# Annexes
