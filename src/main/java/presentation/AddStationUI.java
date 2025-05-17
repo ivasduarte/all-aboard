@@ -6,6 +6,7 @@ import controller.SimulatorController;
 import domain.Budget;
 import domain.Map;
 import domain.Station;
+import domain.Scenario;
 import domain.UserSession;
 import repositories.MapRepository;
 import repositories.Repositories;
@@ -24,9 +25,6 @@ public class AddStationUI implements Runnable {
 
         List<Map> mapList = mapController.getMapList();
 
-        Budget playerBudget = UserSession.getInstance().getUser().getBudget();
-
-        int budget = playerBudget.getBudget();
 
         if(mapList.isEmpty())
         {
@@ -53,6 +51,13 @@ public class AddStationUI implements Runnable {
             System.out.println("Map does not exist");
             return;
         }
+
+        Scenario activeScenario = stationController.getScenarioByMapID(mapID);
+        if (activeScenario == null) {
+            System.out.println("No scenario found for the selected map.");
+            return;
+        }
+        int budget = activeScenario.getBudget().getBudget();
 
         System.out.print("\nEnter the position X of the station: ");
         int positionX = sc.nextInt();
