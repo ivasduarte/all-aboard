@@ -32,6 +32,15 @@ public class LocomotiveRepository {
     }
 
     /**
+     * This method is responsible to give the list of all locomotives in the game.
+     *
+     * @return List of all locomotives
+     */
+    public List<Locomotive> getAllLocomotives() {
+        return locomotives;
+    }
+
+    /**
      * This method is responsible to get a list of the available locomotives based on the scenario restrictions.
      *
      * @param scenarioId The id of the scenario that is being played.
@@ -60,6 +69,15 @@ public class LocomotiveRepository {
         }
 
         return availableLocomotives;
+    }
+
+    /**
+     * This method returns a list of the locomotives the player has already bought.
+     *
+     * @return List of player owned locomotives
+     */
+    public List<Locomotive> getPlayerLocomotives() {
+        return playerLocomotives;
     }
 
     /**
