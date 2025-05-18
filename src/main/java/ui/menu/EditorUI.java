@@ -7,7 +7,6 @@ import ui.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * The EditorUI class provides the main menu interface for the editor module
  * of the application. It allows users to perform various functions such as
@@ -19,8 +18,6 @@ import java.util.List;
  * menu option, delegating functionality to respective classes.
  */
 public class EditorUI implements Runnable {
-
-
     /**
      * Constructs an instance of the EditorUI class, initializing the main menu interface
      * for the editor module of the application. This constructor creates an object that

@@ -17,10 +17,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The PlayerUI class represents the main user interface for a player
+ * to interact with the game. It allows players to select a map, choose
+ * a scenario, and access various game functionalities such as building
+ * stations, upgrading stations, listing stations, purchasing locomotives,
+ * and assigning routes to trains.
+ *
+ * This class implements the {@code Runnable} interface,*/
 public class PlayerUI implements Runnable{
-
+    /**
+     * Constructs an instance of the PlayerUI class, initializing the main console-based interface
+     * for player interactions with the game.
+     *
+     * This constructor creates an object responsible for providing a structured and interactive
+     * interface for players, aligning with the game's core functionalities.
+     */
     public PlayerUI(){}
 
+    /**
+     * This method performs the following operations:
+     * 1. Retrieves the list of available maps from the map repository. If no maps are available, a message is
+     * shown and the method exits.
+     * 2. Prompts the user to select a map based on its name. If the entered map name is invalid, the user will be
+     * prompted repeatedly.
+     * 3. Retrieves and displays the list of scenarios associated with the selected map. If no scenarios are available
+     * for the chosen map, a message is shown and the method exits.
+     * 4. Prompts the user to select a scenario. If the entered scenario name is invalid, the user will be prompted
+     * repeatedly.
+     * 5. Displays the current game details such as the selected map, scenario, time period, and the user's current
+     * budget.
+     * 6. Provides the user with a menu containing various management options, such as adding stations, upgrading
+     * stations, listing stations, buying locomotives, and assigning trains to routes. Users can select these options
+     * repeatedly until they choose to exit the menu.
+     */
     public void run(){
         Scanner sc = new Scanner(System.in);
 
