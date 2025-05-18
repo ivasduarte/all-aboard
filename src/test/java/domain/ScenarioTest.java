@@ -27,12 +27,12 @@ public class ScenarioTest {
         validRestrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents);
         testMap = new Map("TestMap", 100, 100);
         testBudget = new Budget(10000);
-        validScenario = new Scenario("Test Scenario", validRestrictions, testMap, testBudget);
+        validScenario = new Scenario("TestScenario", validRestrictions, testMap, testBudget);
     }
 
     @Test
     void testGetScenarioName(){
-        assertEquals("Test Scenario", validScenario.getScenarioName());
+        assertEquals("TestScenario", validScenario.getScenarioName());
     }
 
     @Test

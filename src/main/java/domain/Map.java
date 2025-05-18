@@ -1,12 +1,11 @@
 package domain;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a two-dimensional map with a specific name, dimensions, and optional creator.
- * The map includes a 2D character matrix that can be used to represent various layouts or configurations.
+ * Represents a map with a name, dimensions (width and height), and a list of associated scenarios.
+ * This class provides methods to access and manipulate the map's properties and scenarios.
  */
 public class Map {
     private String name;
@@ -16,13 +15,16 @@ public class Map {
     private List<Scenario> scenarios;
 
     /**
-     * Constructs a new instance of the Map class, initializing it with a specified name,
-     * width, and height, and creates a two-dimensional grid (matrix) based on these dimensions.
+     * Constructs a new Map instance with the specified name, width, and height.
      *
-     * @param name      The name of the map. It cannot be null or empty.
+     * This constructor initializes the map's attributes, including its name, dimensions,
+     * and an empty list of scenarios. It also validates the name and size of the map
+     * during initialization.
+     *
+     * @param name      The name of the map. Must not be null or empty.
      * @param width     The width of the map. Must be a positive integer.
      * @param height    The height of the map. Must be a positive integer.
-     * @throws          IllegalArgumentException if the name is null, empty, or if the dimensions are non-positive.
+     * @throws          IllegalArgumentException if the name is null or empty, or if the width or height is non-positive.
      */
     public Map(String name, int width, int height) {
         this.name = name;
@@ -32,7 +34,6 @@ public class Map {
         validateName();
         validateSize();
     }
-
 
     /**
      * Retrieves the name of the map associated with the instance.
@@ -66,14 +67,14 @@ public class Map {
     /**
      * Retrieves the list of scenarios of the map.
      *
-     * @return all the scenarios of the map.
+     * @return  All the scenarios of the map.
      */
     public List<Scenario> getScenarios() {return scenarios;}
 
     /**
      * Add a new scenario to the list.
      *
-     * @param scenario the new scenario to be added.
+     * @param scenario  The new scenario to be added.
      */
     public void addNewScenario(Scenario scenario)
     {
@@ -87,14 +88,13 @@ public class Map {
      * If the name is found to be null or empty, an {@code IllegalArgumentException}
      * is thrown to enforce the validity of the map's name.
      *
-     * @throws IllegalArgumentException if the name is null or an empty string.
+     * @throws      IllegalArgumentException if the name is null or an empty string.
      */
     private void validateName() {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Map name cannot be empty.");
         }
     }
-
 
     /**
      * Validates the dimensions of the map.
@@ -111,13 +111,13 @@ public class Map {
         }
     }
 
-
     /**
-     * Returns a string representation of the map object.
-     * The string includes the name of the map and its dimensions
-     * in the format "name (widthxheight)".
+     * Returns a string representation of the map, including its name and dimensions.
      *
-     * @return A string representation of the map, including its name, width, and height.
+     * The string is formatted as "name (widthxheight)", where `name` is the
+     * name of the map, and `width` and `height` represent the dimensions of the map.
+     *
+     * @return  A string representation of the map's name and dimensions.
      */
     @Override
     public String toString() {

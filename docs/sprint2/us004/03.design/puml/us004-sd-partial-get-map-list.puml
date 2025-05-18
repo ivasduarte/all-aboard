@@ -10,15 +10,12 @@ participant "repositories\n:Repositories" as PLAT
 participant "mapRepository\n:MapRepository" as mapRep
 
 
-autonumber 3
+autonumber 3.1
 
 activate UI
-
-UI -> mapCTRL : getMapList()
 activate mapCTRL
 
 group Get Map List
-    autonumber 3.1
     mapCTRL -> reps : getInstance()
     activate reps
     reps --> mapCTRL : instance

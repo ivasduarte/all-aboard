@@ -1,11 +1,8 @@
 package ui.authorization;
 
-import domain.Budget;
 import domain.User;
 import repositories.AuthenticationRepository;
 import repositories.Repositories;
-
-import java.util.Optional;
 
 /**
  * The AuthenticationController class provides methods for managing user authentication
@@ -17,7 +14,6 @@ public class AuthenticationController{
     public static final String ROLE_PLAYER = "PLAYER";
     private final AuthenticationRepository authenticationRepository;
 
-
     /**
      * Constructs an instance of AuthenticationController.
      * This constructor initializes the authentication repository by obtaining it
@@ -28,7 +24,6 @@ public class AuthenticationController{
     public AuthenticationController() {
         this.authenticationRepository = Repositories.getInstance().getAuthenticationRepository();
     }
-
 
     /**
      * Attempts to authenticate a user using the provided email and password.
@@ -43,17 +38,41 @@ public class AuthenticationController{
             return authenticationRepository.doLogin(email, password);
     }
 
-
+    /**
+     * Creates a new user in the system with the specified attributes if the user does not already exist.
+     *
+     * @param name          The name of the user. Must not be null or empty.
+     * @param email         The email address of the user. Must be in a valid email format and unique.
+     * @param password      The password for the user. Must not be null or empty.
+     * @param roleID        The role ID to be assigned to the new user. Must not be null or empty.
+     * @return              True if the user was successfully created;
+     *                      false if the user already exists.
+     */
     public boolean createNewUser(String name, String email, String password, String roleID) {
 
         User user = new User(name, email, roleID, password);
         return authenticationRepository.createNewUser(user);
     }
 
+    /**
+     * Retrieves the role of the user associated with the specified email address.
+     * If no user is found for the provided email, this method returns null.
+     *
+     * @param email     The email address of the user whose role is to be retrieved.
+     *                  Must not be null and should be in a valid email format.
+     * @return          The role of the user as a String, or null if the user is not found.
+     */
     public String getRole(String email) {
         return authenticationRepository.getRole(email);
     }
 
+    /**
+     * Retrieves the email address of the currently authenticated user.
+     * This method delegates the call to the {@code authenticationRepository}
+     * to obtain the email associated with the current session.
+     *
+     * @return  The email address of the current user as a String, or null if no user is authenticated.
+     */
     public String getCurrentUserEmail(){
         return authenticationRepository.getCurrentUserEmail();
     }

@@ -10,8 +10,6 @@ package ui.utils;
  * including the names and email addresses of the development team members.
  */
 public class DevelopmentTeamUI implements Runnable{
-
-
     /**
      * Constructs a new instance of the DevelopmentTeamUI class.
      *
@@ -20,7 +18,6 @@ public class DevelopmentTeamUI implements Runnable{
      * when the class's {@code run} method is executed.
      */
     public DevelopmentTeamUI() {}
-
 
     /**
      * Outputs the development team information to the console.

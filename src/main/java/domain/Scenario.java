@@ -11,7 +11,6 @@ public class Scenario {
     private Map map;
     private Budget budget;
 
-    private int currentYear;
 
     /**
      * Creates a new Scenario instance with the specified name, restrictions, and map.
@@ -29,8 +28,6 @@ public class Scenario {
         this.restrictions = restrictions;
         this.map = map;
         this.budget = budget;
-
-        this.currentYear = restrictions.getStartDate().getYear();
         validateName();
     }
 
@@ -64,19 +61,6 @@ public class Scenario {
         return map;
     }
 
-    /**
-     * Retrives the current year of the scenario, changed by the simulation.
-     *
-     * @return The current year of the scenario.
-     */
-    public int getCurrentYear() { return currentYear;}
-
-    /**
-     * Change the current year of the scenario.
-     *
-     * @param currentYear The new year when changing.
-     */
-    public void setCurrentYear(int currentYear) { this.currentYear = currentYear; }
 
     /**
      * Validates the name of the scenario against specific constraints.
@@ -160,6 +144,6 @@ public class Scenario {
      */
     @Override
     public String toString() {
-        return name + " (" + restrictions + ", belongs to map '" + map.getMapName() + ")";
+        return "" + name + " (" + restrictions + ", belongs to map '" + map.getMapName() + ")";
     }
 }

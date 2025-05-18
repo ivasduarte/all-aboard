@@ -10,14 +10,15 @@ actor "Editor" as Editor
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
 participant ":DisplayMapController" as mapCTRL
+participant ":Restrictions" as Restrictions
+participant ":Budget" as Budget
 participant ":Scenario" as Scenario
 
 activate Editor
 Editor -> UI : requests to create a scenario
 
 activate UI
-UI -> CTRL : create()
-activate CTRL
+UI -> CTRL** : create()
 
 UI -> mapCTRL : getMapList()
 activate mapCTRL
@@ -34,7 +35,30 @@ UI -> Editor : requests to select map from list
 deactivate UI
 Editor --> UI : selects map from list
 activate UI
-UI -> CTRL : submitData()
+
+UI -> Editor : request scenario data
+deactivate UI
+Editor --> UI : provides scenario data (name, dates, locomotive types, historical events)
+activate UI
+
+autonumber 10
+UI -> Restrictions** : new Restrictions(startDate, endDate, locoTypes, events)
+activate Restrictions
+Restrictions --> UI : restrictions
+deactivate Restrictions
+
+UI -> Restrictions : validate()
+activate Restrictions
+Restrictions --> UI : validation result
+deactivate Restrictions
+
+alt restrictions not valid
+    UI -> Editor : showError("Invalid restrictions provided")
+    Editor --> UI : provides new restrictions
+end
+
+UI -> CTRL : createScenario(scenarioName, restrictions, map)
+activate CTRL
 
     ref over CTRL
         Get Scenario Repository
@@ -44,17 +68,16 @@ UI -> CTRL : submitData()
         Check Name Uniqueness
     end
 
-UI -> Editor : request scenario data
-deactivate UI
-Editor --> UI : provides scenario data
-activate UI
+CTRL -> Budget** : new Budget(1000)
+activate Budget
+Budget --> CTRL : defaultBudget
+deactivate Budget
 
-UI -> CTRL : submitData()
-CTRL -> Scenario : createScenario(name, restrictions, map)
+CTRL -> Scenario** : new Scenario(name, restrictions, map, defaultBudget)
 activate Scenario
 
     ref over Scenario
-        Validate Restrictions
+        Validate Scenario
     end
 
 Scenario --> CTRL : scenario

@@ -5,26 +5,31 @@ skinparam shadowing false
 
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
-participant ":Repositories" as reps
-participant "scenarioRepository\n:ScenarioRepository" as Repo
+participant "map\n:Map" as Map
+participant ":Scenario" as Scenario
+
+autonumber 6.5
 
 activate UI
 activate CTRL
 
 group Check Name Uniqueness
-    loop while scenarioName already exists
-        autonumber 7
-        CTRL -> Repo : existsByName(name)
-        autonumber 7.1
-        Repo --> CTRL : true
-        CTRL -> UI : showError()
-        autonumber 8
-        UI --> CTRL : new scenarioName
-    end
+    CTRL -> Map : getScenarios()
+    activate Map
+    Map --> CTRL : List<Scenario>
+    deactivate Map
 
-    CTRL -> Repo : existsByName(name)
-    Repo --> CTRL : false
-    deactivate CTRL
+    loop for each scenario in scenarios
+        CTRL -> Scenario : getScenarioName()
+        activate Scenario
+        Scenario --> CTRL : name
+        deactivate Scenario
+
+        alt name equals scenarioName
+            CTRL --> UI : "ERROR: A scenario with this name already exists."
+            UI --> CTRL : new scenarioName
+        end
+    end
 end
 
 @enduml

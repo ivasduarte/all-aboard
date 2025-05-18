@@ -1,6 +1,5 @@
 package repositories;
 
-
 /**
  * The Repositories class acts as a centralized container for various repository instances
  * used in the application. Each repository serves a specific purpose and provides
@@ -39,7 +38,6 @@ public class Repositories {
         buildingRepo = new BuildingRepository();
     }
 
-
     /**
      * Retrieves the singleton instance of the Repositories class.
      * This method ensures that the same instance is returned for all calls,
@@ -50,7 +48,6 @@ public class Repositories {
     public static Repositories getInstance() {
         return instance;
     }
-
 
     /**
      * Retrieves the instance of the MapRepository.
@@ -63,7 +60,6 @@ public class Repositories {
         return mapRepository;
     }
 
-
     /**
      * Retrieves the instance of the IndustryRepository.
      * The IndustryRepository is responsible for managing a collection of Industry objects
@@ -74,7 +70,6 @@ public class Repositories {
     public IndustryRepository getIndustryRepository() {
         return industryRepository;
     }
-
 
     /**
      * Retrieves the instance of the LocomotiveRepository.
@@ -87,7 +82,6 @@ public class Repositories {
     public LocomotiveRepository getLocomotiveRepository() {
         return locomotiveRepository;
     }
-
 
     /**
      * Retrieves the instance of the AuthenticationRepository.
@@ -110,7 +104,6 @@ public class Repositories {
      */
     public CityRepository getCityRepository() { return cityRepo; }
 
-
     /**
      * Retrieves the instance of the ScenarioRepository.
      * The ScenarioRepository is responsible for managing a collection of scenarios,
@@ -121,7 +114,6 @@ public class Repositories {
      */
     public ScenarioRepository getScenarioRepository() { return scenarioRepository; }
 
-
     /**
      * Retrieves the instance of the StationRepository.
      * The StationRepository is responsible for managing a collection of Station objects,
@@ -131,6 +123,13 @@ public class Repositories {
      */
     public StationRepository getStationRepository() {return stationRepo; }
 
+    /**
+     * Retrieves the instance of the BuildingRepository.
+     * The BuildingRepository is responsible for managing a collection of BuildingType objects,
+     * providing methods to retrieve specific building types and access all available building types.
+     *
+     * @return The BuildingRepository instance used by the application.
+     */
     public BuildingRepository getBuildingRepository() {return buildingRepo; }
 
     /**

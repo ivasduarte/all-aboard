@@ -1,228 +1,114 @@
 package maintenance_route_finder;
 
-import guru.nidi.graphviz.attribute.Color;
-import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Graphviz;
-import static guru.nidi.graphviz.engine.Engine.DOT;
-import static guru.nidi.graphviz.model.Factory.*;
-import guru.nidi.graphviz.engine.GraphvizCmdLineEngine;
-import guru.nidi.graphviz.model.MutableGraph;
-import guru.nidi.graphviz.model.MutableNode;
-
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-
     static Scanner read = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
-        String directoryPath;
-
-        if (args.length > 0) {
-            directoryPath = args[0];
-        } else {
-            System.out.print("Enter the path to the folder containing the CSV files: ");
-            directoryPath = read.nextLine().trim();
+        System.out.print("Enter the path to the folder containing the CSV files: ");
+        String directoryPath = read.nextLine().trim();
+        File dir = new File(directoryPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            System.out.println("Directory does not exist.");
+            return;
         }
 
-        File Directory = new File(directoryPath);
-
-        if (!Directory.exists() || !Directory.isDirectory()) {
-            System.out.println("Directory does not exist or is not a directory.");
-            System.exit(1);
-        }
-
-        File[] files = Directory.listFiles((directory, name) -> name.toLowerCase().endsWith(".csv"));
-
-        if (files == null || files.length < 2) {
-            System.out.println("There must be at least 2 CSV files.");
-            System.exit(1);
+        File[] files = dir.listFiles((d, name) -> name.endsWith(".csv"));
+        if (files == null || files.length < 1) {
+            System.out.println("No CSV files found.");
+            return;
         }
 
         for (int i = 0; i < files.length; i++) {
             System.out.println("[" + (i + 1) + "] " + files[i].getName());
         }
 
-        File linesCSV = null;
-        boolean Choice = false;
+        System.out.print("Choose file number with railway lines: ");
+        int fileNum = read.nextInt();
+        read.nextLine();
+        File selected = files[fileNum - 1];
 
-        while (!Choice) {
-            System.out.println("Please enter the number of lines you wish to read: ");
-            if (read.hasNextInt()) {
-                int number = read.nextInt();
-                read.nextLine();
-                if (number >= 1 && number <= files.length) {
-                    linesCSV = files[number - 1];
-                    Choice = true;
-                } else {
-                    System.out.println("Please enter a number between 1 and " + files.length + ".");
-                }
-            } else {
-                System.out.println("Please enter a number between 1 and " + files.length + ".");
-                read.nextLine();
-            }
-        }
+        System.out.println("Choose maintenance type:\n[1] All Lines\n[2] Only Electrified Lines");
+        String option = read.nextLine().trim();
+        boolean onlyElectrified = option.equals("2");
 
-        List<String[]> ligacoes = new ArrayList<>();
-        Scanner fileScanner = new Scanner(linesCSV);
-
-        while (fileScanner.hasNextLine()) {
-            String linha = fileScanner.nextLine().trim();
-            if (!linha.isEmpty()) {
-                String[] dadosOriginais = linha.split(";");
-                if (dadosOriginais.length >= 3) {
-                    String[] dados = Arrays.copyOfRange(dadosOriginais, 0, 3);
-                    ligacoes.add(dados);
+        List<String[]> edges = new ArrayList<>();
+        Scanner sc = new Scanner(selected);
+        while (sc.hasNextLine()) {
+            String[] parts = sc.nextLine().trim().split(";");
+            if (parts.length >= 3) {
+                if (!onlyElectrified || parts[2].equals("1")) {
+                    edges.add(parts);
                 }
             }
         }
+        sc.close();
 
-        fileScanner.close();
+        Map<String, List<String>> graph = new HashMap<>();
+        for (String[] edge : edges) {
+            graph.putIfAbsent(edge[0], new ArrayList<>());
+            graph.putIfAbsent(edge[1], new ArrayList<>());
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
 
-        Map<String, List<Edge>> graph = buildGraph(ligacoes);
-
-        boolean onlyElectrified = false;
-        boolean maintenanceChoiceMade = false;
-
-        while (!maintenanceChoiceMade) {
-            System.out.println("Choose maintenance type:");
-            System.out.println("[1] All Lines");
-            System.out.println("[2] Only Electrified Lines");
-            String option = read.nextLine().trim();
-            if (option.equals("1")) {
-                maintenanceChoiceMade = true;
-            } else if (option.equals("2")) {
-                onlyElectrified = true;
-                maintenanceChoiceMade = true;
-            } else {
-                System.out.println("Invalid option. Please choose 1 or 2.");
+        List<String> odd = new ArrayList<>();
+        for (String node : graph.keySet()) {
+            if (graph.get(node).size() % 2 != 0) {
+                odd.add(node);
             }
         }
 
-        List<String[]> filteredData = new ArrayList<>();
-        for (String[] data : ligacoes) {
-            boolean electrified = data[2].equals("1");
-            if (!onlyElectrified || electrified) {
-                filteredData.add(data);
-            }
-        }
+        Set<String> visited = new HashSet<>();
+        String start = graph.keySet().stream().filter(k -> !graph.get(k).isEmpty()).findFirst().orElse(null);
+        if (start != null) dfs(start, graph, visited);
 
-        Map<String, List<Edge>> filteredGraph = buildGraph(filteredData);
-        List<String> oddVertices = new ArrayList<>();
+        boolean connected = graph.entrySet().stream()
+                .filter(e -> !e.getValue().isEmpty())
+                .allMatch(e -> visited.contains(e.getKey()));
 
-        for (Map.Entry<String, List<Edge>> entry : filteredGraph.entrySet()) {
-            String station = entry.getKey();
-            int degree = entry.getValue().size();
-            if (degree % 2 != 0) {
-                oddVertices.add(station);
-            }
-        }
-
-        Set<String> visitedNodes = new HashSet<>();
-        String start = null;
-
-        for (Map.Entry<String, List<Edge>> entry : filteredGraph.entrySet()) {
-            if (!entry.getValue().isEmpty()) {
-                start = entry.getKey();
-                break;
-            }
-        }
-
-        if (start != null) {
-            dfsVisit(start, filteredGraph, visitedNodes);
-        }
-
-        boolean isConnected = true;
-        for (Map.Entry<String, List<Edge>> entry : filteredGraph.entrySet()) {
-            if (!entry.getValue().isEmpty() && !visitedNodes.contains(entry.getKey())) {
-                isConnected = false;
-            }
-        }
-
-        if (!isConnected) {
+        if (!connected) {
             System.out.println("The network is disconnected. No maintenance route is possible.");
-        } else if (oddVertices.size() == 0 || oddVertices.size() == 2) {
+            return;
+        }
+
+        if (odd.size() == 0 || odd.size() == 2) {
             System.out.println("A maintenance route is possible.");
-            System.out.println("Start at: " + (oddVertices.isEmpty() ? start : oddVertices.get(0)));
+            if (!odd.isEmpty()) {
+                System.out.println("Start at: " + odd.get(0));
+            } else {
+                System.out.println("Start at: " + start);
+            }
         } else {
-            System.out.println("No Eulerian path possible (vertices with odd degree: " + oddVertices.size() + ").");
+            System.out.println("No Eulerian path possible (vertices with odd degree: " + odd.size() + ").");
         }
 
-        Map<String, MutableNode> nodeMap = new HashMap<>();
-        for (String station : filteredGraph.keySet()) {
-            nodeMap.put(station, mutNode(station).add(Color.BLACK));
+        File dotFile = new File("railway.dot");
+        try (PrintWriter pw = new PrintWriter(dotFile)) {
+            pw.println("graph G {");
+            for (String[] edge : edges) {
+                String color = edge[2].equals("1") ? "yellow" : "red";
+                pw.println("  \"" + edge[0] + "\" -- \"" + edge[1] + "\" [color=" + color + "];");
+            }
+            pw.println("}");
         }
 
-        MutableGraph graphViz = mutGraph("RailwayNetwork").setDirected(false);
-        for (MutableNode node : nodeMap.values()) {
-            graphViz.add(node);
-        }
-
-        Set<String> addedEdges = new HashSet<>();
-        for (String[] dados : filteredData) {
-            String origin = dados[0];
-            String destination = dados[1];
-            boolean electrified = dados[2].equals("1");
-
-            String key1 = origin + "-" + destination;
-            String key2 = destination + "-" + origin;
-
-            if (addedEdges.contains(key1) || addedEdges.contains(key2)) continue;
-
-            Color color = electrified ? Color.YELLOW : Color.RED;
-            nodeMap.get(origin).addLink(to(nodeMap.get(destination)).with(color));
-            addedEdges.add(key1);
-        }
-
-        System.setProperty("graphviz.dot", "C:\\Program Files\\Graphviz\\bin\\dot.exe");
-        Graphviz.useEngine(new GraphvizCmdLineEngine());
-
-        File outputDir = new File("src/main/java/maintenance_route_finder/Graphs");
-
-        String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File outputFile = new File(outputDir, "railway-network_" + timestamp + ".svg");
-
-        Graphviz.fromGraph(graphViz).engine(DOT).render(Format.SVG).toFile(outputFile);
-
-        System.out.println("SVG generated at: " + outputFile.getAbsolutePath());
-
+        ProcessBuilder pb = new ProcessBuilder("dot", "-Tsvg", "railway.dot", "-o", "railway.svg");
+        pb.redirectErrorStream(true);
+        Process p = pb.start();
+        p.waitFor();
+        System.out.println("Graph exported to railway.svg");
     }
 
-    public static class Edge {
-        public String destination;
-        public boolean electrified;
-
-        public Edge(String destination, boolean electrified) {
-            this.destination = destination;
-            this.electrified = electrified;
-        }
-    }
-
-    public static void dfsVisit(String current, Map<String, List<Edge>> graph, Set<String> visited) {
-        visited.add(current);
-        for (Edge e : graph.get(current)) {
-            if (!visited.contains(e.destination)) {
-                dfsVisit(e.destination, graph, visited);
+    public static void dfs(String node, Map<String, List<String>> graph, Set<String> visited) {
+        visited.add(node);
+        for (String neighbor : graph.get(node)) {
+            if (!visited.contains(neighbor)) {
+                dfs(neighbor, graph, visited);
             }
         }
-    }
-
-    public static Map<String, List<Edge>> buildGraph(List<String[]> dados) {
-        Map<String, List<Edge>> graph = new HashMap<>();
-        for (String[] linha : dados) {
-            String origin = linha[0];
-            String destination = linha[1];
-            boolean electrified = linha[2].equals("1");
-
-            graph.putIfAbsent(origin, new ArrayList<>());
-            graph.putIfAbsent(destination, new ArrayList<>());
-
-            graph.get(origin).add(new Edge(destination, electrified));
-            graph.get(destination).add(new Edge(origin, electrified));
-        }
-        return graph;
     }
 }

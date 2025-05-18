@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 
-
 /**
  * The DisplayMapUI class is responsible for managing the user interaction
  * related to displaying and selecting maps. It provides functionality to retrieve
@@ -26,7 +25,6 @@ public class DisplayMapUI implements Runnable{
     private final DisplayMapController ctrl = new DisplayMapController();
     private String mapName;
     private String[][] mapArray;
-
 
     /**
      * Executes the main process of the DisplayMapUI class by orchestrating the following actions:
@@ -46,7 +44,6 @@ public class DisplayMapUI implements Runnable{
         System.out.println();
         displayMap();
     }
-
 
     /**
      * Displays the map data contained in the `mapArray` field to the console in a grid-like format.
@@ -218,6 +215,26 @@ public class DisplayMapUI implements Runnable{
         }
     }
 
+    /**
+     * Updates the `mapArray` field to represent the positions of stations on the map
+     * based on the data retrieved from the `ListStationsController`.
+     *
+     * This method performs the following steps:
+     * 1. Retrieves the list of stations associated with the current `mapName`.
+     * 2. Iterates through the `mapArray` to locate matching X and Y coordinates
+     *    for each station.
+     * 3. Updates the `mapArray` at the corresponding station positions with the
+     *    "🚉" symbol to denote the presence of a station.
+     * 4. Calls `displayStationRange` to process and display additional details about
+     *    the station's range at its respective position.
+     *
+     * Assumptions:
+     * - The `mapArray` is correctly initialized and matches the dimensions of the map.
+     * - The coordinates of each station are valid and within the bounds of `mapArray`.
+     *
+     * This method ensures that all stations related to the current map are visually
+     * represented on `mapArray`, enhancing the visualization of transit features.
+     */
     private void addStationsToMap()
     {
         ListStationsController listStationsController = new ListStationsController();
@@ -239,6 +256,20 @@ public class DisplayMapUI implements Runnable{
         }
     }
 
+    /**
+     * Displays the range of a specific station on the map by marking the surrounding cells
+     * with the appropriate symbol, depending on the station's type and size.
+     *
+     * The method calculates the range based on the station type and updates the corresponding
+     * cells in the map array to represent either the station itself or the station's range.
+     * It skips marking the station's center position and ensures that the surrounding cells
+     * are updated if not already occupied by another station.
+     *
+     * @param stations  A list of all stations present on the map.
+     * @param station   The station for which the range is to be displayed.
+     * @param X         The X-coordinate of the station on the map.
+     * @param Y         The Y-coordinate of the station on the map.
+     */
     private void displayStationRange(List<Station> stations, Station station, int X, int Y)
     {
         int typeID = station.getStationTypeID();

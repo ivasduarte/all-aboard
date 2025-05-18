@@ -12,7 +12,6 @@ import java.util.List;
  * This class provides methods for adding new cities, retrieving existing cities,
  * and validating city-related data, such as uniqueness of names and positions.
  */
-
 public class CityRepository {
     private final List<City> cities = new ArrayList<>();
 
@@ -22,8 +21,13 @@ public class CityRepository {
      * @param c     {@code City} object to be added to the repository
      */
     public void add(City c) { cities.add(c); }
-    public List<City> getCities() { return List.copyOf(cities); }
 
+    /**
+     * Retrieves an unmodifiable list of cities stored in the repository.
+     *
+     * @return      An unmodifiable {@code List} of {@code City} objects representing the cities in the repository.
+     */
+    public List<City> getCities() { return List.copyOf(cities); }
 
     /**
      * Checks if a city name is unique within the specified map.
@@ -35,7 +39,6 @@ public class CityRepository {
     public boolean isNameUnique(String name, String map) {
         return cities.stream().noneMatch(c->c.getName().equals(name) && c.getMapName().equals(map));
     }
-
 
     /**
      * Checks whether a city exists at the specified position on a given map.
@@ -65,7 +68,6 @@ public class CityRepository {
                 .flatMap(c->c.getBlocks().stream())
                 .noneMatch(b::equals);
     }
-
 
     /**
      * Validates a {@code HouseBlock} within the context of a specified map.

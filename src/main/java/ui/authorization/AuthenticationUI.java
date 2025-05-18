@@ -1,6 +1,5 @@
 package ui.authorization;
 
-import domain.Budget;
 import ui.menu.EditorUI;
 import ui.menu.MenuItem;
 import ui.menu.PlayerUI;
@@ -8,8 +7,6 @@ import ui.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 
 /**
  * The AuthenticationUI class provides a graphical interface for user authentication.
@@ -20,12 +17,27 @@ public class AuthenticationUI implements Runnable {
     private final AuthenticationController ctrl;
     private int option;
 
+    /**
+     * Initializes an instance of AuthenticationUI which provides the user interface
+     * for managing authentication processes such as login and role-based navigation.
+     *
+     * @param option    An integer parameter to determine or configure specific behavior
+     *                  of the authentication user interface.
+     */
     public AuthenticationUI(int option) {
         ctrl = new AuthenticationController();
         this.option = option;
     }
 
-
+    /**
+     * Executes a specific operation based on the configured option.
+     *
+     * The behavior of this method is determined by the value of the `option` field:
+     * - If the option is 0, it invokes the `run1` method to initiate the authentication process,
+     *   including login and role-based navigation.
+     * - If the option is 1, it calls the `createUser` method to display the user registration interface
+     *   and facilitate new user creation.
+     */
     public void run(){
         switch (option) {
             case 0:
@@ -70,13 +82,12 @@ public class AuthenticationUI implements Runnable {
         this.logout();
     }
 
-
     /**
      * Creates and returns a list of MenuItem objects that map user roles to their specific UI components.
      * The method adds predefined roles and their associated UIs to the list.
      * Additional roles and their corresponding UIs can be introduced later.
      *
-     * @return  A list of MenuItem objects representing role-specific user interfaces.
+     * @return      A list of MenuItem objects representing role-specific user interfaces.
      */
     private List<MenuItem> getMenuItemForRoles() {
         List<MenuItem> rolesUI = new ArrayList<>();
@@ -87,6 +98,20 @@ public class AuthenticationUI implements Runnable {
         return rolesUI;
     }
 
+    /**
+     * This method provides a registration UI where users can enter their name, email,
+     * and password to create a new account. It allows users to retry the registration
+     * process if account creation is unsuccessful due to an already existing user.
+     *
+     * The following steps are performed:
+     * - Prompts the user to input their name, email, and password.
+     * - Attempts to create a new user with the specified details and a default role.
+     * - If the user already exists, informs the user and gives the option to try again.
+     * - If the user creation is successful: confirms the creation and exits the prompt.
+     *
+     * Internally, uses the createNewUser method from the authentication controller
+     * to perform the user creation process.
+     */
     public void createUser() {
         System.out.println("\n\n-------------------------- REGISTRATION UI --------------------------");
 
@@ -108,8 +133,6 @@ public class AuthenticationUI implements Runnable {
             }
         } while (tryAgain);
     }
-
-
 
     /**
      * Attempts to log in a user by validating their credentials. The login process allows

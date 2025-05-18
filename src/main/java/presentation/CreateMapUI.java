@@ -6,13 +6,14 @@ import repositories.MapRepository;
 
 import java.util.Scanner;
 
-
 /**
- * The CreateMapUI class provides a user interface for creating maps.
- * This class implements the Runnable interface to facilitate the execution
- * of the map creation workflow in a separate thread.
- * It interacts with the CreateMapController and MapRepository
- * to collect input, validate data, and create a new map.
+ * The CreateMapUI class represents a user interface for creating a map through
+ * a console-based application. It facilitates interaction with the user to gather
+ * required input data such as map name, width, and height, validates the inputs,
+ * and delegates the map creation process to the CreateMapController.
+ *
+ * This class also handles errors during map creation and provides feedback to the user.
+ * It is designed to be executed as a runnable process.
  */
 public class CreateMapUI implements Runnable {
     private CreateMapController controller = new CreateMapController();
@@ -21,26 +22,24 @@ public class CreateMapUI implements Runnable {
     private String mapName;
     private int width = 0, height = 0;
 
-
     /**
      * Retrieves the instance of {@code CreateMapController} associated with this class.
      *
-     * @return    An instance of {@code CreateMapController} used to handle operations
-     *            related to map creation.
+     * @return      The {@code CreateMapController} instance used for map-related operations.
      */
     private CreateMapController getController() {
         return controller;
     }
 
     /**
-     * Executes the main process of creating a map by interacting with the user interface.
+     * Executes the main workflow for creating a map in the user interface.
      *
-     * This method provides a command-line prompt to guide the user through the map creation process.
-     * It displays a banner indicating the initialization of map creation, then proceeds to:
-     * 1. Prompt and collect user input required for map creation via the `getInput` method.
-     * 2. Submit the collected input data for map creation using the `submitData` method.
-     *
-     * Any errors encountered during data submission and map creation are displayed as error messages.
+     * This method serves as the entry point to the map creation process. It sequentially
+     * performs the following actions:
+     * 1. Displays a message indicating the start of the map creation process.
+     * 2. Invokes {@code getInput()} to collect the map name, width, and height from the user.
+     * 3. Calls {@code submitData()} to validate the input and create the map using the
+     *    associated controller.
      */
     public void run() {
         System.out.println("\n\n------------------------ Create Map ------------------------");
@@ -48,20 +47,18 @@ public class CreateMapUI implements Runnable {
         submitData();
     }
 
-
     /**
-     * Collects input data for creating a map by prompting the user for map name, width, and height.
+     * Collects and assigns user input for the map name, width, and height.
      *
-     * This method uses helper methods to request each input:
-     * - The map name is obtained through the {@code requestMapName} method, ensuring uniqueness by checking
-     *   against existing map names in the repository.
-     * - The map dimensions (width and height) are collected using the {@code requestWidth} and {@code requestHeight} methods,
-     *   validating user input to ensure it falls within acceptable ranges.
+     * This method sequentially performs the following operations:
+     * 1. Prompts the user to input a unique map name by invoking {@code requestMapName()}.
+     * 2. Requests the user to input a valid width for the map by calling {@code requestWidth()}.
+     * 3. Requests the user to input a valid height for the map by calling {@code requestHeight()}.
      *
-     * Once all inputs are provided and validated, they are assigned to the corresponding fields:
-     * - {@code mapName}: The name of the map, provided by the user.
-     * - {@code width}: The width of the map, constrained to valid dimensions.
-     * - {@code height}: The height of the map, constrained to valid dimensions.
+     * The inputs are assigned to the respective fields of the class:
+     * - {@code mapName} is set to the user-provided unique map name.
+     * - {@code width} is set to the validated positive integer for the width.
+     * - {@code height} is set to the validated positive integer for the height.
      */
     public void getInput() {
         mapName = requestMapName();
@@ -69,13 +66,15 @@ public class CreateMapUI implements Runnable {
         height = requestHeight();
     }
 
-
     /**
-     * Prompts the user to enter a name for the map and ensures the entered name is unique.
-     * If the name entered already exists in the map repository, the user is prompted to enter
-     * a different name. The method trims any leading or trailing spaces from the input.
+     * Prompts the user to input a name for the map and validates its uniqueness in the repository.
      *
-     * @return  A trimmed string representing the user-provided unique map name.
+     * The method interacts with the user through the console to collect the map name.
+     * If the entered name already exists in the repository, the user is prompted to input
+     * a different name. The method trims any leading or trailing whitespace from the input
+     * before returning it.
+     *
+     * @return      The validated map name provided by the user as a trimmed string.
      */
     private String requestMapName() {
         Scanner sc = new Scanner(System.in);
@@ -87,12 +86,11 @@ public class CreateMapUI implements Runnable {
         return mapName.trim();
     }
 
-
     /**
      * Prompts the user to input the width of the map, validates the input,
      * and ensures it is a positive integer within the allowed range (1 to 256).
      *
-     * @return  The validated width of the map provided by the user.
+     * @return      The validated width of the map provided by the user.
      */
     private int requestWidth() {
         Scanner sc = new Scanner(System.in);
@@ -107,12 +105,11 @@ public class CreateMapUI implements Runnable {
         return width;
     }
 
-
     /**
      * Prompts the user to input the height of the map, validates the input,
      * and ensures it is a positive integer within the allowed range (1 to 256).
      *
-     * @return  The validated height of the map provided by the user.
+     * @return      The validated height of the map provided by the user.
      */
     private int requestHeight() {
         Scanner sc = new Scanner(System.in);
@@ -127,19 +124,19 @@ public class CreateMapUI implements Runnable {
         return height;
     }
 
-
     /**
-     * Submits the data required to create a new map by invoking the map creation
-     * method from the controller.
+     * Validates user input data and creates a new map using the provided name, width, and height.
      *
-     * This method attempts to create a new map with the specified name, width,
-     * and height fields of the class. Upon successful creation, a confirmation
-     * message is displayed, including the name of the successfully created map.
+     * The method performs the following operations:
+     * - Calls the {@code createMap()} method of the associated controller to generate a new map instance.
+     * - Logs a success message indicating the creation of the map, displaying the map's name.
+     * - Handles exceptions to ensure proper error messaging for validation failures or unexpected errors:
+     *    - {@code IllegalArgumentException} is caught to provide feedback on invalid or duplicate input.
+     *    - Any other {@code Exception} is caught to log a generic error message for unforeseen issues.
      *
-     * If the map creation process encounters invalid input (e.g., duplicate map
-     * name or invalid dimensions), an {@code IllegalArgumentException} is caught
-     * and an error message is printed. For other unexpected exceptions, a generic
-     * error message is displayed to inform the user.
+     * Exceptions:
+     * - {@code IllegalArgumentException} if the map name is not unique or if dimensions are invalid.
+     * - {@code Exception} for unexpected errors that occur during the map creation process.
      */
     private void submitData() {
         try {

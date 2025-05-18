@@ -5,36 +5,56 @@ skinparam shadowing false
 
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
+participant ":Restrictions" as Restrictions
+participant ":Budget" as Budget
 participant ":Scenario" as Scenario
 
-autonumber 13
+autonumber 10
 
 activate UI
 
-UI -> CTRL : submitData()
+UI -> Restrictions : new Restrictions(startDate, endDate, locoTypes, events)
+activate Restrictions
+Restrictions --> UI : restrictions
+deactivate Restrictions
+
+UI -> Restrictions : validate()
+activate Restrictions
+Restrictions -> Restrictions : validateTimeRestrictions()
+Restrictions -> Restrictions : validateLocomotiveTypes()
+Restrictions -> Restrictions : validateHistoricalRestrictions()
+Restrictions --> UI : validation result
+deactivate Restrictions
+
+alt restrictions not valid
+    UI -> Editor : showError("Invalid restrictions provided")
+    Editor --> UI : provides new restrictions
+end
+
+UI -> CTRL : createScenario(scenarioName, restrictions, map)
 activate CTRL
-CTRL -> Scenario : createScenario(name, restrictions, map)
+
+CTRL -> Budget** : new Budget(1000)
+activate Budget
+Budget --> CTRL : defaultBudget
+deactivate Budget
+
+CTRL -> Scenario** : new Scenario(name, restrictions, map, defaultBudget)
 activate Scenario
 
-group Validate Restrictions
+group Validate Scenario
     Scenario -> Scenario : validateName()
-    Scenario -> Scenario : validateRestrictions()
 
-    loop while restrictions are invalid
-        autonumber 16.1
-            Scenario --> CTRL : throw IllegalArgumentException
-            deactivate Scenario
-            CTRL -> UI : showError()
-            deactivate CTRL
-            autonumber 17
-            UI --> CTRL : new map restrictions
-            activate CTRL
+    alt name not valid
+        Scenario --> CTRL : throw IllegalArgumentException
+        CTRL -> UI : showError()
+        UI --> CTRL : new name
+        CTRL -> Scenario** : new Scenario(newName, restrictions, map, defaultBudget)
+        activate Scenario
     end
 
-    CTRL -> Scenario : createScenario(name, restrictions, map)
-    activate Scenario
-    Scenario -> Scenario : hasValidMap()
     Scenario -> Scenario : validateRestrictions()
+    Scenario -> Scenario : hasValidMap()
 end
 
 Scenario --> CTRL : scenario

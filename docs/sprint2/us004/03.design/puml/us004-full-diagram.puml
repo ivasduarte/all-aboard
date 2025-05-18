@@ -13,6 +13,9 @@ participant "repositories\n:Repositories" as PLAT
 participant "mapRepository\n:MapRepository" as mapRep
 participant "scenarioRepository\n:ScenarioRepository" as Repo
 participant ":Scenario" as Scenario
+participant ":Restrictions" as Restrictions
+participant ":Budget" as Budget
+participant ":Map" as Map
 
 activate Editor
 
@@ -45,79 +48,105 @@ deactivate UI
 Editor --> UI : selects map from list
 activate UI
 
-UI -> CTRL : submitData()
+UI -> Editor : request scenario data
+deactivate UI
+Editor --> UI : provides scenario data (name, dates, locomotive types, historical events)
+activate UI
+
+UI -> Restrictions** : new Restrictions(startDate, endDate, locoTypes, events)
+activate Restrictions
+Restrictions --> UI : restrictions
+deactivate Restrictions
+
+UI -> Restrictions : validate()
+activate Restrictions
+Restrictions -> Restrictions : validateTimeRestrictions()
+Restrictions -> Restrictions : validateLocomotiveTypes()
+Restrictions -> Restrictions : validateHistoricalRestrictions()
+Restrictions --> UI : validation result
+deactivate Restrictions
+
+alt restrictions not valid
+    UI -> Editor : showError("Invalid restrictions provided")
+    Editor --> UI : provides new restrictions
+end
+
+UI -> CTRL : createScenario(scenarioName, restrictions, map)
+activate CTRL
 
 autonumber 6.1
-
-activate CTRL
 CTRL -> reps : getInstance()
 activate reps
 reps --> CTRL : repositories
 deactivate reps
 
-CTRL -> Repo : getScenarioRepository()
-activate Repo
-Repo --> CTRL : scenarioRepository
-deactivate Repo
+CTRL -> PLAT : getScenarioRepository()
+activate PLAT
+PLAT --> CTRL : scenarioRepository
+deactivate PLAT
 
-loop while scenarioName already exists
-autonumber 7
-        CTRL -> Repo : existsByName(name)
-        autonumber 7.1
-        activate Repo
-        Repo --> CTRL : true
-        deactivate Repo
-        CTRL -> UI : showError()
+CTRL -> Map : getScenarios()
+activate Map
+Map --> CTRL : List<Scenario>
+deactivate Map
+
+loop for each scenario in scenarios
+    CTRL -> Scenario : getScenarioName()
+    activate Scenario
+    Scenario --> CTRL : name
+    deactivate Scenario
+
+    alt name already exists
+        CTRL --> UI : "ERROR: A scenario with this name already exists."
         deactivate CTRL
-        autonumber 8
-        UI --> CTRL : new scenarioName
-    activate CTRL
+        UI -> Editor : showError(result)
+        Editor --> UI : provides new name
+        UI -> CTRL : createScenario(newName, restrictions, map)
+        activate CTRL
+    end
 end
 
-CTRL -> Repo : existsByName(name)
-activate Repo
-Repo --> CTRL : false
-deactivate Repo
+CTRL -> Budget** : new Budget(1000)
+activate Budget
+Budget --> CTRL : defaultBudget
+deactivate Budget
 
-UI -> Editor : request scenario data
-deactivate UI
-Editor --> UI : provides scenario data
-activate UI
-
-UI -> CTRL : submitData()
-CTRL -> Scenario : createScenario(name, restrictions, map)
+CTRL -> Scenario** : new Scenario(name, restrictions, map, defaultBudget)
 activate Scenario
-
 Scenario -> Scenario : validateName()
-Scenario -> Scenario : validateRestrictions()
 
-
-loop while restrictions are invalid
-autonumber 16.1
+alt name not valid
     Scenario --> CTRL : throw IllegalArgumentException
     deactivate Scenario
-    CTRL -> UI : showError()
+    CTRL --> UI : "ERROR: " + e.getMessage()
     deactivate CTRL
-    autonumber 17
-    UI --> CTRL : new map restrictions
+    UI -> Editor : showError(result)
+    Editor --> UI : provides new name
+    UI -> CTRL : createScenario(newName, restrictions, map)
     activate CTRL
+    CTRL -> Scenario** : new Scenario(newName, restrictions, map, defaultBudget)
+    activate Scenario
 end
 
-CTRL -> Scenario : createScenario(name, restrictions, map)
-activate Scenario
-Scenario -> Scenario : hasValidMap()
-Scenario -> Scenario : validateRestrictions()
 Scenario --> CTRL : scenario
 deactivate Scenario
 
 CTRL -> Repo : add(scenario)
 activate Repo
+Repo -> Repo : validateScenario(scenario)
 Repo --> CTRL : void
 deactivate Repo
 
-CTRL --> UI : result
+CTRL -> Map : addNewScenario(scenario)
+activate Map
+Map --> CTRL : void
+deactivate Map
+
+CTRL --> UI : "Scenario '" + name + "' created successfully."
 deactivate CTRL
+
 UI --> Editor : showSuccess(result)
 deactivate UI
+deactivate Editor
 
 @enduml
