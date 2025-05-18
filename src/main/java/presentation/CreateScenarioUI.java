@@ -11,16 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 /**
- * The CreateScenarioUI class provides a user interface for creating a new scenario
- * by interacting with the user to gather required inputs, such as the scenario name,
- * map details, restrictions, and other scenario-specific data.
+ * The CreateScenarioUI class provides a user interface for creating a new scenario,
+ * including input validation and interaction with the underlying controllers.
+ * This class collects necessary user input, interacts with the CreateScenarioController
+ * to create scenarios, and manages the display of success or error messages.
  *
- * This class interacts with controllers to manage the workflow, validate user input,
- * and persist the scenario in the repository.
- *
- * Implements the Runnable interface to allow execution in a separate thread.
+ * This class implements the Runnable interface, allowing it to be executed within
+ * a separate thread if required.
  */
 public class CreateScenarioUI implements Runnable {
     private final CreateScenarioController ctrl = new CreateScenarioController();
@@ -31,27 +29,19 @@ public class CreateScenarioUI implements Runnable {
     private Map map;
     private String mapName;
 
-
     /**
-     * Prompts the user to input details for creating a scenario, including map selection,
-     * scenario name, date range, locomotive types, and historical events. The input is validated
-     * and stored in the class fields if valid.
+     * Collects input from the user to configure a new scenario.
      *
-     * The method performs the following steps:
-     * 1. Displays a list of maps retrieved from the controller and prompts the user to select a map.
-     * 2. Prompts the user to input a scenario name.
-     * 3. Collects and parses start and end dates for the scenario time range.
-     * 4. Requests input for allowed locomotive types and historical events, parsing them into lists.
-     * 5. Validates the collected input. Displays an error and terminates if any validation fails.
+     * This method prompts the user to select a map from a list, enter a scenario name,
+     * specify start and end dates, define locomotive types, and list historical events.
+     * The collected inputs are then validated and used to set scenario restrictions.
      *
-     * Validation errors may include the following:
-     * - Invalid date format for start or end date.
-     * - End date earlier than start date.
-     * - Missing or invalid locomotive types.
-     * - Missing or invalid historical event descriptions.
+     * Error handling includes:
+     * - Catching invalid date formats entered by the user.
+     * - Catching generic exceptions and displaying their corresponding messages.
      *
-     * If any exception occurs (e.g., invalid input values), the method logs a descriptive error message
-     * using the {@code showError(String)} method.
+     * If invalid inputs are provided, appropriate error messages are displayed using the
+     * {@code showError} method.
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
@@ -98,22 +88,14 @@ public class CreateScenarioUI implements Runnable {
         }
     }
 
-
     /**
-     * Executes the process of creating a scenario in the system. This method serves
-     * as the entry point for user action within the CreateScenarioUI workflow.
+     * This method serves as the main execution point for the Create Scenario functionality.
+     * It begins by displaying a header to indicate the start of the process, then:
+     * - Collects and validates user input via the `getInput` method.
+     * - Submits the collected data to create a new scenario using the `submitData` method,
+     *   which handles scenario creation and provides success or error messages.
      *
-     * The method performs the following sequence of actions:
-     * 1. Displays a header indicating the start of the scenario creation process.
-     * 2. Invokes the {@code getInput()} method to prompt the user for all necessary
-     *    inputs, including selecting a map, specifying a scenario name, providing
-     *    a date range, and defining locomotive types and historical events.
-     * 3. Invokes the {@code submitData()} method to process and submit the collected
-     *    input data.
-     *
-     * The success or failure of the scenario creation is handled within the
-     * {@code getInput()} and {@code submitData()} methods, which display appropriate
-     * messages to the user.
+     * Any input-related errors are handled during execution through error messaging.
      */
     @Override
     public void run() {
@@ -122,30 +104,19 @@ public class CreateScenarioUI implements Runnable {
         submitData();
     }
 
-
     /**
-     * Submits the scenario creation data for processing. This method validates the required inputs
-     * before attempting to create a new scenario. If the input validations fail,
-     * an error message is displayed and the operation is aborted. Otherwise, the data is submitted
-     * using the controller's functionality.
+     * Submits the collected data to create a new scenario and displays the outcome.
      *
-     * The following steps are performed:
-     * 1. Validates whether the required `restrictions` object is present. If not, an error is displayed.
-     * 2. Invokes the controller to create a scenario with the provided `scenarioName`, `restrictions`,
-     *    and `map` fields.
-     * 3. If the creation process fails (evident from the error prefix in the result string),
-     *    an appropriate error message is displayed.
-     * 4. If the creation is successful, a success message is displayed with the result.
+     * This method validates the necessary inputs and sends a request to create
+     * a scenario using the provided data. If the required inputs (`restrictions`)
+     * are null, an error message is displayed, and the execution is aborted.
      *
-     * Error handling:
-     * - Displays a validation error message if the `restrictions` object is null.
-     * - Displays an error if the controller returns a result that begins with the prefix "ERROR".
+     * If the scenario creation request fails, the error message returned by the controller is shown to the user.
+     * Otherwise, a success message is displayed.
      *
-     * Success handling:
-     * - Displays a success message with the details provided in the result from the controller.
-     *
-     * This method is invoked as part of the scenario creation workflow and ensures that only
-     * valid input data is submitted for processing.
+     * Error handling includes:
+     * - Validating that `restrictions` isn't null.
+     * - Interpreting error messages returned by the `createScenario` method.
      */
     public void submitData() {
         if (restrictions == null) {
@@ -161,21 +132,19 @@ public class CreateScenarioUI implements Runnable {
         }
     }
 
-
     /**
-     * Displays an error message to the user.
+     * Displays an error message to the user by printing it to the console.
      *
-     * @param message the error message to be displayed
+     * @param message   The error message to be displayed
      */
     public void showError(String message) {
         System.out.println(message);
     }
 
-
     /**
-     * Displays a success message to the user.
+     * Displays a success message to the user by printing it to the console.
      *
-     * @param message the success message to be displayed
+     * @param message   The success message to be displayed
      */
     public void showSuccess(String message) {
         System.out.println(message);
