@@ -5,16 +5,19 @@ skinparam linetype polyline
 skinparam classAttributeIconSize 0
 
 class ListStationsUI {
+    - map: Map
     + run(): void
+    + getInput(): void
 }
 
 class ListStationsController {
     - stationRepository: StationRepository
-    + listAllStations(): List<Station>
+    + getStationsByMapName(mapName: String): List<Station>
 }
 
 class StationRepository {
     - stations: List<Station>
+    + getAvailableStationsByMapName(mapName: String): List<Station>
     + getStations(): List<Station>
 }
 
@@ -24,10 +27,14 @@ class Station {
     - positionX: int
     - positionY: int
     - buildings: List<Building>
+    - map: Map
+    + getStationID(): int
     + getStationType(): String
     + getPositionX(): int
     + getPositionY(): int
     + getBuildings(): List<Building>
+    + getCargo(): int
+    + getMap(): Map
 }
 
 class Building {
@@ -35,7 +42,13 @@ class Building {
     + getBuildingType(): String
 }
 
+class Map {
+    - mapName: String
+    + getMapName(): String
+}
+
 ListStationsUI ..> ListStationsController
 ListStationsController ..> StationRepository
 Station --> "0..*" Building
+Station --> Map
 @enduml

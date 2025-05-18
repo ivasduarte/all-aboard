@@ -1,0 +1,24 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "ListStationsUI" as UI
+participant "Station" as Station
+participant "Building" as Building
+
+UI -> Station : getStationID()
+UI -> Station : getStationType()
+UI -> Station : getPositionX()
+UI -> Station : getPositionY()
+UI -> Station : getBuildings()
+
+alt Station has buildings
+    loop for each Building
+        UI -> Building : getBuildingType()
+    end
+else No buildings
+    UI -> UI : display "No buildings found"
+end
+
+UI -> Station : getCargo()
+@enduml

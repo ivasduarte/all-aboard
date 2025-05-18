@@ -1,0 +1,17 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "ListStationsController" as Controller
+participant "Repositories" as Repositories
+participant "StationRepository" as StationRepo
+
+Controller -> Repositories : getInstance()
+Repositories --> Controller : Repository instance
+
+Controller -> Repositories : getStationRepository()
+Repositories --> Controller : StationRepository
+
+Controller -> StationRepo : getAvailableStationsByMapName(mapName)
+StationRepo --> Controller : List<Station>
+@enduml
