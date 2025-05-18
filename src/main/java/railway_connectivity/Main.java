@@ -26,27 +26,7 @@ public class Main {
         File lines = new File(linesFile);
         File stations = new File(stationsFile);
 
-        while (true) {
-            System.out.println("\n=== Menu ===");
-            System.out.println("1. Verify if a train can travel between two stations (US13)");
-            System.out.println("2. Verify if a route that passes once, and only once, by each railway line exists (US14)");
-            System.out.println("3. Exit");
-            System.out.print("Choose an option: ");
-            String op = sc.nextLine().trim();
-
-            if (op.equals("1")) {
-                us13Implementation(lines);
-                break;
-            } else if (op.equals("2")) {  // adicionar metodo implementacao us14
-                break;
-            } else if (op.equals("3")) {
-                System.out.println("Closing...");
-                break;
-            } else {
-                System.out.println("Invalid option. Please, try another one.");
-            }
-        }
-        sc.close();
+        us13Implementation(lines);
     }
 
     // utilities methods
