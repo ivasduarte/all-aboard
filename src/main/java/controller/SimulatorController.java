@@ -88,7 +88,7 @@ public class SimulatorController implements  Runnable {
                                 int cargoGenerated = (int)(industry.getCargoAmount() * cargoGeneratorMultiplier);
                                 int budgetEarned = (int)(industry.getCargoPrice() * cargoGenerated * costMultiplier);
 
-                                System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "x" + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
+                                System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "," + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
 
                                 earned += budgetEarned;
                             }
