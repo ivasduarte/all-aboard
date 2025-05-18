@@ -19,6 +19,7 @@ public class BuildingRepository {
         buildingTypes.add(new BuildingType("Large Hotel", 150, "Long-term cargo", 1890));
         buildingTypes.add(new BuildingType("Silo", 40, "Stores grain", 1855));
         buildingTypes.add(new BuildingType("Liquid Storage", 70, "Stores liquids", 1900));
+        buildingTypes.add(new BuildingType("Customs", 90, "Facilitates international trade", 1865));
     }
 
     public List<BuildingType> getBuildingTypes() {

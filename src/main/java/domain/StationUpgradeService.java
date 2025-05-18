@@ -25,8 +25,6 @@ public class StationUpgradeService {
             return false;
         }
 
-        handleReplacement(existingBuildings, newBuildingType);
-
         return station.addBuilding(building);
     }
 
@@ -46,11 +44,5 @@ public class StationUpgradeService {
             }
         }
         return null;
-    }
-
-    private void handleReplacement(List<Building> existingBuildings, String newType) {
-        if (newType.equalsIgnoreCase("Telephone")) {
-            existingBuildings.removeIf(b -> b.getBuildingType().equalsIgnoreCase("Telegraph"));
-        }
     }
 }

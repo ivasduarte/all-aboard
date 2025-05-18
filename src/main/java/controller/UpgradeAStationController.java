@@ -55,4 +55,25 @@ public class UpgradeAStationController {
         }
         return null;
     }
+
+    public void removeObsoleteBuildings(Station station, int currentYear) {
+        boolean hadTelegraph = false;
+
+        if (currentYear >= 1920) {
+            hadTelegraph = station.getBuildings().removeIf(b ->
+                    b.getBuildingType().equalsIgnoreCase("Telegraph")
+            );
+
+            if (hadTelegraph) {
+                BuildingType telephone = Repositories.getInstance()
+                        .getBuildingRepository()
+                        .getBuildingType("Telephone");
+
+                if (telephone != null) {
+                    station.addBuilding(new Building(telephone));
+                    System.out.println("INFO: Telegraph was replaced by Telephone at station " + station.getStationID());
+                }
+            }
+        }
+    }
 }

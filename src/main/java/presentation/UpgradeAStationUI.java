@@ -56,9 +56,23 @@ public class UpgradeAStationUI implements Runnable {
 
         System.out.println("Your current budget is " + budget + "€");
 
+        int currentYear = scenario.getCurrentYear();
+
+        System.out.println("Year of simulation: " + currentYear);
+
+        controller.removeObsoleteBuildings(selectedStation, currentYear);
+
         System.out.println("\nAvailable Building Types:");
         for (BuildingType bt : controller.getAvailableBuildingTypes()) {
-            System.out.println(bt.getName() + " | " + bt.getCost() + "€ | Effect: " + bt.getEffect());
+            String name = bt.getName();
+
+            if (name.equalsIgnoreCase("Telegraph") && currentYear >= 1920) {
+                continue;
+            }
+
+            if (bt.getAvailableYear() <= currentYear) {
+                System.out.println(name + " | " + bt.getCost() + "€ | Effect: " + bt.getEffect());
+            }
         }
 
         System.out.print("\nEnter the type of building to add: ");
@@ -75,7 +89,6 @@ public class UpgradeAStationUI implements Runnable {
             return;
         }
 
-        int currentYear = LocalDate.now().getYear();
         boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
 
         if (success) {
