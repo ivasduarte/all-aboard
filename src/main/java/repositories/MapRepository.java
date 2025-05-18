@@ -2,7 +2,6 @@ package repositories;
 
 import domain.Map;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,10 +10,8 @@ import java.util.Optional;
  * The MapRepository class is used to manage a collection of Map instances.
  * It provides methods to add, retrieve, and perform operations on the stored maps.
  */
-
 public class MapRepository{
     private List<Map> maps;
-
 
     /**
      * Constructs a new instance of the {@code MapRepository} class.
@@ -23,7 +20,6 @@ public class MapRepository{
     public MapRepository() {
         maps = new ArrayList<>();
     }
-
 
     /**
      * Adds a new map to the repository if it passes validation.
@@ -36,7 +32,6 @@ public class MapRepository{
         }
     }
 
-
     /**
      * Validates if the given map instance is not already present in the repository's collection.
      *
@@ -46,7 +41,6 @@ public class MapRepository{
     private boolean validateMap(Map map){
         return !maps.contains(map);
     }
-
 
     /**
      * Checks if a map with the specified name exists in the repository.
@@ -64,7 +58,6 @@ public class MapRepository{
         return false;
     }
 
-
     /**
      * Retrieves an unmodifiable list of maps stored in the repository.
      * The returned list cannot be modified and reflects the current state
@@ -75,7 +68,6 @@ public class MapRepository{
     public List<Map> getMapList() {
         return List.copyOf(maps);
     }
-
 
     /**
      * Retrieves a map from the repository by its name.
