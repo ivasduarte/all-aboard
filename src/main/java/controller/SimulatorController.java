@@ -4,7 +4,6 @@ import domain.Industry;
 import domain.Locomotive;
 import domain.Map;
 import domain.Scenario;
-import repositories.IndustryRepository;
 import repositories.Repositories;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class SimulatorController implements  Runnable {
         this.scenario = scenario;
     }
 
-    public void PassTime() {
+    public void SimulateGame() {
 
         int startYear = scenario.getRestrictions().getStartDate().getYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
@@ -77,6 +76,7 @@ public class SimulatorController implements  Runnable {
 
                     if(running)
                     {
+                        int total = 0;
                         System.out.println("\n\n------------Stats of year " + year + "------------");
 
                         if (industries != null && !industries.isEmpty()) {
@@ -90,10 +90,10 @@ public class SimulatorController implements  Runnable {
 
                                 System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "x" + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
 
-                                scenario.addBudget(budgetEarned);
                                 earned += budgetEarned;
                             }
 
+                            total += earned;
                             System.out.println("You gained a total of " + earned + "€ from industries!");
                         }
 
@@ -118,10 +118,12 @@ public class SimulatorController implements  Runnable {
                             }
 
                             int totalEarned = earned - lost;
+                            total += totalEarned;
                             System.out.println("You gained a total of " + earned + "€ from trains and lost a total of " + lost + "€! Total balance is " + totalEarned + "€!");
                         }
 
-                        System.out.println("Your budget is now " + scenario.getBudget().getBudget() + "€");
+                        scenario.addBudget(total);
+                        System.out.println("You have earned a total of " + total + "€. Your budget is now " + scenario.getBudget().getBudget() + "€");
 
                         if(historicalEvents.contains("pandemic"))
                         {
@@ -159,6 +161,6 @@ public class SimulatorController implements  Runnable {
     @Override
     public void run()
     {
-        PassTime();
+        SimulateGame();
     }
 }

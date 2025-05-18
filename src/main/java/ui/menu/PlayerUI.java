@@ -121,6 +121,12 @@ public class PlayerUI implements Runnable{
 
         Budget budget = currentScenario.getBudget();
 
+        if(currentScenario.getCurrentYear() > currentScenario.getRestrictions().getEndDate().getYear())
+        {
+            System.out.println("This scenario has ended!");
+            return;
+        }
+
         List<MenuItem> options = new ArrayList<>();
         options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario)));
