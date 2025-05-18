@@ -33,7 +33,7 @@ public class IndustryRepository {
      * @param map The desired map.
      * @return Industry list of the desired map.
      */
-    public List<Industry> getIndustryByMap(Map map)
+    public List<Industry> getIndustriesByMap(Map map)
     {
         List<Industry> filteredIndustries = new ArrayList<>();
 

@@ -24,6 +24,8 @@ public class SimulatorController implements  Runnable {
 
     public void PassTime() {
 
+        running = true;
+
         int startYear = scenario.getRestrictions().getStartDate().getYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
 
@@ -37,24 +39,31 @@ public class SimulatorController implements  Runnable {
 
                 List<String> historicalEvents = scenario.getRestrictions().getHistoricalEvents();
 
+                System.out.println("Historical events: ");
+                for(String event : historicalEvents)
+                {
+                    if(!event.equalsIgnoreCase("none"))
+                        System.out.print(event + " ");
+                }
+                System.out.println();
+
                 double cargoGeneratorMultiplier = 1;
                 double costMultiplier = 1;
 
                 if(historicalEvents.contains("pandemic"))
                 {
-                    cargoGeneratorMultiplier = 0.25;
+                    cargoGeneratorMultiplier *= 0.25;
                 }
 
                 if(historicalEvents.contains("war"))
                 {
-                    cargoGeneratorMultiplier = 1.5;
-                    costMultiplier = 1.75;
+                    cargoGeneratorMultiplier *= 1.5;
+                    costMultiplier *= 1.65;
                 }
 
-                List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustryByMap(map);
+                List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
                 List<Locomotive> locomotives = Repositories.getInstance().getLocomotiveRepository().getPlayerLocomotives();
 
-                int budget = scenario.getBudget().getBudget();
                 int year = startYear;
 
                 while (running) {
@@ -62,10 +71,31 @@ public class SimulatorController implements  Runnable {
 
                     if(running)
                     {
-                        
+                        System.out.println("\n------------Stats of year " + year + "------------");
 
-                        scenario.setCurrentYear(year);
+                        if (industries != null && !industries.isEmpty()) {
+                            System.out.println("----Stats for industries----");
+                            for(int i = 0; i < industries.size(); i++)
+                            {
+                                Industry industry = industries.get(i);
+                                int cargoGenerated = (int)(industry.getCargoAmount() * cargoGeneratorMultiplier);
+                                int budgetEarned = (int)(industry.getCargoPrice() * cargoGenerated * costMultiplier);
+
+                                System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "x" + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
+
+                                scenario.addBudget(budgetEarned);
+                            }
+                        }
+
+                        System.out.println("Your budget is now " + scenario.getBudget().getBudget() + "€");
+
+                        if(historicalEvents.contains("pandemic"))
+                        {
+                            cargoGeneratorMultiplier += 0.1;
+                        }
+
                         year++;
+                        scenario.setCurrentYear(year);
 
                         if(year > endYear)
                             running = false;
