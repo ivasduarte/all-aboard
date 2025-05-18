@@ -177,6 +177,6 @@ public class Scenario {
      */
     @Override
     public String toString() {
-        return "" + name + " (" + restrictions + ", belongs to map '" + map.getMapName() + ")";
+        return "" + name + " (" + restrictions + ", belongs to map '" + map.getMapName() + "')";
     }
 }
