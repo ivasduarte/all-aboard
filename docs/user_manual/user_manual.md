@@ -7,7 +7,10 @@
 ### Created by:
 
 #### Susana Loureiro
-#### 
+#### Iva Silva
+#### João Ferreira 
+#### Rafael Capão 
+#### José Cardoso
 
 <br>
 <br>
@@ -283,7 +286,7 @@ Step 4: For each station, select the cargoes to be picked up.
 
 Step 5: Confirm the route assignment.
 
-<!--![Assign Train to Route](imagesUserManual/assignTrainToRoute.png)-->
+![Assign Train to Route](imagesUserManual/assignTrainToRoute.png)
 Image 14: Assign Train to Route screen
 
 # Troubleshooting
