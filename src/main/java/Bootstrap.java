@@ -10,15 +10,57 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class is responsible to add the default scenario to the database.
+ */
 public class Bootstrap implements Runnable {
-
+    /**
+     * Executes the initialization process for the application by invoking the following methods in sequence:
+     *
+     * 1. `addUsers`: Ensures the system is populated with predefined default users, such as an editor and a player,
+     *    each assigned specific roles required for system functionality.
+     *
+     * 2. `createScenario`: Creates a scenario and associates it with a generated map. The map is fetched or created
+     *    using the `createMap` method, which initializes a default map instance if not already available in the system.
+     *
+     * 3. `gameLocomotives`: Adds all locomotives available in the simulation to the repository upon startup, ensuring
+     *    that locomotive data is consistently loaded for gameplay.
+     *
+     * This method is typically used during the startup of the application to properly set up the required entities
+     * and resources for the system to run as expected.
+     *
+     * Preconditions:
+     * - The database or repository should be properly initialized before the method is executed.
+     *
+     * Postconditions:
+     * - Default users will exist in the system if they did not already exist.
+     * - A map and a scenario will be created and added to their respective repositories if they are not already available.
+     * - All available locomotives will be loaded into the repository for use in the simulation.
+     */
     public void run() {
         addUsers();
         createScenario(createMap().get());
         gameLocomotives();
     }
 
-
+    /**
+     * Adds default users to the application. This method creates a set of default users
+     * and assigns them predefined roles to facilitate the initialization of the system.
+     *
+     * The users created are:
+     * - An "editor" user with the email "editor@isep.ipp.pt", password "editor", and the "EDITOR" role.
+     * - A "player" user with the email "player@isep.ipp.pt", password "player", and the "PLAYER" role.
+     *
+     * This method is typically called during the initialization phase to ensure that the minimum
+     * required set of users exists in the application.
+     *
+     * Preconditions:
+     * - The email addresses used for user creation must be unique and adhere to the expected format.
+     * - Roles "EDITOR" and "PLAYER" must be defined in the application.
+     *
+     * Postconditions:
+     * - The system will contain the users specified with the given roles, provided they do not already exist.
+     */
     public void addUsers(){
         AuthenticationController ctrl = new AuthenticationController();
 
@@ -26,6 +68,14 @@ public class Bootstrap implements Runnable {
         ctrl.createNewUser("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
     }
 
+    /**
+     * Creates a map with a specified name and dimensions, adds it to the map repository,
+     * and retrieves it from the repository. If a map with the specified name already exists,
+     * the existing map is returned.
+     *
+     * @return      An {@code Optional<Map>} containing the created or retrieved map, or an empty
+     *              {@code Optional} if the map could not be found or created.
+     */
     public Optional<Map> createMap() {
         MapRepository mr = Repositories.getInstance().getMapRepository();
         mr.add(new Map("ExampleMap", 100, 100));
@@ -33,6 +83,14 @@ public class Bootstrap implements Runnable {
         return mr.getMap("ExampleMap");
     }
 
+    /**
+     * Creates a new scenario and associates it with the provided map.
+     *
+     * The scenario iS configured with predefined locomotive types, historical events, a date range, and a budget.
+     * The created scenario is added to the specified map and stored in the scenario repository.
+     *
+     * @param map  The map to which the new scenario will be linked. Must not be null.
+     */
     public void createScenario(Map map) {
         ScenarioRepository sr = Repositories.getInstance().getScenarioRepository();
         List<String> locomotiveTypes = new ArrayList<>();
