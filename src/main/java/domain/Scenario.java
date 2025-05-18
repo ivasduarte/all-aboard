@@ -29,6 +29,8 @@ public class Scenario {
         this.restrictions = restrictions;
         this.map = map;
         this.budget = budget;
+
+        this.currentYear = restrictions.getStartDate().getYear();
         validateName();
     }
 

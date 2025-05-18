@@ -60,13 +60,18 @@ public class CreateScenarioUI implements Runnable {
         System.out.print("\nSelect a map from the list: ");
         mapName = sc.nextLine().trim();
 
+        boolean validMap = false;
         for (Map map: controller.getMapList()) {
-
-            if(map.getMapName().equalsIgnoreCase(mapName)) {
-
+            if(map.getMapName().trim().equalsIgnoreCase(mapName)) {
                 this.map = map;
-
+                validMap = true;
             }
+        }
+
+        if(!validMap)
+        {
+            System.out.println("The entered map does not exist!");
+            return;
         }
 
         System.out.print("Enter the name of the scenario: ");
@@ -82,7 +87,7 @@ public class CreateScenarioUI implements Runnable {
             System.out.print("\nEnter Locomotive Types (comma-separated: steam, diesel, electric): ");
             List<String> locoTypes = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
-            System.out.print("\nEnter Historical Events (comma-separated descriptions): ");
+            System.out.print("\nEnter Historical Events (comma-separated: none, pandemic (cargo demand is lowered, increases every year), great war (all costs are increased, cargo demand is greatly increased)): ");
             List<String> events = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
             restrictions = new Restrictions(startDate, endDate, locoTypes, events);

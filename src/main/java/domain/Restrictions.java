@@ -146,6 +146,18 @@ public class Restrictions {
      *         false otherwise.
      */
     private boolean validateHistoricalRestrictions(){
-        return historicalEvents != null && !historicalEvents.isEmpty();
+        if(historicalEvents == null || historicalEvents.isEmpty())
+        {
+            return false;
+        }
+
+        for(String event : historicalEvents){
+            if(!event.trim().equalsIgnoreCase("none") &&
+                    !event.trim().equalsIgnoreCase("pandemic") &&
+                    !event.trim().equalsIgnoreCase("great war") && !event.trim().equalsIgnoreCase("war")){
+                return false;
+            }
+        }
+        return true;
     }
 }

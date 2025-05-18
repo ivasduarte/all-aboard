@@ -26,13 +26,18 @@ public class SimulatorController implements  Runnable {
             try {
                 int year = startYear;
                 while (running) {
-                    System.out.println(year);
-                    year++;
-
                     Thread.sleep(2000);
 
-                    if(year > endYear)
-                        running = false;
+                    if(running)
+                    {
+                        System.out.println(year);
+
+                        scenario.setCurrentYear(year);
+                        year++;
+
+                        if(year > endYear)
+                            running = false;
+                    }
                 }
             } catch (InterruptedException e) {
                 System.out.println("Simulator interrupted.");

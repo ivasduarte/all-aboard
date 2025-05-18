@@ -105,6 +105,7 @@ public class PlayerUI implements Runnable{
             System.out.println("\nCurrent map: " + currentMap.getMapName());
             System.out.println("Current scenario: " + currentScenario.getScenarioName());
             System.out.println("Time period: " + currentScenario.getRestrictions().getStartDate() + " to " + currentScenario.getRestrictions().getEndDate());
+            System.out.println("The current year is " + currentScenario.getCurrentYear());
             System.out.println("Your current budget: " + budget.getBudget() + "€");
 
             option = Utils.showAndSelectIndex(options, "\n\n------------------------- PLAYER MENU -------------------------");
