@@ -1,0 +1,30 @@
+graph G {
+  "S_Kyle_of_Lochalsh" -- "D_Attadale" [color=red];
+  "D_Attadale" -- "S_Dingwall" [color=red];
+  "S_Dingwall" -- "T_Inverness" [color=red];
+  "T_Inverness" -- "S_Elgin" [color=yellow];
+  "S_Elgin" -- "T_Aberdeen" [color=yellow];
+  "T_Aberdeen" -- "S_Arbroath" [color=yellow];
+  "S_Arbroath" -- "T_Dundee" [color=yellow];
+  "T_Dundee" -- "D_Inverkeithing" [color=red];
+  "D_Inverkeithing" -- "T_Edinburgh" [color=red];
+  "T_Perth" -- "D_Inverkeithing" [color=yellow];
+  "D_Inverkeithing" -- "T_Edinburgh" [color=yellow];
+  "T_Inverness" -- "D_Aviemore" [color=yellow];
+  "D_Aviemore" -- "S_Kingussie" [color=yellow];
+  "S_Kingussie" -- "T_Perth" [color=yellow];
+  "T_Perth" -- "T_Dundee" [color=yellow];
+  "T_Perth" -- "S_Dunblane" [color=yellow];
+  "S_Dunblane" -- "T_Stirling" [color=yellow];
+  "T_Stirling" -- "D_Croy" [color=yellow];
+  "D_Croy" -- "T_Edinburgh" [color=red];
+  "D_Croy" -- "T_Glasgow_Queen_Street" [color=yellow];
+  "T_Edinburgh" -- "S_Bathgate" [color=yellow];
+  "S_Bathgate" -- "S_Airdrie" [color=yellow];
+  "S_Airdrie" -- "T_Glasgow_Queen_Street" [color=yellow];
+  "T_Glasgow_Queen_Street" -- "S_Dalmuir" [color=red];
+  "S_Dalmuir" -- "D_Crianlarich" [color=red];
+  "D_Crianlarich" -- "D_Tulloch" [color=red];
+  "D_Tulloch" -- "S_Fort_William" [color=red];
+  "S_Fort_William" -- "S_Mallaig" [color=yellow];
+}
