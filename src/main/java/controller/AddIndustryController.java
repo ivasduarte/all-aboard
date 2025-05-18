@@ -18,10 +18,10 @@ public class AddIndustryController {
      *
      * @return Will show a success message if it is possible to create the industry. Otherwise, it will show a message related to the error that occurred.
      */
-    public String addIndustry(int mapID, int scenarioID, int positionX, int positionY, String industryType, int cargoAmount) {
+    public String addIndustry(int mapID, int scenarioID, int positionX, int positionY, String industryType, int cargoAmount, int cargoPrice) {
         IndustryRepository industryRepository = Repositories.getInstance().getIndustryRepository();
 
-        Industry industry = new Industry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount);
+        Industry industry = new Industry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount, cargoPrice);
 
         if (!industry.validatePosition()) {
             return "ERROR: Invalid position";

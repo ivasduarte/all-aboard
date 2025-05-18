@@ -10,7 +10,7 @@ class IndustryTest {
 
     @BeforeEach
     void setUp() {
-        industry = new Industry(0, 0, 25, 75, "Mixed industry", 50) {
+        industry = new Industry(0, 0, 25, 75, "Mixed industry", 50, 30) {
             @Override
             public boolean validatePosition() {
                 int width = 100;
@@ -53,7 +53,7 @@ class IndustryTest {
 
     @Test
     void validatePosition_Invalid() {
-        Industry invalidIndustry = new Industry(0, 0, 150, 75, "Invalid industry" ,50) {
+        Industry invalidIndustry = new Industry(0, 0, 150, 75, "Invalid industry" ,50, 30) {
             @Override
             public boolean validatePosition() {
                 int width = 100;
@@ -69,7 +69,7 @@ class IndustryTest {
 
     @Test
     void checkOverbuilding() {
-        Industry conflictIndustry = new Industry(0, 0, 25, 75, "Primary sector industry", 50) {
+        Industry conflictIndustry = new Industry(0, 0, 25, 75, "Primary sector industry", 50, 30) {
             @Override
             public boolean checkOverbuilding() {
                 int otherX = 25;

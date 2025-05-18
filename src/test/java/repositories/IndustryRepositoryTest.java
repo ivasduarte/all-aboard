@@ -15,7 +15,7 @@ class IndustryRepositoryTest {
     @BeforeEach
     void setUp() {
         indRepo = new IndustryRepository();
-        testIndustry = new Industry(0, 0, 50, 50, "Mixed Industry", 50);
+        testIndustry = new Industry(0, 0, 50, 50, "Mixed Industry", 50, 30);
     }
 
     @Test
@@ -29,7 +29,7 @@ class IndustryRepositoryTest {
 
     @Test
     void getIndustryList() {
-        Industry testIndustry2 = new Industry(0, 0, 25, 25, "Transforming industry", 50);
+        Industry testIndustry2 = new Industry(0, 0, 25, 25, "Transforming industry", 50, 30);
         indRepo.save(testIndustry);
         indRepo.save(testIndustry2);
 

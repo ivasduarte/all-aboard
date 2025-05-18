@@ -25,6 +25,7 @@ public class AddIndustryUI implements Runnable {
     private int positionY;
     private String industryType;
     private int cargoAmount;
+    private int cargoPrice;
 
     /**
      * This method will be responsible to show the UI to user.
@@ -80,6 +81,16 @@ public class AddIndustryUI implements Runnable {
                 System.out.println("Cargo amount must be a positive value!");
             }
         }while (cargoAmount <= 0);
+
+        do {
+            System.out.println("\nEnter the amount of money that each cargo gives to the player: ");
+            cargoPrice = sc.nextInt();
+
+            if(cargoPrice <= 0)
+            {
+                System.out.println("Each cargo must give positive money to the player!");
+            }
+        }while (cargoPrice <= 0);
     }
 
     @Override
@@ -96,7 +107,7 @@ public class AddIndustryUI implements Runnable {
      * This method will be responsible to show the success or error message to the Editor.
      */
     private void submitData() {
-        Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount));
+        Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount, cargoPrice));
 
         if (result.isPresent()) {
             System.out.println("\nIndustry successfully added!");
