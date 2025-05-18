@@ -108,7 +108,6 @@ public class SimulatorController implements  Runnable {
 
                                 if (closest != null) {
                                     closest.addCargo(cargoGenerated);
-                                    System.out.println("Station ID " + closest.getStationID() + " received " + cargoGenerated + " cargo from industry at (" + industry.getPositionX() + ", " + industry.getPositionY() + ")");
                                 }
 
                                 System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "," + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
