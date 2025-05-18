@@ -34,7 +34,7 @@ public class SimulatorController implements  Runnable {
         }
 
         running = true;
-        
+
         Thread simulatorThread = new Thread(() -> {
             try {
 
