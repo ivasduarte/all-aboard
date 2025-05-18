@@ -4,7 +4,6 @@ import domain.Locomotive;
 import domain.Restrictions;
 import domain.Scenario;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +51,12 @@ public class LocomotiveRepository {
         List<Scenario> scenarios = Repositories.getInstance().getScenarioRepository().getScenarioList();
         Scenario scenario = scenarios.get(scenarioId);
         Restrictions scenarioRestrictions = scenario.getRestrictions();
-        LocalDate scenarioStartDate = scenarioRestrictions.getStartDate();
 
         for (int i = 0; i < locomotives.size(); i++) {
 
             boolean alreadyAdded = false;
 
-            if (locomotives.get(i).getStartYear() <= scenarioStartDate.getYear() && locomotives.get(i).getEndYear() >= scenarioStartDate.getYear()) {
+            if (locomotives.get(i).getStartYear() <= scenario.getCurrentYear() && scenario.getCurrentYear() <= locomotives.get(i).getEndYear()) {
                 for (String techRestrictions : scenarioRestrictions.getLocomotiveTypes()) {
                     if (!alreadyAdded && techRestrictions.equalsIgnoreCase(locomotives.get(i).getLocomotiveFuelType())) {
                         availableLocomotives.add(locomotives.get(i));
@@ -94,14 +92,5 @@ public class LocomotiveRepository {
             }
         }
         throw new IllegalArgumentException("Locomotive with model " + locomotiveModel + " doesn't exist.");
-    }
-
-    /**
-     * This method is responsible to show the locomotive list in the form of a list.
-     */
-    public void displayAvailableLocomotives() {
-        for (int i = 0; i < availableLocomotives.size(); i++) {
-            System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + ": " + availableLocomotives.get(i).getPrice() + "€");
-        }
     }
 }
