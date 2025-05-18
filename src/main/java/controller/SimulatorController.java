@@ -1,5 +1,6 @@
 package controller;
 
+import domain.*;
 import domain.Industry;
 import domain.Locomotive;
 import domain.Map;
@@ -82,11 +83,33 @@ public class SimulatorController implements  Runnable {
                         if (industries != null && !industries.isEmpty()) {
                             System.out.println("----Stats for industries----");
                             int earned = 0;
-                            for(int i = 0; i < industries.size(); i++)
-                            {
+                            for (int i = 0; i < industries.size(); i++) {
                                 Industry industry = industries.get(i);
                                 int cargoGenerated = (int)(industry.getCargoAmount() * cargoGeneratorMultiplier);
                                 int budgetEarned = (int)(industry.getCargoPrice() * cargoGenerated * costMultiplier);
+
+                                Station closest = null;
+                                int closestDistance = Integer.MAX_VALUE;
+
+                                List<Station> stations = Repositories.getInstance().getStationRepository().getStations();
+
+                                for (Station station : stations) {
+                                    if (station.getMap().getMapName().equalsIgnoreCase(map.getMapName())) {
+                                        int dx = station.getPositionX() - industry.getPositionX();
+                                        int dy = station.getPositionY() - industry.getPositionY();
+                                        int distance = dx * dx + dy * dy;
+
+                                        if (distance < closestDistance) {
+                                            closestDistance = distance;
+                                            closest = station;
+                                        }
+                                    }
+                                }
+
+                                if (closest != null) {
+                                    closest.addCargo(cargoGenerated);
+                                    System.out.println("Station ID " + closest.getStationID() + " received " + cargoGenerated + " cargo from industry at (" + industry.getPositionX() + ", " + industry.getPositionY() + ")");
+                                }
 
                                 System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "," + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
 

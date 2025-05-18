@@ -43,6 +43,8 @@ public class ListStationsUI implements Runnable{
                     System.out.println();
                 }
             }
+            System.out.println("Cargo stored: " + station.getCargo());
+            System.out.println();
         }
     }
 
