@@ -111,6 +111,11 @@ public class Locomotive {
         return endYear;
     }
 
+    public int getFuelCost() { return  fuelCost;}
+
+    public int getMaintenanceCost() { return maintenanceCost;}
+
+    public List<Station> getRoute() {return route;}
     /**
      * This method sets the locomotive's route
      *

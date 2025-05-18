@@ -24,11 +24,17 @@ public class SimulatorController implements  Runnable {
 
     public void PassTime() {
 
-        running = true;
-
         int startYear = scenario.getRestrictions().getStartDate().getYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
 
+        if(scenario.getCurrentYear() > endYear)
+        {
+            System.out.println("\nCannot start simulation, game is over!");
+            return;
+        }
+
+        running = true;
+        
         Thread simulatorThread = new Thread(() -> {
             try {
 
@@ -71,10 +77,11 @@ public class SimulatorController implements  Runnable {
 
                     if(running)
                     {
-                        System.out.println("\n------------Stats of year " + year + "------------");
+                        System.out.println("\n\n------------Stats of year " + year + "------------");
 
                         if (industries != null && !industries.isEmpty()) {
                             System.out.println("----Stats for industries----");
+                            int earned = 0;
                             for(int i = 0; i < industries.size(); i++)
                             {
                                 Industry industry = industries.get(i);
@@ -84,7 +91,34 @@ public class SimulatorController implements  Runnable {
                                 System.out.println("Industry of type " + industry.getIndustryType() + " (" + industry.getPositionX() + "x" + industry.getPositionY() + ") has generated " + cargoGenerated + " cargo, producing a total of " + budgetEarned + "€");
 
                                 scenario.addBudget(budgetEarned);
+                                earned += budgetEarned;
                             }
+
+                            System.out.println("You gained a total of " + earned + "€ from industries!");
+                        }
+
+                        if(locomotives != null && !locomotives.isEmpty())
+                        {
+                            System.out.println("\n----Stats for trains----");
+                            int earned = 0;
+                            int lost = 0;
+                            for(int i = 0; i < locomotives.size(); i++)
+                            {
+                                Locomotive locomotive = locomotives.get(i);
+                                int locomotiveMaintenanceCost = (int)(locomotive.getFuelCost() * costMultiplier + locomotive.getMaintenanceCost() * costMultiplier);
+
+                                int budgetEarned = 0;
+                                if(locomotive.getRoute() != null && !locomotive.getRoute().isEmpty())
+                                    budgetEarned = (int)(locomotive.getRoute().size() * 50 * costMultiplier);
+                                else
+                                    System.out.println("The train of model " + locomotive.getLocomotiveModel() + " does not have a route. The maintenance cost is " + locomotiveMaintenanceCost + "€");
+
+                                lost += locomotiveMaintenanceCost;
+                                earned += budgetEarned;
+                            }
+
+                            int totalEarned = earned - lost;
+                            System.out.println("You gained a total of " + earned + "€ from trains and lost a total of " + lost + "€! Total balance is " + totalEarned + "€!");
                         }
 
                         System.out.println("Your budget is now " + scenario.getBudget().getBudget() + "€");
