@@ -1,6 +1,7 @@
 package controller;
 
 import domain.Industry;
+import domain.Locomotive;
 import domain.Map;
 import domain.Scenario;
 import repositories.IndustryRepository;
@@ -51,6 +52,7 @@ public class SimulatorController implements  Runnable {
                 }
 
                 List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustryByMap(map);
+                List<Locomotive> locomotives = Repositories.getInstance().getLocomotiveRepository().getPlayerLocomotives();
 
                 int budget = scenario.getBudget().getBudget();
                 int year = startYear;
@@ -60,6 +62,8 @@ public class SimulatorController implements  Runnable {
 
                     if(running)
                     {
+                        
+
                         scenario.setCurrentYear(year);
                         year++;
 
