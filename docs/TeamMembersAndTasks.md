@@ -27,39 +27,39 @@ At last, remember that each User Story does not stand alone... it needs to be in
 
 **This table must be always up-to-date.**
 
-| Task                                                                                                                           | Sprint 1 | Sprint 2 | Sprint 3 |
-|--------------------------------------------------------------------------------------------------------------------------------|----------|----------|----------|
-| [Glossary](system-documentation/global-artifacts/01.requirements-engineering/glossary.md)                                      | all      | all      | all      |
-| [Use Case Diagram (UCD)](system-documentation/global-artifacts/01.requirements-engineering/use-case-diagram.md)                | all      | all      | all      |
-| [Supplementary Specification](system-documentation/global-artifacts/01.requirements-engineering/suplementary-specification.md) | all      | all      | all      |
-| [Domain Model](system-documentation/global-artifacts/01.requirements-engineering/domain-model.md)                              | all      | all      | all      |
-| US01 (SDP Activities)                                                                                                          | 1241176  | 1241176  |          |
-| US02 (SDP Activities)                                                                                                          | 1241166  | 1241166  |          |
-| US03 (SDP Activities)                                                                                                          | 1220804  | 1220804  |          |
-| US04 (SDP Activities)                                                                                                          | 1241176  | 1241176  |          |
-| US05 (SDP Activities)                                                                                                          | 1241285  | 1241285  |          |
-| US06 (SDP Activities)                                                                                                          | 1241323  | 1241323  |          |
-| US07 (SDP Activities)                                                                                                          | 1241323  | 1241323  |          |
-| US08 (SDP Activities)                                                                                                          | 1241166  | 1241166  |          |
-| US09 (SDP Activities)                                                                                                          | 1220804  | 1220804  |          |
-| US10 (SDP Activities)                                                                                                          | 1241285  | 1241285  |          |
-| US11 (SDP Activities)                                                                                                          | 1241323  | 1241323  |          |
-| US12 (SDP Activities)                                                                                                          | 1241285  | 1241285  |          |
-| US01 (IMP Activities)                                                                                                          | 1241176  | 1241176  |          |
-| US02 (IMP Activities)                                                                                                          | 1241166  | 1241166  |          |
-| US03 (IMP Activities)                                                                                                          | 1220804  | 1241176  |          |
-| US04 (IMP Activities)                                                                                                          | 1241176  | 1241176  |          |
-| US05 (IMP Activities)                                                                                                          | 1241285  | 1241285  |          |
-| US06 (IMP Activities)                                                                                                          | 1241323  | 1241323  |          |
-| US07 (IMP Activities)                                                                                                          | 1241323  | 1241323  |          |
-| US08 (IMP Activities)                                                                                                          | 1241166  | 1241166  |          |
-| US09 (IMP Activities)                                                                                                          | 1220804  | 1241166  |          |
-| US10 (IMP Activities)                                                                                                          | 1241285  | 1241285  |          |
-| US11 (IMP Activities)                                                                                                          | 1241323  | 1241323  |          |
-| US12 (IMP Activities)                                                                                                          | 1241285  | 1241285  |          |
-| US13 (IMP Activities)                                                                                                          |          |          |          |
-| US14 (IMP Activities)                                                                                                          |          |          |          |
-| US15 (IMP Activities)                                                                                                          |          | 1241176  |          |
-| US16 (IMP Activities)                                                                                                          |          | 1241323  |          |
-| US17 (IMP Activities)                                                                                                          |          | 1241285  |          |
-| US18 (IMP Activities)                                                                                                          |          | 1241166  |          |
+| Task                                                                                                                           | Sprint 1 | Sprint 2            | Sprint 3 |
+|--------------------------------------------------------------------------------------------------------------------------------|----------|---------------------|----------|
+| [Glossary](system-documentation/global-artifacts/01.requirements-engineering/glossary.md)                                      | all      | all                 | all      |
+| [Use Case Diagram (UCD)](system-documentation/global-artifacts/01.requirements-engineering/use-case-diagram.md)                | all      | all                 | all      |
+| [Supplementary Specification](system-documentation/global-artifacts/01.requirements-engineering/suplementary-specification.md) | all      | all                 | all      |
+| [Domain Model](system-documentation/global-artifacts/01.requirements-engineering/domain-model.md)                              | all      | all                 | all      |
+| US01 (SDP Activities)                                                                                                          | 1241176  | 1241176             |          |
+| US02 (SDP Activities)                                                                                                          | 1241166  | 1241166             |          |
+| US03 (SDP Activities)                                                                                                          | 1220804  | 1220804             |          |
+| US04 (SDP Activities)                                                                                                          | 1241176  | 1241176             |          |
+| US05 (SDP Activities)                                                                                                          | 1241285  | 1241285             |          |
+| US06 (SDP Activities)                                                                                                          | 1241323  | 1241323             |          |
+| US07 (SDP Activities)                                                                                                          | 1241323  | 1241323             |          |
+| US08 (SDP Activities)                                                                                                          | 1241166  | 1241166             |          |
+| US09 (SDP Activities)                                                                                                          | 1220804  | 1220804             |          |
+| US10 (SDP Activities)                                                                                                          | 1241285  | 1241285             |          |
+| US11 (SDP Activities)                                                                                                          | 1241323  | 1241323             |          |
+| US12 (SDP Activities)                                                                                                          | 1241285  | 1241285             |          |
+| US01 (IMP Activities)                                                                                                          | 1241176  | 1241176             |          |
+| US02 (IMP Activities)                                                                                                          | 1241166  | 1241166             |          |
+| US03 (IMP Activities)                                                                                                          | 1220804  | 1241176             |          |
+| US04 (IMP Activities)                                                                                                          | 1241176  | 1241176             |          |
+| US05 (IMP Activities)                                                                                                          | 1241285  | 1241285             |          |
+| US06 (IMP Activities)                                                                                                          | 1241323  | 1241323             |          |
+| US07 (IMP Activities)                                                                                                          | 1241323  | 1241323             |          |
+| US08 (IMP Activities)                                                                                                          | 1241166  | 1241166             |          |
+| US09 (IMP Activities)                                                                                                          | 1220804  | 1241166             |          |
+| US10 (IMP Activities)                                                                                                          | 1241285  | 1241285             |          |
+| US11 (IMP Activities)                                                                                                          | 1241323  | 1241323             |          |
+| US12 (IMP Activities)                                                                                                          | 1241285  | 1241285             |          |
+| US13 (IMP Activities)                                                                                                          |          | 1241166 and 1241176 |          |
+| US14 (IMP Activities)                                                                                                          |          | 1241323             |          |
+| US15 (IMP Activities)                                                                                                          |          | 1241176             |          |
+| US16 (IMP Activities)                                                                                                          |          | 1241323             |          |
+| US17 (IMP Activities)                                                                                                          |          | 1241285             |          |
+| US18 (IMP Activities)                                                                                                          |          | 1241166             |          |
