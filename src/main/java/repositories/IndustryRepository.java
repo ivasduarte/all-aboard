@@ -28,6 +28,38 @@ public class IndustryRepository {
     }
 
     /**
+     * This method allows other classes to get the list with all the industries from a specific map.
+     *
+     * @param map The desired map.
+     * @return Industry list of the desired map.
+     */
+    public List<Industry> getIndustryByMap(Map map)
+    {
+        List<Industry> filteredIndustries = new ArrayList<>();
+
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Map> maps = mapRepository.getMapList();
+
+        int mapID = -1;
+
+        for(int i = 0; i < maps.size(); i++)
+        {
+            if(maps.get(i).equals(map))
+            {
+                mapID = i;
+            }
+        }
+
+        for(Industry industry : industries)
+        {
+            if(industry.getMapID() == mapID)
+                filteredIndustries.add(industry);
+        }
+
+        return filteredIndustries;
+    }
+
+    /**
      * This method is responsible to show the industry list in the form of a list.
      */
     public void displayIndustryList() {

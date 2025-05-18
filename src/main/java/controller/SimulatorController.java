@@ -1,8 +1,12 @@
 package controller;
 
+import domain.Industry;
 import domain.Map;
 import domain.Scenario;
+import repositories.IndustryRepository;
+import repositories.Repositories;
 
+import java.util.List;
 import java.util.Scanner;
 public class SimulatorController implements  Runnable {
 
@@ -24,14 +28,38 @@ public class SimulatorController implements  Runnable {
 
         Thread simulatorThread = new Thread(() -> {
             try {
+
+                System.out.println("Starting simulation in " + scenario.getScenarioName() + ", " + map.getMapName());
+                System.out.println("The starting date is " + scenario.getRestrictions().getStartDate() + " and the end date is " + scenario.getRestrictions().getEndDate());
+
+                System.out.println("The budget is " + scenario.getBudget().getBudget() + "€");
+
+                List<String> historicalEvents = scenario.getRestrictions().getHistoricalEvents();
+
+                double cargoGeneratorMultiplier = 1;
+                double costMultiplier = 1;
+
+                if(historicalEvents.contains("pandemic"))
+                {
+                    cargoGeneratorMultiplier = 0.25;
+                }
+
+                if(historicalEvents.contains("war"))
+                {
+                    cargoGeneratorMultiplier = 1.5;
+                    costMultiplier = 1.75;
+                }
+
+                List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustryByMap(map);
+
+                int budget = scenario.getBudget().getBudget();
                 int year = startYear;
+
                 while (running) {
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
 
                     if(running)
                     {
-                        System.out.println(year);
-
                         scenario.setCurrentYear(year);
                         year++;
 
