@@ -11,18 +11,10 @@ import controller.CreateCityController.BlockError;
 import java.util.Scanner;
 
 /**
- * The AddCityUI class is responsible for handling the user interface to add a new city
- * into the system. It retrieves user inputs, validates data, and coordinates with
- * controllers to create cities and assign house blocks.
- *
- * This class provides a command-line interface (CLI) for the user to select a map,
- * define a city, and configure its house blocks either manually or automatically.
- * It ensures that input validation is performed and displays appropriate error messages
- * when necessary.
- *
- * Implements the {@link Runnable} interface to run the user interface process.
+ * The AddCityUI class provides a user-facing interface for creating a new city
+ * on an existing map. It implements the Runnable interface to enable execution
+ * within a sequential or parallel execution context.
  */
-
 public class AddCityUI implements Runnable {
     private final CreateCityController ctrl = new CreateCityController();
     private final DisplayMapController controller = new DisplayMapController();
@@ -33,22 +25,12 @@ public class AddCityUI implements Runnable {
     private char blockMode;
     private int houseBlocks;
 
-
     /**
-     * Handles the process of gathering user input, validating input data,
-     * and creating a new city along with its associated blocks on a specific map.
+     * Collects and processes user input to create a new city on a selected map.
      *
-     * This method interacts with the user via the console to perform the following steps:
-     * 1. Displays the list of available maps and prompts the user to select one.
-     * 2. Prompts the user to provide a name for the city and validates it for duplicate names or map existence.
-     * 3. Requests coordinates for the city's center and validates their position on the map.
-     * 4. Creates the city on the selected map once the center coordinates are valid.
-     * 5. Allows the user to choose between manual or automatic block assignment modes:
-     *    - In manual mode, the user specifies block coordinates individually, which are validated and added accordingly.
-     *    - In automatic mode, blocks are assigned using a specified count and spread (sigma) parameter.
-     *
-     * Appropriate error messages are displayed for any validation failures during the process, and input is re-requested
-     * until valid data is provided.
+     * Upon successful execution, a new city is created, added to the selected
+     * map, and reported to the user. If errors occur during the input process,
+     * appropriate error messages are displayed to guide the user.
      */
     public void getInput() {
         CreateCityController.NameMapError nameError;
@@ -141,15 +123,13 @@ public class AddCityUI implements Runnable {
         System.out.println("City '" + city.getName() + "' successfully created on map '" + city.getMapName() + "'.");
     }
 
-
     /**
-     * Executes the main function of adding a city by displaying the user interface
-     * and initiating the input collection process.
+     * Executes the AddCityUI workflow by displaying initial prompts and delegating
+     * user input collection and processing to the `getInput` method.
      *
-     * This method provides a user-facing console interaction for city creation.
-     * It displays a banner indicating the start of the "Add City" process,
-     * and delegates the task of gathering required input data, validation,
-     * and city creation steps to the `getInput` method.
+     * The method is intended as the main execution point for the Add City functionality.
+     * It begins by displaying a header to indicate the start of the process and then
+     * calls `getInput` to handle user interactions and city creation logic.
      */
     @Override
     public void run() {

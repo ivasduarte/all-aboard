@@ -10,24 +10,23 @@ import repositories.Repositories;
 import java.util.Optional;
 
 /**
- * This controller is responsible for the creation of cities and their validation on maps.
+ * This class is responsible for the process of creating cities and assigning blocks to them. It validates mechanisms
+ * for city creation and block placement to ensure proper consistency with the associated map and repository.
  *
- * Provides methods to validate the city creation, map names, center and block positions,
- * to create cities and add blocks - manually or automatically.
+ * This class interacts with the {@link MapRepository} and {@link CityRepository} to perform operations such as:
+ * name validation; map existence checks; and city/block assignment.
  */
 public class CreateCityController {
     private final MapRepository mapRepo;
     private final CityRepository cityRepo;
 
-    /**
-     * The possible errors that can occur when creating a city.
-     */
     public enum NameMapError { OK, MAP_NOT_FOUND, NAME_DUPLICATE }
     public enum CenterError { OK, OUT_OF_BOUNDS, POSITION_TAKEN, BLOCK_PRESENT }
     public enum BlockError { OK, OUT_OF_BOUNDS, COLLIDES_CITY_CENTER, COLLIDES_BLOCK }
 
     /**
-     * The constructor of the class, initializing repositories to be used.
+     * CreateCityController's contructor.
+     * It initializes the controller with required repository instances for managing city and map data.
      */
     public CreateCityController() {
         var repos = Repositories.getInstance();
@@ -36,13 +35,15 @@ public class CreateCityController {
     }
 
     /**
-     * Validates the name and map of the city to be created.
+     * Validates the uniqueness of a city name within the context of a specified map by checking if the city name
+     * is unique in the context of a specified map.
      *
-     * @param name  Name of the city to be created.
-     * @param map   Map to be used.
-     * @return      NameMapError.OK if the city can be created, or one of the following:
-     *              NameMapError.MAP_NOT_FOUND if the map does not exist;
-     *              NameMapError.NAME_DUPLICATE if the name is already used by another city in the map.
+     * @param name      The name of the city to validate. Cannot be null or empty.
+     * @param map       The name of the map in which the validation is to be performed. Cannot be null or empty.
+     * @return          A {@code NameMapError} enumeration value representing the result of the validation:
+     *                  - {@code NameMapError.MAP_NOT_FOUND}: If the specified map does not exist in the repository.
+     *                  - {@code NameMapError.NAME_DUPLICATE}: If the city name is not unique within the specified map.
+     *                  - {@code NameMapError.OK}: If the validation is successful.
      */
     public NameMapError validateNameMap(String name, String map) {
         Optional<Map> m = mapRepo.getMap(map);
@@ -52,16 +53,18 @@ public class CreateCityController {
     }
 
     /**
-     * Validates the center position of the city to be created.
+     * Validates the center position for creating a city on a specified map and checks constraints such as boundaries,
+     * position availability, and block uniqueness.
      *
-     * @param name  Name of city-to-be-created.
-     * @param map   Map where the city will be created.
-     * @param x     The X-coordinate of the city center.
-     * @param y     The Y-coordinate of the city center.
-     * @return      CenterError.OK if the city can be created, or one of the following:
-     *              CenterError.OUT_OF_BOUNDS if the coordinates are outside the map bounds;
-     *              CenterError.POSITION_TAKEN if the coordinates are already occupied by another city;
-     *              CenterError.BLOCK_PRESENT if the coordinates are already occupied by a block.
+     * @param name      The name of the city to be validated. Cannot be null or empty.
+     * @param map       The name of the map where the validation is performed. Cannot be null or empty.
+     * @param x         The x-coordinate of the proposed city center on the map. Must be within map boundaries.
+     * @param y         The y-coordinate of the proposed city center on the map. Must be within map boundaries.
+     * @return          A {@code CenterError} enumeration value indicating the result of the validation:
+     *                  - {@code CenterError.OUT_OF_BOUNDS}: If the coordinates are outside the map boundaries.
+     *                  - {@code CenterError.POSITION_TAKEN}: If the position is already occupied by a city.
+     *                  - {@code CenterError.BLOCK_PRESENT}: If a block already exists at the specified position.
+     *                  - {@code CenterError.OK}: If the center position is valid.
      */
     public CenterError validateCenter(String name, String map, int x, int y) {
         Optional<domain.Map> m = mapRepo.getMap(map);
@@ -75,14 +78,17 @@ public class CreateCityController {
     }
 
     /**
-     * Validates the block position of the city to be created.
+     * Validates the placement of a house block within a specified map according to constraints:
+     * map boundaries; block position uniqueness; collision with existing city centers.
      *
-     * @param map   Map where the block will be placed.
-     * @param b     House block to be validated.
-     * @return      BlockError.OK if the block can be placed, or one of the following:
-     *              BlockError.OUT_OF_BOUNDS if the coordinates are outside the map bounds;
-     *              BlockError.COLLIDES_CITY_CENTER if the coordinates are already occupied by another city;
-     *              BlockError.COLLIDES_BLOCK if the coordinates are already occupied by another block.
+     * @param map       The name of the map where the block's placement is to be validated. Cannot be null or empty.
+     * @param b         The {@code HouseBlock} to validate, representing its position within the map.
+     *                  Must not be null and should have valid coordinates.
+     * @return          A {@code BlockError} enumeration value indicating the result of the validation:
+     *                  - {@code BlockError.OUT_OF_BOUNDS}: If the block's coordinates are outside the map boundaries.
+     *                  - {@code BlockError.COLLIDES_CITY_CENTER}: If the block collides with an existing city center.
+     *                  - {@code BlockError.COLLIDES_BLOCK}: If the block's position is not unique within the map.
+     *                  - {@code BlockError.OK}: If the block placement is valid.
      */
     public BlockError validateBlock(String map, HouseBlock b) {
         Optional<domain.Map> m = mapRepo.getMap(map);
@@ -96,14 +102,15 @@ public class CreateCityController {
     }
 
     /**
-     * Creates a new city in the given map, at the given coordinates.
+     * Creates a new city with the specified name, map, and center coordinates by validating the city name and map,
+     * as well as the center position.
      *
-     * @param name  Name of the city to be created.
-     * @param map   Map where the city will be created.
-     * @param x     Center X coordinate of the city.
-     * @param y     Center Y coordinate of the city.
-     * @return      Created city.
-     * @throws      IllegalStateException if the city cannot be created for any reason.
+     * @param name      The name of the city to be created. Must be unique within the given map.
+     * @param map       The name of the map where the city will be created. Must exist in the repository.
+     * @param x         The x-coordinate of the city's center on the map. Must be within map boundaries.
+     * @param y         The y-coordinate of the city's center on the map. Must be within map boundaries.
+     * @return          The {@code City} object representing the newly created city.
+     * @throws          IllegalStateException if the city name, map, or center coordinates fail validation.
      */
     public City createCity(String name, String map, int x, int y) {
         if (validateNameMap(name, map) != NameMapError.OK || validateCenter(name, map, x, y) != CenterError.OK) {
@@ -114,15 +121,12 @@ public class CreateCityController {
         return c;
     }
 
-
     /**
-     * Manually adds a house block to the specified city, after validating its position.
-     * The validation checks if the block's position is within the map boundaries,
-     * does not collide with another city's center, and does not conflict with existing blocks.
+     * Adds a house block manually to the specified city if the block passes validation.
      *
-     * @param city   {@code City} where the house block will be added
-     * @param b      {@code HouseBlock} representing the block to be added
-     * @return       {@code true} if the block was successfully added, or {@code false} if the validation fails
+     * @param city      The {@code City} to which the house block should be added. Cannot be null.
+     * @param b         The {@code HouseBlock} to be added to the city. Must not be null and should have valid coordinates.
+     * @return          {@code true} if the block is successfully added after validation; {@code false} otherwise.
      */
     public boolean addBlockManual(City city, HouseBlock b) {
         BlockError err = validateBlock(city.getMapName(), b);
@@ -132,12 +136,13 @@ public class CreateCityController {
     }
 
     /**
-     * Automatically adds blocks to the given city.
-     * The number of blocks to be added is specified by the count parameter.
+     * Automatically assigns a specified number of house blocks to a city. The method uses Gaussian distribution around
+     * the city's center to determine the positions of house blocks and ensures that every block passes validation
+     * before being added.
      *
-     * @param city      City to which the blocks will be added.
-     * @param count     Number of blocks to be added.
-     * @param sigma     Standard deviation of the Gaussian distribution used to generate the coordinates of the blocks.
+     * @param city      The {@code City} object to which the house blocks will be added. Must not be null.
+     * @param count     The number of house blocks to be assigned. Must be a non-negative integer.
+     * @param sigma     The standard deviation used for Gaussian distribution to calculate house block positions. Must be positive.
      */
     public void assignBlocksAuto(City city, int count, double sigma) {
         java.util.Random rnd = new java.util.Random();
@@ -155,11 +160,11 @@ public class CreateCityController {
     }
 
     /**
-     * Retrieves the {@code CityRepository} instance used for managing cities.
-     * The repository provides access to stored city information and supports
-     * operations such as adding, retrieving, and validating cities.
+     * Retrieves the CityRepository instance that's used for managing and storing a collection of cities.
+     * This repository provides functionality for handling city-related operations such as
+     * adding cities, validating uniqueness, and performing position checks.
      *
-     * @return the {@code CityRepository} instance for city management
+     * @return          The {@code CityRepository} instance associated with the controller
      */
     public CityRepository getCityRepo(){
         var repos = Repositories.getInstance();
