@@ -37,6 +37,11 @@ public class Industry {
     private String industryType;
 
     /**
+     * The amount of cargo generated, per year.
+     */
+    private int cargoAmount;
+
+    /**
      * This method is the constructor of the industry.
      *
      * @param mapID The ID of a map.
@@ -44,13 +49,15 @@ public class Industry {
      * @param positionX The position X of the industry.
      * @param positionY The position Y of the industry.
      * @param industryType The type of the industry.
+     * @param cargoAmount The amount of cargo generated, per year.
      */
-    public Industry(int mapID, int scenarioID, int positionX, int positionY, String industryType) {
+    public Industry(int mapID, int scenarioID, int positionX, int positionY, String industryType, int cargoAmount) {
         this.mapID = mapID;
         this.scenarioID = scenarioID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.industryType = industryType;
+        this.cargoAmount = cargoAmount;
     }
 
     /**
@@ -97,6 +104,13 @@ public class Industry {
     public String getIndustryType() {
         return industryType;
     }
+
+    /**
+     * This method returns the amount of cargo generated, per year.
+     *
+     * @return The amount of carge generated, per year.
+     */
+    public int getCargoAmount() { return cargoAmount; }
 
     /**
      * This method verifies if the selected position exists on the map.
