@@ -5,37 +5,41 @@ skinparam classAttributeIconSize 0
 
 class Station {
   - mapID: int
-  - scenarioID: int
   - positionX: int
   - positionY: int
   - stationID: int
-  - stationName: String
   - stationType: String
   - buildings: List<Building>
-  + Station(mapID: int, scenarioID: int, positionX: int, positionY: int, stationName: String, stationType: String)
-  + addBuilding(b: Building, year: int): boolean
+  + Station(mapID: int, posX: int, posY: int, stationType: String)
+  + isAvailable(): boolean
+  + getMap(): Map
   + getBuildings(): List<Building>
-  + getStationName(): String
   + getStationType(): String
+  + getStationID(): int
+  + getPositionX(): int
+  + getPositionY(): int
 }
 
 class Building {
   - buildingType: String
-  + Building(buildingType: String)
   + getBuildingType(): String
 }
 
-class StationUpgradeService {
-  + upgradeStation(station: Station, building: Building, currentYear: int): boolean
+class ListStationsController {
+  - StationRepo: StationRepository
+  + getStationsByMapName(mapName: String): List<Station>
 }
 
-class UpgradeAStationUI <<boundary>>
+class ListStationsUI <<boundary>> {
+  - map: Map
+  + run(): void
+  + getInput(): void
+}
 
-class UpgradeAStationController {
-  - upgradeService: StationUpgradeService
-  - stationRepository: StationRepository
-  + getAvailableStations(): List<Station>
-  + upgradeStation(station: Station, buildingType: String, currentYear: int): boolean
+class StationRepository {
+  - stations: List<Station>
+  + getAvailableStationsByMapName(mapName: String): List<Station>
+  + getStations(): List<Station>
 }
 
 class Repositories <<singleton>> {
@@ -45,13 +49,8 @@ class Repositories <<singleton>> {
   + getStationRepository(): StationRepository
 }
 
-class StationRepository {
-  + getAvailableStations(): List<Station>
-}
-
-UpgradeAStationUI ..> UpgradeAStationController
-UpgradeAStationController ..> StationUpgradeService
-UpgradeAStationController ..> StationRepository
+ListStationsUI ..> ListStationsController
+ListStationsController ..> StationRepository
 Repositories ..> StationRepository
 Station "1" --> "0..*" Building
 
