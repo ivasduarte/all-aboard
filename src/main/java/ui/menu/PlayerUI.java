@@ -1,6 +1,7 @@
 package ui.menu;
 
 import controller.DisplayMapController;
+import controller.SimulatorController;
 import domain.Budget;
 import domain.Map;
 import domain.Restrictions;
@@ -96,6 +97,8 @@ public class PlayerUI implements Runnable{
         options.add(new MenuItem("List all Stations", new ListStationsUI(currentMap)));
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI(currentMap, currentScenario)));
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario)));
+        options.add(new MenuItem("Start a simulation", new SimulatorController(currentMap, currentScenario)));
+
 
         int option;
         do{
