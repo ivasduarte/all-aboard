@@ -1,11 +1,14 @@
 package ui.utils;
 
 import controller.DisplayMapController;
+import controller.ListStationsController;
 import domain.City;
 import domain.HouseBlock;
 import domain.Map;
+import domain.Station;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -124,8 +127,9 @@ public class DisplayMapUI implements Runnable{
         List<Map> mapList = ctrl.getMapList();
         for (int i = 0; i < mapList.size(); i++) {
             Map map = mapList.get(i);
-            if (map.getMapName().equals(mapName)) {
+            if (map.getMapName().equalsIgnoreCase(mapName)) {
                 matchingMap = Optional.of(map);
+                mapName = map.getMapName();
                 break;
             }
         }
@@ -135,6 +139,7 @@ public class DisplayMapUI implements Runnable{
             height = matchingMap.get().getHeight();
         }else{
             System.out.println("\nMap does not exist!");
+            return null;
         }
 
         mapArray = new String[height][width];
@@ -144,8 +149,11 @@ public class DisplayMapUI implements Runnable{
                 mapArray[i][k] = "⬛";
             }
         }
+
+        addStationsToMap();
         addCitiesToMap();
         addHouseBlocksToMap();
+
         return mapArray;
     }
 
@@ -205,6 +213,48 @@ public class DisplayMapUI implements Runnable{
                     int posX = houseBlockList.get(j).getX();
                     int posY = houseBlockList.get(j).getY();
                     mapArray[posY-1][posX-1] = "🌆";
+                }
+            }
+        }
+    }
+
+    private void addStationsToMap()
+    {
+        ListStationsController listStationsController = new ListStationsController();
+        List<Station> stations =  listStationsController.getStationsByMapName(mapName);
+
+        for(int i = 0; i < mapArray.length; i++)
+        {
+            for(int j = 0; j < mapArray[i].length; j++)
+            {
+                for(Station station : stations)
+                {
+                    if(station.getPositionX() == j && station.getPositionY() == i)
+                    {
+                        mapArray[i][j] = "🚉";
+                        displayStationRange(stations, station, i, j);
+                    }
+                }
+            }
+        }
+    }
+
+    private void displayStationRange(List<Station> stations, Station station, int X, int Y)
+    {
+        int typeID = station.getStationTypeID();
+        int size = Station.typesSizes[typeID] / 2;
+
+        for(int i = X-size; i <= X+size; i++)
+        {
+            for(int j = Y-size; j <= Y+size; j++)
+            {
+                if(!(i == X && j == Y))
+                {
+                    for(Station newStation : stations)
+                    {
+                        if(!(Objects.equals(mapArray[i][j], "🚉")))
+                            mapArray[i][j] = "🛤️";
+                    }
                 }
             }
         }
