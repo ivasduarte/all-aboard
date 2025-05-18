@@ -43,6 +43,7 @@
       3. [Check Station Details](#check-station-details)
       4. [Buy Locomotive](#buy-locomotive)
       5. [Assign Train to Route](#assign-train-to-route)
+      6. [Start a Simulation](#start-simulation)
 
 5. [Troubleshooting](#troubleshooting)
 
@@ -288,6 +289,25 @@ Step 5: Confirm the route assignment.
 
 ![Assign Train to Route](imagesUserManual/assignTrainToRoute.png)
 Image 14: Assign Train to Route screen
+
+### Start Simulation 
+
+This feature allows you to begin the operation of your assigned train routes, simulating the transportation of cargoes between the selected stations.
+
+Step 1: Select **"Start Simulation"** from the Player Menu.
+
+Step 2: Review the list of assigned trains and their routes.
+
+Step 3: Choose the train or trains you want to include in the simulation.
+
+Step 4: Click **"Start"** to initiate the simulation process.
+
+Step 5: Monitor the trains as they move along their routes, picking up and delivering cargoes at each station.
+
+![Start Simulation](imagesUserManual/startSimulation.png)
+Image 15: Simulation in Progress screen
+
+During the simulation, you can view real-time status updates for each train, including current location, cargo load, and estimated time to arrival at the next station.
 
 # Troubleshooting
 
