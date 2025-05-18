@@ -8,8 +8,8 @@
 @Test
 public void ensureControllerRetrievesAllStations() {
     StationRepository repo = new StationRepository();
-    repo.save(new Station(1, 10, 10, "Medium"));
-    repo.save(new Station(1, 20, 20, "Large"));
+    repo.save(new Station(1, 10, 10, "Station"));
+    repo.save(new Station(1, 20, 20, "Terminal"));
 
     Repositories.getInstance().setStationRepository(repo);
 
@@ -43,7 +43,7 @@ public void ensureRepositoryReturnsEmptyWhenNoStations() {
 
 @Test
 public void ensureStationReturnsCorrectBuildingInfo() {
-    Station station = new Station(1, 5, 5, "Small");
+    Station station = new Station(1, 5, 5, "Depot");
     station.addBuilding(new Building("Storage"));
     station.addBuilding(new Building("Fuel"));
 
