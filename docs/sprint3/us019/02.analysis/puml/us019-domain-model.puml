@@ -19,20 +19,12 @@ class Map {
 
 }
 
-class City {
-    - position XY
-    - name
-    - number of house blocks
-}
-
 class Editor {
     - name
     - password
 }
 
-
-Map "1" - "*" City : has
-Editor "1" -- "*" City : creates
+Editor "1" -- "*" Map : saves
 
 
 

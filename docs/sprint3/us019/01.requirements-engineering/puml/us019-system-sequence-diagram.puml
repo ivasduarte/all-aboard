@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant "System" as System
+
+activate Editor
+
+    Editor -> System : Request to save a map
+    activate System
+
+
+    System --> Editor : Prompt to select a map
+    deactivate System
+
+
+    Editor -> System : Selects a map
+    activate System
+
+
+    System --> Editor: Display success message: "Map saved."
+    deactivate System
+    deactivate Editor
+
+
+
+@enduml
