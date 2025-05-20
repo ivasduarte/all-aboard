@@ -70,7 +70,7 @@ public class SimulatorController implements  Runnable {
                 List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
                 List<Locomotive> locomotives = Repositories.getInstance().getLocomotiveRepository().getPlayerLocomotives();
 
-                int year = startYear;
+                int year = scenario.getCurrentYear();
 
                 while (running) {
                     Thread.sleep(5000);
