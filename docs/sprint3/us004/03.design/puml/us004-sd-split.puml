@@ -1,0 +1,95 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":DisplayMapController" as mapCTRL
+participant ":Restrictions" as Restrictions
+participant ":Budget" as Budget
+participant ":Scenario" as Scenario
+
+activate Editor
+Editor -> UI : requests to create a scenario
+
+activate UI
+UI -> CTRL** : create()
+
+UI -> mapCTRL : getMapList()
+activate mapCTRL
+
+    ref over mapCTRL
+        Get Map List
+    end ref
+
+deactivate mapCTRL
+
+autonumber 4
+
+UI -> Editor : requests to select map from list
+deactivate UI
+Editor --> UI : selects map from list
+activate UI
+
+UI -> Editor : request scenario data
+deactivate UI
+Editor --> UI : provides scenario data (name, dates, locomotive types, historical events)
+activate UI
+
+autonumber 10
+UI -> Restrictions** : new Restrictions(startDate, endDate, locoTypes, events)
+activate Restrictions
+Restrictions --> UI : restrictions
+deactivate Restrictions
+
+UI -> Restrictions : validate()
+activate Restrictions
+Restrictions --> UI : validation result
+deactivate Restrictions
+
+alt restrictions not valid
+    UI -> Editor : showError("Invalid restrictions provided")
+    Editor --> UI : provides new restrictions
+end
+
+UI -> CTRL : createScenario(scenarioName, restrictions, map)
+activate CTRL
+
+    ref over CTRL
+        Get Scenario Repository
+    end
+
+    ref over CTRL
+        Check Name Uniqueness
+    end
+
+CTRL -> Budget** : new Budget(1000)
+activate Budget
+Budget --> CTRL : defaultBudget
+deactivate Budget
+
+CTRL -> Scenario** : new Scenario(name, restrictions, map, defaultBudget)
+activate Scenario
+
+    ref over Scenario
+        Validate Scenario
+    end
+
+Scenario --> CTRL : scenario
+deactivate Scenario
+
+    ref over CTRL
+        Add Scenario
+    end
+
+CTRL --> UI : result
+deactivate CTRL
+UI --> Editor : showSuccess(result)
+deactivate UI
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant "System" as System
+
+activate Player
+
+    Player -> System : selects a station to start simulator
+    activate System
+
+    System --> Player : shows a list of the available maps
+    deactivate System
+
+    Player -> System : selects the map
+    activate System
+
+    System --> Player : shows a list of the available scenarios
+    deactivate System
+
+    Player -> System : selects the scenario
+    activate System
+
+    System --> Player : starts the simulation
+    deactivate System
+
+    Player -> System : requests to pause simulation
+    activate System
+
+    System --> Player : pauses simulation
+    deactivate System
+
+@enduml

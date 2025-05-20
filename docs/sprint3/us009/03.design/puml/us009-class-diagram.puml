@@ -1,0 +1,131 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Locomotive {
+    -locomotiveModel: String
+    -fuelType: String
+    -speed: int
+    -startYear: int
+    -endYear: int
+    -price: int
+    -fuelCost: int
+    -maintenanceCost: int
+    -route: List<Station>
+    +Locomotive(locomotiveModel, fuelType, startYear, endYear, price, maintenanceCost, fuelCost, speed)
+    +getLocomotiveModel(): String
+    +getLocomotiveFuelType(): String
+    +getPrice(): int
+    +getStartYear(): int
+    +getEndYear(): int
+    +setRoute(route: List<Station>): void
+}
+
+class Station {
+}
+
+class LocomotiveRepository {
+    -locomotives: List<Locomotive>
+    -availableLocomotives: List<Locomotive>
+    -playerLocomotives: List<Locomotive>
+    +saveLocomotive(locomotive: Locomotive): void
+    +save(locomotive: Locomotive): void
+    +getAvailableLocomotives(scenarioId: int): List<Locomotive>
+    +getLocomotiveByModel(model: String): Locomotive
+    +displayAvailableLocomotives(): void
+}
+
+class Repositories {
+    -instance: Repositories{static}
+    -locomotiveRepository: LocomotiveRepository
+    -scenarioRepository: ScenarioRepository
+    +getInstance(): Repositories{static}
+    +getLocomotiveRepository(): LocomotiveRepository
+    +getScenarioRepository(): ScenarioRepository
+}
+
+class Scenario {
+    -name: String
+    -restrictions: Restrictions
+    -map: Map
+    -budget: Budget
+    +getScenarioName(): String
+    +getRestrictions(): Restrictions
+    +getMap(): Map
+    +getBudget(): Budget
+    +subtractBudget(amount: int): int
+    +addBudget(amount: int): int
+}
+
+class Budget {
+    -budget: int
+    +getBudget(): int
+    +setBudget(budget: int): void
+}
+
+class Map {
+    -mapName: String
+    +getMapName(): String
+}
+
+class Restrictions {
+    -startDate: LocalDate
+    -endDate: LocalDate
+    -locomotiveTypes: List<String>
+    -historicalEvents: List<String>
+    +getStartDate(): LocalDate
+    +getEndDate(): LocalDate
+    +getLocomotiveTypes(): List<String>
+    +getHistoricalEvents(): List<String>
+}
+
+class ScenarioRepository {
+    -scenarios: List<Scenario>
+    +add(scenario: Scenario): void
+    +getScenarioList(): List<Scenario>
+    +getScenario(name: String): Optional<Scenario>
+}
+
+class BuyLocomotiveController {
+    -locomotiveRepository: LocomotiveRepository
+    +buyLocomotive(locomotiveModel: String, mapName: String): String
+    +getLocomotiveRepository(): LocomotiveRepository
+}
+
+class BuyLocomotiveUI {
+    -ctrl: BuyLocomotiveController
+    -scenarioController: CreateScenarioController
+    -locomotiveModel: String
+    -mapName: String
+    +getInput(): void
+    +getLocomotiveController(): BuyLocomotiveController
+    +run(): void
+    +submitData(): void
+    +showError(result: String): void
+    +showSuccess(result: String): void
+}
+
+class CreateScenarioController {
+    +getScenarioList(): List<Scenario>
+}
+
+Repositories -> Repositories : instance
+
+BuyLocomotiveUI ..> BuyLocomotiveController
+BuyLocomotiveUI ..> CreateScenarioController
+BuyLocomotiveController ..> Repositories
+BuyLocomotiveController ..> LocomotiveRepository : uses
+BuyLocomotiveController ..> ScenarioRepository : uses
+BuyLocomotiveController ..> Locomotive : selects
+BuyLocomotiveController ..> Scenario : updates budget
+
+Locomotive "*" -- "*" Station : has route
+
+Repositories --> "1" LocomotiveRepository
+Repositories --> "1" ScenarioRepository
+
+Scenario "1" -- "1" Restrictions : has
+Scenario "1" -- "1" Budget : has
+Scenario "1" -- "1" Map : has
+ScenarioRepository "1" -- "*" Scenario : manages
+
+@enduml

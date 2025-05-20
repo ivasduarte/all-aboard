@@ -1,0 +1,67 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Editor
+participant "BuildRailwayLineUI" as UI
+
+activate Editor
+
+Editor -> UI : start the simulation
+activate UI
+
+create ":BuildRailwayLineController" as CTRL
+UI --> CTRL : create
+
+UI --> Editor : shows a list of the available maps
+Editor -> UI : selects a map
+UI --> Editor : shows a list of the available scenarios
+Editor -> UI : selects a scenario
+UI --> Editor : shows a list of the cities
+Editor -> UI : selects a city
+UI --> Editor : shows a list of the actions the player can do
+Editor -> UI : selects to add a railway line
+
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "railwayLineRepository\n:RailwayLineRepository" as railwayLineRepository
+
+UI --> Editor : shows a list of the available stations
+Editor -> UI : selects stations
+UI --> Editor : requests the type of railway line
+Editor -> UI : inserts the type of railway line
+
+UI --> CTRL : buildRailwayLine(first station, second station, type of railway line)
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getRailwayLineRepository()
+activate PLAT
+PLAT --> CTRL : railwayLineRepository
+deactivate PLAT
+
+CTRL -> railwayLineRepository : buildRailwayLine(first station, second station, type of railway line)
+activate railwayLineRepository
+
+create "railwayLine\n:RailwayLine" as RailwayLine
+railwayLineRepository -> RailwayLine : create()
+railwayLineRepository -> railwayLineRepository : verifyIfExistsAndSave(first station, second station, type of railway line)
+
+railwayLineRepository --> CTRL : railwayLineData
+deactivate railwayLineRepository
+
+CTRL --> UI : railwayLineData
+deactivate CTRL
+
+UI --> Editor : displays operation success and railwayLineData
+deactivate UI
+
+@enduml

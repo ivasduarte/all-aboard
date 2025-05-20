@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuyLocomotiveController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "scenarioRepo\n:ScenarioRepository" as ScenarioRepo
+
+autonumber 1
+group Get Scenario Information
+--> CTRL**: create
+activate CTRL
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : repositories
+deactivate reps
+
+CTRL -> PLAT : getScenarioRepository()
+activate PLAT
+PLAT --> CTRL : scenarioRepository
+deactivate PLAT
+
+CTRL -> ScenarioRepo : getScenarioList()
+activate ScenarioRepo
+ScenarioRepo --> CTRL : scenarioList
+deactivate ScenarioRepo
+
+CTRL -> CTRL : find scenario by mapName
+end
+@enduml

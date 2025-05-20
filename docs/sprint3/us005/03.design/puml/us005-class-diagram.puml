@@ -1,0 +1,93 @@
+@startuml
+skinparam packageeStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Player {
+    - String name
+    - String ID
+    - String password
+    + getPlayerName()
+    + getPlayerID()
+    + getPlayerPassword()
+}
+
+class UserSession {
+}
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+
+class Station {
+    - int mapID
+    - int scenarioID
+    - int positionX
+    - int positionY
+    - int id
+    - String stationName
+    - String stationType
+    - int totalStations
+
+    + increaseTotalStations()
+    + getMapID()
+    + getScenarioID()
+    + getPositionX()
+    + getPositionY()
+    + getStationID()
+    + getStationType()
+    + getStationName()
+}
+
+class Building {
+    - String buildingType
+      + getBuildingType()
+}
+
+class AddStationUI {
+}
+
+class AddStationController {
+    + getAddRepository()
+    + AddStation(station)
+    + getStationList()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : repositories
+    + getAddRepository()
+}
+
+class AddStationRepository {
+    - Station
+    + addStation(station)
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+AddStationUI .> AddStationController
+
+AddStationController .> Repositories : repositories
+
+Repositories -> "1" AddStationRepository
+AddStationController ..> Station
+AddStationController ..> Building
+AddStationController ..> AddStationRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+AddStationController ..> ApplicationSession
+AddStationController ..> UserSession
+
+AddStationRepository "1" --> "*" Station : stations
+
+Station --> Player : createdBy
+Station --> "*" Building : buildings
+
+@enduml

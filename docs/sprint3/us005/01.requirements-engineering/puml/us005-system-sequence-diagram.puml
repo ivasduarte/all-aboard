@@ -1,0 +1,49 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant "System" as System
+
+activate Player
+
+    Player -> System : starts the simulation
+    activate System
+
+    System --> Player : shows a list of the available maps
+    deactivate System
+
+    Player -> System : selects the map
+    activate System
+
+    System --> Player : shows a list of the available scenarios
+    deactivate System
+
+    Player -> System : selects the scenario
+    activate System
+
+    System --> Player : shows a list of the cities
+    deactivate System
+
+    Player -> System : selects a city
+    activate System
+
+    System --> Player : shows a list of the actions the player can do
+    deactivate System
+
+    Player -> System : selects to add a station
+    activate System
+
+    System --> Player : requests data (station type, location, centre)
+    deactivate System
+
+    Player -> System : types requested data
+    activate System
+
+    System --> Player : shows all data and displays operation success
+    deactivate System
+
+@enduml

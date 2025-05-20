@@ -1,0 +1,41 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+skinparam classAttributeIconSize 0
+
+class ListStationsUI {
+    + run(): void
+}
+
+class ListStationsController {
+    - stationRepository: StationRepository
+    + listAllStations(): List<Station>
+}
+
+class StationRepository {
+    - stations: List<Station>
+    + getStations(): List<Station>
+}
+
+class Station {
+    - stationID: int
+    - stationType: String
+    - positionX: int
+    - positionY: int
+    - buildings: List<Building>
+    + getStationType(): String
+    + getPositionX(): int
+    + getPositionY(): int
+    + getBuildings(): List<Building>
+}
+
+class Building {
+    - buildingType: String
+    + getBuildingType(): String
+}
+
+ListStationsUI ..> ListStationsController
+ListStationsController ..> StationRepository
+Station --> "0..*" Building
+@enduml

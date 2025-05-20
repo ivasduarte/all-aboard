@@ -1,0 +1,52 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class RailwayLine{
+    - id
+    - name
+    - size
+}
+
+class Train{
+    - name
+    - ID
+    - date of purchase
+}
+
+class Station {
+    - id
+    - name
+    - type
+    - building
+    - cargoDemand
+    - cargoSupply
+}
+
+class Player {
+    - id
+    - name
+    - password
+}
+
+class Route{
+    - id
+    - ListOfStations
+}
+
+Player "1" - "1" Train : selects
+Player "1" -- "1" Station : selects
+
+Player "1" -- "1" RailwayLine : assigns
+Train "1" - "1" Route : has
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant "System" as System
+
+activate Editor
+
+    Editor -> System : Request to create a scenario
+    activate System
+
+    System --> Editor : Display available maps
+    deactivate System
+
+    Editor -> System : Choose map from list
+    activate System
+
+    System --> Editor : Request data (time restrictions, \ntechnological restrictions, historical restrictions)
+    deactivate System
+
+    Editor -> System : Types requested data
+    activate System
+
+    System --> Editor : Returns success message "Scenario created successfully."\nand shows all data
+    deactivate System
+
+@enduml

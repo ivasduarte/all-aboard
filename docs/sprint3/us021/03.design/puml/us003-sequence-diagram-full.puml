@@ -1,0 +1,92 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant ":CreateCityUI" as UI
+participant ":CreateCityController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "mapRepo\n:MapRepository" as mapRepo
+participant "cityRepo\n:CityRepository" as cityRepo
+participant ":City" as City
+participant ":HouseBlock" as HouseBlock
+
+activate Editor
+
+Editor -> UI : requests to create a new city
+
+activate UI
+UI -> CTRL** : create
+
+UI -> Editor : prompt for map name and city data
+Editor -> UI : provides map name, city name, and coordinates
+UI -> CTRL : validateNameMap(name, map)
+
+activate CTRL
+
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : repositories
+deactivate reps
+
+CTRL -> PLAT : getMapRepository()
+activate PLAT
+PLAT --> CTRL : mapRepository
+deactivate PLAT
+
+CTRL -> PLAT : getCityRepository()
+activate PLAT
+PLAT --> CTRL : cityRepository
+deactivate PLAT
+
+CTRL -> mapRepo : getMap(mapName)
+activate mapRepo
+mapRepo --> CTRL : Optional<Map>
+deactivate mapRepo
+
+CTRL -> cityRepo : isNameUnique(name, map)
+activate cityRepo
+cityRepo --> CTRL : isUnique
+deactivate cityRepo
+
+CTRL --> UI : validationResult
+deactivate CTRL
+
+UI -> CTRL : createCity(name, map, x, y)
+activate CTRL
+
+CTRL -> City** : create(name, map, x, y)
+
+CTRL -> cityRepo : add(city)
+activate cityRepo
+deactivate cityRepo
+
+CTRL -> UI : city
+deactivate CTRL
+
+UI -> CTRL : assignBlocksAuto(city, blockCount, sigma)
+activate CTRL
+
+loop for each block to add
+  CTRL -> HouseBlock** : create(x, y) 
+  CTRL -> cityRepo : isBlockPositionUnique(map, block)
+  activate cityRepo
+  cityRepo --> CTRL : isUnique
+  deactivate cityRepo
+  CTRL -> City : addBlockManual(block)
+  activate City
+  deactivate City
+end
+
+CTRL --> UI : success
+deactivate CTRL
+
+UI --> Editor : display result
+deactivate UI
+deactivate Editor
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Editor {
+  - name
+  - password
+}
+
+class Scenario {
+  - name
+  - timeRestrictions
+  - technologicalRestrictions
+  - historicalRestrictions
+}
+
+class Map {
+  - name
+  - width: int
+  - height: int
+}
+
+class TimeRestriction {
+  - startDate
+  - endDate
+}
+
+class TechnologicalRestriction {
+  - locomotiveTypes
+  - industriesAvailable
+}
+
+class HistoricalRestriction {
+  - historicalEvents
+  - goodsImportedExported
+}
+
+Scenario "1" -- "*" Map : is created for
+Scenario "1" -- "1" TimeRestriction : has
+Scenario "1" -- "1" TechnologicalRestriction : has
+Scenario "1" -- "1" HistoricalRestriction : has
+Editor "1" -- "*" Scenario : can create
+
+@enduml

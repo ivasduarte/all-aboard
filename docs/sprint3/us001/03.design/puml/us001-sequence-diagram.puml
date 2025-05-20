@@ -1,0 +1,99 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor Editor
+
+participant ":CreateMapUI" as UI
+
+activate Editor
+Editor -> UI : requests to create a map
+
+create ":CreateMapController" as ctrl
+
+activate UI
+UI -> ctrl : create()
+
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repositories
+participant "mapRepository\n:MapRepositories" as repo
+participant ":Map" as Map
+
+UI -> Editor : requestMapName()
+deactivate UI
+
+Editor --> UI : provides mapName
+activate UI
+
+UI -> ctrl : submitData()
+activate ctrl
+
+ctrl -> reps : getInstance()
+activate reps
+
+reps --> ctrl : instance
+deactivate reps
+
+ctrl -> repo : getMapRepository()
+activate repo
+
+repo --> ctrl : mapRepository
+deactivate repo
+
+loop while mapName exists
+  ctrl -> repo : existsByName(mapName)
+  activate repo
+
+  repo --> ctrl : true
+  deactivate repo
+
+  ctrl -> UI : show error "Map name already exists"
+  deactivate ctrl
+
+  UI --> ctrl : new mapName
+  activate ctrl
+end
+
+ctrl -> repo : existsByName(mapName)
+activate repo
+
+repo --> ctrl : false
+deactivate repo
+
+UI -> Editor : requestWidth()
+deactivate UI
+
+Editor --> UI : provides width
+activate UI
+
+UI -> Editor : requestHeight()
+deactivate UI
+
+Editor --> UI : provides height
+activate UI
+
+UI -> ctrl : submitData()
+ctrl -> Map : new Map(mapName, width, height)
+activate Map
+
+Map -> Map : validateName()
+Map -> Map : validateSize()
+Map --> ctrl : Map object
+deactivate Map
+
+ctrl -> repo : add(map)
+activate repo
+
+repo -> repo : validateMap(map)
+repo --> ctrl : void
+deactivate repo
+
+ctrl --> UI : map
+deactivate ctrl
+
+UI --> Editor : "Map (name) successfully created!"
+deactivate UI
+@enduml

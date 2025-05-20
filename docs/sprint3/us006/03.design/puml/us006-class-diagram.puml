@@ -1,0 +1,58 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class Station {
+  - mapID: int
+  - scenarioID: int
+  - positionX: int
+  - positionY: int
+  - stationID: int
+  - stationName: String
+  - stationType: String
+  - buildings: List<Building>
+  + Station(mapID: int, scenarioID: int, positionX: int, positionY: int, stationName: String, stationType: String)
+  + addBuilding(b: Building, year: int): boolean
+  + getBuildings(): List<Building>
+  + getStationName(): String
+  + getStationType(): String
+}
+
+class Building {
+  - buildingType: String
+  + Building(buildingType: String)
+  + getBuildingType(): String
+}
+
+class StationUpgradeService {
+  + upgradeStation(station: Station, building: Building, currentYear: int): boolean
+}
+
+class UpgradeAStationUI <<boundary>>
+
+class UpgradeAStationController {
+  - upgradeService: StationUpgradeService
+  - stationRepository: StationRepository
+  + getAvailableStations(): List<Station>
+  + upgradeStation(station: Station, buildingType: String, currentYear: int): boolean
+}
+
+class Repositories <<singleton>> {
+  - instance: Repositories
+  - stationRepo: StationRepository
+  + getInstance(): Repositories
+  + getStationRepository(): StationRepository
+}
+
+class StationRepository {
+  + getAvailableStations(): List<Station>
+}
+
+UpgradeAStationUI ..> UpgradeAStationController
+UpgradeAStationController ..> StationUpgradeService
+UpgradeAStationController ..> StationRepository
+Repositories ..> StationRepository
+Station "1" --> "0..*" Building
+
+@enduml
