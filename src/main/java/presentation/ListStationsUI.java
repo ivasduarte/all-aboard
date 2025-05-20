@@ -6,46 +6,67 @@ import domain.Building;
 import domain.Map;
 import domain.Scenario;
 import domain.Station;
+
 import java.util.List;
 import java.util.Scanner;
 
-public class ListStationsUI implements Runnable{
+/**
+ * User Interface class responsible for listing all stations of a given map,
+ * showing their type, position, buildings, and stored cargo.
+ */
+public class ListStationsUI implements Runnable {
 
     private Map map;
 
-    public ListStationsUI(Map map)
-    {
+    /**
+     * Constructs the UI with the specified map.
+     *
+     * @param map the map to filter stations by
+     */
+    public ListStationsUI(Map map) {
         this.map = map;
     }
 
+    /**
+     * Gets input and displays all available stations on the specified map,
+     * along with their buildings and cargo stored.
+     */
     public void getInput() {
         ListStationsController controller = new ListStationsController();
 
         List<Station> stations = controller.getStationsByMapName(map.getMapName());
 
-        if(stations.isEmpty()){
+        if (stations.isEmpty()) {
             System.out.println("No stations found");
             return;
         }
 
         System.out.println("\n\n------------------------- List of Stations -------------------------");
 
-        for(Station station : stations){
-            System.out.println("Station ID: " + station.getStationID() + " | Type: " + station.getStationType() + " | Position: (" + station.getPositionX() +", "+station.getPositionY()+")");
+        for (Station station : stations) {
+            System.out.println("Station ID: " + station.getStationID()
+                    + " | Type: " + station.getStationType()
+                    + " | Position: (" + station.getPositionX() + ", " + station.getPositionY() + ")");
             System.out.println("Buildings: ");
 
-            if(station.getBuildings().isEmpty()){
+            if (station.getBuildings().isEmpty()) {
                 System.out.println("No buildings found");
                 System.out.println();
             } else {
-                for(Building building : station.getBuildings()){
+                for (Building building : station.getBuildings()) {
                     System.out.print(building.getBuildingType());
                     System.out.println();
                 }
             }
+
+            System.out.println("Cargo stored: " + station.getCargo());
+            System.out.println();
         }
     }
 
+    /**
+     * Starts the execution of the UI for listing stations.
+     */
     @Override
     public void run() {
         getInput();

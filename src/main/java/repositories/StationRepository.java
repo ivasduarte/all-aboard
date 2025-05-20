@@ -37,13 +37,13 @@ public class StationRepository {
      * @return all stations with available building slots
      */
     public List<Station> getAvailableStationsByMapName(String mapName) {
-        List<Station> available = new ArrayList<>();
+        List<Station> result = new ArrayList<>();
         for (Station station : stations) {
-            if (station.isAvailable() && station.getMap().getMapName().equalsIgnoreCase(mapName)) {
-                available.add(station);
+            if (station.getMap().getMapName().equalsIgnoreCase(mapName)) {
+                result.add(station);
             }
         }
-        return available;
+        return result;
     }
 
 }

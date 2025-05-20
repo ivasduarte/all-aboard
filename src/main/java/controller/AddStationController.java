@@ -68,4 +68,5 @@ public class AddStationController {
 
         scenario.subtractBudget(Station.typesPrices[typeID]);
         return true;
-    }}
+    }
+}

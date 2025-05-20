@@ -1,0 +1,20 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "Station" as Station
+participant "Building" as Building
+
+Station -> Station : addBuilding(building)
+
+alt Building is null
+    Station --> caller : throw IllegalArgumentException
+else Max buildings reached
+    Station --> caller : return false
+else Duplicate building type
+    Station --> caller : return false
+else Success
+    Station --> caller : return true
+end
+
+@enduml

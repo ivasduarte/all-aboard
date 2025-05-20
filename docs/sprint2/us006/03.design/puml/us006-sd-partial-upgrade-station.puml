@@ -1,0 +1,24 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "UpgradeAStationController" as CTRL
+participant "StationUpgradeService" as Service
+participant "Building" as Building
+participant "Station" as Station
+
+CTRL -> Service : upgradeStation(station, new Building(type), year)
+activate Service
+
+Service -> Station : getBuildings()
+Service -> Service : checkMutualExclusivity()
+Service -> Station : addBuilding(building)
+
+alt Success
+    Service --> CTRL : true
+else Failure
+    Service --> CTRL : false
+end
+
+deactivate Service
+@enduml

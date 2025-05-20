@@ -19,6 +19,8 @@ public class Station {
     private static final int MAX_SLOTS = 7;
     private List<Building> buildings;
 
+    private int cargo;
+
     public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
     public final static int[] typesSizes = {3, 4, 5};
     public final static int[] typesPrices = {50, 100, 200};
@@ -230,5 +232,29 @@ public class Station {
      */
     public List<Building> getBuildings() {
         return buildings;
+    }
+
+    /**
+     * Get the amount of cargo stored in the station
+     * @return current cargo
+     */
+    public int getCargo() {
+        return cargo;
+    }
+
+    /**
+     * Adds cargo to the station
+     * @param amount amount to add
+     */
+    public void addCargo(int amount) {
+        this.cargo += amount;
+    }
+
+    /**
+     * Removes cargo from the station, cannot go below 0
+     * @param amount amount to remove
+     */
+    public void removeCargo(int amount) {
+        this.cargo = Math.max(0, this.cargo - amount);
     }
 }

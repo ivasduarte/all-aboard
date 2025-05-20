@@ -44,7 +44,7 @@ deactivate StationRepo
 CTRL -> CTRL : sort stations (optional)
 
 CTRL --> UI : list of stations
-deactivate CTRL
+destroy CTRL
 
 UI --> Player : displays list of stations (ID, Type, Position, Buildings)
 deactivate UI

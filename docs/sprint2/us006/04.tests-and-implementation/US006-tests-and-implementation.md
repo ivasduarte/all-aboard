@@ -1,72 +1,140 @@
 # US006 - Upgrade a selected station with a building
 
-## 4. Tests 
+## 4. Tests
 
-**Test 1:** Check that is not possible to upgrade a station with null values.
+**Test 1:** Check that it is not possible to create a building with a null type.
 
-	@Test(expected = IllegalArgumentException.class)
-		public void ensureBuildingIsNotCreatedWithNullType() {
-		Building instance = new Building(null);
-	}
-	
+```java
+@Test(expected = IllegalArgumentException.class)
+public void ensureBuildingIsNotCreatedWithNullType() {
+    Building building = new Building(null);
+}
+```
 
-**Test 2:** Check that it is not possible to create an instance of the Task class with a reference containing less than five chars - AC2. 
 
-	@Test(expected = IllegalArgumentException.class)
-		public void ensureReferenceMeetsAC2() {
-		Category cat = new Category(10, "Category 10");
-		
-		Task instance = new Task("Ab1", "Task Description", "Informal Data", "Technical Data", 3, 3780, cat);
-	}
+**Test 2:** Check mutual exclusivity between Small Hotel and Large Hotel.
 
-_It is also recommended to organize this content by subsections._ 
+```java
+@Test
+public void ensureMaxSevenBuildingsLimit() {
+    Station station = new Station(1, 5, 5, "Medium");
+    for (int i = 0; i < 7; i++) {
+        station.addBuilding(new Building("Type" + i));
+    }
 
+    assertFalse(station.addBuilding(new Building("Extra"))); // Exceeds limit
+}
+
+```
+
+**Test 3:** Check that a valid building is successfully added.
+
+```java
+
+@Test
+public void ensureValidBuildingUpgrade() {
+    Station station = new Station(1, 20, 20, "Large");
+    StationUpgradeService service = new StationUpgradeService();
+
+    boolean result = service.upgradeStation(station, new Building("Fuel"), 2025);
+    assertTrue(result);
+}
+
+```
 
 ## 5. Construction (Implementation)
 
-### Class  
+**Class Building**
 
 ```java
-public Task createTask(String reference, String description, String informalDescription, String technicalDescription,
-                       Integer duration, Double cost, String taskCategoryDescription) {
+public class Building {
+    private String buildingType;
 
-	TaskCategory taskCategory = 
-            (taskCategoryDescription);
+    public Building(String buildingType) {
+        if (buildingType == null || buildingType.isBlank())
+            throw new IllegalArgumentException("Building type cannot be null or blank.");
+        this.buildingType = buildingType;
+    }
 
-	Employee employee = getEmployeeFromSession();
-	Organization organization = getOrganizationRepository().getOrganizationByEmployee(employee);
-
-	newTask = organization.createTask(reference, description, informalDescription, technicalDescription, duration,
-                                      cost,taskCategory, employee);
-    
-	return newTask;
+    public String getBuildingType() {
+        return buildingType;
+    }
 }
 ```
 
-### Class Organization
+**Class Station**
 
 ```java
-public Optional<Task> createTask(String reference, String description, String informalDescription,
-                                 String technicalDescription, Integer duration, Double cost, TaskCategory taskCategory,
-                                 Employee employee) {
-    
-    Task task = new Task(reference, description, informalDescription, technicalDescription, duration, cost,
-                         taskCategory, employee);
+public boolean addBuilding(Building building) {
+if (building == null)
+throw new IllegalArgumentException("Building cannot be null.");
 
-    addTask(task);
-        
-    return task;
+    for (Building b : buildings) {
+        if (b.getBuildingType().equalsIgnoreCase(building.getBuildingType()))
+            return false;
+    }
+
+    if (buildings.size() >= 7)
+        return false;
+
+    buildings.add(building);
+    return true;
+}
+```
+
+**Class StationUpgradeService**
+```java
+
+public class StationUpgradeService {
+
+    public boolean upgradeStation(Station station, Building building, int currentYear) {
+        List<Building> existingBuildings = station.getBuildings();
+
+        if (!checkMutualExclusivity(existingBuildings, building.getBuildingType())) {
+            return false;
+        }
+
+        return station.addBuilding(building);
+    }
+
+    private boolean checkMutualExclusivity(List<Building> existingBuildings, String newType) {
+        for (Building b : existingBuildings) {
+            String existingType = b.getBuildingType();
+            if ((existingType.equalsIgnoreCase("Small Hotel") && newType.equalsIgnoreCase("Large Hotel")) ||
+                    (existingType.equalsIgnoreCase("Large Hotel") && newType.equalsIgnoreCase("Small Hotel"))) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+**Class StationUpgradeController**
+```java
+
+public class UpgradeAStationController {
+    private final StationUpgradeService upgradeService = new StationUpgradeService();
+
+    public boolean upgradeStation(Station station, String buildingType, int currentYear) {
+        return upgradeService.upgradeStation(station, new Building(buildingType), currentYear);
+    }
 }
 ```
 
 
-## 6. Integration and Demo 
 
-* A new option on the Employee menu options was added.
+## 6. Integration and Demo
 
-* For demo purposes some tasks are bootstrapped while system starts.
+* A new action is available in the simulation interface to allow the player to upgrade an existing station by adding a building.
+
+* For demo purposes, some stations are preloaded with buildings and users can test the upgrade behavior interactively through the UI.
 
 
 ## 7. Observations
 
-n/a
+* Only one hotel type (Small or Large) can exist in a station — they are mutually exclusive.
+
+* The maximum number of buildings allowed per station is 7.
+
+

@@ -1,0 +1,15 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "StationUpgradeService" as Service
+
+Service -> Service : checkMutualExclusivity(existingBuildings, newType)
+
+alt Not allowed together
+    Service --> caller : return false
+else Allowed
+    Service --> caller : return true
+end
+
+@enduml
