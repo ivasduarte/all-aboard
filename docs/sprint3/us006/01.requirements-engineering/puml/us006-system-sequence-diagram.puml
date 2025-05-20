@@ -1,0 +1,58 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant "System" as System
+
+activate Player
+
+    Player -> System : starts the simulation
+    activate System
+
+    System --> Player : shows a list of the available maps
+    deactivate System
+
+    Player -> System : selects the map
+    activate System
+
+    System --> Player : shows a list of the available scenarios
+    deactivate System
+
+    Player -> System : selects the scenario
+    activate System
+
+    System --> Player : shows a list of the cities
+    deactivate System
+
+    Player -> System : selects a city
+    activate System
+
+    System --> Player : shows a list of the actions the player can do
+    deactivate System
+
+    Player -> System : selects to upgrade a station
+    activate System
+
+    System --> Player : shows a list of the available stations
+    deactivate System
+
+    Player -> System : selects the station
+    activate System
+
+    System --> Player : shows a list of existing buildings in the station and those who are available to build.
+
+
+    System --> Player : requests the type of the building.
+    deactivate System
+
+    Player -> System : inserts the type of the building
+    activate System
+
+    System --> Player : shows a message about the success of the operation, including the data received
+    deactivate System
+
+@enduml

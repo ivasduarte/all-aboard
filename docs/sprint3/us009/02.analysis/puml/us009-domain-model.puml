@@ -1,0 +1,64 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Locomotive {
+    - locomotiveModel
+    - fuelType
+    - speed
+    - startYear
+    - endYear
+    - price
+    - fuelCost
+    - maintenanceCost
+}
+
+class Scenario {
+    - name
+    - restrictions
+}
+
+class Budget {
+    - budget
+}
+
+class Map {
+    - mapName
+}
+
+class Restrictions {
+    - startDate
+    - endDate
+    - locomotiveTypes
+    - historicalEvents
+}
+
+class Station {
+    - name
+    - location
+}
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+Scenario "1" -- "1" Budget : has
+Scenario "1" -- "1" Map : has
+Scenario "1" -- "1" Restrictions : has
+Scenario "1" -- "*" Locomotive : purchases
+Locomotive "*" -- "*" Station : has route
+Player "1" -- "*" Scenario : plays
+
+@enduml

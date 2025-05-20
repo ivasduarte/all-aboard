@@ -1,0 +1,67 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Editor
+participant "AddStationUI" as UI
+
+activate Editor
+
+Editor -> UI : start the simulation
+activate UI
+
+UI --> Editor : shows a list of the available maps
+Editor -> UI : selects a map
+UI --> Editor : shows a list of the available scenarios
+Editor -> UI : selects a scenario
+UI --> Editor : shows a list of the cities
+Editor -> UI : selects a city
+UI --> Editor : shows a list of the actions the player can do
+Editor -> UI : selects to add a station
+
+create "AddAStationController" as CTRL
+UI --> CTRL : create()
+
+participant "Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+
+UI --> Editor : shows a list of the available station types
+Editor -> UI : selects the station type
+UI --> Editor : adds the requested station
+
+
+UI --> CTRL : AddStation(station)
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getAddStationRepository()
+activate PLAT
+PLAT --> CTRL : AddStationRepository
+deactivate PLAT
+
+CTRL -> AddStationRepository : AddStation(station)
+activate AddStationRepository
+
+create "AddStationRepository\n:AddStationRepository" as AddStationRepository
+create "AddStation" as AddStation
+AddStationRepository -> AddStation : create()
+AddStationRepository -> AddStationRepository : AddStation(station)
+
+AddStationRepository --> CTRL : AddStationData
+deactivate AddStationRepository
+
+CTRL --> UI : AddStationData
+deactivate CTRL
+
+UI --> Editor : displays operation success and AddData
+deactivate UI
+
+@enduml

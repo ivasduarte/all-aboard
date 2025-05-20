@@ -1,0 +1,36 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant "scenarioRepository\n:ScenarioRepository" as Repo
+participant "map\n:Map" as Map
+participant ":Scenario" as Scenario
+
+autonumber 19
+
+activate UI
+activate CTRL
+
+Scenario --> CTRL : scenario
+deactivate Scenario
+
+group Add Scenario
+    CTRL -> Repo : add(scenario)
+    activate Repo
+    Repo -> Repo : validateScenario(scenario)
+    Repo --> CTRL : void
+    deactivate Repo
+
+    CTRL -> Map : addNewScenario(scenario)
+    activate Map
+    Map --> CTRL : void
+    deactivate Map
+end
+
+CTRL --> UI : "Scenario '" + name + "' created successfully."
+deactivate CTRL
+
+@enduml

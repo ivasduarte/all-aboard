@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber 11
+
+participant ":AddIndustryController" as CTRL
+participant "Repositories" as REPS
+participant "repositories\n:Repositories" as reps
+
+-> CTRL : submitData()
+activate CTRL
+
+group Get Industry Repository
+    CTRL -> REPS : getInstance()
+    activate REPS
+    REPS --> CTRL : repositories
+    deactivate REPS
+
+    CTRL -> reps : getIndustryRepository()
+    activate reps
+    reps --> CTRL : industryRepository
+    deactivate reps
+end
+
+@enduml

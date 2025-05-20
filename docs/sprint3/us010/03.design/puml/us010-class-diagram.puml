@@ -1,0 +1,79 @@
+@startuml
+skinparam packageeStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Player {
+    - String name
+    - String ID
+    - String password
+    + getPlayerName()
+    + getPlayerID()
+    + getPlayerPassword()
+}
+
+class UserSession {
+}
+
+class Route{
+    - id
+    - ListOfStations
+}
+
+class Train{
+    - name
+    - ID
+    - date of purchase
+}
+
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+
+class AssignRouteUI {
+}
+
+class AssignRouteController {
+    + getAddRepository()
+    + AssignRoute(train, route)
+    + getStationList()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : repositories
+    + getAddRepository()
+}
+
+class AssignRouteRepository {
+    - Train
+    - Route
+    + AssignRoute(train, route)
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+AssignRouteUI .> AssignRouteController
+
+AssignRouteController .> Repositories : repositories
+
+Repositories -> "1" AssignRouteRepository
+AssignRouteController ..> Train
+AssignRouteController ..> Route
+AssignRouteController ..> AssignRouteRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+AssignRouteController ..> ApplicationSession
+AssignRouteController ..> UserSession
+
+AssignRouteRepository "1" --> "*" Trains : trains
+
+
+@enduml

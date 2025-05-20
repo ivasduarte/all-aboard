@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor Editor
+participant ":CreateMapUI" as UI
+participant ":CreateMapController" as ctrl
+
+activate Editor
+Editor -> UI : requests to create a map
+
+group Request Map Name
+    activate UI
+    UI -> ctrl : create()
+
+    UI -> Editor : requestMapName()
+    deactivate UI
+
+    Editor --> UI : provides mapName
+    activate UI
+
+    UI -> ctrl : submitData()
+    activate ctrl
+end
+@enduml

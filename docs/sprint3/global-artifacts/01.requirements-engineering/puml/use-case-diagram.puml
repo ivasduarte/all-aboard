@@ -1,0 +1,59 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+'skinparam shadowing false
+
+
+
+'title Use Case Diagram Example
+
+left to right direction
+
+rectangle "System Actors" as actors {
+    actor Editor
+    actor "Player" as Player
+    actor "Product Owner" as PO
+}
+
+
+
+rectangle "Use Cases" as usecases{
+    note right of Editor
+        Who creates the features of the game
+    end note
+
+    note right of Player
+        Who plays the game
+    end note
+
+    note right of PO
+        the person representing the organization that intends to develop the game.
+    end note
+    usecase "UC1 - Create a map" as UC1
+        Editor --> UC1
+    usecase "UC2 - Add an industry" as UC2
+        Editor --> UC2
+    usecase "UC3 - Add a city" as UC3
+        Editor --> UC3
+    usecase "UC4 - Create a scenario" as UC4
+         Editor --> UC4
+    usecase "UC5 - Build a Station" as UC5
+         Player --> UC5
+    usecase "UC6 - Upgrade a selected station with a building" as UC6
+         Player --> UC6
+    usecase "UC7 - List all the stations" as UC7
+         Player --> UC7
+    usecase "UC8 - Build a railway station between two stations" as UC8
+         Player --> UC8
+    usecase "UC9 - Buy a train" as UC9
+         Player --> UC9
+    usecase "UC10 - Assign a train to a route" as UC10
+         Player --> UC10
+    usecase "UC11 - List all Trains" as UC11
+         Player --> UC11
+    usecase "UC12 - Create a simulator" as UC12
+         PO --> UC12
+}
+
+
+@enduml

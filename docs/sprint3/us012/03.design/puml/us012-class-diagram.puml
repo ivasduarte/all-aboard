@@ -1,0 +1,72 @@
+@startuml
+skinparam packageeStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Player {
+    - String name
+    - String ID
+    - String password
+    + getPlayerName()
+    + getPlayerID()
+    + getPlayerPassword()
+}
+
+class UserSession {
+}
+
+
+class ApplicationSession {
+    + static getInstance()
+    + getCurrentSession()
+}
+
+class Scenario {
+    - name
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
+}
+
+class SimulatorUI {
+}
+
+class SimulatorController {
+    + getAddRepository()
+    + StartSimulation(scenario)
+    + getStationList()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : repositories
+    + getAddRepository()
+}
+
+class CreateSimulatorRepository {
+    - Scenario
+    + StartSimulation(scenario)
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+SimulatorUI .> SimulatorController
+
+SimulatorController .> Repositories : repositories
+
+Repositories -> "1" CreateSimulatorRepository
+SimulatorController ..> Scenario
+SimulatorController ..> CreateSimulatorRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+SimulatorController ..> ApplicationSession
+SimulatorController ..> UserSession
+
+CreateSimulatorRepository "1" --> "*" Simulator : simulator
+
+
+@enduml

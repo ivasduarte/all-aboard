@@ -1,0 +1,41 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant "System" as System
+
+activate Editor
+
+    Editor -> System : request to create a scenario
+    activate System
+
+    System --> Editor : display available maps
+    deactivate System
+
+    Editor -> System : choose map from list
+    activate System
+
+    System --> Editor : request data (name, time restrictions, technological restrictions,\nhistorical restrictions)
+    deactivate System
+
+    Editor -> System : provide **invalid** name
+    activate System
+
+    System --> Editor : return error message ("ERROR: Invalid name. Must be under 15 characters,\nhave at least one upper case character, and can't be null")
+
+    System --> Editor : request data (name, time restrictions, technological restrictions,\nhistorical restrictions)
+    deactivate System
+
+    Editor -> System : provide **valid** name
+    activate System
+
+    System --> Editor : returns success message ("Scenario created successfully.")\nand shows all data
+    deactivate System
+
+
+
+@enduml

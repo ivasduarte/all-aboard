@@ -1,0 +1,52 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant "ListStationsUI" as UI
+participant "ListStationsController" as CTRL
+participant "Repositories" as Repos
+participant "StationRepository" as StationRepo
+participant "Station" as Station
+
+activate Player
+
+Player -> UI : start the simulation
+activate UI
+
+UI --> Player : shows a list of the available maps
+Player -> UI : selects a map
+UI --> Player : shows a list of the available scenarios
+Player -> UI : selects a scenario
+UI --> Player : shows a list of the cities
+Player -> UI : selects a city
+UI --> Player : shows a list of the actions the player can do
+Player -> UI : selects to list all stations
+
+UI -> CTRL : create controller
+activate CTRL
+
+CTRL -> Repos : getInstance()
+Repos --> CTRL : RepositorySingleton
+
+CTRL -> Repos : getStationRepository()
+Repos --> CTRL : StationRepository
+
+CTRL -> StationRepo : getStations()
+activate StationRepo
+StationRepo --> CTRL : List<Station>
+deactivate StationRepo
+
+CTRL -> CTRL : sort stations (optional)
+
+CTRL --> UI : list of stations
+deactivate CTRL
+
+UI --> Player : displays list of stations (ID, Type, Position, Buildings)
+deactivate UI
+
+@enduml

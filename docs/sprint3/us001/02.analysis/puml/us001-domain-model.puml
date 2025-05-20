@@ -1,0 +1,48 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Map {
+    - name
+    - width: int
+    - height: int
+}
+
+class Editor{
+    - name
+    - password
+}
+
+class Size {
+    - width: int
+    - height: int
+}
+
+class PredefinedSzie {
+    - label
+    - width: int
+    - height: int
+}
+
+class NameValidationRule {
+    - message
+}
+
+class SizeValidationRule {
+    - maxWidth: int = 256
+    - maxHeight: int = 256
+}
+
+Editor "1" -- "*" Map : creates
+Map "1" -- "1" Size : uses
+Map "1" -- "*" NameValidationRule : validatedBy
+Map "1" -- "*" SizeValidationRule : validatedBy
+PredefinedSzie --> Size
+
+
+@enduml

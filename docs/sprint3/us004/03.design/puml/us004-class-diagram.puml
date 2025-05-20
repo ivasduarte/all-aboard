@@ -1,0 +1,166 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Scenario {
+    -name: String
+    -restrictions: Restrictions
+    -map: Map
+    +Scenario(name: String, restrictions: Restrictions, map: Map)
+    +getScenarioName(): String
+    +getRestrictions(): Restrictions
+    +getMap(): Map
+    +validateName(): boolean
+    +validateRestrictions(): boolean
+    +hasValidMap(): boolean
+    +isValid(): boolean
+    +toString(): String
+}
+
+class Restrictions{
+    -startDate: LocalDate
+    -endDate: LocalDate
+    -locomotiveTypes: List<String>
+    -historicalEvents: List<String>
+    +Restrictions(startDate: LocalDate, endDate: LocalDate,\nlocomotiveTypes: List<String>, historicalEvents: List<String>)
+    +getStartDate(): LocalDate
+    +getLocomotiveTypes(): List<String>
+    +getHistoricalEvents(): List<String>
+    +validate(): boolean
+    +validateTimeRestrictions(): boolean
+    +validateLocomotiveTypes(): boolean
+    +validateHistoricalRestrictions(): boolean
+}
+
+class Budget {
+    -budget: int
+    +Budget(budget: int)
+    +getBudget(): int
+    +setBudget(budget: int): void
+}
+
+interface Runnable <<interface>>{
+    +run(): void
+}
+
+class CreateScenarioUI {
+    -ctrl: CreateScenarioController
+    -controller: DisplayMapController
+    -scenarioName: String
+    -restrictions: Restrictions
+    -map: Map
+    -mapName: String
+    +getInput(): void
+    +run(): void
+    +submitData(): void
+    +showError(message: String): void
+    +showSuccess(message: String): void
+}
+
+class CreateScenarioController {
+    -scenarioRepository: ScenarioRepository
+    +createScenario(name: String, restrictions: Restrictions, map: Map): String
+    +getScenarioRepository(): ScenarioRepository
+    +getScenarioList(): List<Scenario>
+}
+
+class ScenarioRepository {
+    -scenarios: List<Scenarios>
+    +ScenarioRepository()
+    +add(scenario: Scenario): void
+    +validateScenario(scenario: Scenario): boolean
+    +existsByName(name: String): boolean
+    +getScenarioList(): List<Scenario>
+    +getScenarios(name: String): Optional<Scenario>
+}
+
+class User {
+    -name: String
+    -email: String
+    -roleId: String
+    -password: String
+    +User(name: String, email: String roleId: String, password: String)
+    +getRoleId(): String
+    +setRoleId(roleId: String)_ void
+    +getName(): String
+    +setName(): String
+    +getPassword(): String
+    +setPassword(): void
+    +getEmail(): String
+    +setEmail(): void
+}
+
+
+class Map {
+    -name: String
+    -width: int
+    -height: int
+    -scenarios: List<Scenario>
+    +Map(name: String, width: int, height: int)
+    +getMapName(): String
+    +getWidth(): int
+    +getHeight(): int
+    +getScenarios(): List<Scenarios>
+    +addNewScenario(scenario: Scenario): void
+    +validateName(): void
+    +validateSize(): void
+    +toString(): String
+}
+
+class Repositories {
+    -instance: Repositories{static}
+    -scenarioRepository: ScenarioRepository
+    +Repositories()
+    +getInstance(): Repositories{static}
+    +getScenarioRepository(): ScenarioRepository
+}
+
+class ApplicationSession {
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +ApplicationSession()
+    +getInstance(): ApplicationSession{static}
+    +getCurrentSession(): UserSession
+    +setUserSession(session: UserSession): void
+}
+
+class UserSession {
+    -session: UserSession{static}
+    -user: Map<String, User>
+    +UserSession()
+    +getInstance(): UserSession{static}
+    +getUser(): User
+    +setUser(usr: User): void
+    +doLogin(usr: User): boolean
+    +clear(): void
+    +doLogout(): boolean
+}
+
+class DisplayMapController {
+    +getMapList(): List<Map>
+}
+
+Repositories --> Repositories : instance
+ApplicationSession --> ApplicationSession : instance
+UserSession --> UserSession : session
+
+CreateScenarioUI ..|> Runnable
+
+CreateScenarioUI .> CreateScenarioController
+CreateScenarioUI --> DisplayMapController : controller
+
+CreateScenarioController ..> ScenarioRepository : scenarioRepository
+Repositories --> "1" ScenarioRepository
+
+ApplicationSession --> "1" UserSession : userSession
+CreateScenarioController ..> Repositories : uses
+CreateScenarioController ..> ApplicationSession : uses
+CreateScenarioController ..> UserSession : uses
+
+Scenario *--> Restrictions : restrictions
+Scenario *--> Budget : budget
+Scenario --> Map : map
+Map o--> "*" Scenario : scenarios
+ScenarioRepository "1" --> "*" Scenario : scenarios
+Map --> User : createdBy
+
+@enduml

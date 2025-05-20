@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Map {
+    - name
+    - width: int
+    - height: int
+}
+
+class Scenario {
+    - name
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
+}
+
+class Editor {
+    - name
+    - password
+}
+
+class Industry {
+    - name
+    - id
+    - position
+}
+
+class IndustryType {
+    - name
+    - id
+    - description
+}
+
+Editor "1" -- "*" Industry : creates
+Industry "*" -- "1" IndustryType : has
+Map "1" -- "1" Scenario : defines
+Scenario "1" - "*" Industry : has
+
+@enduml

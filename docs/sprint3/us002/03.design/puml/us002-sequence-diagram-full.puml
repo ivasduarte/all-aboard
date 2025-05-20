@@ -1,0 +1,86 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant ":AddIndustryUI" as UI
+
+activate Editor
+
+Editor -> UI : asks to add an industry
+activate UI
+
+create ":AddIndustryController" as CTRL
+UI -> CTRL : create()
+
+participant ":Repositories" as REPS
+participant "repositories\n:Repositories" as reps
+participant ":Industry" as IND
+participant "industryRepository\n:IndustryRepository" as repo
+
+UI --> Editor : shows a list of the available maps
+deactivate UI
+
+Editor -> UI : selects a map
+activate UI
+
+UI --> Editor : shows a list of the available scenarios
+deactivate UI
+
+Editor -> UI : selects a scenario
+activate UI
+
+UI --> Editor : asks the industry position
+deactivate UI
+
+Editor -> UI : introduces the position
+activate UI
+
+UI --> Editor : asks to introduce the industry type
+deactivate UI
+
+Editor -> UI : introduces the industry type
+activate UI
+
+UI -> CTRL : submitData(mapId, scenarioId, positionX, positionY, industryType)
+activate CTRL
+
+CTRL -> REPS : getInstance()
+activate  REPS
+
+REPS --> CTRL : repositories
+deactivate REPS
+
+CTRL -> reps : getIndustryRepository()
+activate reps
+
+reps --> CTRL : industryRepository
+deactivate reps
+
+CTRL -> IND : addIndustry(mapId, scenarioId, positionX, positionY, industryType)
+activate IND
+
+IND -> IND : validatePosition()
+IND -> IND : checkOverbuilding()
+
+IND --> CTRL : Industry Object
+deactivate IND
+
+CTRL -> repo : save(industry)
+activate repo
+
+repo -> repo : validateIndustry()
+
+repo --> CTRL : industryData
+deactivate repo
+
+CTRL --> UI : industryData
+deactivate CTRL
+
+UI --> Editor : "Industry [(positionX), (positionY)] saved successfully."
+deactivate UI
+
+@enduml

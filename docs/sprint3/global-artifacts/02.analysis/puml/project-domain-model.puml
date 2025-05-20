@@ -1,0 +1,193 @@
+@startuml "domain-model"
+
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+hide circle
+hide methods
+
+class Editor {
+    - name
+    - ID
+    - password
+}
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+class Simulator {
+}
+
+class Simulation {
+}
+
+class Map {
+    - name
+    - id
+    - width
+    - height
+}
+
+class City {
+    - name
+    - position XY
+    - numberHouseBlocks
+}
+
+class Industry {
+    - name
+    - id
+    - position XY
+}
+
+class IndustryType {
+    - name
+    - id
+    - description
+}
+
+class Scenario {
+    - name
+    - timeRestrictions
+    - technologicalRestrictions
+    - historicalRestrictions
+}
+
+class TimeRestriction {
+    - startDate
+    - endDate
+}
+
+class TechnologicalRestriction {
+    - locomotiveTypes
+    - industriesAvailable
+}
+
+class HistoricalRestriction {
+    - historicalEvents
+    - goodsImportedExported
+}
+
+class Station {
+    - name
+    - id
+    - type
+    - position XY
+    - center
+}
+
+class StationType {
+    - name
+    - id
+}
+
+class Building {
+    - id
+    - type
+}
+
+class Cargo {
+    - id
+    - type
+}
+
+class CargoType {
+    - passengers
+    - mail
+    - coal
+    - ironOre
+    - steel
+    - cars
+}
+
+class Route {
+    - id
+    - stationsList
+}
+
+class RailwayLine {
+    - name
+    - id
+    - length
+    - type
+}
+
+class RailwayLineType {
+    - name
+    - id
+}
+
+class Train {
+    - name
+    - ID
+    - purchaseDate
+}
+
+class Locomotive {
+    - name
+    - serialNumber
+    - locomotiveType
+    - power
+    - acceleration
+    - topSpeed
+    - startYear
+    - acquisitionType
+}
+
+class LocomotiveType {
+    - steam
+    - diesel
+    - electricity
+}
+
+class Carriage {
+    - name
+    - id
+    - cargoType
+}
+
+Simulator -- Simulation : starts >
+
+Editor -- Map : creates >
+Editor -- Scenario : creates >
+Map *-- "0..*" City : contains >
+Map *-- "0..*" Industry : contains >
+Scenario -- Map : is created for >
+
+Station o-- "0..*" Building : has >
+
+RailwayLine -- "2" Station : connects >
+
+Player -- Station : builds >
+Player -- RailwayLine : builds >
+Player -- Train : buys >
+
+Simulation -- Player: creates >
+Simulation -- Editor: creates >
+
+Train *-- "1" Locomotive : has >
+Locomotive "*" -- "1" LocomotiveType : has
+Carriage "1" - "*" CargoType : has
+Train *-- "0..*" Carriage : has >
+Train -- Route : assigned to >
+Route *-- "2..*" Station : includes >
+
+City -- "0..*" Cargo : generates/consumes >
+Industry -- "0..*" Cargo : generates/processes >
+
+Cargo "*" - "1" CargoType : has
+
+Scenario "1" -- "1" TimeRestriction : has
+Scenario "1" -- "1" TechnologicalRestriction : has
+Scenario "1" -- "1" HistoricalRestriction : has
+
+Industry "*" -- "1" IndustryType : has
+Station "*" - "1" StationType : has
+RailwayLine "*" - "1" RailwayLineType : has
+
+@enduml

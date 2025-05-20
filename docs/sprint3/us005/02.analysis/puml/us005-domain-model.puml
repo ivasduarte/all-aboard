@@ -1,0 +1,46 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Map {
+    - id
+    - name
+    - size
+}
+
+class Station {
+    - id
+    - type
+    - location
+    - centre
+}
+
+class StationType{
+    - id
+    - name
+}
+
+class Player {
+    - id
+    - name
+    - password
+}
+
+
+Map "1" - "*" Station : has
+Player "1" -- "*" Station : creates
+Station "1" -- "1" StationType : has
+
+
+
+@enduml

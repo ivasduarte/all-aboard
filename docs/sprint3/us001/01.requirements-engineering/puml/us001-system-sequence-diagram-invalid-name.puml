@@ -1,0 +1,39 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant "System" as System
+
+activate Editor
+
+    Editor -> System : Request to create a new map
+    activate System
+
+    System --> Editor : Prompt for map name
+    deactivate System
+
+    Editor -> System : Submit **invalid** map name
+    activate System
+
+    System --> Editor: Display error message:\n"ERROR. Invalid name. Name shouldn't start with a space, \nhyphen, or underline. Must be under 15 characters. Must have, at least, one upper\ncase character."
+    deactivate System
+
+    Editor -> System: Submit **valid** map name
+    activate System
+
+    System --> Editor: Provides size list
+    deactivate System
+
+    Editor -> System: Submit **valid** size option
+    activate System
+
+    System --> Editor: Display success message:\n"Map created successfully."
+
+    deactivate System
+    deactivate Editor
+
+@enduml

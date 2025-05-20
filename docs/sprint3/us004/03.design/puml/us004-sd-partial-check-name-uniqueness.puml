@@ -1,0 +1,35 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant "map\n:Map" as Map
+participant ":Scenario" as Scenario
+
+autonumber 6.5
+
+activate UI
+activate CTRL
+
+group Check Name Uniqueness
+    CTRL -> Map : getScenarios()
+    activate Map
+    Map --> CTRL : List<Scenario>
+    deactivate Map
+
+    loop for each scenario in scenarios
+        CTRL -> Scenario : getScenarioName()
+        activate Scenario
+        Scenario --> CTRL : name
+        deactivate Scenario
+
+        alt name equals scenarioName
+            CTRL --> UI : "ERROR: A scenario with this name already exists."
+            UI --> CTRL : new scenarioName
+        end
+    end
+end
+
+@enduml

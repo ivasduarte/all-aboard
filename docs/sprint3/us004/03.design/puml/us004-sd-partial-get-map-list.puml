@@ -1,0 +1,39 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioUI" as UI
+participant ":DisplayMapController" as mapCTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "mapRepository\n:MapRepository" as mapRep
+
+
+autonumber 3.1
+
+activate UI
+activate mapCTRL
+
+group Get Map List
+    mapCTRL -> reps : getInstance()
+    activate reps
+    reps --> mapCTRL : instance
+    deactivate reps
+
+    mapCTRL -> PLAT : getMapRepository()
+    activate PLAT
+    PLAT --> mapCTRL : mapRep
+    deactivate PLAT
+
+    mapCTRL -> mapRep : getMapList()
+    activate mapRep
+    mapRep --> mapCTRL : List<Map>
+    deactivate mapRep
+
+    mapCTRL --> UI : List<Map>
+    deactivate mapCTRL
+end
+
+
+@enduml

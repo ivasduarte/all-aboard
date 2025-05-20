@@ -1,0 +1,79 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant "UpgradeAStationUI" as UI
+participant "UpgradeAStationController" as CTRL
+participant "Repositories" as Repos
+participant "StationRepository" as Station_REPO
+participant "StationUpgradeService" as UpgradeService
+participant "Station" as Station
+
+activate Player
+
+Player -> UI : start the simulation
+activate UI
+
+UI --> Player : shows a list of the available maps
+Player -> UI : selects a map
+UI --> Player : shows a list of the available scenarios
+Player -> UI : selects a scenario
+UI --> Player : shows a list of the cities
+Player -> UI : selects a city
+UI --> Player : shows a list of the actions the player can do
+Player -> UI : selects to upgrade a station
+
+UI -> CTRL : create controller
+activate CTRL
+
+CTRL -> Repos : getInstance()
+Repos --> CTRL : Repositories instance
+
+CTRL -> Repos : getStationRepository()
+Repos --> CTRL : StationRepository
+
+CTRL -> Station_REPO : getAvailableStations()
+activate Station_REPO
+Station_REPO --> CTRL : List<AvailableStation>
+deactivate Station_REPO
+
+CTRL --> UI : Send Stations
+deactivate CTRL
+
+UI --> Player : shows a list of the available stations
+Player -> UI : selects the station
+
+UI --> Player : requests the type of the building to add
+Player -> UI : inserts the type of the building
+
+UI -> CTRL : upgradeStation(selectedStation, buildingType, currentYear)
+activate CTRL
+
+CTRL -> UpgradeService : upgradeStation(selectedStation, new Building(buildingType), currentYear)
+activate UpgradeService
+
+UpgradeService -> UpgradeService : validateData(buildingType, currentYear)
+UpgradeService -> Station : getBuildings()
+UpgradeService -> UpgradeService : checkMutualExclusivity(existingBuildings, buildingType)
+UpgradeService -> UpgradeService : handleReplacement(existingBuildings, buildingType)
+UpgradeService -> Station : addBuilding(building, currentYear)
+
+alt Building added successfully
+    UpgradeService --> CTRL : true
+    CTRL --> UI : show success
+    UI --> Player : SUCCESS: Building added
+else Failed to add building
+    UpgradeService --> CTRL : false
+    CTRL --> UI : show error
+    UI --> Player : ERROR: Upgrade failed
+end
+
+deactivate UpgradeService
+deactivate CTRL
+deactivate UI
+
+@enduml
