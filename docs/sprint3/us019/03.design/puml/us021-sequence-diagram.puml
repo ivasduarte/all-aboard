@@ -1,0 +1,64 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor Editor
+
+participant ":SaveMapUI" as UI
+
+activate Editor
+Editor -> UI : requests to save a map
+
+create ":SaveMapController" as ctrl
+
+activate UI
+UI -> ctrl : create()
+
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repositories
+participant "mapRepository\n:MapRepositories" as repo
+
+
+
+UI -> ctrl : getMapsList()
+activate ctrl
+
+ctrl -> reps : getInstance()
+activate reps
+
+reps --> ctrl : instance
+deactivate reps
+
+ctrl -> repo : getMapRepository()
+activate repo
+
+repo --> ctrl : mapRepository
+
+ctrl -> repo: getMapsList()
+
+
+repo --> ctrl: mapsList
+deactivate repo
+
+ctrl --> UI: mapsList
+deactivate ctrl
+
+UI --> Editor: shows maps to select
+deactivate UI
+Editor -> UI: selects map
+activate UI
+UI -> ctrl: saveMapInFile(map)
+activate ctrl
+ctrl -> repo: saveMapInFile(map)
+activate repo
+repo --> ctrl: saved map
+deactivate repo
+ctrl --> UI: saved map
+deactivate ctrl
+UI --> Editor: shows message of success in saving the map
+deactivate UI
+
+@enduml

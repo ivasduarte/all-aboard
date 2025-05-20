@@ -1,0 +1,72 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+
+interface Runnable <<interface>>{
+    +run(): void
+}
+
+class SaveMapUI {
+    -controller: SaveMapController
+    +getController(): SaveMapController
+    +run(): void
+}
+
+class SaveMapController {
+    +saveMapInFile(map: Map)
+    +getMapsList(): List<Map>
+}
+
+class MapRepository {
+    -maps: List <Map>
+    +getMapList(): List<Map>
+    +saveMapInFile(map: Map)
+}
+
+class Editor {
+    -name: String
+    -ID: String
+    -password: String
+    +Editor(name, id, password)
+    +getEditorName(): String
+    +getPassword(): String
+    +getID(): String
+}
+
+class Repositories {
+    -instance: Repositories{static}
+    -mapRepository: MapRepository
+    +Repositories()
+    +getInstance(): Repositories
+    +getMapRepository(): MapRepository
+}
+
+class ApplicationSession {
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +getInstance(): ApplicationSession{static}
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
+}
+
+class UserSession {
+    -instance: UserSession{static}
+    -user: UserSession
+    +getInstance(): UserSession{static}
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+SaveMapUI ..|> Runnable
+SaveMapUI .> SaveMapController
+SaveMapController ..> ApplicationSession
+SaveMapController ..> UserSession
+SaveMapController ..> MapRepository : mapRepository
+
+Repositories --> "1" MapRepository
+
+ApplicationSession --> "1" UserSession : userSession
+
+
+@enduml
