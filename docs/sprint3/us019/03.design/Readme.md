@@ -8,43 +8,39 @@
 
 | Interaction ID | Question: Which class is responsible for...       | Answer            | Justification (with patterns)                                                                               |
 |:---------------|:--------------------------------------------------|:------------------|:------------------------------------------------------------------------------------------------------------|
-| Step 1         | ...asking to add a city?                          | AddCityUI         | **Pure Fabrication**: UI initiation is not a responsibility of any domain class. It fabricates interaction. |
-|                | ...coordinating the US?                           | AddCityController | **Controller**: Handles system operations initiated by the user (Editor).                                   |
-|                | ...instantiating the class that handles the UI?   | AddCityUI         | **Pure Fabrication**: No domain object is responsible for UI instantiation.                                 |
-| Step 2         | ...requesting data from the user?                 | AddCityController | **Controller**: Responsible for initiating communication to get user input.                                 |
-| Step 3         | ...typing/providing the data?                     | Editor            | **Role Assignment**: The actor (Editor) provides input data as requested.                                   |
-| Step 4         | ...validating and processing the provided data?   | AddCityController | **Controller**: Takes user input, processes or delegates it further.                                        |
-| Step 5         | ...creating the city object with input data?      | City              | **Information Expert**: City is the expert on its own creation and holds its data (name, XY, blocks).       |
-| Step 6         | ...showing the operation success?                 | AddCityUI         | **Pure Fabrication**: UI class presents success messages to the user.                                       |
-| Step 7         | ...storing the new city into the system?          | CityRepository    | **Information Expert / Low Coupling**: Specialized class for data persistence.                              |
-| Step 8         | ...displaying all city data?                      | AddCityUI         | **Pure Fabrication**: UI handles output/display logic.                                                      |
-| Step 9         | ...coordinating between UI and Domain for flow?   | AddCityController | **Controller**: Central coordinator for user-system interaction.                                            |
-| Step 10        | ...initializing the process based on user action? | AddCityController | **Controller**: Handles initial request from Editor and manages the use case.                               |
+| Step 1         | ...asking to save a map in file?                  | SaveMapUI         | **Pure Fabrication**: UI initiation is not a responsibility of any domain class. It fabricates interaction. |
+|                | ...coordinating the US?                           | SaveMapController | **Controller**: Handles system operations initiated by the user (Editor).                                   |
+|                | ...instantiating the class that handles the UI?   | SaveMapUI         | **Pure Fabrication**: No domain object is responsible for UI instantiation.                                 |
+| Step 2         | ...retrieving the list of maps?                   | SaveMapController | **Controller**: Responsible for obtaining data from repositories.                                           |
+| Step 3         | ...providing the maps data?                       | MapRepository     | **Information Expert**: Repository holds the maps data and is responsible for providing it.                 |
+| Step 4         | ...showing maps to select?                        | SaveMapUI         | **Pure Fabrication**: UI class presents data to the user.                                                   |
+| Step 5         | ...selecting a map?                               | Editor            | **Role Assignment**: The actor (Editor) selects the map to save.                                            |
+| Step 6         | ...saving the map to a file?                      | MapRepository     | **Information Expert**: Repository has the knowledge to save maps to files.                                 |
+| Step 7         | ...showing the operation success?                 | SaveMapUI         | **Pure Fabrication**: UI class presents success messages to the user.                                       |
+| Step 8         | ...coordinating between UI and Domain for flow?   | SaveMapController | **Controller**: Central coordinator for user-system interaction.                                            |
 
 
 ### Systematization ##
 
 According to the taken rationale, the conceptual classes promoted to software classes are:
 
-* City
-* CityRepository
+* Map
+* MapRepository
 * Editor
 
 Other software classes (i.e., Pure Fabrication) identified:
 
-* AddCityUI
-* AddCityController
+* SaveMapUI
+* SaveMapController
+* Repositories
+* ApplicationSession
+* UserSession
 
 ## 3.2. Sequence Diagram (SD)
 
-![](svg/us003-sequence-diagram-full.svg)
+![](svg/us019-sequence-diagram.svg)
 
 ## 3.3. Class Diagram (CD)
 
-![](svg/us003-class-diagram.svg)
-
-
-
-
-
+![](svg/us019-class-diagram.svg)
 
