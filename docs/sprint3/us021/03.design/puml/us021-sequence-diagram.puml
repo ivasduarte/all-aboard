@@ -1,0 +1,81 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor Editor
+
+participant ":SaveScenarioUI" as UI
+
+activate Editor
+Editor -> UI : requests to save a scenario
+
+create ":SaveScenarioController" as ctrl
+
+activate UI
+UI -> ctrl : create()
+
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repositories
+participant "mapRepository\n:MapRepositories" as repo
+participant "scenarioRepository\n:ScenarioRepositories" as srepo
+
+
+
+UI -> ctrl : getMapsList()
+activate ctrl
+
+ctrl -> reps : getInstance()
+activate reps
+
+reps --> ctrl : instance
+deactivate reps
+
+ctrl -> repo : getMapRepository()
+activate repo
+
+repo --> ctrl : mapRepository
+
+ctrl -> repo: getMapsList()
+
+
+repo --> ctrl: mapsList
+deactivate repo
+
+ctrl --> UI: mapsList
+deactivate ctrl
+
+UI --> Editor: shows maps to select
+deactivate UI
+Editor -> UI: selects map
+activate UI
+
+UI -> ctrl: getScenariosList(map)
+deactivate UI
+activate ctrl
+
+ctrl -> repo: getScenariosList(map)
+activate repo
+repo --> ctrl:
+deactivate repo
+ctrl --> UI:  scenarios list
+activate UI
+deactivate ctrl
+UI --> Editor: asks to select a scenario
+
+Editor -> UI: selects a scenario
+
+UI -> ctrl: saveScenarioInFile(scenario)
+activate ctrl
+ctrl -> srepo: saveScenarioInFile(scenario)
+activate srepo
+srepo --> ctrl: saved scenario
+deactivate srepo
+ctrl --> UI: saved scenario
+deactivate ctrl
+UI --> Editor: shows message of success in saving the scenario
+deactivate UI
+
+@enduml

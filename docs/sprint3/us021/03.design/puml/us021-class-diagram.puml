@@ -1,0 +1,84 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+
+interface Runnable <<interface>>{
+    +run(): void
+}
+
+class SaveScenarioUI {
+    -controller: SaveScenarioController
+    +getController(): SaveScenarioController
+    +run(): void
+}
+
+class SaveScenarioController {
+    +saveScenarioInFile(scenario: Scenario)
+    +getMapsList(): List<Map>
+    +getScenariosList(): List<Scenario>
+}
+
+class MapRepository {
+    -maps: List <Map>
+    +getMapList(): List<Map>
+    +getScenarioList(map: Map): List<Scenario>
+}
+
+class ScenarioRepository {
+    -scenarios: List <Scenario>
+    +saveScenarioInFile(scenario: Scenario)
+}
+
+
+class Editor {
+    -name: String
+    -ID: String
+    -password: String
+    +Editor(name, id, password)
+    +getEditorName(): String
+    +getPassword(): String
+    +getID(): String
+}
+
+class Repositories {
+    -instance: Repositories{static}
+    -mapRepository: MapRepository
+    -scenarioRepository: ScenarioRepository
+    +Repositories()
+    +getInstance(): Repositories
+    +getMapRepository(): MapRepository
+    +getScenarioRepository(): ScenarioRepository
+}
+
+class ApplicationSession {
+    -instance: ApplicationSession{static}
+    -userSession: UserSession
+    +getInstance(): ApplicationSession{static}
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
+}
+
+class UserSession {
+    -instance: UserSession{static}
+    -user: UserSession
+    +getInstance(): UserSession{static}
+}
+
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+SaveScenarioUI ..|> Runnable
+SaveScenarioUI .> SaveScenarioController
+SaveScenarioController ..> ApplicationSession
+SaveScenarioController ..> UserSession
+SaveScenarioController ..> MapRepository : mapRepository
+SaveScenarioController ..> ScenarioRepository : scenarioRepository
+
+Repositories --> "1" MapRepository
+Repositories --> "1" ScenarioRepository
+ApplicationSession --> "1" UserSession : userSession
+Editor --> "1" SaveScenarioUI: interacts
+
+
+@enduml

@@ -67,6 +67,7 @@ SaveMapController ..> MapRepository : mapRepository
 Repositories --> "1" MapRepository
 
 ApplicationSession --> "1" UserSession : userSession
+Editor --> "1" SaveMapUI: interacts
 
 
 @enduml
