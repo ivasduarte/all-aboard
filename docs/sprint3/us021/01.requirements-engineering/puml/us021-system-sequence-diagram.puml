@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+participant ":System" as System
+
+activate Editor
+
+    Editor -> System : Request to save a scenario
+        activate System
+
+        System --> Editor : Display available maps
+        deactivate System
+
+        Editor -> System : Choose map from list
+        activate System
+
+        System --> Editor : Displays available scenarios
+        deactivate System
+
+        Editor -> System : Selects a scenario from the list
+        activate System
+
+        System --> Editor : Returns success message "Scenario saved successfully."
+        deactivate System
+
+@enduml
