@@ -47,7 +47,6 @@ public class ScenarioRepository {
      * @return              true if the scenario does not already exist in the repository; false otherwise.
      */
     private boolean validateScenario(Scenario scenario){
-        System.out.println(!scenarios.contains(scenario));
         return !scenarios.contains(scenario);
     }
 

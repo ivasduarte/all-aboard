@@ -77,7 +77,7 @@ public class CreateScenarioUI implements Runnable {
             System.out.print("\nEnter Locomotive Types (comma-separated: steam, diesel, electric): ");
             List<String> locoTypes = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
-            System.out.print("\nEnter Historical Events (comma-separated: none, pandemic (cargo demand is lowered, increases every year), great war (all costs are increased, cargo demand is greatly increased)): ");
+            System.out.print("\nEnter Historical Events (comma-separated: none, pandemic (cargo demand is lowered, increases every year),\n great war (all costs are increased, cargo demand is greatly increased)): ");
             List<String> events = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
             events.replaceAll(String::toLowerCase);
