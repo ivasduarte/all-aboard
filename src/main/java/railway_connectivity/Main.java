@@ -147,10 +147,6 @@ public class Main {
             builtGraph.add(nodeMap.get(a).addLink(to(nodeMap.get(b)).with(c)));
         }
 
-        for (int i = 0; i < route.size() - 1; i++) {
-            builtGraph.add(nodeMap.get(route.get(i)).addLink(to(nodeMap.get(route.get(i + 1))).with(attr("penwidth", "4"))));
-        }
-
         Graphviz.fromGraph(builtGraph).engine(DOT).render(Format.SVG).toFile(new File("station-map.svg"));
         System.out.println("Graph saved as stationsMap.svg");
     }
