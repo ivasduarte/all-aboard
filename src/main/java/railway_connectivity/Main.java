@@ -21,10 +21,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // getting input
         String linesFile = askFileName("Enter the name of the lines file: ");         // lines file name
-        String stationsFile = askFileName("Enter the name of the stations file: ");   // stations file name
 
         File lines = new File(linesFile);
-        File stations = new File(stationsFile);
 
         us13Implementation(lines);
     }
@@ -103,7 +101,6 @@ public class Main {
     private static void us13Implementation(File linesFile) throws IOException {
         // getting railway data
         List<String[]> edges = getScenarioLines(linesFile);
-        List<String> vertices = new ArrayList<>();
 
         // selection menu for train type
         System.out.println("Select a train type from the following list.");
@@ -119,6 +116,7 @@ public class Main {
         System.out.println("Enter the station where the route will end: ");
         String destinationStation = sc.nextLine().trim();
 
+        List<String> vertices = new ArrayList<>();
         for (String[] edge : edges) {
             if (!vertices.contains(edge[0])) vertices.add(edge[0]);
             if (!vertices.contains(edge[1])) vertices.add(edge[1]);
@@ -126,7 +124,6 @@ public class Main {
 
         // building adjacency list
         Map<String, List<String>> graph = buildGraph(edges, trainType);
-        List<String> route = new ArrayList<>(graph.keySet());
 
         // checking connectivity
         boolean canTravel = isConnected(graph, startStation, destinationStation);
@@ -143,11 +140,11 @@ public class Main {
         MutableGraph builtGraph = mutGraph("StationsMap").setDirected(false).add(nodeMap.values().toArray(new MutableNode[0]));
         for (String[] edge : edges) {
             String a = edge[0], b = edge[1];
-            Color c = edge[2].equals("1") ? Color.YELLOW : Color.RED;
+            Color c = edge[2].equals("1") ? Color.BLUE : Color.YELLOW;
             builtGraph.add(nodeMap.get(a).addLink(to(nodeMap.get(b)).with(c)));
         }
 
-        Graphviz.fromGraph(builtGraph).engine(DOT).render(Format.SVG).toFile(new File("station-map.svg"));
+        Graphviz.fromGraph(builtGraph).engine(DOT).render(Format.SVG).toFile(new File("stationsMap.svg"));
         System.out.println("Graph saved as stationsMap.svg");
     }
 }
