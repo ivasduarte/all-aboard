@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * The AddIndustryUI class provides a user-facing interface for adding a new industry
+ * on an existing map. It implements the Runnable interface to enable execution
+ * within a sequential or parallel execution context.
+ */
 public class AddIndustryUI implements Runnable {
     private AddIndustryController ctrl = new AddIndustryController();
     private DisplayMapController controller = new DisplayMapController();
@@ -30,6 +35,10 @@ public class AddIndustryUI implements Runnable {
     /**
      * This method will be responsible to show the UI to user.
      * This method will also collect all the inputs related to the industry and pass them to the controller.
+     *
+     * Upon successful execution, a new industry is created, added to the selected
+     * map, and reported to the user. If errors occur during the input process,
+     * appropriate error messages are displayed to guide the user.
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
@@ -116,9 +125,20 @@ public class AddIndustryUI implements Runnable {
         }
     }
 
+    /**
+     * This method will be responsible to show an error message if the industry cannot be created.
+     *
+     * @param result error message
+     */
     public void showError(String result) {
         System.out.println("ERROR: " + result);
     }
+
+    /**
+     * This method will be responsible to show a message of success, if the industry is added.
+     *
+     * @param result success message
+     */
     public void showSuccess(String result) {
         System.out.println("SUCCESS: " + result);
     }

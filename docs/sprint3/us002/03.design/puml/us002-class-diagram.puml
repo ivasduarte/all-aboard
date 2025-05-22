@@ -56,9 +56,14 @@ class IndustryRepository {
     + getIndustriesList()
 }
 
+interface Runnable <<interface>>{
+    +run(): void
+}
+
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
+AddIndustryUI ..|> Runnable
 AddIndustryUI .> AddIndustryController
 
 AddIndustryController .> Repositories : repositories
