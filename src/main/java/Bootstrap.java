@@ -14,28 +14,24 @@ import java.util.Optional;
  * This class is responsible to add the default scenario to the database.
  */
 public class Bootstrap implements Runnable {
+
     /**
-     * Executes the initialization process for the application by invoking the following methods in sequence:
-     * <p>
-     * 1. `addUsers`: Ensures the system is populated with predefined default users, such as an editor and a player,
-     * each assigned specific roles required for system functionality.
-     * <p>
-     * 2. `createScenario`: Creates a scenario and associates it with a generated map. The map is fetched or created
-     * using the `createMap` method, which initializes a default map instance if not already available in the system.
-     * <p>
-     * 3. `gameLocomotives`: Adds all locomotives available in the simulation to the repository upon startup, ensuring
-     * that locomotive data is consistently loaded for gameplay.
-     * <p>
-     * This method is typically used during the startup of the application to properly set up the required entities
-     * and resources for the system to run as expected.
-     * <p>
-     * Preconditions:
-     * - The database or repository should be properly initialized before the method is executed.
-     * <p>
-     * Postconditions:
-     * - Default users will exist in the system if they did not already exist.
-     * - A map and a scenario will be created and added to their respective repositories if they are not already available.
-     * - All available locomotives will be loaded into the repository for use in the simulation.
+     * Executes the initialization process for the application by performing the following operations:
+     *
+     * 1. Calls {@link #addUsers()} to add default users to the application. This ensures that the system
+     *    contains a minimum set of predefined users with specific roles.
+     *
+     * 2. Calls {@link #createMap()} to create and add predefined maps to the map repository. This step
+     *    ensures that the application has a predefined set of maps required for gameplay scenarios.
+     *
+     * 3. Calls {@link #createScenario()} to create scenarios associated with the predefined maps. These
+     *    scenarios include various restrictions, budgets, and locomotive types relevant to the simulation.
+     *
+     * 4. Calls {@link #gameLocomotives()} to add defined locomotives into the system repository. This ensures
+     *    that all available locomotives are ready for the simulation each time the application starts.
+     *
+     * This method is intended to be the entry point for initializing the system, ensuring that all necessary
+     * components and data are preloaded for proper application functionality.
      */
     public void run() {
         addUsers();
@@ -45,22 +41,23 @@ public class Bootstrap implements Runnable {
     }
 
     /**
-     * Adds default users to the application. This method creates a set of default users
-     * and assigns them predefined roles to facilitate the initialization of the system.
-     * <p>
-     * The users created are:
-     * - An "editor" user with the email "editor@isep.ipp.pt", password "editor", and the "EDITOR" role.
-     * - A "player" user with the email "player@isep.ipp.pt", password "player", and the "PLAYER" role.
-     * <p>
-     * This method is typically called during the initialization phase to ensure that the minimum
-     * required set of users exists in the application.
-     * <p>
+     * Adds default users to the system using the {@link AuthenticationController}.
+     * This method creates two predefined users:
+     *
+     * 1. An editor with the role "EDITOR".
+     * 2. A player with the role "PLAYER".
+     *
+     * The added users are intended for initial testing or setup purposes and
+     * can be utilized in various parts of the application where these roles
+     * are required.
+     *
      * Preconditions:
-     * - The email addresses used for user creation must be unique and adhere to the expected format.
-     * - Roles "EDITOR" and "PLAYER" must be defined in the application.
-     * <p>
+     * - The {@link AuthenticationController} must be properly initialized and
+     *   connected to the authentication repository.
+     *
      * Postconditions:
-     * - The system will contain the users specified with the given roles, provided they do not already exist.
+     * - Two users with the specified roles, names, emails, and passwords are
+     *   created and stored in the system's authentication repository.
      */
     public void addUsers() {
         AuthenticationController ctrl = new AuthenticationController();
@@ -70,12 +67,12 @@ public class Bootstrap implements Runnable {
     }
 
     /**
-     * Creates a map with a specified name and dimensions, adds it to the map repository,
-     * and retrieves it from the repository. If a map with the specified name already exists,
-     * the existing map is returned.
+     * Creates and adds multiple predefined maps to the map repository.
+     * After adding the maps, it retrieves and returns a specific map from the repository
+     * with the name "ExampleMap" if it exists.
      *
-     * @return An {@code Optional<Map>} containing the created or retrieved map, or an empty
-     * {@code Optional} if the map could not be found or created.
+     * @return an {@code Optional<Map>} containing the map with the name "ExampleMap"
+     *         if it is found in the repository, or an empty {@code Optional} if it is not found.
      */
     public Optional<Map> createMap() {
         MapRepository mr = Repositories.getInstance().getMapRepository();
@@ -98,39 +95,26 @@ public class Bootstrap implements Runnable {
     }
 
     /**
-     * Creates and associates scenarios with corresponding maps from the map repository.
-     * Each scenario is defined with specific restrictions, a budget, and locomotive types,
-     * and is linked to a map if the map is present in the repository.
-     * <p>
-     * This method checks for the presence of predefined maps in the {@code MapRepository}
-     * and creates a corresponding scenario for each available map. The created scenarios
-     * are added to both the scenarios associated with their respective maps and the
-     * {@code ScenarioRepository}.
-     * <p>
+     * Creates and assigns predefined scenarios to all available maps in the repository.
+     *
+     * This method performs the following tasks:
+     * 1. Retrieves instances of {@code ScenarioRepository} and {@code MapRepository}.
+     * 2. Defines a list of predefined scenarios, each with specific restrictions, budgets,
+     *    and locomotive types. The predefined scenarios do not have an associated map initially.
+     * 3. Retrieves all maps from the {@code MapRepository}.
+     * 4. Iterates over all the maps and associates each map with every predefined scenario.
+     *    For each map, it creates a new {@code Scenario} by appending the map's name to the
+     *    base scenario name, assigns the map, and uses the same restrictions and budget
+     *    from the base scenario.
+     * 5. Adds each newly created scenario to the respective map and stores it in the
+     *    {@code ScenarioRepository}.
+     *
      * Preconditions:
-     * - The {@code ScenarioRepository} and {@code MapRepository} must be correctly initialized
-     * and accessible from {@code Repositories}.
-     * - Locomotive types and historical events lists must be defined for scenario restrictions.
-     * <p>
+     * - The repositories must be properly initialized and accessible via the {@code Repositories} class.
+     *
      * Postconditions:
-     * - For each map present in the {@code MapRepository}, a new scenario will be created with:
-     * - A unique name.
-     * - Predefined restrictions, including time period, locomotive types, and historical events.
-     * - A set budget.
-     * - Each created scenario will be added to both the {@code ScenarioRepository} and the
-     * corresponding map in the {@code MapRepository}.
-     * <p>
-     * Maps and their corresponding scenarios:
-     * - "ExampleMap": Scenario "ExampleScenario" created with restrictions from 1880-01-01 to 1890-12-31 and budget of 1000.
-     * - "ExampleMap1": Scenario "ExampleScenario1" created with restrictions from 1998-01-01 to 2001-12-31 and budget of 1500.
-     * - "ExampleMap2": Scenario "ExampleScenario2" created with restrictions from 1993-01-01 to 2015-12-31 and budget of 2000.
-     * - "ExampleMap3": Scenario "ExampleScenario3" created with restrictions from 2006-01-01 to 2020-12-31 and budget of 5000.
-     * - "ExampleMap4": Scenario "ExampleScenario4" created with restrictions from 2001-01-01 to 2010-12-31 and budget of 10000.
-     * <p>
-     * Notes:
-     * - The method utilizes {@code Optional} objects from the {@code MapRepository} to check if
-     * a map exists before creating its scenario.
-     * - If a map does not exist in the repository, no scenario will be created for it.
+     * - Each map in the repository will have a set of associated scenarios based on the predefined list.
+     * - The newly created scenarios will be added to both the map and the scenario repository.
      */
     public void createScenario() {
         ScenarioRepository sr = Repositories.getInstance().getScenarioRepository();
