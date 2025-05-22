@@ -14,9 +14,9 @@ participant ":Map" as Map
 activate Editor
 Editor -> UI : requests to create a map
 
-activate UI
-UI -> ctrl : create()
 
+activate UI
+UI -> ctrl** : create()
 
 UI -> Editor : requestMapName()
 deactivate UI
@@ -28,8 +28,12 @@ UI -> ctrl : submitData()
 activate ctrl
 
     ref over ctrl
-      Check Name Uniqueness
-    end ref
+        Get Map Repository
+    end
+
+    ref over ctrl
+        Check Name Uniqueness
+    end
 
 
 UI -> Editor : requestWidth()
@@ -45,11 +49,19 @@ Editor --> UI : provides height
 activate UI
 
 UI -> ctrl : submitData()
+ctrl -> Map : new Map(mapName, width, height)
+activate Map
 
     ref over Map
-        Create Map
+        Validate Map
     end
 
+Map --> ctrl : map
+deactivate Map
+
+    ref over ctrl
+        Add Map
+    end
 
 ctrl --> UI : map
 deactivate ctrl

@@ -1,0 +1,22 @@
+@startuml
+
+participant ":CreateMapController" as ctrl
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repositories
+participant "mapRepository\n:MapRepositories" as repo
+participant ":Map" as Map
+
+autonumber 21
+
+group Validate Map
+    ctrl -> Map : new Map(mapName, width, height)
+    activate Map
+
+    Map -> Map : validateName()
+    Map -> Map : validateSize()
+    Map --> ctrl : Map object
+    deactivate Map
+
+end
+
+@enduml

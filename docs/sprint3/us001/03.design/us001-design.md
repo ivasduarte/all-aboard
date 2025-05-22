@@ -50,31 +50,22 @@ It uses Interaction Occurrence (a.k.a. Interaction Use).
 
 ![Sequence Diagram - split](svg/us001-sd-split.svg)
 
-**Requests Map Name SD**
 
-![Sequence Diagram - Partial - Requests Map Name](svg/us001-sd-partial-requests-mapName.svg)
+**Get Map Repository SD**
 
-**Get Map SD**
+![Sequence Diagram - Partial - Get Map Repository](svg/us001-sd-partial-get-map-repository.svg)
 
-![Sequence Diagram - Partial - Get Map](svg/us001-sd-partial-get-map.svg)
+**Check Name Uniqueness SD**
 
-**Map Exists SD**
+![Sequence Diagram - Partial - Check Name Uniqueness](svg/us001-sd-partial-check-name-uniqueness.svg)
 
-![Sequence Diagram - Partial - Map Exists](svg/us001-sd-partial-map-exists.svg)
+**Validate Map SD**
 
-**Requests Dimensions SD**
+![Sequence Diagram - Partial - Validate Map](svg/us001-sd-partial-validate-map.svg)
 
-![Sequence Diagram - Partial - Requests Dimensions](svg/us001-sd-partial-request-dimensions.svg)
+**Add Map SD**
 
-**Create Map SD**
-
-![Sequence Diagram - Partial - Create Map](svg/us001-sd-partial-create-map.svg)
-
-**Map Creation Success SD**
-
-![Sequence Diagram - Partial - Map Creation Success](svg/us001-sd-partial-map-creation-success.svg)
-
-
+![Sequence Diagram - Partial - Add Map](svg/us001-sd-partial-add-map.svg)
 ## 3.3. Class Diagram (CD)
 
 ![Class Diagram](svg/us001-class-diagram.svg)
