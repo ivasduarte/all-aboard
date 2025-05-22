@@ -50,7 +50,6 @@ food, textiles, cars).
 * **Operational Feedback:**
     - The file containing the details of the map.  
 
-
 ### 1.6. System Sequence Diagram (SSD)
 
 ![System Sequence Diagram](svg/us019-system-sequence-diagram.svg)
