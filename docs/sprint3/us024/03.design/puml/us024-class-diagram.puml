@@ -1,0 +1,64 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface Runnable <<interface>> {
+    +run(): void
+}
+
+interface Serializable <<interface>> {
+    +loadFromFile(): void
+}
+
+class SaveSimulationUI {
+    +getController(): SaveSimulationController
+    +run(): void
+}
+
+class SaveSimulationController {
+    +getRepository(): SimulationRepository
+}
+
+class SimulationRepository implements Serializable {
+    -simulations: List<Simulation>
+    +getSimulationList(): List<Simulation>
+    +saveSimulation(simulation: Simulation)
+    +carregarDeFicheiro(): void
+}
+
+class Player {
+    -name: String
+    -email: String
+    -password: String
+}
+
+class Repositories {
+    -simulationRepository: SimulationRepository
+    +getInstance(): Repositories
+    +getSimulationRepository(): SimulationRepository
+}
+
+class ApplicationSession {
+    -userSession: UserSession
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
+}
+
+class UserSession {
+    -user: UserSession
+    +getUser(): UserSession
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+SaveSimulationUI ..|> Runnable
+SaveSimulationUI .> SaveSimulationController
+SaveSimulationController ..> ApplicationSession
+SaveSimulationController ..> UserSession
+SaveSimulationController ..> SimulationRepository : simulationRepository
+
+Repositories --> "1" SimulationRepository
+ApplicationSession --> "1" UserSession : userSession
+Player --> "1" SaveSimulationUI : interacts
+
+@enduml

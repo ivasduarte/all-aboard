@@ -1,0 +1,66 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as player
+
+participant ":LoadSimulationUI" as ui
+
+activate player
+player --> ui : Requests to load a simulation from file
+
+create ":LoadSimulationController" as ctrl
+
+activate ui
+ui -> ctrl : create()
+
+participant ":ApplicationSession" as app
+participant ":UserSession" as user
+
+ui -> ctrl : loadSimulationFromFile()
+activate ctrl
+
+ctrl -> app : getCurrentSession()
+activate app
+
+app --> ctrl : userSession
+deactivate app
+
+ctrl -> user : getUser()
+activate user
+
+user --> ctrl : currentUser
+deactivate user
+
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repo
+participant "simulationRepository\n:SimulationRepository" as simRepo
+
+ctrl -> reps : getInstance()
+activate reps
+
+reps --> ctrl : instance
+deactivate reps
+
+ctrl -> repo : getSimulationRepository()
+activate repo
+
+repo --> ctrl : simulationRepository
+deactivate repo
+
+ctrl -> simRepo : loadSimulationFromFile(currentUser)
+activate simRepo
+
+simRepo --> ctrl : loaded simulation data
+deactivate simRepo
+
+ctrl --> ui : loaded simulation data
+deactivate ctrl
+
+ui --> player : shows simulation loaded successfully
+deactivate ui
+
+@enduml
