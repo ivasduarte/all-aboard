@@ -19,8 +19,7 @@ public class AddStationUI implements Runnable {
     private Map map;
     private Scenario scenario;
 
-    public AddStationUI(Map map, Scenario scenario)
-    {
+    public AddStationUI(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
     }
@@ -33,26 +32,25 @@ public class AddStationUI implements Runnable {
         System.out.print("\nEnter the position X of the station: ");
         int positionX = sc.nextInt();
 
-        System.out.print("\nEnter the position Y of the station: ");
+        System.out.print("Enter the position Y of the station: ");
         int positionY = sc.nextInt();
 
         int budget = scenario.getBudget().getBudget();
         sc.nextLine();
-        System.out.println("Station types:");
-        for(int i = 0; i < Station.stationTypes.length; i++)
-        {
+
+        System.out.println("\n\nStation types:");
+        for (int i = 0; i < Station.stationTypes.length; i++) {
             System.out.println(Station.stationTypes[i] + " | " + Station.typesPrices[i] + "€");
         }
-        System.out.println("Your current budget is " + scenario.getBudget().getBudget() + "€");
-        System.out.print("Enter the station type you want to add: ");
+
+        System.out.println("\nYour current budget is " + scenario.getBudget().getBudget() + "€");
+        System.out.print("\nEnter the station type you want to add: ");
         String stationType = sc.nextLine();
 
         boolean typeExists = false;
         int stationTypeID = -1;
-        for(int i = 0; i < Station.stationTypes.length; i++)
-        {
-            if(stationType.trim().equalsIgnoreCase(Station.stationTypes[i]))
-            {
+        for (int i = 0; i < Station.stationTypes.length; i++) {
+            if (stationType.trim().equalsIgnoreCase(Station.stationTypes[i])) {
                 typeExists = true;
                 stationTypeID = i;
             }
@@ -61,8 +59,7 @@ public class AddStationUI implements Runnable {
         if (!typeExists) {
             System.out.println("Station type not valid");
             return;
-        }else if(budget < Station.typesPrices[stationTypeID])
-        {
+        } else if (budget < Station.typesPrices[stationTypeID]) {
             System.out.println("User does not have sufficient budget!");
             return;
         }

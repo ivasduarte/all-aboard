@@ -47,11 +47,10 @@ public class ListStationsUI implements Runnable {
             System.out.println("Station ID: " + station.getStationID()
                     + " | Type: " + station.getStationType()
                     + " | Position: (" + station.getPositionX() + ", " + station.getPositionY() + ")");
-            System.out.println("Buildings: ");
+            System.out.println("\nExisting buildings of this station: ");
 
             if (station.getBuildings().isEmpty()) {
                 System.out.println("No buildings found");
-                System.out.println();
             } else {
                 for (Building building : station.getBuildings()) {
                     System.out.print(building.getBuildingType());
@@ -59,8 +58,7 @@ public class ListStationsUI implements Runnable {
                 }
             }
 
-            System.out.println("Cargo stored: " + station.getCargo());
-            System.out.println();
+            System.out.println("\nCargo stored: " + station.getCargo());
         }
     }
 

@@ -67,7 +67,7 @@ public class AuthenticationUI implements Runnable {
 
         if (success) {
             String userEmail = ctrl.getCurrentUserEmail();
-            String userRole = ctrl.getRole(userEmail);  // uses corrected method
+            String userRole = ctrl.getRole(userEmail);
 
             List<MenuItem> roleMenus = getMenuItemForRoles();
 

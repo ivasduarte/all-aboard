@@ -24,17 +24,19 @@ import java.util.Scanner;
  * a scenario, and access various game functionalities such as building
  * stations, upgrading stations, listing stations, purchasing locomotives,
  * and assigning routes to trains.
- *
- * This class implements the {@code Runnable} interface,*/
-public class PlayerUI implements Runnable{
+ * <p>
+ * This class implements the {@code Runnable} interface,
+ */
+public class PlayerUI implements Runnable {
     /**
      * Constructs an instance of the PlayerUI class, initializing the main console-based interface
      * for player interactions with the game.
-     *
+     * <p>
      * This constructor creates an object responsible for providing a structured and interactive
      * interface for players, aligning with the game's core functionalities.
      */
-    public PlayerUI(){}
+    public PlayerUI() {
+    }
 
     /**
      * This method performs the following operations:
@@ -52,77 +54,75 @@ public class PlayerUI implements Runnable{
      * stations, listing stations, buying locomotives, and assigning trains to routes. Users can select these options
      * repeatedly until they choose to exit the menu.
      */
-    public void run(){
+    public void run() {
         Scanner sc = new Scanner(System.in);
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
         List<Map> maps = mapRepository.getMapList();
 
-        if(maps == null || maps.isEmpty())
-        {
-            System.out.println("\nIt seems that there are no maps available! You must have at least 1 map to play!");
+        if (maps == null || maps.isEmpty()) {
+            System.out.println("\n\nIt seems that there are no maps available! You must have at least 1 map to play!");
             return;
         }
 
-        System.out.println("\nWelcome! Choose a map to play from the list below!");
-        for(Map map : maps)
-        {
-            System.out.println("["+ map.getMapName() + " | " + map.getWidth() + "x" + map.getHeight() + "]");
+        System.out.println("\n------------------------------------------------------------");
+        System.out.println("\nWelcome!");
+
+
+        System.out.println("\n\nChoose a map to play from the list below:");
+        for (int i = 0; i < maps.size(); i++) {
+            System.out.println((i + 1) + ". " + maps.get(i).getMapName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
         }
 
         Map currentMap = null;
+
         do {
-            System.out.print("Enter the name of the map you wish to play: ");
-            String mapName = sc.nextLine();
+            System.out.print("\nEnter the number of the map you wish to play: ");
+            try{
+                int mapChoice = Integer.parseInt(sc.nextLine());
 
-            for(Map map : maps)
-            {
-                if(map.getMapName().equalsIgnoreCase(mapName))
-                {
-                    currentMap = map;
+                if (mapChoice <= maps.size() && mapChoice >= 1) {
+                    currentMap = maps.get(mapChoice - 1);
+                } else {
+                    System.out.println("\nSelected map does not exist, try a new one!");
                 }
+            } catch(NumberFormatException e){
+                System.out.println("\nPlease enter a valid number.");
             }
-
-            if(currentMap == null)
-                System.out.println("Selected map does not exist, try a new one!");
-        }while (currentMap == null);
+        } while (currentMap == null);
 
         List<Scenario> scenarios = currentMap.getScenarios();
 
-        if(scenarios == null || scenarios.isEmpty())
-        {
+        if (scenarios == null || scenarios.isEmpty()) {
             System.out.println("\nIt seems that there are no scenarios available! You must have at least 1 scenario to play!");
             return;
         }
 
-        System.out.println("\nChoose a scenario for the map " + currentMap.getMapName());
-        for(Scenario scenario : scenarios)
-        {
-            Restrictions restrictions = scenario.getRestrictions();
-            System.out.println("[" + scenario.getScenarioName() + " | From " + restrictions.getStartDate() + " to " + restrictions.getEndDate() + "]");
+        System.out.println("\nChoose a scenario for the map " + currentMap.getMapName() + " from the list below:");
+        for (int i = 0; i < scenarios.size(); i++) {
+            Restrictions restrictions = scenarios.get(i).getRestrictions();
+            System.out.println((i + 1) + ". " + scenarios.get(i).getScenarioName() + " | From " + restrictions.getStartDate() + " to " + restrictions.getEndDate() + "");
         }
 
         Scenario currentScenario = null;
         do {
-            System.out.print("Enter the name of the scenario you wish to play: ");
-            String scenarioName = sc.nextLine();
+            System.out.print("\nEnter the number of the scenario you wish to play: ");
+            try {
+                int scenarioChoice = Integer.parseInt(sc.nextLine());
 
-            for(Scenario scenario : scenarios)
-            {
-                if(scenario.getScenarioName().equalsIgnoreCase(scenarioName))
-                {
-                    currentScenario = scenario;
+                if (scenarioChoice >= 1 && scenarioChoice <= scenarios.size()) {
+                    currentScenario = scenarios.get(scenarioChoice - 1);
+                } else {
+                    System.out.println("\nInvalid number! Please choose a number between 1 and " + scenarios.size());
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter a valid number!");
             }
-
-            if(currentScenario == null)
-                System.out.println("Selected scenario does not exist, try a new one!");
-        }while (currentScenario == null);
+        } while (currentScenario == null);
 
         Budget budget = currentScenario.getBudget();
 
-        if(currentScenario.getCurrentYear() > currentScenario.getRestrictions().getEndDate().getYear())
-        {
+        if (currentScenario.getCurrentYear() > currentScenario.getRestrictions().getEndDate().getYear()) {
             System.out.println("This scenario has ended!");
             return;
         }
@@ -130,14 +130,16 @@ public class PlayerUI implements Runnable{
         List<MenuItem> options = new ArrayList<>();
         options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario)));
-        options.add(new MenuItem("List all Stations", new ListStationsUI(currentMap)));
+        options.add(new MenuItem("Upgrade Type of Station", new ChangeStationTypeUI(currentMap, currentScenario)));
+        options.add(new MenuItem("List All Stations", new ListStationsUI(currentMap)));
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI(currentMap, currentScenario)));
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario)));
-        options.add(new MenuItem("Start a simulation", new SimulatorController(currentMap, currentScenario)));
+        options.add(new MenuItem("Play Simulation", new SimulatorController(currentMap, currentScenario)));
 
 
         int option;
-        do{
+        do {
+            System.out.println("\n------------------------- PLAYER INFORMATION -------------------------");
             System.out.println("\nCurrent map: " + currentMap.getMapName());
             System.out.println("Current scenario: " + currentScenario.getScenarioName());
             System.out.println("Time period: " + currentScenario.getRestrictions().getStartDate() + " to " + currentScenario.getRestrictions().getEndDate());
@@ -146,9 +148,9 @@ public class PlayerUI implements Runnable{
 
             option = Utils.showAndSelectIndex(options, "\n\n------------------------- PLAYER MENU -------------------------");
 
-            if((option >= 0) && (option < options.size())){
+            if ((option >= 0) && (option < options.size())) {
                 options.get(option).run();
             }
-        }while(option != -1);
+        } while (option != -1);
     }
 }
