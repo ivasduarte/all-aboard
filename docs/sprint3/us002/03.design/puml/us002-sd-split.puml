@@ -1,0 +1,89 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as edit
+
+participant ":AddIndustryUI" as ui
+participant ":AddIndustryController" as ctrl
+participant ":DisplayMapController" as mapCTRL
+participant ":ScenarioController" as sceneCTRL
+participant ":Industry" as ind
+
+activate edit
+edit -> ui : requests to add industry
+
+activate ui
+ui -> ctrl** : create()
+
+ui -> mapCTRL : getMapList()
+activate mapCTRL
+
+    ref over mapCTRL
+        Get Map List
+    end ref
+
+deactivate mapCTRL
+
+ui --> edit : shows a list of the available maps
+deactivate ui
+
+edit -> ui : selects a map
+activate ui
+
+ui -> sceneCTRL : getScenarioList()
+activate sceneCTRL
+
+    ref over sceneCTRL
+        Get Scenario List
+    end ref
+
+deactivate sceneCTRL
+
+ui --> edit : shows a list of the available scenarios
+deactivate ui
+
+edit -> ui : selects a scenario
+activate ui
+
+ui --> edit : requests industry attributes \n(position, type, generated cargo, money per cargo)
+deactivate ui
+
+edit -> ui : provides industry data
+activate ui
+
+ui -> ctrl : addIndustry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount, cargoPrice)
+activate ctrl
+
+    ref over ctrl
+        Get Industry Repository
+    end
+
+    ref over ctrl
+        Validate Position
+    end
+
+    ref over ctrl
+        Check Overbuilding
+    end
+
+ctrl -> ind** : addIndustry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount, cargoPrice)
+activate ind
+
+ind --> ctrl : industry
+deactivate ind
+
+    ref over ctrl
+        Add Industry
+    end
+
+ctrl --> ui : result
+deactivate ctrl
+
+ui --> edit : showSuccess(result)
+deactivate ui
+
+@enduml
