@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+class Simulation {
+}
+
+Player "1" -- "*" Simulation : saves
+
+@enduml
