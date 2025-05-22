@@ -122,6 +122,4 @@ public class Locomotive {
      * @param route The new route to be assigned
      */
     public void setRoute(List<Station> route) { this.route = route;}
-
-    // possible validations
 }
