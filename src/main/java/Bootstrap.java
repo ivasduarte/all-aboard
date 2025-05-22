@@ -16,22 +16,22 @@ import java.util.Optional;
 public class Bootstrap implements Runnable {
     /**
      * Executes the initialization process for the application by invoking the following methods in sequence:
-     *
+     * <p>
      * 1. `addUsers`: Ensures the system is populated with predefined default users, such as an editor and a player,
-     *    each assigned specific roles required for system functionality.
-     *
+     * each assigned specific roles required for system functionality.
+     * <p>
      * 2. `createScenario`: Creates a scenario and associates it with a generated map. The map is fetched or created
-     *    using the `createMap` method, which initializes a default map instance if not already available in the system.
-     *
+     * using the `createMap` method, which initializes a default map instance if not already available in the system.
+     * <p>
      * 3. `gameLocomotives`: Adds all locomotives available in the simulation to the repository upon startup, ensuring
-     *    that locomotive data is consistently loaded for gameplay.
-     *
+     * that locomotive data is consistently loaded for gameplay.
+     * <p>
      * This method is typically used during the startup of the application to properly set up the required entities
      * and resources for the system to run as expected.
-     *
+     * <p>
      * Preconditions:
      * - The database or repository should be properly initialized before the method is executed.
-     *
+     * <p>
      * Postconditions:
      * - Default users will exist in the system if they did not already exist.
      * - A map and a scenario will be created and added to their respective repositories if they are not already available.
@@ -39,29 +39,30 @@ public class Bootstrap implements Runnable {
      */
     public void run() {
         addUsers();
-        createScenario(createMap().get());
+        createMap();
+        createScenario();
         gameLocomotives();
     }
 
     /**
      * Adds default users to the application. This method creates a set of default users
      * and assigns them predefined roles to facilitate the initialization of the system.
-     *
+     * <p>
      * The users created are:
      * - An "editor" user with the email "editor@isep.ipp.pt", password "editor", and the "EDITOR" role.
      * - A "player" user with the email "player@isep.ipp.pt", password "player", and the "PLAYER" role.
-     *
+     * <p>
      * This method is typically called during the initialization phase to ensure that the minimum
      * required set of users exists in the application.
-     *
+     * <p>
      * Preconditions:
      * - The email addresses used for user creation must be unique and adhere to the expected format.
      * - Roles "EDITOR" and "PLAYER" must be defined in the application.
-     *
+     * <p>
      * Postconditions:
      * - The system will contain the users specified with the given roles, provided they do not already exist.
      */
-    public void addUsers(){
+    public void addUsers() {
         AuthenticationController ctrl = new AuthenticationController();
 
         ctrl.createNewUser("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR);
@@ -73,35 +74,96 @@ public class Bootstrap implements Runnable {
      * and retrieves it from the repository. If a map with the specified name already exists,
      * the existing map is returned.
      *
-     * @return      An {@code Optional<Map>} containing the created or retrieved map, or an empty
-     *              {@code Optional} if the map could not be found or created.
+     * @return An {@code Optional<Map>} containing the created or retrieved map, or an empty
+     * {@code Optional} if the map could not be found or created.
      */
     public Optional<Map> createMap() {
         MapRepository mr = Repositories.getInstance().getMapRepository();
-        mr.add(new Map("ExampleMap", 100, 100));
+
+        Map map1 = new Map("ExampleMap", 20, 20);
+        Map map2 = new Map("ExampleMap1", 36, 36);
+        Map map3 = new Map("ExampleMap2", 50, 50);
+        Map map4 = new Map("ExampleMap3", 100, 100);
+        Map map5 = new Map("ExampleMap4", 200, 200);
+        Map map6 = new Map("ExampleMap5", 256, 256);
+
+        mr.add(map1);
+        mr.add(map2);
+        mr.add(map3);
+        mr.add(map4);
+        mr.add(map5);
+        mr.add(map6);
 
         return mr.getMap("ExampleMap");
     }
 
     /**
-     * Creates a new scenario and associates it with the provided map.
-     *
-     * The scenario iS configured with predefined locomotive types, historical events, a date range, and a budget.
-     * The created scenario is added to the specified map and stored in the scenario repository.
-     *
-     * @param map  The map to which the new scenario will be linked. Must not be null.
+     * Creates and associates scenarios with corresponding maps from the map repository.
+     * Each scenario is defined with specific restrictions, a budget, and locomotive types,
+     * and is linked to a map if the map is present in the repository.
+     * <p>
+     * This method checks for the presence of predefined maps in the {@code MapRepository}
+     * and creates a corresponding scenario for each available map. The created scenarios
+     * are added to both the scenarios associated with their respective maps and the
+     * {@code ScenarioRepository}.
+     * <p>
+     * Preconditions:
+     * - The {@code ScenarioRepository} and {@code MapRepository} must be correctly initialized
+     * and accessible from {@code Repositories}.
+     * - Locomotive types and historical events lists must be defined for scenario restrictions.
+     * <p>
+     * Postconditions:
+     * - For each map present in the {@code MapRepository}, a new scenario will be created with:
+     * - A unique name.
+     * - Predefined restrictions, including time period, locomotive types, and historical events.
+     * - A set budget.
+     * - Each created scenario will be added to both the {@code ScenarioRepository} and the
+     * corresponding map in the {@code MapRepository}.
+     * <p>
+     * Maps and their corresponding scenarios:
+     * - "ExampleMap": Scenario "ExampleScenario" created with restrictions from 1880-01-01 to 1890-12-31 and budget of 1000.
+     * - "ExampleMap1": Scenario "ExampleScenario1" created with restrictions from 1998-01-01 to 2001-12-31 and budget of 1500.
+     * - "ExampleMap2": Scenario "ExampleScenario2" created with restrictions from 1993-01-01 to 2015-12-31 and budget of 2000.
+     * - "ExampleMap3": Scenario "ExampleScenario3" created with restrictions from 2006-01-01 to 2020-12-31 and budget of 5000.
+     * - "ExampleMap4": Scenario "ExampleScenario4" created with restrictions from 2001-01-01 to 2010-12-31 and budget of 10000.
+     * <p>
+     * Notes:
+     * - The method utilizes {@code Optional} objects from the {@code MapRepository} to check if
+     * a map exists before creating its scenario.
+     * - If a map does not exist in the repository, no scenario will be created for it.
      */
-    public void createScenario(Map map) {
+    public void createScenario() {
         ScenarioRepository sr = Repositories.getInstance().getScenarioRepository();
+        MapRepository mr = Repositories.getInstance().getMapRepository();
+
         List<String> locomotiveTypes = new ArrayList<>();
         List<String> historicalEvents = new ArrayList<>();
-
         locomotiveTypes.add("steam");
-        Scenario scenario = new Scenario("ExampleScenario", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), map, new Budget(1000));
 
-        map.addNewScenario(scenario);
-        sr.add(scenario);
+        List<Scenario> scenarios = List.of(
+                new Scenario("ExampleScenario1", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), null, new Budget(1000)),
+                new Scenario("ExampleScenario2", new Restrictions(LocalDate.parse("1998-01-01"), LocalDate.parse("2001-12-31"), locomotiveTypes, historicalEvents), null, new Budget(1500)),
+                new Scenario("ExampleScenario3", new Restrictions(LocalDate.parse("1993-01-01"), LocalDate.parse("2015-12-31"), locomotiveTypes, historicalEvents), null, new Budget(2000)),
+                new Scenario("ExampleScenario4", new Restrictions(LocalDate.parse("2006-01-01"), LocalDate.parse("2020-12-31"), locomotiveTypes, historicalEvents), null, new Budget(5000)),
+                new Scenario("ExampleScenario5", new Restrictions(LocalDate.parse("2001-01-01"), LocalDate.parse("2010-12-31"), locomotiveTypes, historicalEvents), null, new Budget(10000))
+        );
+
+        List<Map> allMaps = mr.getMapList();
+
+        for (Map map : allMaps) {
+            for (Scenario baseScenario : scenarios) {
+                Scenario scenarioForMap = new Scenario(
+                        baseScenario.getScenarioName() + "_for_" + map.getMapName(),
+                        baseScenario.getRestrictions(),
+                        map,
+                        baseScenario.getBudget()
+                );
+                map.addNewScenario(scenarioForMap);
+                sr.add(scenarioForMap);
+            }
+        }
     }
+
 
     /**
      * This method is responsible to add every locomotive available on the simulator to the repository, everytime the simulation starts.
