@@ -1,0 +1,19 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as player
+participant ":System" as sys
+
+activate player
+
+player -> sys : Requests the Year Financial Results, including expenses and revenues
+activate sys
+
+sys --> player : Displays the Year Financial Results
+deactivate
+
+@enduml

@@ -16,6 +16,4 @@ activate sys
 sys --> player : Display success message: "Simulation saved successfully!"
 deactivate sys
 
-deactivate player
-
 @enduml
