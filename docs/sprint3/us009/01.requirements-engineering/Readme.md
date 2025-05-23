@@ -1,4 +1,4 @@
-# US009 - Buy a train
+# US009 - Buy a locomotive
 
 ## 1. Requirements Engineering
 

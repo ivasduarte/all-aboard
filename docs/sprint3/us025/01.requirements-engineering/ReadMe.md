@@ -34,12 +34,21 @@ and Fuel is based on traveled kms.
 
 ### 1.4. Found out Dependencies
 
+* There is a dependency with US008 - "Build a railway station between two stations", given that to get the maintenance
+cost of the tracks there needs to be railway lines.
+* There is a dependency with US009 - "Buy a locomotive", give that to get maintenance and fuel cost of a train we need
+to know the locomotive model of the train.
+
 ### 1.5 Input and Output Data
+
+**Output Data:**
+* **Financial Results:**
+    - A message showing how much the player spent during the year on track and train maintenance, train fuel cost and
+    the profits of revenues.
 
 ### 1.6. System Sequence Diagram (SSD)
 
 ![System Sequence Diagram](svg/.svg)
-
 
 ### 1.7 Other Relevant Remarks
 
