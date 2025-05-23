@@ -1,0 +1,37 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Player {
+    - name
+    - ID
+    - password
+}
+
+class YearFinancialResults {
+    - expenses
+    - revenues
+}
+
+class Expenses {
+    - track maintenance
+    - train maintenance
+    - fuel cost
+}
+
+class Revenues {
+    - cargo deliveries
+}
+
+Player "1" -- "*" YearFinancialResults : gets
+
+YearFinancialResults -- Expenses : has
+YearFinancialResults -- Revenues : has
+
+@enduml

@@ -48,7 +48,7 @@ to know the locomotive model of the train.
 
 ### 1.6. System Sequence Diagram (SSD)
 
-![System Sequence Diagram](svg/.svg)
+![System Sequence Diagram](svg/us025-system-sequence-diagram.svg)
 
 ### 1.7 Other Relevant Remarks
 
