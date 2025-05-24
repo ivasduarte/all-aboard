@@ -10,7 +10,7 @@ actor "Player" as player
 participant ":SaveSimulationUI" as ui
 
 activate player
-player --> ui : Requests to save a simulation
+player -> ui : Requests to save a simulation
 
 create ":SaveSimulationController" as ctrl
 

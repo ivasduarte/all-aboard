@@ -1,0 +1,117 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as player
+
+participant ":ShowFinancialResultsUI" as ui
+
+activate player
+player -> ui : Requests to see the yearly financial results
+
+create ":ShowFinancialResultsController" as ctrl
+
+activate ui
+ui -> ctrl : create()
+
+participant ":ApplicationSession" as app
+participant ":UserSession" as user
+
+ui -> ctrl : getSimulationYears()
+activate ctrl
+
+ctrl -> app : getCurrentSession()
+activate app
+
+app --> ctrl : currentSession
+deactivate app
+
+ctrl -> user : getUser()
+activate user
+
+user --> ctrl : currentUser
+deactivate user
+
+participant ":Repositories" as reps
+participant "repositories :Repositories" as repo
+participant ":ScenarioRepository" as sceneRepo
+participant ":Scenario" as scene
+
+ctrl -> reps : getInstance()
+activate reps
+
+reps --> ctrl : instance
+deactivate reps
+
+ctrl -> repo : getScenarioRepository()
+activate repo
+
+repo --> ctrl : scenarioRepository
+deactivate repo
+
+ctrl -> sceneRepo : getCurrentScenario()
+activate sceneRepo
+
+sceneRepo --> ctrl : currentScenario
+deactivate
+
+ctrl -> scene : getStartYear() & getEndYear()
+activate scene
+
+scene --> ctrl : startYear & endYear
+deactivate scene
+
+ctrl --> ui : startYear & endYear
+deactivate ctrl
+
+ui --> player : shows a list of all years available on the scenario
+deactivate ui
+
+player -> ui : selects the year he wants to see the financial results
+activate ui
+
+ui -> ctrl : getFinancialResults(year)
+activate ctrl
+
+ctrl -> repo : getFinancialResultsRepository()
+activate repo
+
+repo --> ctrl : financialResultsRepository
+deactivate repo
+
+participant ":FinancialResultsRepository" as frRepo
+
+ctrl -> frRepo : getTrackMaintenanceCost()
+activate frRepo
+
+frRepo --> ctrl : trackMaintenanceCost
+deactivate frRepo
+
+ctrl -> frRepo : getTrainMaintenanceCost()
+activate frRepo
+
+frRepo --> ctrl : trainMaintenanceCost
+deactivate frRepo
+
+ctrl -> frRepo : getFuelCost()
+activate frRepo
+
+frRepo --> ctrl : fuelCost
+deactivate frRepo
+
+ctrl -> frRepo : getCargoDeliveries()
+activate frRepo
+
+frRepo --> ctrl : cargoDeliveries
+deactivate frRepo
+
+ctrl --> ui : financialResults
+deactivate ctrl
+
+ui --> player : shows the financial results of the year the player has selected
+deactivate ui
+
+@enduml
