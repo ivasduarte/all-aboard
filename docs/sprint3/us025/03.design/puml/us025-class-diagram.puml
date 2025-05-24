@@ -1,0 +1,60 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface Runnable <<interface>>{
+    +run(): void
+}
+
+class ShowFinancialResultsUI {
+    +getController(): ShowFinancialResultsController
+    +run(): void
+}
+
+class ShowFinancialResultsController {
+    +getRepository(): FinancialResultsRepository
+}
+
+class FinancialResultsRepository {
+    - financialResults: List<FinancialResults>
+    + getFinancialResultsPerYear()
+    + save(financialResults)
+}
+
+class Player {
+    -name: String
+    -email: String
+    -password: String
+}
+
+class Repositories {
+    -simulationRepository: SimulationRepository
+    +getInstance(): Repositories
+    +getSimulationRepository(): SimulationRepository
+}
+
+class ApplicationSession {
+    -userSession: UserSession
+    +getCurrentSession(): UserSession
+    +setUserSession(): void
+}
+
+class UserSession {
+    -user: UserSession
+    +getUser(): UserSession
+}
+
+Repositories -> Repositories : instance
+ApplicationSession -> ApplicationSession : instance
+
+ShowFinancialResultsUI ..|> Runnable
+ShowFinancialResultsUI .> ShowFinancialResultsController
+ShowFinancialResultsController ..> ApplicationSession
+ShowFinancialResultsController .> UserSession
+ShowFinancialResultsController .> FinancialResultsRepository : financialResultsRepository
+
+Repositories --> "1" FinancialResultsRepository
+
+ApplicationSession --> "1" UserSession : userSession
+Player --> "1" ShowFinancialResultsUI : interacts
+
+@enduml

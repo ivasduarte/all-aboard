@@ -49,8 +49,8 @@ ApplicationSession -> ApplicationSession : instance
 SaveSimulationUI ..|> Runnable
 SaveSimulationUI .> SaveSimulationController
 SaveSimulationController ..> ApplicationSession
-SaveSimulationController ..> UserSession
-SaveSimulationController ..> SimulationRepository : simulationRepository
+SaveSimulationController .> UserSession
+SaveSimulationController .> SimulationRepository : simulationRepository
 
 Repositories --> "1" SimulationRepository
 
