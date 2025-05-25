@@ -14,10 +14,11 @@ public class Repositories {
     private IndustryRepository industryRepository = new IndustryRepository();
     private LocomotiveRepository locomotiveRepository = new LocomotiveRepository();
     private ScenarioRepository scenarioRepository;
-    private final AuthenticationRepository authenticationRepository = new AuthenticationRepository();;
+    private final AuthenticationRepository authenticationRepository = new AuthenticationRepository();
     private final CityRepository cityRepo;
     private final StationRepository stationRepo;
     private final BuildingRepository buildingRepo;
+    private FinancialResultsRepository financialResultsRepository;
 
 
     /**
@@ -36,6 +37,7 @@ public class Repositories {
         scenarioRepository = new ScenarioRepository();
         stationRepo = new StationRepository();
         buildingRepo = new BuildingRepository();
+        financialResultsRepository = new FinancialResultsRepository();
     }
 
     /**
@@ -131,6 +133,17 @@ public class Repositories {
      * @return The BuildingRepository instance used by the application.
      */
     public BuildingRepository getBuildingRepository() {return buildingRepo; }
+
+    /**
+     * Retrieves the instance of the FinancialResultsRepository.
+     * The FinancialResultsRepository is responsible for managing a collection of FinancialResults objects,
+     * providing methods to retrieve yearly specifics financial results.
+     *
+     * @return The FinancialResultsRepository instance used by the application.
+     */
+    public FinancialResultsRepository getFinancialResultsRepository() {
+        return financialResultsRepository;
+    }
 
     /**
      * This method will be used just for testing purposes.
