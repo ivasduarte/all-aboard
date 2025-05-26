@@ -13,6 +13,7 @@ public class Station {
 
     private int stationID;
     private String stationType;
+    private String rotation;
 
     private static int totalStations = 0;
 
@@ -31,12 +32,13 @@ public class Station {
      * @param positionY station's Y position
      * @param stationType station type
      */
-    public Station(int mapID, int positionX, int positionY, String stationType)
+    public Station(int mapID, int positionX, int positionY, String stationType, String rotation)
     {
         this.mapID = mapID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.stationType = stationType;
+        this.rotation = rotation;
         stationID = totalStations;
         this.buildings = new ArrayList<>();
     }
@@ -180,6 +182,11 @@ public class Station {
      * @return station's type
      */
     public String getStationType() {return stationType;}
+    /**
+     * Get the station's rotation
+     * @return station's rotation
+     */
+    public String getRotation() {return rotation;}
     /**
      * Get the station's type id
      * @return station's type id

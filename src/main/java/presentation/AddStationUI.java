@@ -58,22 +58,22 @@ public class AddStationUI implements Runnable {
             return;
         }
 
-        String stationCoordinates = "NE";
+        String stationRotation = "NE";
 
         if(stationType.equalsIgnoreCase("station"))
         {
             System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
-            stationCoordinates = sc.nextLine();
+            stationRotation = sc.nextLine();
 
             String[] rotations = new String[]{"NE", "NW", "SE", "SW"};
             boolean valid = false;
 
             for(String rotation : rotations)
             {
-                if(stationCoordinates.equalsIgnoreCase(rotation))
+                if(stationRotation.equalsIgnoreCase(rotation))
                 {
                     valid = true;
-                    stationCoordinates = rotation;
+                    stationRotation = rotation;
                 }
             }
 
@@ -90,7 +90,7 @@ public class AddStationUI implements Runnable {
         System.out.print("Enter the position Y of the station: ");
         int positionY = sc.nextInt();
 
-        boolean result = stationController.AddStation(map, scenario, positionX, positionY, stationType);
+        boolean result = stationController.AddStation(map, scenario, positionX, positionY, stationType, stationRotation);
 
         if (!result) {
             System.out.println("Station not valid");
