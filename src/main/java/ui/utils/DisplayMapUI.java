@@ -221,12 +221,9 @@ public class DisplayMapUI implements Runnable{
      *
      * This method performs the following steps:
      * 1. Retrieves the list of stations associated with the current `mapName`.
-     * 2. Iterates through the `mapArray` to locate matching X and Y coordinates
-     *    for each station.
+     * 2. Updates the `mapArray` to show the range of each station, according to its size.
      * 3. Updates the `mapArray` at the corresponding station positions with the
      *    "🚉" symbol to denote the presence of a station.
-     * 4. Calls `displayStationRange` to process and display additional details about
-     *    the station's range at its respective position.
      *
      * Assumptions:
      * - The `mapArray` is correctly initialized and matches the dimensions of the map.
@@ -240,54 +237,63 @@ public class DisplayMapUI implements Runnable{
         ListStationsController listStationsController = new ListStationsController();
         List<Station> stations =  listStationsController.getStationsByMapName(mapName);
 
-        for(int i = 0; i < mapArray.length; i++)
+        for(Station station : stations)
         {
-            for(int j = 0; j < mapArray[i].length; j++)
-            {
-                for(Station station : stations)
-                {
-                    if(station.getPositionX() == j && station.getPositionY() == i)
-                    {
-                        mapArray[i][j] = "🚉";
-                        displayStationRange(stations, station, i, j);
-                    }
-                }
-            }
-        }
-    }
+            int Y = station.getPositionY();
+            int X = station.getPositionX();
 
-    /**
-     * Displays the range of a specific station on the map by marking the surrounding cells
-     * with the appropriate symbol, depending on the station's type and size.
-     *
-     * The method calculates the range based on the station type and updates the corresponding
-     * cells in the map array to represent either the station itself or the station's range.
-     * It skips marking the station's center position and ensures that the surrounding cells
-     * are updated if not already occupied by another station.
-     *
-     * @param stations  A list of all stations present on the map.
-     * @param station   The station for which the range is to be displayed.
-     * @param X         The X-coordinate of the station on the map.
-     * @param Y         The Y-coordinate of the station on the map.
-     */
-    private void displayStationRange(List<Station> stations, Station station, int X, int Y)
-    {
-        int typeID = station.getStationTypeID();
-        int size = Station.typesSizes[typeID] / 2;
+            int typeID = station.getStationTypeID();
+            int size = Station.typesSizes[typeID] / 2;
 
-        for(int i = X-size; i <= X+size; i++)
-        {
-            for(int j = Y-size; j <= Y+size; j++)
+            if(Station.typesSizes[typeID] % 2 != 0)
             {
-                if(!(i == X && j == Y))
+                for(int i = X-size; i <= X+size; i++)
                 {
-                    for(Station newStation : stations)
+                    for(int j = X-size; j <= X+size; j++)
                     {
-                        if(!(Objects.equals(mapArray[i][j], "🚉")))
+                        if(!(i == X && j == X))
+                        {
                             mapArray[i][j] = "🛤️";
+                        }
+                    }
+                }
+            }else
+            {
+                String rotation = station.getRotation();
+
+                int offsetRow = 0;
+                int offsetCol = 0;
+
+                switch (rotation) {
+                    case "NW":
+                        offsetRow = size - 1;
+                        offsetCol = size - 1;
+                        break;
+                    case "NE":
+                        offsetRow = size - 1;
+                        offsetCol = size;
+                        break;
+                    case "SW":
+                        offsetRow = size;
+                        offsetCol = size - 1;
+                        break;
+                    case "SE":
+                        offsetRow = size;
+                        offsetCol = size;
+                        break;
+                }
+
+                int startRow = Y - offsetRow;
+                int startCol = X - offsetCol;
+
+                for (int i = 0; i < Station.typesSizes[typeID]; i++) {
+                    for (int j = 0; j < Station.typesSizes[typeID]; j++) {
+                        mapArray[startRow + i][startCol + j] = "🛤️";
                     }
                 }
             }
+
+            mapArray[station.getPositionY()][station.getPositionX()] = "🚉";
         }
     }
 }

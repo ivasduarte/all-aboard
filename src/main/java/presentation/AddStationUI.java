@@ -30,7 +30,6 @@ public class AddStationUI implements Runnable {
         AddStationController stationController = new AddStationController();
 
         int budget = scenario.getBudget().getBudget();
-        sc.nextLine();
 
         System.out.println("\n\nStation types:");
         for (int i = 0; i < Station.stationTypes.length; i++) {
