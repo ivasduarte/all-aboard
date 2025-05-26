@@ -12,9 +12,11 @@ public class ShowFinancialResultsController {
 
         FinancialResults financialResults = new FinancialResults(trackMaintenance, trainMaintenance, fuelCost, cargoDeliveries);
 
-        // verify if year selected is valid
-
         financialResultsRepository.save(financialResults);
+    }
+
+    public FinancialResults getFinancialResultsByYear(int yearSelected) {
+        return getFinancialResultsRepository().getFinancialResultsList().get(yearSelected);
     }
 
     public FinancialResultsRepository getFinancialResultsRepository() {

@@ -28,4 +28,9 @@ public class FinancialResults {
     public int getCargoDeliveries() {
         return cargoDeliveries;
     }
+
+    @Override
+    public String toString() {
+        return "\nTrack Maintenance Cost: " + getTrackMaintenance() + "€\nTrain Maintenance Cost: " + getTrainMaintenance() + "€\nTrain Fuel Cost: " + getFuelCost() + "€\nCargo Deliveries: " + getCargoDeliveries() + "€";
+    }
 }

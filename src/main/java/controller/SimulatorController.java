@@ -10,6 +10,7 @@ import repositories.Repositories;
 import java.util.List;
 import java.util.Scanner;
 public class SimulatorController implements  Runnable {
+    private ShowFinancialResultsController financialController = new ShowFinancialResultsController();
 
     private static boolean running = true;
 
@@ -151,6 +152,17 @@ public class SimulatorController implements  Runnable {
                         {
                             cargoGeneratorMultiplier += 0.1;
                         }
+
+                        int trainMaintenanceCost = 0;
+                        int trainFuelCost = 0;
+
+                        for (int i = 0; i < locomotives.size(); i++) {
+                            Locomotive locomotive = locomotives.get(i);
+                            trainMaintenanceCost = (int)(locomotive.getMaintenanceCost() * costMultiplier);
+                            trainFuelCost = (int)(locomotive.getFuelCost() * costMultiplier);
+                        }
+
+                        financialController.addFinancialResults(0, trainMaintenanceCost, trainFuelCost, 0);  // update trackMaintenanceCost and cargoDeliveries
 
                         year++;
                         scenario.setCurrentYear(year);

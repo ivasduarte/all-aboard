@@ -135,6 +135,7 @@ public class PlayerUI implements Runnable {
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI(currentMap, currentScenario)));
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario)));
         options.add(new MenuItem("Play Simulation", new SimulatorController(currentMap, currentScenario)));
+        options.add(new MenuItem("Check Financial Results", new ShowFinancialResultsUI(currentScenario)));
 
 
         int option;
