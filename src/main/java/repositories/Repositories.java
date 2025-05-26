@@ -1,5 +1,7 @@
 package repositories;
 
+import domain.SimulationFile;
+
 /**
  * The Repositories class acts as a centralized container for various repository instances
  * used in the application. Each repository serves a specific purpose and provides
@@ -10,15 +12,17 @@ package repositories;
  */
 public class Repositories {
     private static Repositories instance = new Repositories();
-    private MapRepository mapRepository;
-    private IndustryRepository industryRepository = new IndustryRepository();
-    private LocomotiveRepository locomotiveRepository = new LocomotiveRepository();
-    private ScenarioRepository scenarioRepository;
-    private final AuthenticationRepository authenticationRepository = new AuthenticationRepository();
+
+    private final MapRepository mapRepository;
+    private final IndustryRepository industryRepository;
+    private final LocomotiveRepository locomotiveRepository;
+    private final AuthenticationRepository authenticationRepository;
     private final CityRepository cityRepo;
     private final StationRepository stationRepo;
     private final BuildingRepository buildingRepo;
-    private FinancialResultsRepository financialResultsRepository;
+    private final FinancialResultsRepository financialResultsRepository;
+    private ScenarioRepository scenarioRepository;
+    private SimulatorRepository simRep;
 
 
     /**
@@ -33,11 +37,19 @@ public class Repositories {
      */
     private Repositories() {
         mapRepository = new MapRepository();
+        industryRepository = new IndustryRepository();
+        locomotiveRepository = new LocomotiveRepository();
         cityRepo = new CityRepository();
         scenarioRepository = new ScenarioRepository();
+        authenticationRepository = new AuthenticationRepository();
         stationRepo = new StationRepository();
         buildingRepo = new BuildingRepository();
         financialResultsRepository = new FinancialResultsRepository();
+        simRep = new SimulatorRepository();
+
+
+        SimulationFile simFile = new SimulationFile();
+        simFile.load(this.simRep, this.stationRepo, this.buildingRepo);
     }
 
     /**
@@ -152,5 +164,27 @@ public class Repositories {
      */
     public void setScenarioRepository(ScenarioRepository scenarioRepository) {
         this.scenarioRepository = scenarioRepository;
+    }
+
+    /**
+     * Retrieves the instance of the SimulatorRepository.
+     * The SimulatorRepository is responsible for managing simulator-related data
+     * and provides methods to interact with the simulator's functionalities and operations.
+     *
+     * @return The SimulatorRepository instance used by the application.
+     */
+    public SimulatorRepository getSimRep() {
+        return simRep;
+    }
+
+    /**
+     * Sets the SimulatorRepository instance for the Repositories class.
+     * This method allows assigning a specific instance of SimulatorRepository,
+     * which is used to manage simulator-related data and operations.
+     *
+     * @param simRep The SimulatorRepository instance to be set. Cannot be null.
+     */
+    public void setSimRep(SimulatorRepository simRep) {
+        this.simRep = simRep;
     }
 }
