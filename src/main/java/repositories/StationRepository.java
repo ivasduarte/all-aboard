@@ -39,11 +39,15 @@ public class StationRepository {
     public List<Station> getAvailableStationsByMapName(String mapName) {
         List<Station> result = new ArrayList<>();
         for (Station station : stations) {
-            if (station.getMap().getMapName().equalsIgnoreCase(mapName)) {
+            if (station.getMap().getName().equalsIgnoreCase(mapName)) {
                 result.add(station);
             }
         }
         return result;
     }
 
+    public void copyFrom(StationRepository st2){
+        this.stations.clear();
+        this.stations.addAll(st2.getStations());
+    }
 }
