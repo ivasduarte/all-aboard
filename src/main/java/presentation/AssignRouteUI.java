@@ -92,38 +92,41 @@ public class AssignRouteUI implements Runnable {
                     exists = true;
             }
 
-            if(exists)
+            if(value >= 0)
             {
-                boolean repeated = false;
-                for(Integer id : stationIDs)
+                if(exists)
                 {
-                    if(id == value)
-                        repeated = true;
-                }
+                    boolean repeated = false;
+                    for(Integer id : stationIDs)
+                    {
+                        if(id == value)
+                            repeated = true;
+                    }
 
-                if(!repeated)
-                {
-                    stationIDs.add(value);
-                    System.out.println("Added successfully!");
+                    if(!repeated)
+                    {
+                        stationIDs.add(value);
+                        System.out.println("Added successfully!");
+                    }else
+                    {
+                        System.out.println("Selected ID is already in list!");
+                    }
                 }else
                 {
-                    System.out.println("Selected ID is already in list!");
+                    System.out.println("Selected ID does not exist!");
                 }
-            }else if(value >= 0)
-            {
-                System.out.println("Selected ID does not exist!");
             }
+
         }while(value >= 0);
 
         Locomotive locomotive = locomotiveRepository.getAvailableLocomotives(scenarioID).get(trainID);
 
-        StationRepository stationRepository = Repositories.getInstance().getStationRepository();
         List<Station> newStations = new ArrayList<>();
 
-        for(Integer id : stationIDs)
+        for(Station station : stations)
         {
-            Station station = stationRepository.getStations().get(id);
-            newStations.add(station);
+            if(stationIDs.contains(station.getStationID()))
+                newStations.add(station);
         }
 
         AssignRouteController routeController = new AssignRouteController();
