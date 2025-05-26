@@ -5,9 +5,6 @@ import controller.CreateScenarioController;
 import controller.DisplayMapController;
 import domain.Map;
 import domain.Scenario;
-import repositories.IndustryRepository;
-import repositories.MapRepository;
-import repositories.ScenarioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +43,7 @@ public class AddIndustryUI implements Runnable {
         List<Map> mapList = controller.getMapList();
         for (int i = 0; i < mapList.size(); i++) {
             Map map = mapList.get(i);
-            System.out.println((i + 1) + ". " + map.getMapName());
+            System.out.println((i + 1) + ". " + map.getName());
             System.out.println();
         }
         System.out.println("Select a map from the list: ");

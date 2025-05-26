@@ -1,7 +1,6 @@
 package presentation;
 
 import controller.BuyLocomotiveController;
-import controller.CreateScenarioController;
 import domain.Locomotive;
 import domain.Map;
 import domain.Scenario;
@@ -9,7 +8,6 @@ import repositories.Repositories;
 import repositories.ScenarioRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class BuyLocomotiveUI implements Runnable {
@@ -75,7 +73,7 @@ public class BuyLocomotiveUI implements Runnable {
      * This method will be responsible to show the success or error message to the Player.
      */
     public void submitData() {
-        String result = ctrl.buyLocomotive(locomotiveModel, map.getMapName());
+        String result = ctrl.buyLocomotive(locomotiveModel, map.getName());
 
         if (result.startsWith("ERROR")) {
             showError(result);

@@ -51,7 +51,7 @@ public class MapRepository{
      */
     public boolean existsByName(String name) {
         for (int i = 0; i < maps.size(); i++) {
-            if (maps.get(i).getMapName().equalsIgnoreCase(name)) {
+            if (maps.get(i).getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -82,7 +82,7 @@ public class MapRepository{
      *              or an empty {@code Optional} if no match is found.
      */
     public Optional<Map> getMap(String name) {
-        return maps.stream().filter(m -> m.getMapName().equals(name)).findFirst();
+        return maps.stream().filter(m -> m.getName().equals(name)).findFirst();
     }
 
 }

@@ -1,14 +1,11 @@
 package presentation;
 
-import controller.DisplayMapController;
 import controller.ListStationsController;
 import domain.Building;
 import domain.Map;
-import domain.Scenario;
 import domain.Station;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * User Interface class responsible for listing all stations of a given map,
@@ -34,7 +31,7 @@ public class ListStationsUI implements Runnable {
     public void getInput() {
         ListStationsController controller = new ListStationsController();
 
-        List<Station> stations = controller.getStationsByMapName(map.getMapName());
+        List<Station> stations = controller.getStationsByMapName(map.getName());
 
         if (stations.isEmpty()) {
             System.out.println("No stations found");

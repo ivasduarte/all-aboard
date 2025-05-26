@@ -151,7 +151,6 @@ public class Scenario {
         return budget.getBudget();
     }
 
-
     /**
      * Returns a string representation of the Scenario object.
      * The representation includes the scenario name, its restrictions,
@@ -161,6 +160,6 @@ public class Scenario {
      */
     @Override
     public String toString() {
-        return name + " (" + restrictions + ", belongs to map '" + map.getMapName() + ")";
+        return name + " (" + restrictions + ", belongs to map '" + map.getName() + ")";
     }
 }

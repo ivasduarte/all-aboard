@@ -181,7 +181,7 @@ import java.util.Optional;
  * The MapRepository class is used to manage a collection of Map instances.
  * It provides methods to add, retrieve, and perform operations on the stored maps.
  */
-public class MapRepository{
+public class MapRepository {
     private List<Map> maps;
 
     /**
@@ -197,8 +197,8 @@ public class MapRepository{
      *
      * @param map The Map instance to be added to the repository. It must not already exist in the collection.
      */
-    public void add(Map map){
-        if(validateMap(map)){
+    public void add(Map map) {
+        if (validateMap(map)) {
             maps.add(map);
         }
     }
@@ -207,9 +207,9 @@ public class MapRepository{
      * Validates if the given map instance is not already present in the repository's collection.
      *
      * @param map   The Map instance to validate. It must not be null.
-     * @return      True if the map is not already contained in the repository's collection; false otherwise.
+     * @return True if the map is not already contained in the repository's collection; false otherwise.
      */
-    private boolean validateMap(Map map){
+    private boolean validateMap(Map map) {
         return !maps.contains(map);
     }
 
@@ -222,7 +222,7 @@ public class MapRepository{
      */
     public boolean existsByName(String name) {
         for (int i = 0; i < maps.size(); i++) {
-            if (maps.get(i).getMapName().equalsIgnoreCase(name)) {
+            if (maps.get(i).getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -249,11 +249,11 @@ public class MapRepository{
      * map is found with the given name, an empty {@code Optional} is returned.
      *
      * @param name  The name of the map to retrieve. Must not be null.
-     * @return      An {@code Optional} containing the matching {@code Map} if found,
+     * @return An {@code Optional} containing the matching {@code Map} if found,
      *              or an empty {@code Optional} if no match is found.
      */
     public Optional<Map> getMap(String name) {
-        return maps.stream().filter(m -> m.getMapName().equals(name)).findFirst();
+        return maps.stream().filter(m -> m.getName().equals(name)).findFirst();
     }
 
 }

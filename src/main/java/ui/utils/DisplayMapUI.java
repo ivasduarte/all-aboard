@@ -124,9 +124,9 @@ public class DisplayMapUI implements Runnable{
         List<Map> mapList = ctrl.getMapList();
         for (int i = 0; i < mapList.size(); i++) {
             Map map = mapList.get(i);
-            if (map.getMapName().equalsIgnoreCase(mapName)) {
+            if (map.getName().equalsIgnoreCase(mapName)) {
                 matchingMap = Optional.of(map);
-                mapName = map.getMapName();
+                mapName = map.getName();
                 break;
             }
         }

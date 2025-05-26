@@ -93,7 +93,7 @@ public class UpgradeAStationController {
     public Scenario getScenarioByMapName(String mapName) {
         ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
         for (Scenario scenario : scenarioRepository.getScenarioList()) {
-            if (scenario.getMap().getMapName().equalsIgnoreCase(mapName)) {
+            if (scenario.getMap().getName().equalsIgnoreCase(mapName)) {
                 return scenario;
             }
         }

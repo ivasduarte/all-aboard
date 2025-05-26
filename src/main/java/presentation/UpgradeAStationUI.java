@@ -1,11 +1,10 @@
 package presentation;
 
-import controller.DisplayMapController;
 import controller.UpgradeAStationController;
 import domain.*;
 
 import domain.Map;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Scanner;
 /**
@@ -59,7 +58,7 @@ public class UpgradeAStationUI implements Runnable {
 
         int budget = scenario.getBudget().getBudget();
 
-        List<Station> stations = controller.getAvailableStations(map.getMapName());
+        List<Station> stations = controller.getAvailableStations(map.getName());
 
         if (stations.isEmpty()) {
             System.out.println("There are no available stations to upgrade.");

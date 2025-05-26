@@ -137,7 +137,7 @@ public class Bootstrap implements Runnable {
         for (Map map : allMaps) {
             for (Scenario baseScenario : scenarios) {
                 Scenario scenarioForMap = new Scenario(
-                        baseScenario.getScenarioName() + "_for_" + map.getMapName(),
+                        baseScenario.getScenarioName() + "_for_" + map.getName(),
                         baseScenario.getRestrictions(),
                         map,
                         baseScenario.getBudget()

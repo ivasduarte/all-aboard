@@ -25,7 +25,7 @@ public class BuyLocomotiveController {
         Scenario scenario = null;
 
         for (Scenario s : scenarioRepository.getScenarioList()) {
-            if (s.getMap().getMapName().equalsIgnoreCase(mapName)) {
+            if (s.getMap().getName().equalsIgnoreCase(mapName)) {
                 scenario = s;
             }
         }

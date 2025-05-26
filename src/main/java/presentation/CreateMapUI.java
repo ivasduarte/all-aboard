@@ -141,7 +141,7 @@ public class CreateMapUI implements Runnable {
     private void submitData() {
         try {
             Map map = getController().createMap(mapName, width, height);
-            System.out.println("\nMap '" + map.getMapName() + "' successfully created!");
+            System.out.println("\nMap '" + map.getName() + "' successfully created!");
         } catch (IllegalArgumentException e) {
             System.out.println("\nERROR: " + e.getMessage());
         } catch (Exception e) {

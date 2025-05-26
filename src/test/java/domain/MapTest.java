@@ -31,7 +31,7 @@ class MapTest {
 
     @Test
     void testConstructorWithValidInput(){
-        assertEquals("TestMap", testMap.getMapName());
+        assertEquals("TestMap", testMap.getName());
         assertEquals(100, testMap.getWidth());
         assertEquals(100, testMap.getHeight());
         assertTrue(testMap.getScenarios().isEmpty());

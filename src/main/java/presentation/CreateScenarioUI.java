@@ -52,7 +52,7 @@ public class CreateScenarioUI implements Runnable {
 
         boolean validMap = false;
         for (Map map: controller.getMapList()) {
-            if(map.getMapName().trim().equalsIgnoreCase(mapName)) {
+            if(map.getName().trim().equalsIgnoreCase(mapName)) {
                 this.map = map;
                 validMap = true;
             }

@@ -1,6 +1,5 @@
 package ui.menu;
 
-import controller.DisplayMapController;
 import controller.SimulatorController;
 import domain.Budget;
 import domain.Map;
@@ -10,8 +9,6 @@ import presentation.*;
 
 import repositories.MapRepository;
 import repositories.Repositories;
-import repositories.ScenarioRepository;
-import ui.utils.DisplayMapUI;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
@@ -71,7 +68,7 @@ public class PlayerUI implements Runnable {
 
         System.out.println("\n\nChoose a map to play from the list below:");
         for (int i = 0; i < maps.size(); i++) {
-            System.out.println((i + 1) + ". " + maps.get(i).getMapName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
+            System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
         }
 
         Map currentMap = null;
@@ -98,7 +95,7 @@ public class PlayerUI implements Runnable {
             return;
         }
 
-        System.out.println("\nChoose a scenario for the map " + currentMap.getMapName() + " from the list below:");
+        System.out.println("\nChoose a scenario for the map " + currentMap.getName() + " from the list below:");
         for (int i = 0; i < scenarios.size(); i++) {
             Restrictions restrictions = scenarios.get(i).getRestrictions();
             System.out.println((i + 1) + ". " + scenarios.get(i).getScenarioName() + " | From " + restrictions.getStartDate() + " to " + restrictions.getEndDate() + "");
@@ -141,7 +138,7 @@ public class PlayerUI implements Runnable {
         int option;
         do {
             System.out.println("\n------------------------- PLAYER INFORMATION -------------------------");
-            System.out.println("\nCurrent map: " + currentMap.getMapName());
+            System.out.println("\nCurrent map: " + currentMap.getName());
             System.out.println("Current scenario: " + currentScenario.getScenarioName());
             System.out.println("Time period: " + currentScenario.getRestrictions().getStartDate() + " to " + currentScenario.getRestrictions().getEndDate());
             System.out.println("The current year is " + currentScenario.getCurrentYear());

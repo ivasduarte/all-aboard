@@ -28,7 +28,7 @@ public class ChangeStationTypeUI implements Runnable {
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
         UpgradeAStationController controller = new UpgradeAStationController();
 
-        List<Station> stations = controller.getAvailableStations(map.getMapName());
+        List<Station> stations = controller.getAvailableStations(map.getName());
 
         System.out.println("\nAvailable Stations:");
         for (int i = 0; i < stations.size(); i++) {
