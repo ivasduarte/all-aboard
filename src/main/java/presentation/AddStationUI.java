@@ -29,12 +29,6 @@ public class AddStationUI implements Runnable {
 
         AddStationController stationController = new AddStationController();
 
-        System.out.print("\nEnter the position X of the station: ");
-        int positionX = sc.nextInt();
-
-        System.out.print("Enter the position Y of the station: ");
-        int positionY = sc.nextInt();
-
         int budget = scenario.getBudget().getBudget();
         sc.nextLine();
 
@@ -63,6 +57,38 @@ public class AddStationUI implements Runnable {
             System.out.println("User does not have sufficient budget!");
             return;
         }
+
+        String stationCoordinates = "NE";
+
+        if(stationType.equalsIgnoreCase("station"))
+        {
+            System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
+            stationCoordinates = sc.nextLine();
+
+            String[] rotations = new String[]{"NE", "NW", "SE", "SW"};
+            boolean valid = false;
+
+            for(String rotation : rotations)
+            {
+                if(stationCoordinates.equalsIgnoreCase(rotation))
+                {
+                    valid = true;
+                    stationCoordinates = rotation;
+                }
+            }
+
+            if(!valid)
+            {
+                System.out.println("Rotation is not valid!");
+                return;
+            }
+        }
+
+        System.out.print("\nEnter the position X of the station: ");
+        int positionX = sc.nextInt();
+
+        System.out.print("Enter the position Y of the station: ");
+        int positionY = sc.nextInt();
 
         boolean result = stationController.AddStation(map, scenario, positionX, positionY, stationType);
 
