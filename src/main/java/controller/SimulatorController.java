@@ -25,6 +25,7 @@ public class SimulatorController implements Runnable {
     private final MapRepository mapRep = Repositories.getInstance().getMapRepository();
     private final ScenarioRepository scenarioRep = Repositories.getInstance().getScenarioRepository();
     private final StationRepository stRep = Repositories.getInstance().getStationRepository();
+    private final LocomotiveRepository locoRep = Repositories.getInstance().getLocomotiveRepository();
     private final CityRepository cityRep = Repositories.getInstance().getCityRepository();
     private final List<City> cities = cityRep.getCities();
 
@@ -295,6 +296,7 @@ public class SimulatorController implements Runnable {
                 int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
                 displayYearStats(year, totalEarnings);
 
+                processFinancialResults();
                 scenario.addBudget(totalEarnings);
 
                 if (historicalEvents.contains("pandemic")) {
@@ -380,8 +382,6 @@ public class SimulatorController implements Runnable {
         System.out.println("\n----Stats for trains----");
         int totalEarned = 0;
         int totalLost = 0;
-        int trainMaintenanceCost = 0;
-        int trainFuelCost = 0;
 
         for (Locomotive locomotive : locomotives) {
             int fuelCost = (int) (locomotive.getFuelCost() * costMultiplier);
@@ -397,17 +397,27 @@ public class SimulatorController implements Runnable {
 
             totalEarned += routeEarnings;
             totalLost += totalMaintenanceCostPerTrain;
-            trainMaintenanceCost = maintenanceCost;
-            trainFuelCost = fuelCost;
         }
 
         int netEarnings = totalEarned - totalLost;
         System.out.println("You gained a total of " + totalEarned + "€ from trains and lost a total of " +
                 totalLost + "€! Total balance is " + netEarnings + "€!");
 
-        financialController.addFinancialResults(0, trainMaintenanceCost, trainFuelCost, 0);
-
         return netEarnings;
+    }
+
+    private void processFinancialResults() {
+        List<Locomotive> locomotives = locoRep.getPlayerLocomotives();
+
+        int trainMaintenanceCost = 0;
+        int trainFuelCost = 0;
+
+        for (Locomotive locomotive : locomotives) {
+            trainMaintenanceCost += locomotive.getMaintenanceCost();
+            trainFuelCost += locomotive.getFuelCost();
+        }
+
+        financialController.addFinancialResults(0, trainMaintenanceCost, trainFuelCost, 0);
     }
 
     /**

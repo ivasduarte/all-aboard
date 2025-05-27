@@ -1,6 +1,7 @@
 package controller;
 
 import domain.FinancialResults;
+import domain.Scenario;
 import repositories.FinancialResultsRepository;
 import repositories.Repositories;
 
@@ -25,5 +26,20 @@ public class ShowFinancialResultsController {
             financialResultsRepository = repositories.getFinancialResultsRepository();
         }
         return financialResultsRepository;
+    }
+
+    public boolean isYearValid(int yearSelected, Scenario currentScenario) {
+        if (yearSelected < 0 || yearSelected >= (currentScenario.getCurrentYear() - currentScenario.getRestrictions().getStartDate().getYear())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkFinancialResultsExistence() {
+        if (getFinancialResultsRepository().getFinancialResultsList().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
