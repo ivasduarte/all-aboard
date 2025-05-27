@@ -132,6 +132,26 @@ public class Station {
     }
 
     /**
+     * Verify if the given station type exists.
+     *
+     * @param type the type to be checked
+     * @return the id the of the type, returns -1 if it doesn't exist
+     */
+    public static int checkStationType(String type)
+    {
+        int id = -1;
+        for(int i = 0; i < Station.stationTypes.length; i++)
+        {
+            if(type.equalsIgnoreCase(Station.stationTypes[i]))
+            {
+                id = i;
+            }
+        }
+
+        return id;
+    }
+
+    /**
      * Validates the station's position on the map.
      *
      * @param map station's map

@@ -19,7 +19,7 @@ public class AddStationController {
      * @param stationType station type
      * @return return true if successfully added station, false otherwise
      */
-    public boolean AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation)
+    public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation)
     {
         int mapID = -1;
 
@@ -33,40 +33,32 @@ public class AddStationController {
         }
 
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
-        Station newStation = new Station(mapID, positionX, positionY, stationType, rotation);
-        Map stationMap = newStation.getMap();
 
-        if(scenario == null){
-            System.out.println("No scenario found for the selected map.");
-            return false;
-        }
-
-        boolean validStationType = false;
-        int typeID = 0;
-        for(int i = 0; i < Station.stationTypes.length; i++)
-        {
-            if(stationType.equalsIgnoreCase(Station.stationTypes[i]))
-            {
-                typeID = i;
-                validStationType = true;
-            }
-        }
-
-        if(!validStationType)
-            return false;
+        int typeID = Station.checkStationType(stationType);
+        if(typeID == -1)
+            return "Station type is not valid!";
 
         int size = Station.typesSizes[typeID] / 2;
 
-        if(!newStation.validatePosition(stationMap, size))
-            return false;
+        stationType = Station.stationTypes[typeID];
+
+        int budget = scenario.getBudget().getBudget();
+
+        if(Station.typesPrices[typeID] > budget)
+            return "Not enough money to purchase the station!";
+
+        Station newStation = new Station(mapID, positionX, positionY, stationType, rotation);
+
+        if(!newStation.validatePosition(map, size))
+            return "Station position is not valid!";
 
         if(!newStation.checkOverbuilding())
-            return false;
+            return "Station is overbuilding other objects!";
 
         stationRepository.save(newStation);
         Station.increaseTotalStations();
 
         scenario.subtractBudget(Station.typesPrices[typeID]);
-        return true;
+        return "Station added successfully!";
     }
 }
