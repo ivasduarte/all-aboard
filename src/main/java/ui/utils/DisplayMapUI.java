@@ -178,8 +178,8 @@ public class DisplayMapUI implements Runnable {
             String owner = currentUser.getEmail();
             for (Station st : stRep.getStations()) {
                 if (!st.getMapName().equals(map.getName()) ||
-                        !st.getOwnerPlayer().equals(owner) ||
-                        !st.getScenarioName().equals(scenario.getScenarioName())) {
+                        !Objects.equals(st.getOwnerPlayer(), owner) ||
+                        !Objects.equals(st.getScenarioName(), scenario.getScenarioName())) {
                     continue;
                 }
 
