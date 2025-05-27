@@ -56,6 +56,6 @@ public class BuildingRepository {
 
     public void copyFrom(BuildingRepository bd2){
         this.buildingTypes.clear();
-        this.buildingTypes.addAll(bd2.getSimulations());
+        this.buildingTypes.addAll(bd2.getBuildingTypes());
     }
 }
