@@ -31,6 +31,6 @@ public class FinancialResults {
 
     @Override
     public String toString() {
-        return "\nTrack Maintenance Cost: " + getTrackMaintenance() + "€\nTrain Maintenance Cost: " + getTrainMaintenance() + "€\nTrain Fuel Cost: " + getFuelCost() + "€\nCargo Deliveries: " + getCargoDeliveries() + "€";
+        return "\nTrain Maintenance Cost: " + getTrainMaintenance() + "€\nTrain Fuel Cost: " + getFuelCost() + "€\nCargo Deliveries: " + getCargoDeliveries();
     }
 }

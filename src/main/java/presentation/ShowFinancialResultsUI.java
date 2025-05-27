@@ -9,21 +9,42 @@ public class ShowFinancialResultsUI implements Runnable {
     private ShowFinancialResultsController ctrl = new ShowFinancialResultsController();
 
     private Scenario currentScenario;
-
     private int yearSelected;
 
     public ShowFinancialResultsUI(Scenario currentScenario) {
         this.currentScenario = currentScenario;
     }
 
-    public void getInput() {
+    public boolean getInput() {
+        if (!ctrl.checkFinancialResultsExistence()) {
+            System.out.println("There's still not enough data to give the financial results of any year!");
+            return false;
+        }
+
         Scanner sc = new Scanner(System.in);
 
-        displayScenarioYears();
-        System.out.println();
+        boolean validInput = false;
 
-        System.out.println("Select the year you want to analyse the financial results: ");
-        yearSelected = sc.nextInt() - currentScenario.getRestrictions().getStartDate().getYear();
+        while (!validInput) {
+            displayScenarioYears();
+            System.out.println("Select the year you want to analyse the financial results: ");
+
+            if (!sc.hasNextInt()) {
+                System.out.println("It is meant to insert an year!\n");
+                sc.next();
+                continue;
+            }
+
+            yearSelected = sc.nextInt() - currentScenario.getRestrictions().getStartDate().getYear();
+            sc.nextLine();
+
+            if (ctrl.isYearValid(yearSelected, currentScenario)) {
+                validInput = true;
+            } else {
+                System.out.println("The year selected has no financial results available!\n");
+            }
+        }
+        return true;
     }
 
     public ShowFinancialResultsController getShowFinancialResultsController() {
@@ -41,7 +62,9 @@ public class ShowFinancialResultsUI implements Runnable {
     @Override
     public void run() {
         System.out.println("\n\n------------------------ Financial Results ------------------------");
-        getInput();
+        if (!getInput()) {
+            return;
+        }
         System.out.println(ctrl.getFinancialResultsByYear(yearSelected));
     }
 }
