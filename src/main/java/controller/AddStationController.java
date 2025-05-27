@@ -18,7 +18,6 @@ public class AddStationController {
      * @param positionX   station's X position
      * @param positionY   station's Y position
      * @param stationType station type
-     * @param rotation    station orientation/rotation
      * @return return true if successfully added station, false otherwise
      */
     public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation) {
@@ -42,7 +41,6 @@ public class AddStationController {
 
         Station.StationType type = Station.StationType.values()[typeID];
 
-        // Validar e converter rotation para Orientation
         Station.Orientation orientation;
         try {
             orientation = Station.Orientation.fromString(rotation);

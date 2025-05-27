@@ -60,7 +60,7 @@ class AddStationController {
 class Repositories {
     - Repositories()
     + getInstance() : repositories
-    + getAddRepository()
+    + getStationRepository()
 }
 
 class AddStationRepository {

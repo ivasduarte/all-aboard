@@ -30,20 +30,25 @@ public class Station {
      * Enum representing different types of orientation with their properties.
      */
     public enum Orientation {
-        NW("Northwest"),
-        NE("Northeast"),
-        SW("Southwest"),
-        SE("Southeast");
+        NW("Northwest", "NW"),
+        NE("Northeast", "NE"),
+        SW("Southwest", "SW"),
+        SE("Southeast", "SE");
 
         private final String displayName;
+        private final String shortening;
 
-
-        Orientation(String displayName) {
+        Orientation(String displayName, String shortening) {
             this.displayName = displayName;
+            this.shortening = shortening;
         }
 
         public String getDisplayName() {
             return displayName;
+        }
+
+        public String getShortening() {
+            return shortening;
         }
 
         /**
