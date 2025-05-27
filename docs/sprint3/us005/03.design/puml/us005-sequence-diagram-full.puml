@@ -11,17 +11,15 @@ participant "AddStationUI" as UI
 
 activate Editor
 
-Editor -> UI : start the simulation
+Editor -> UI : request to add a station
 activate UI
 
-UI --> Editor : shows a list of the available maps
-Editor -> UI : selects a map
-UI --> Editor : shows a list of the available scenarios
-Editor -> UI : selects a scenario
-UI --> Editor : shows a list of the cities
-Editor -> UI : selects a city
-UI --> Editor : shows a list of the actions the player can do
-Editor -> UI : selects to add a station
+UI --> Editor : request a station type
+Editor -> UI : enter the station type
+UI --> Editor : request the X position of the station
+Editor -> UI : enter the X position of the station
+UI --> Editor : request the Y position of the station
+Editor -> UI : enter the Y position of the station
 
 create "AddAStationController" as CTRL
 UI --> CTRL : create()
@@ -29,12 +27,7 @@ UI --> CTRL : create()
 participant "Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
 
-UI --> Editor : shows a list of the available station types
-Editor -> UI : selects the station type
-UI --> Editor : adds the requested station
-
-
-UI --> CTRL : AddStation(station)
+UI --> CTRL : AddStation(map, scenario, positionX, positionY, stationType, stationRotation)
 activate CTRL
 
 CTRL -> RepositorySingleton : getInstance()
@@ -42,26 +35,26 @@ activate RepositorySingleton
 RepositorySingleton --> CTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getAddStationRepository()
+CTRL -> PLAT : getMapRepository()
 activate PLAT
-PLAT --> CTRL : AddStationRepository
+PLAT --> CTRL : mapRepository.getMapList()
 deactivate PLAT
+CTRL --> CTRL : verify data
+CTRL -> Station : new Station(map.getName(), mapID, positionX, positionY, type, orientation)
+Station --> CTRL : return the new station
+activate StationRepository
+CTRL --> StationRepository : save the new station
+CTRL --> Station : increase total stations
+CTRL --> Scenario : subtract budget
+create "StationRepository\n:StationRepository" as StationRepository
 
-CTRL -> AddStationRepository : AddStation(station)
-activate AddStationRepository
+StationRepository --> CTRL : validations
+deactivate StationRepository
 
-create "AddStationRepository\n:AddStationRepository" as AddStationRepository
-create "AddStation" as AddStation
-AddStationRepository -> AddStation : create()
-AddStationRepository -> AddStationRepository : AddStation(station)
-
-AddStationRepository --> CTRL : AddStationData
-deactivate AddStationRepository
-
-CTRL --> UI : AddStationData
+CTRL --> UI : validations
 deactivate CTRL
 
-UI --> Editor : displays operation success and AddData
+UI --> Editor : displays operation success or fail
 deactivate UI
 
 @enduml
