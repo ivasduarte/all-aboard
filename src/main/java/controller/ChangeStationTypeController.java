@@ -23,7 +23,7 @@ public class ChangeStationTypeController {
 
         int size = Station.typesSizes[typeID] / 2;
 
-        if(!station.ValidatePosition(station.getMap(), size))
+        if(!station.validatePosition(station.getMap(), size))
             return false;
 
         station.setStationType(newType);

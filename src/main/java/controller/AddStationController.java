@@ -57,14 +57,14 @@ public class AddStationController {
 
         int size = Station.typesSizes[typeID] / 2;
 
-        if(!newStation.ValidatePosition(stationMap, size))
+        if(!newStation.validatePosition(stationMap, size))
             return false;
 
         if(!newStation.checkOverbuilding())
             return false;
 
         stationRepository.save(newStation);
-        Station.IncreaseTotalStations();
+        Station.increaseTotalStations();
 
         scenario.subtractBudget(Station.typesPrices[typeID]);
         return true;
