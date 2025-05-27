@@ -11,6 +11,7 @@ import domain.UserSession;
 import repositories.MapRepository;
 import repositories.Repositories;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,8 +31,9 @@ public class AddStationUI implements Runnable {
         AddStationController stationController = new AddStationController();
 
         System.out.println("\n\nStation types:");
-        for (int i = 0; i < Station.stationTypes.length; i++) {
-            System.out.println(Station.stationTypes[i] + " | " + Station.typesPrices[i] + "€");
+        for (int i = 0; i < Station.StationType.values().length; i++) {
+            Station.StationType type = Station.StationType.values()[i];
+            System.out.println((i + 1) + " | " + type.getDisplayName() + " | " + type.getPrice() + "€");
         }
 
         System.out.println("\nYour current budget is " + scenario.getBudget().getBudget() + "€");
@@ -40,8 +42,7 @@ public class AddStationUI implements Runnable {
 
         String stationRotation = "NE";
 
-        if(stationType.equalsIgnoreCase("station"))
-        {
+        if (stationType.equalsIgnoreCase("station")) {
             System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
             stationRotation = sc.nextLine();
         }

@@ -12,53 +12,56 @@ public class AddStationController {
 
     /**
      * Add a station in a map
-     * @param map map of the station
-     * @param scenario scenario in which the budget will be subtracted from
-     * @param positionX station's X position
-     * @param positionY station's Y position
+     *
+     * @param map         map of the station
+     * @param scenario    scenario in which the budget will be subtracted from
+     * @param positionX   station's X position
+     * @param positionY   station's Y position
      * @param stationType station type
      * @return return true if successfully added station, false otherwise
      */
-    public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation)
-    {
+    public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation) {
         int mapID = -1;
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
         List<Map> maps = mapRepository.getMapList();
 
-        for(int i = 0; i < maps.size(); i++)
-        {
-            if(maps.get(i).equals(map))
+        for (int i = 0; i < maps.size(); i++) {
+            if (maps.get(i).equals(map))
                 mapID = i;
         }
 
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
 
         int typeID = Station.checkStationType(stationType);
-        if(typeID == -1)
-            return "Station type is not valid!";
 
-        int size = Station.typesSizes[typeID] / 2;
+        if (typeID == -1) {
+            return "Invalid station type";
+        }
 
-        stationType = Station.stationTypes[typeID];
+        Station.StationType type = Station.StationType.values()[typeID];
+
+        int size = Station.StationType.values().length / 2;
 
         int budget = scenario.getBudget().getBudget();
 
-        if(Station.typesPrices[typeID] > budget)
-            return "Not enough money to purchase the station!";
+        if (type.getPrice() > budget) {
+            return "Invalid budget";
+        }
 
-        Station newStation = new Station(mapID, positionX, positionY, stationType, rotation);
+        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, rotation);
 
-        if(!newStation.validatePosition(map, size))
-            return "Station position is not valid!";
+        if (!newStation.validatePosition(map, size)) {
+            return "Invalid position";
+        }
 
-        if(!newStation.checkOverbuilding())
-            return "Station is overbuilding other objects!";
+        if (!newStation.checkOverbuilding()) {
+            return "Station overbuilding";
+        }
 
         stationRepository.save(newStation);
         Station.increaseTotalStations();
-
-        scenario.subtractBudget(Station.typesPrices[typeID]);
-        return "Station added successfully!";
+        scenario.subtractBudget(type.getPrice());
+        return "Station added successfully";
     }
 }
