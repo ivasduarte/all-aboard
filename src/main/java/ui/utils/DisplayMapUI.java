@@ -53,7 +53,6 @@ public class DisplayMapUI implements Runnable {
         selectData();
         submitData();
         System.out.println();
-        displayMap();
     }
 
     /**
