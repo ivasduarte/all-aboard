@@ -6,28 +6,28 @@
 
 **The rationale grounds on the SSD interactions and the identified input/output data.**
 
-| Interaction ID | Question: Which class is responsible for... | Answer                 | Justification (with patterns)                                                             |
-|:---------------|:--------------------------------------------|:-----------------------|:------------------------------------------------------------------------------------------|
-| Step 1         | ... asking to assign a train to a route?    | AssignARouteUI         | **Pure Fabrication**: UI layer is responsible for managing the interaction with the user. |
-| Step 2         | ... showing a list of all available routes? | AssignARouteUI         | **Pure Fabrication**: UI layer is responsible for showing the available routes.           |
-| Step 3         | ... showing a list of all available trains? | AssignARouteUI         | **Pure Fabrication**: UI layer is responsible for showing the available trains.           |
-| Step 4         | ... select a train to assign?               | Player                 | **Role Assignment**: The player is responsible to choose a train to assign.               |
-| Step 5         | ... select a route to assign?               | Player                 | **Role Assignment**: The player is responsible to choose a route to assign.               |
-| Step 6         | ... save the train data?                    | AssignARouteController | **Controller**: Saves the route that the train must take.                                 |
+| Interaction ID | Question: Which class is responsible for...      | Answer                | Justification (with patterns)                                                             |
+|:---------------|:-------------------------------------------------|:----------------------|:------------------------------------------------------------------------------------------|
+| Step 1         | ... asking to assign a train to a route?         | PlayerUI              | **Pure Fabrication**: UI layer is responsible for managing the interaction with the user. |
+| Step 2         | ... showing a list of all available locomotives? | AssignRouteUI         | **Pure Fabrication**: UI layer is responsible for showing the available locomotives.      |
+| Step 3         | ... select a locomotive to assign?               | Player                | **Role Assignment**: The player is responsible to choose a locomotive to assign.          |
+| Step 4         | ... showing a list of all available stations?    | AssignRouteUI         | **Pure Fabrication**: UI layer is responsible for showing the available stations.         |
+| Step 5         | ... select a stations to assign?                 | Player                | **Role Assignment**: The player is responsible to choose a list of stations to assign.    |
+| Step 6         | ... save the locomotive data?                    | AssignRouteController | **Controller**: Saves the route that the locomotive must take.                            |
 
 ### Systematization ##
 
 According to the taken rationale, the conceptual classes promoted to software classes are: 
 
 * Player
-* Train
-* Route
+* Locomotive
 
 
 Other software classes (i.e. Pure Fabrication) identified: 
 
-* AssignARouteUI  
-* AssignARouteController
+* PlayerUI
+* AssignRouteUI  
+* AssignRouteController
 
 
 ## 3.2. Sequence Diagram (SD)
