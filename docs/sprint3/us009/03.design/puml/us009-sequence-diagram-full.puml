@@ -14,6 +14,13 @@ participant "repositories\n:Repositories" as PLAT
 participant "locomotiveRepo\n:LocomotiveRepository" as LocomotiveRepo
 participant "scenarioRepo\n:ScenarioRepository" as ScenarioRepo
 participant "scenario:\nScenario" as ScenarioObj
+participant "ScenarioMapper" as scenariomapper
+participant "ScenarioDTO" as scenariodto
+participant "LocomotiveMapper" as locomapper
+participant "LocomotiveDTO" as locodto
+
+
+
 
 activate Player
 
@@ -40,8 +47,18 @@ activate ScenarioRepo
 ScenarioRepo --> ScenarioCtrl : scenarioList
 deactivate ScenarioRepo
 
-ScenarioCtrl --> UI : scenarioList
-deactivate ScenarioCtrl
+ScenarioCtrl -> scenariomapper: getScenarioDTOList(scenarioList)
+activate scenariomapper
+loop for each scenario in scenarioList
+                        scenariomapper --> scenariodto : ScenarioDTO = toDTO(scenarioList)
+                            activate scenariodto
+                            deactivate scenariodto
+                    end loop
+    scenariomapper --> ScenarioCtrl: scenarioDTOList
+    deactivate scenariomapper
+   ScenarioCtrl --> UI: scenarioDTOList
+    deactivate ScenarioCtrl
+
 
 UI -> Player : displays list of scenarios
 Player -> UI : selects scenario
@@ -58,46 +75,40 @@ activate PLAT
 PLAT --> CTRL : locomotiveRepository
 deactivate PLAT
 CTRL --> UI : locomotiveRepository
-deactivate CTRL
 
-UI -> LocomotiveRepo : getAvailableLocomotives(scenarioId)
+
+CTRL -> LocomotiveRepo : getAvailableLocomotives(scenarioId)
 activate LocomotiveRepo
-LocomotiveRepo --> UI : availableLocomotives
+LocomotiveRepo --> CTRL : availableLocomotivesList
 deactivate LocomotiveRepo
+CTRL -> locomapper: getLocomotiveDTOList(availableLocomotivesList)
+activate locomapper
+loop for each locomotive in availableLocomotivesList
+                        locomapper --> locodto : LocomotiveDTO = toDTO(availableLocomotivesList)
+                            activate locodto
+                            deactivate locodto
+                    end loop
+    locomapper --> CTRL: locomotiveDTOList
+    deactivate locomapper
+   CTRL --> UI: locomotiveDTOList
+    deactivate CTRL
 
 UI -> Player : displays available locomotives
 Player -> UI : selects locomotive model
 
-UI -> CTRL : buyLocomotive(locomotiveModel, mapName)
+UI -> CTRL : buyLocomotive(locomotiveModelDTO, scenarioDTO)
 activate CTRL
 
-CTRL -> reps : getInstance()
-activate reps
-reps --> CTRL : repositories
-deactivate reps
-
-CTRL -> PLAT : getLocomotiveRepository()
-activate PLAT
-PLAT --> CTRL : locomotiveRepository
-deactivate PLAT
-
-CTRL -> PLAT : getScenarioRepository()
-activate PLAT
-PLAT --> CTRL : scenarioRepository
-deactivate PLAT
-
-CTRL -> ScenarioRepo : getScenarioList()
-activate ScenarioRepo
-ScenarioRepo --> CTRL : scenarioList
-deactivate ScenarioRepo
-
-CTRL -> CTRL : find scenario by mapName
 
 CTRL -> LocomotiveRepo : getLocomotiveByModel(locomotiveModel)
 activate LocomotiveRepo
 LocomotiveRepo --> CTRL : locomotive
 deactivate LocomotiveRepo
 
+'this will do the conversion from dto -> object
+CTRL -> ScenarioRepo: getScenario(scenarioDTO)
+activate ScenarioRepo
+ScenarioRepo --> CTRL: scenario
 CTRL -> ScenarioObj : getBudget()
 activate ScenarioObj
 ScenarioObj --> CTRL : budget
