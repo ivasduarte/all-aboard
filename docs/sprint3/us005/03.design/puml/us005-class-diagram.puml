@@ -5,6 +5,10 @@ skinparam linetype polyline
 
 skinparam classAttributeIconSize 0
 
+interface Runnable {
+    + run(): void
+}
+
 class Player {
     - String name
     - String ID
@@ -24,37 +28,97 @@ class ApplicationSession {
 
 
 class Station {
-    - int mapID
-    - int scenarioID
-    - int positionX
-    - int positionY
-    - int id
-    - String stationName
-    - String stationType
     - int totalStations
 
-    + increaseTotalStations()
-    + getMapID()
-    + getScenarioID()
-    + getPositionX()
-    + getPositionY()
-    + getStationID()
-    + getStationType()
-    + getStationName()
+    - int stationID
+    - String ownerPlayer
+    - String mapName
+    - String scenarioName
+    - int mapID
+    - int positionX
+    - int positionY
+
+    - StationType stationType
+    - Orientation orientation
+    - List<Building> buildings
+    - int cargo
+
+    + int getMapID()
+    + int getPositionX()
+    + int getPositionY()
+    + int getStationID()
+    + StationType getStationType()
+    + Orientation getStationOrientation()
+    + List<Building> getBuildings()
+    + int getCargo()
+    + String getOwnerPlayer()
+    + String getMapName()
+    + String getScenarioName()
+    + int getStationSize()
+    + int getStationPrice()
+    + int getStationTypeID()
+    + String getStationTypeString()
+    + String getOrientationString()
+    + Map getMap()
+    + int getTotalStations()
+
+    + void setOwnerPlayer(String ownerPlayer)
+    + void setMapName(String mapName)
+    + void setScenarioName(String scenarioName)
+    + void setMapID(int mapID)
+    + void setPosition(int positionX, int positionY)
+    + void setStationType(StationType stationType)
+    + void setStationType(String stationType)
+    + void setOrientation(Orientation orientation)
+    + void setOrientation(String orientation)
+
+    + boolean addBuilding(Building buildingToAdd)
+    + boolean isAvailable()
+    + void addCargo(int amount)
+    + void removeCargo(int amount)
+    + boolean validatePosition(Map map, int size)
+    + boolean checkOverbuilding()
+
+    + void increaseTotalStations()
+    + int checkStationType(String type)
 }
 
-class Building {
-    - String buildingType
-      + getBuildingType()
+enum Orientation {
+    - String displayName;
+    - String shortening;
+
+    + Orientation(String displayName, String shortening)
+    + getDisplayName()
+    + getShortening()
+    + fromString()
+    + toString()
 }
 
-class AddStationUI {
+enum StationType {
+    - String displayName;
+    - int size;
+    - int price
+
+    + Orientation(String displayName, String shortening)
+    + getDisplayName()
+    + getSize()
+    + getPrice()
+    + fromString()
+    + toString()
+}
+
+class AddStationUI implements Runnable {
+    - Map map
+    - Scenario scenario
+
+    + AddStationUI(Map map, Scenario scenario)
+    + getInput()
+
+    + run()
 }
 
 class AddStationController {
-    + getAddRepository()
-    + AddStation(station)
-    + getStationList()
+    + String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation)
 }
 
 class Repositories {
@@ -63,7 +127,7 @@ class Repositories {
     + getStationRepository()
 }
 
-class AddStationRepository {
+class StationRepository {
     - Station
     + addStation(station)
 }
@@ -75,19 +139,17 @@ AddStationUI .> AddStationController
 
 AddStationController .> Repositories : repositories
 
-Repositories -> "1" AddStationRepository
+Repositories -> "1" StationRepository
 AddStationController ..> Station
-AddStationController ..> Building
-AddStationController ..> AddStationRepository
+AddStationController ..> StationRepository
 
 ApplicationSession --> "1" UserSession : userSession
 
 AddStationController ..> ApplicationSession
 AddStationController ..> UserSession
 
-AddStationRepository "1" --> "*" Station : stations
+StationRepository "1" --> "*" Station : stations
 
 Station --> Player : createdBy
-Station --> "*" Building : buildings
 
 @enduml

@@ -107,7 +107,6 @@ public class Station {
             return price;
         }
 
-
         /**
          * Parses a string to find a matching StationType based on display name.
          *
