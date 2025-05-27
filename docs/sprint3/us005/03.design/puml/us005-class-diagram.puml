@@ -128,8 +128,13 @@ class Repositories {
 }
 
 class StationRepository {
-    - Station
-    + addStation(station)
+    - List<Station> stations
+
+    + void save(Station station)
+    + List<Station> getStations()
+    + void displayAllStations()
+    + List<Station> getAvailableStationsByMapName(String mapName)
+    + void copyFrom(StationRepository st2)
 }
 
 Repositories -> Repositories : instance

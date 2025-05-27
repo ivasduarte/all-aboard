@@ -5,6 +5,10 @@ skinparam linetype polyline
 
 skinparam classAttributeIconSize 0
 
+interface Runnable {
+    + run(): void
+}
+
 class Player {
     - String name
     - String ID
@@ -17,15 +21,26 @@ class Player {
 class UserSession {
 }
 
-class Route{
-    - id
-    - ListOfStations
-}
+class Locomotive{
+    - String locomotiveModel;
+    - String fuelType;
+    - int speed;
+    - int startYear;
+    - int endYear;
+    - int price;
+    - int fuelCost;
+    - int maintenanceCost;
+    - List<Station> route;
 
-class Train{
-    - name
-    - ID
-    - date of purchase
+    + String getLocomotiveModel()
+    + String getLocomotiveFuelType()
+    + int getPrice()
+    + int getStartYear()
+    + int getEndYear()
+    + int getFuelCost()
+    + int getMaintenanceCost()
+    + List<Station> getRoute()
+    + void setRoute(List<Station> route)
 }
 
 
@@ -35,27 +50,39 @@ class ApplicationSession {
 }
 
 
-class AssignRouteUI {
+class AssignRouteUI implements Runnable {
+    - Map map
+    - Scenario scenario
+
+    + AssignRouteUI(Map map, Scenario scenario)
+    + void getInput()
+    + void run()
 }
 
 class AssignRouteController {
-    + getAddRepository()
-    + AssignRoute(train, route)
-    + getStationList()
+    + AssignRoute(Locomotive locomotive, List<Station> route)
 }
 
 class Repositories {
     - Repositories()
     + getInstance() : repositories
-    + getAddRepository()
+    + getLocomotiveRepository()
 }
 
-class AssignRouteRepository {
-    - Train
-    - Route
-    + AssignRoute(train, route)
+class LocomotiveRepository {
+    - List<Locomotive> locomotives
+    - List<Locomotive> availableLocomotives
+    - List<Locomotive> playerLocomotives
+
+    + void saveLocomotive(Locomotive locomotive)
+    + void save(Locomotive locomotive)
+    + List<Locomotive> getAllLocomotives()
+    + List<Locomotive> getAvailableLocomotives(int scenarioId)
+    + List<Locomotive> getPlayerLocomotives()
+    + Locomotive getLocomotiveByModel()
 }
 
+Player -> AssignRouteUI : calls
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
@@ -63,17 +90,13 @@ AssignRouteUI .> AssignRouteController
 
 AssignRouteController .> Repositories : repositories
 
-Repositories -> "1" AssignRouteRepository
-AssignRouteController ..> Train
-AssignRouteController ..> Route
-AssignRouteController ..> AssignRouteRepository
+Repositories --> "1" LocomotiveRepository
+AssignRouteController ..> Locomotive
 
 ApplicationSession --> "1" UserSession : userSession
 
 AssignRouteController ..> ApplicationSession
 AssignRouteController ..> UserSession
-
-AssignRouteRepository "1" --> "*" Trains : trains
 
 
 @enduml
