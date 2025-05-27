@@ -44,7 +44,7 @@ activate PLAT
 PLAT --> CTRL : cityRepository
 deactivate PLAT
 
-
+UI -> CTRL: getMapList()
 CTRL -> mapRepo: getMapList()
 activate mapRepo
 mapRepo --> CTRL: list of maps
@@ -63,48 +63,41 @@ loop for each map in mapList
     deactivate CTRL
 UI --> Editor: shows list of maps\n for user to select
 Editor -> UI: selects a map
-UI -> CTRL : validateNameMap(name, map)
-activate CTRL
-CTRL -> mapRepo : getMap(mapName)
-activate mapRepo
-mapRepo --> CTRL : Optional<Map>
-deactivate mapRepo
+UI --> Editor: requests data to add city\n(name, x,y)
+Editor -> UI: inputs data needed to add city
 
-CTRL -> cityRepo : isNameUnique(name, map)
-activate cityRepo
-cityRepo --> CTRL : isUnique
-deactivate cityRepo
-
-CTRL --> UI : validationResult
-deactivate CTRL
 
 UI -> CTRL : createCity(name, map, x, y)
 activate CTRL
+'this will do the conversion dto -> object
+CTRL -> mapRepo : getMap(mapDTO)
+
+activate mapRepo
+mapRepo --> CTRL : map
+deactivate mapRepo
+
+
+
 
 CTRL -> City** : create(name, map, x, y)
 
-CTRL -> cityRepo : add(city)
-activate cityRepo
-deactivate cityRepo
 
-CTRL -> UI : city
-deactivate CTRL
-
-UI -> CTRL : assignBlocksAuto(city, blockCount, sigma)
-activate CTRL
 
 loop for each block to add
-  CTRL -> HouseBlock** : create(x, y) 
+  CTRL -> HouseBlock** : createBlock(x, y)
   CTRL -> cityRepo : isBlockPositionUnique(map, block)
   activate cityRepo
   cityRepo --> CTRL : isUnique
   deactivate cityRepo
-  CTRL -> City : addBlockManual(block)
+  CTRL -> City : addBlockManual(block, map)
   activate City
   deactivate City
 end
 
+CTRL -> cityRepo : addAndVerify(city)
+activate cityRepo
 CTRL --> UI : success
+deactivate cityRepo
 deactivate CTRL
 
 UI --> Editor : display result
