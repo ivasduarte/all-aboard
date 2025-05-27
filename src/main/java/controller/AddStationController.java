@@ -18,6 +18,7 @@ public class AddStationController {
      * @param positionX   station's X position
      * @param positionY   station's Y position
      * @param stationType station type
+     * @param rotation    station orientation/rotation
      * @return return true if successfully added station, false otherwise
      */
     public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation) {
@@ -41,6 +42,14 @@ public class AddStationController {
 
         Station.StationType type = Station.StationType.values()[typeID];
 
+        // Validar e converter rotation para Orientation
+        Station.Orientation orientation;
+        try {
+            orientation = Station.Orientation.fromString(rotation);
+        } catch (IllegalArgumentException e) {
+            return "Invalid orientation";
+        }
+
         int size = Station.StationType.values().length / 2;
 
         int budget = scenario.getBudget().getBudget();
@@ -49,7 +58,7 @@ public class AddStationController {
             return "Invalid budget";
         }
 
-        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, rotation);
+        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation);
 
         if (!newStation.validatePosition(map, size)) {
             return "Invalid position";
