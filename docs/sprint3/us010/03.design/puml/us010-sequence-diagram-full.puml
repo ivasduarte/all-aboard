@@ -11,58 +11,27 @@ participant "AssignRouteUI" as UI
 
 activate Editor
 
-Editor -> UI : start the simulation
+Editor -> UI : request to assign a route
 activate UI
 
-UI --> Editor : shows a list of the available maps
-Editor -> UI : selects a map
-UI --> Editor : shows a list of the available scenarios
-Editor -> UI : selects a scenario
-UI --> Editor : shows a list of the cities
-Editor -> UI : selects a city
-UI --> Editor : shows a list of the railroads
-Editor -> UI : selects a railroads
+UI --> Editor : shows a list of the available locomotives
+Editor -> UI : selects a locomotive
+UI --> Editor : shows a list of the available stations
+Editor -> UI : selects the desired stations
 
 
 create "AssignRouteController" as CTRL
 UI --> CTRL : create
 
-participant "Repositories" as RepositorySingleton
-participant "repositories\n:Repositories" as PLAT
-
-UI --> Editor : shows a list of the available trains
-Editor -> UI : selects a train to assign to a route
-UI --> Editor : assign the selected train to the route
-
-
-UI --> CTRL : AssignRoute(train, route)
+UI --> CTRL : AssignRoute(locomotive, route)
 activate CTRL
 
-CTRL -> RepositorySingleton : getInstance()
-activate RepositorySingleton
-RepositorySingleton --> CTRL : repositories
-deactivate RepositorySingleton
+CTRL -> CTRL : AssignRoute(locomotive, route)
 
-CTRL -> PLAT : getAssignRouteRepository()
-activate PLAT
-PLAT --> CTRL : AssignRouteRepository
-deactivate PLAT
-
-CTRL -> AssignRouteRepository : AssignRoute(train, route)
-activate AssignRouteRepository
-
-create "AssignRouteRepository\n:AssignRouteRepository" as AssignRouteRepository
-create "AssignRoute" as AssignRoute
-AssignRouteRepository -> AssignRoute : create()
-AssignRouteRepository -> AssignRouteRepository : AssignRoute(train, route)
-
-AssignRouteRepository --> CTRL : AssignRouteData
-deactivate AssignRouteRepository
-
-CTRL --> UI : AssignRouteData
+CTRL --> UI : verifications
 deactivate CTRL
 
-UI --> Editor : displays operation success and AddData
+UI --> Editor : displays operation success or failure
 deactivate UI
 
 @enduml
