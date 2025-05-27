@@ -47,7 +47,7 @@ public class ChangeStationTypeUI implements Runnable {
 
         Station station = stationRepository.getStations().get(stationID);
 
-        if (station.getStationTypeID() >= Station.stationTypes.length - 1) {
+        if (station.getStationTypeID() >= Station.StationType.values().length - 1) {
             System.out.println("Station is already a " + station.getStationType() + ". Cannot be further upgraded");
             return;
         }
@@ -57,10 +57,10 @@ public class ChangeStationTypeUI implements Runnable {
 
         List<String> availableStationTypes = new ArrayList<>();
 
-        for (int i = 0; i < Station.stationTypes.length; i++) {
+        for (int i = 0; i < Station.StationType.values().length; i++) {
             if (i > station.getStationTypeID()) {
-                System.out.println(Station.stationTypes[i]);
-                availableStationTypes.add(Station.stationTypes[i]);
+                System.out.println(Station.StationType.values()[i]);
+                availableStationTypes.add(String.valueOf(Station.StationType.values()[i]));
             }
         }
 
