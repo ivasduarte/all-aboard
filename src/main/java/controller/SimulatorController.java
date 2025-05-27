@@ -533,33 +533,33 @@ public class SimulatorController implements Runnable {
 
                 int w, h, ox, oy;
                 switch (st.getStationType()) {
-                    case DEPOT:
+                    case "Depot":
                         w = h = 3;
                         ox = st.getPositionX() - 1;
                         oy = st.getPositionY() - 1;
                         paintArea(grid, width, height, st.getPositionX(), st.getPositionY(), ox, oy, w, h);
                         break;
-                    case TERMINAL:
+                    case "Terminal":
                         w = h = 5;
                         ox = st.getPositionX() - 2;
                         oy = st.getPositionY() - 2;
                         paintArea(grid, width, height, st.getPositionX(), st.getPositionY(), ox, oy, w, h);
                         break;
-                    case STATION:
+                    case "Station":
                         w = h = 4;
                         ox = st.getPositionX() - 1;
                         oy = st.getPositionY() - 1;
                         int sdx = 1, sdy = 1;
                         switch (st.getOrientation()) {
-                            case NW:
+                            case "NW":
                                 break;
-                            case NE:
+                            case "NE":
                                 sdx = 2;
                                 break;
-                            case SW:
+                            case "SW":
                                 sdy = 2;
                                 break;
-                            case SE:
+                            case "SE":
                                 sdx = 2;
                                 sdy = 2;
                                 break;

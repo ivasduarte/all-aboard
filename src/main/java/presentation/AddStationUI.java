@@ -46,6 +46,7 @@ public class AddStationUI implements Runnable {
             if (stationType.trim().equalsIgnoreCase(Station.stationTypes[i])) {
                 typeExists = true;
                 stationTypeID = i;
+                stationType = Station.stationTypes[i];
             }
         }
 
@@ -64,10 +65,9 @@ public class AddStationUI implements Runnable {
             System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
             stationRotation = sc.nextLine();
 
-            String[] rotations = new String[]{"NE", "NW", "SE", "SW"};
             boolean valid = false;
 
-            for(String rotation : rotations)
+            for(String rotation : Station.rotations)
             {
                 if(stationRotation.equalsIgnoreCase(rotation))
                 {
