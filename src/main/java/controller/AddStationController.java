@@ -47,7 +47,7 @@ public class AddStationController {
         } catch (IllegalArgumentException e) {
             return "Invalid orientation";
         }
-
+        
         int size = Station.StationType.values().length / 2;
 
         int budget = scenario.getBudget().getBudget();
