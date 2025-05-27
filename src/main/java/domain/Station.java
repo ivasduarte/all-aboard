@@ -21,16 +21,108 @@ public class Station {
     private int positionX;
     private int positionY;
 
-    private String stationType;
-    private int stationTypeID;
-    private String orientation;
+    private StationType stationType;
+    private Orientation orientation;
     private List<Building> buildings;
     private int cargo;
 
-    public final static String[] stationTypes = {"Depot", "Station", "Terminal"};
-    public final static int[] typesSizes = {3, 4, 5};
-    public final static int[] typesPrices = {50, 100, 200};
-    public final static String[] rotations = {"NE", "NW", "SE", "SW"};
+    /**
+     * Enum representing different types of orientation with their properties.
+     */
+    public enum Orientation {
+        NW("Northwest"),
+        NE("Northeast"),
+        SW("Southwest"),
+        SE("Southeast");
+
+        private final String displayName;
+
+
+        Orientation(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        /**
+         * Converts a string to an equivalent Orientation enumeration value.
+         * Compares both enum constant names and display names (case-insensitive).
+         *
+         * @param orientation The string representation of the orientation
+         * @return The corresponding Orientation enumeration value
+         * @throws IllegalArgumentException if no matching orientation is found
+         */
+        public static Orientation fromString(String orientation) {
+            for (Orientation orient : Orientation.values()) {
+                if (orient.name().equalsIgnoreCase(orientation) ||
+                        orient.displayName.equalsIgnoreCase(orientation)) {
+                    return orient;
+                }
+            }
+            throw new IllegalArgumentException("Invalid orientation: " + orientation);
+        }
+        @Override
+        public String toString() {
+            return displayName;
+        }
+
+    }
+    /**
+     * Enum representing different types of stations with their properties.
+     */
+    public enum StationType {
+        DEPOT("Depot", 3, 50),
+        STATION("Station", 4, 100),
+        TERMINAL("Terminal", 5, 200);
+
+        private final String displayName;
+        private final int size;
+        private final int price;
+
+
+        StationType(String displayName, int size, int price) {
+            this.displayName = displayName;
+            this.size = size;
+            this.price = price;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+
+
+        /**
+         * Parses a string to find a matching StationType based on display name.
+         *
+         * @param type the string representation of the station type
+         * @return the corresponding StationType
+         * @throws IllegalArgumentException if no valid StationType matches
+         */
+        public static StationType fromString(String type) {
+            for (StationType stationType : StationType.values()) {
+                if (stationType.displayName.equalsIgnoreCase(type)) {
+                    return stationType;
+                }
+            }
+            throw new IllegalArgumentException("Invalid station type: " + type);
+        }
+        @Override
+        public String toString() {
+            return displayName;
+        }
+
+    }
 
     /**
      * Main constructor for creating a station with all parameters.
@@ -41,22 +133,36 @@ public class Station {
      * @param stationType station type
      * @param orientation station orientation
      */
-    public Station(int mapID, int positionX, int positionY, String stationType, String orientation) {
+    public Station(int mapID, int positionX, int positionY, StationType stationType, Orientation orientation) {
         this.mapID = mapID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.stationType = stationType;
-
-        for(int i = 0; i < stationTypes.length; i++)
-        {
-            if(stationType.equalsIgnoreCase(stationTypes[i]))
-                stationTypeID = i;
-        }
-
         this.orientation = orientation;
         this.stationID = totalStations;
         this.buildings = new ArrayList<>();
         this.cargo = 0;
+    }
+
+    /**
+     * Constructor with default NW orientation.
+     */
+    public Station(int mapID, int positionX, int positionY, StationType stationType) {
+        this(mapID, positionX, positionY, stationType, Orientation.NW);
+    }
+
+    /**
+     * Constructor with string parameters (for backward compatibility).
+     */
+    public Station(int mapID, int positionX, int positionY, String stationType, String orientation) {
+        this(mapID, positionX, positionY, StationType.fromString(stationType), Orientation.fromString(orientation));
+    }
+
+    /**
+     * Constructor with string type only (for backward compatibility).
+     */
+    public Station(int mapID, int positionX, int positionY, String stationType) {
+        this(mapID, positionX, positionY, StationType.fromString(stationType), Orientation.NW);
     }
 
     /**
@@ -263,7 +369,7 @@ public class Station {
      *
      * @return the station type as a {@code StationType} enum value
      */
-    public String getStationType() {
+    public StationType getStationType() {
         return stationType;
     }
 
@@ -272,7 +378,7 @@ public class Station {
      *
      * @return the orientation of the station as an {@code Orientation} enum value.
      */
-    public String getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
@@ -282,7 +388,7 @@ public class Station {
      * @return the size of the station as an integer
      */
     public int getStationSize() {
-        return typesSizes[stationTypeID];
+        return stationType.getSize();
     }
 
     /**
@@ -291,7 +397,7 @@ public class Station {
      * @return the price of the station as an integer
      */
     public int getStationPrice() {
-        return typesPrices[stationTypeID];
+        return stationType.getPrice();
     }
 
     /**
@@ -300,7 +406,25 @@ public class Station {
      * @return an integer representing the ordinal value of the station's type.
      */
     public int getStationTypeID() {
-        return stationTypeID;
+        return stationType.ordinal();
+    }
+
+    /**
+     * Retrieves the string representation of the station's type.
+     *
+     * @return the display name of the station type as a string.
+     */
+    public String getStationTypeString() {
+        return stationType.getDisplayName();
+    }
+
+    /**
+     * Retrieves the string representation of the station's orientation.
+     *
+     * @return the display name of the station's orientation as a string.
+     */
+    public String getOrientationString() {
+        return orientation.getDisplayName();
     }
 
     /**
@@ -368,6 +492,15 @@ public class Station {
     }
 
     /**
+     * Sets the type of the station.
+     *
+     * @param stationType the {@code StationType} to be assigned to the station
+     */
+    public void setStationType(StationType stationType) {
+        this.stationType = stationType;
+    }
+
+    /**
      * Updates the station type using a string representation.
      * The string is parsed to determine the corresponding {@code StationType} enum value.
      *
@@ -377,7 +510,17 @@ public class Station {
      * @throws IllegalArgumentException if the provided string does not match any valid station type.
      */
     public void setStationType(String stationType) {
-        this.stationType = stationType;
+        this.stationType = StationType.fromString(stationType);
+    }
+
+    /**
+     * Sets the orientation of the station.
+     *
+     * @param orientation the desired orientation of the station, provided
+     *                    as an {@code Orientation} enum value
+     */
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
     }
 
     /**
@@ -390,7 +533,7 @@ public class Station {
      * @throws IllegalArgumentException if the provided string does not match any valid orientation.
      */
     public void setOrientation(String orientation) {
-        this.orientation = orientation;
+        this.orientation = Orientation.fromString(orientation);
     }
 
 
