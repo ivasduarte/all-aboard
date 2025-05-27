@@ -12,6 +12,8 @@ participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
 participant "mapRepo\n:MapRepository" as mapRepo
 participant "cityRepo\n:CityRepository" as cityRepo
+participant ":MapMapper" as mapper
+participant ":MapDTO" as dto
 participant ":City" as City
 participant ":HouseBlock" as HouseBlock
 
@@ -22,9 +24,8 @@ Editor -> UI : requests to create a new city
 activate UI
 UI -> CTRL** : create
 
-UI -> Editor : prompt for map name and city data
-Editor -> UI : provides map name, city name, and coordinates
-UI -> CTRL : validateNameMap(name, map)
+'Editor -> UI : provides map name, city name, and coordinates
+'UI -> CTRL : validateNameMap(name, map)
 
 activate CTRL
 
@@ -43,6 +44,27 @@ activate PLAT
 PLAT --> CTRL : cityRepository
 deactivate PLAT
 
+
+CTRL -> mapRepo: getMapList()
+activate mapRepo
+mapRepo --> CTRL: list of maps
+deactivate mapRepo
+
+CTRL -> mapper: getMapListDTO(mapList)
+activate mapper
+loop for each map in mapList
+                        mapper --> dto : MapDTO = toDTO(mapList)
+                            activate dto
+                            deactivate dto
+                    end loop
+    mapper --> CTRL: mapDTOList
+    deactivate mapper
+   CTRL --> UI: mapDTOList
+    deactivate CTRL
+UI --> Editor: shows list of maps\n for user to select
+Editor -> UI: selects a map
+UI -> CTRL : validateNameMap(name, map)
+activate CTRL
 CTRL -> mapRepo : getMap(mapName)
 activate mapRepo
 mapRepo --> CTRL : Optional<Map>

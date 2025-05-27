@@ -117,6 +117,17 @@ class AddCityUI {
     +getInput(): void
 }
 
+class MapDTO{
+    -name: String
+    -width: int
+    -height: int
+}
+
+class MapMapper{
+    + getMapDTOList(mapList: List<Map>)
+    + toDTO(map: Map)
+}
+
 Repositories -> Repositories : instance
 ApplicationSession -> ApplicationSession : instance
 
@@ -128,6 +139,9 @@ CreateCityController ..> MapRepository : uses
 CreateCityController ..> NameMapError
 CreateCityController ..> CenterError
 CreateCityController ..> BlockError
+
+CreateCityController "1" --> "1" MapMapper
+MapMapper --> MapDTO: creates
 
 AddCityUI ..|> Runnable
 
