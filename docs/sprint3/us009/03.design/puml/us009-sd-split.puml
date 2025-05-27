@@ -1,0 +1,82 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+
+participant ":BuyLocomotiveUI" as UI
+participant ":CreateScenarioController" as ScenarioCtrl
+participant ":BuyLocomotiveController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "locomotiveRepo\n:LocomotiveRepository" as LocomotiveRepo
+participant "scenarioRepo\n:ScenarioRepository" as ScenarioRepo
+participant "scenario:\nScenario" as ScenarioObj
+
+activate Player
+Player -> UI : requests to buy a locomotive
+
+activate UI
+UI -> CTRL** : create
+UI -> ScenarioCtrl** : create
+
+UI -> ScenarioCtrl : getScenarioList()
+activate ScenarioCtrl
+
+    ref over ScenarioCtrl, reps, PLAT, ScenarioRepo
+        Get Scenario List
+    end ref
+
+ScenarioCtrl --> UI: scenarioDTOList
+deactivate ScenarioCtrl
+
+UI -> Player : displays list of scenarios
+deactivate UI
+
+Player -> UI : selects scenario
+activate UI
+
+UI -> CTRL : getLocomotiveRepository()
+activate CTRL
+
+    ref over CTRL, reps, PLAT
+        Get Locomotive Repository
+    end ref
+
+CTRL --> UI : locomotiveRepository
+deactivate CTRL
+
+UI -> CTRL : getAvailableLocomotives(scenarioId)
+activate CTRL
+
+    ref over CTRL, LocomotiveRepo
+        Get Available Locomotives
+    end ref
+
+CTRL --> UI: locomotiveDTOList
+deactivate CTRL
+
+UI -> Player : displays available locomotives
+deactivate UI
+
+Player -> UI : selects locomotive model
+activate UI
+
+UI -> CTRL : buyLocomotive(locomotiveModelDTO, scenarioDTO)
+activate CTRL
+
+    ref over CTRL, LocomotiveRepo, ScenarioRepo, ScenarioObj
+        Buy Locomotive
+    end ref
+
+CTRL --> UI : successMessage
+deactivate CTRL
+
+UI --> Player : displays purchase success
+deactivate UI
+deactivate Player
+
+@enduml
