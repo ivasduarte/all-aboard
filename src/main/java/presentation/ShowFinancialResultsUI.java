@@ -11,10 +11,22 @@ public class ShowFinancialResultsUI implements Runnable {
     private Scenario currentScenario;
     private int yearSelected;
 
+    /**
+     * This method is the constructor of ShowFinancialResultsUI.
+     *
+     * @param currentScenario scenario that is being played
+     */
     public ShowFinancialResultsUI(Scenario currentScenario) {
         this.currentScenario = currentScenario;
     }
 
+    /**
+     * This method will be responsible to show the UI to user.
+     * This method will also collect the year selected by the player and pass it to the controller.
+     *
+     * Upon successful execution, the financial results will be shown to the player.
+     * If errors occur during the input process, appropriate error messages are displayed to guide the user.
+     */
     public boolean getInput() {
         if (!ctrl.checkFinancialResultsExistence()) {
             System.out.println("There's still not enough data to give the financial results of any year!");
@@ -47,10 +59,18 @@ public class ShowFinancialResultsUI implements Runnable {
         return true;
     }
 
+    /**
+     * This method returns the ShowFinancialResultsController.
+     *
+     * @return ShowFinancialResultsController
+     */
     public ShowFinancialResultsController getShowFinancialResultsController() {
         return ctrl;
     }
 
+    /**
+     * This method will be responsible to show the player a list of the years that have available financial results to show.
+     */
     public void displayScenarioYears() {
         int startYear = currentScenario.getRestrictions().getStartDate().getYear();
 
@@ -60,6 +80,9 @@ public class ShowFinancialResultsUI implements Runnable {
     }
 
     @Override
+    /**
+     * This method will be responsible to show the UI related to showing financial results to the player.
+     */
     public void run() {
         System.out.println("\n\n------------------------ Financial Results ------------------------");
         if (!getInput()) {
