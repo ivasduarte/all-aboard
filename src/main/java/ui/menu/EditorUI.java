@@ -1,7 +1,6 @@
 package ui.menu;
 
 import presentation.*;
-import ui.utils.DisplayMapUI;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
@@ -49,9 +48,7 @@ public class EditorUI implements Runnable {
     public void run() {
         List<MenuItem> options = new ArrayList<MenuItem>();
         options.add(new MenuItem("Create Map", new CreateMapUI()));
-        options.add(new MenuItem("Create a Scenario", new CreateScenarioUI()));
-        options.add(new MenuItem("Add a City", new AddCityUI()));
-        options.add(new MenuItem("Add an Industry", new AddIndustryUI()));
+        options.add(new MenuItem("Choose Map", new ChooseMapUI()));
 
         int option = 0;
         do {
