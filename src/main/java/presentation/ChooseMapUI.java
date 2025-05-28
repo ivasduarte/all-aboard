@@ -17,7 +17,6 @@ public class ChooseMapUI implements Runnable {
 
     public void run(){
         Map selectedMap = getInput();
-        System.out.println("Selected Map: " + selectedMap.getName());
         List<MenuItem> options = new ArrayList<MenuItem>();
         options.add(new MenuItem("Create a Scenario", new CreateScenarioUI(selectedMap)));
         options.add(new MenuItem("Add a City", new AddCityUI(selectedMap)));
@@ -41,7 +40,6 @@ public class ChooseMapUI implements Runnable {
 
         System.out.print("\nEnter the number of the map you want to play: ");
         int mapID = Integer.parseInt(System.console().readLine()) - 1;
-        System.out.println(mapID);
         if(mapID < 0 || mapID >= maps.size()){
             System.out.println("Invalid map selection.");
             return null;
