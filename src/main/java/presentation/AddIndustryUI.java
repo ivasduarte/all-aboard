@@ -23,6 +23,7 @@ public class AddIndustryUI implements Runnable {
     private DisplayMapController controller = new DisplayMapController();
     private CreateScenarioController scenarioController = new CreateScenarioController();
 
+    private Map map;
     private int mapID;
     private int scenarioID;
     private int positionX;
@@ -30,6 +31,12 @@ public class AddIndustryUI implements Runnable {
     private String industryType;
     private int cargoAmount;
     private int cargoPrice;
+
+    public AddIndustryUI(Map map) {
+        MapRepository mapRepo = Repositories.getInstance().getMapRepository();
+        this.map = map;
+        this.mapID = mapRepo.getMapList().indexOf(map);
+    }
 
     /**
      * This method will be responsible to show the UI to user.
@@ -41,17 +48,6 @@ public class AddIndustryUI implements Runnable {
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
-
-        List<Map> mapList = controller.getMapList();
-        for (int i = 0; i < mapList.size(); i++) {
-            Map map = mapList.get(i);
-            System.out.println((i + 1) + ". " + map.getName());
-            System.out.println();
-        }
-        System.out.println("Select a map from the list: ");
-        mapID = sc.nextInt() - 1;
-
-        System.out.println();
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
         Map map = mapRepository.getMapList().get(mapID);
