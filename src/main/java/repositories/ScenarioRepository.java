@@ -1,5 +1,6 @@
 package repositories;
 
+import domain.Map;
 import domain.Scenario;
 
 import java.util.ArrayList;
@@ -78,6 +79,18 @@ public class ScenarioRepository {
      */
     public List<Scenario> getScenarioList(){
         return List.copyOf(scenarios);
+    }
+
+    public List<Scenario> getScenarioListByMap(Map map){
+        List<Scenario> filteredScenarios = new ArrayList<>();
+
+        for (Scenario scenario : scenarios) {
+            if(scenario.getMap().equals(map)){
+                filteredScenarios.add(scenario);
+            }
+        }
+
+        return List.copyOf(filteredScenarios);
     }
 
     /**
