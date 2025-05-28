@@ -6,12 +6,13 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Player
-participant "UpgradeAStationUI" as UI
-participant "UpgradeAStationController" as CTRL
-participant "Repositories" as Repos
-participant "StationRepository" as Station_REPO
-participant "BuildingRepository" as Building_REPO
-participant "StationUpgradeService" as Service
+participant ":UpgradeAStationUI" as UI
+participant ":UpgradeAStationController" as CTRL
+participant ":Repositories" as Repos
+participant ":StationRepository" as Station_REPO
+participant ":BuildingRepository" as Building_REPO
+participant ":Scenario" as Scenario
+participant ":StationUpgradeService" as Service
 
 activate Player
 
@@ -31,28 +32,53 @@ UI -> CTRL : create controller
 activate CTRL
 
 CTRL -> Repos : getInstance()
-Repos --> CTRL : Repositories instance
+activate Repos
+Repos --> CTRL : Repositories
+deactivate Repos
 
 CTRL -> Repos : getStationRepository()
+activate Repos
 Repos --> CTRL : StationRepository
+deactivate Repos
 
-CTRL -> Station_REPO : getAvailableStations()
+CTRL -> Station_REPO : getAvailableStationsByMapName(mapName)
 activate Station_REPO
-Station_REPO --> CTRL : List<AvailableStation>
+Station_REPO --> CTRL : List<Station>
 deactivate Station_REPO
 
 CTRL --> UI : send stations
 UI --> Player : show available stations
 Player -> UI : selects a station
+UI -> Scenario : getCurrentYear()
+activate Scenario
+Scenario --> UI : currentYear
+deactivate Scenario
+UI -> Scenario : getBudget()
+activate Scenario
+Scenario --> UI : budget
+deactivate Scenario
 
-UI --> Player : show available buildings
-Player -> UI : selects building type (e.g., "Large Hotel")
+CTRL -> CTRL : removeObsoleteBuildings(station, currentYear)
+
 
 CTRL -> Repos : getBuildingRepository()
+activate Repos
 Repos --> CTRL : BuildingRepository
+deactivate Repos
+
+CTRL -> Building_REPO : getBuildingTypes()
+activate Building_REPO
+Building_REPO --> CTRL : List<BuildingType>
+deactivate Building_REPO
+
+CTRL --> UI : return building types
+UI --> Player : show filtered buildings
+Player -> UI : selects building type (e.g., "Large Hotel")
 
 CTRL -> Building_REPO : getBuildingType("Large Hotel")
+activate Building_REPO
 Building_REPO --> CTRL : BuildingType
+deactivate Building_REPO
 
 CTRL -> Service : upgradeStation(station, building, year)
 activate Service
@@ -60,7 +86,10 @@ Service --> CTRL : success/failure (boolean)
 deactivate Service
 
 alt on success
-  CTRL --> UI : return success
+  UI -> Scenario : subtractBudget(cost)
+  activate Scenario
+  Scenario --> UI : return success
+  deactivate Scenario
   UI --> Player : Building added successfully
 else on failure
   CTRL --> UI : return failure

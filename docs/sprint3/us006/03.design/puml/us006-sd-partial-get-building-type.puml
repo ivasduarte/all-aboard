@@ -1,0 +1,26 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationController" as ctrl
+participant ":BuildingRepository" as bd
+
+activate ctrl
+
+autonumber 33
+
+-> ctrl : getBuildingType("Large Hotel")
+
+    group Get Building Type
+
+        ctrl -> bd : getBuildingType("Large Hotel")
+        activate bd
+        bd --> ctrl : BuildingType
+        deactivate bd
+
+    end
+
+<-- ctrl : BuildingType
+
+@enduml

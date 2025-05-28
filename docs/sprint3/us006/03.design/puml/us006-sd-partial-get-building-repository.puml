@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationController" as ctrl
+participant ":Repositories" as reps
+participant ":BuildingRepository" as bd
+
+autonumber 22
+-> ctrl : removeObsoleteBuildings(station, currentYear)
+
+
+
+activate ctrl
+
+    group Get Building Repository
+
+        ctrl -> reps : getBuildingRepository()
+        activate reps
+        reps --> ctrl : BuildingRepository
+        deactivate reps
+
+        ctrl -> bd : getBuildingType(e.g. "Telephone")
+        activate bd
+        bd --> ctrl : BuildingType
+        deactivate bd
+
+    end
+
+@enduml

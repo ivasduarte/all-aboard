@@ -8,68 +8,61 @@ autonumber
 actor "Player" as Player
 participant ":UpgradeAStationUI" as UI
 participant ":UpgradeAStationController" as CTRL
-participant ":Repositories" as Repos
-participant ":StationRepository" as StationRepo
-participant ":BuildingRepository" as BuildingRepo
-participant ":StationUpgradeService" as Service
 
 activate Player
 
-Player -> UI : requests to upgrade a station
+Player -> UI : start the simulation
 activate UI
-UI -> CTRL** : create()
 
-== Station Selection ==
-autonumber 3.1
-UI -> CTRL : getAvailableStations(map)
+UI --> Player : shows a list of the available maps
+Player -> UI : selects a map
+UI --> Player : shows a list of the available scenarios
+Player -> UI : selects a scenario
+UI --> Player : shows a list of the cities
+Player -> UI : selects a city
+UI --> Player : shows a list of the actions the player can do
+Player -> UI : selects to upgrade a station
+
+UI -> CTRL : create controller
 activate CTRL
 
-ref over CTRL, Repos
-  Get Station Repository
-end ref
+    ref over CTRL
+        Get Station Repository
+    end
 
-ref over CTRL, StationRepo
-  Get Available Stations
-end ref
+    ref over CTRL
+        Get Available Stations
+    end
 
-CTRL --> UI : List<Station>
-deactivate CTRL
+autonumber 17
+CTRL --> UI : send stations
+UI --> Player : show available stations
+Player -> UI : selects a station
 
-UI -> Player : show available stations
-Player -> UI : selects station
+UI --> Player : show available buildings
+Player -> UI : selects building type (e.g., "Large Hotel")
 
-UI -> Player : show available building types
-Player -> UI : selects building
+    ref over CTRL
+        Get Building Repository
+    end
 
-== Upgrade Process ==
-autonumber 6
-UI -> CTRL : upgradeStation(station, buildingType, year)
-activate CTRL
+    ref over CTRL
+        Get Building Type
+    end
 
-ref over CTRL, Repos
-  Get Building Repository
-end ref
+    ref over CTRL
+        Upgrade Station
+    end
 
-ref over CTRL, BuildingRepo
-  Get Building Type
-end ref
+autonumber 28
+alt on success
+  CTRL --> UI : return success
+  UI --> Player : Building added successfully
+else on failure
+  CTRL --> UI : return failure
+  UI --> Player : Show error message
+end
 
-ref over CTRL, Service
-  Upgrade Station
-end ref
-
-ref over Service
-  Check Mutual Exclusivity
-end ref
-
-ref over Service, Station
-  Add Building
-end ref
-
-CTRL --> UI : success/failure
-UI -> Player : show message (success or error)
-
-deactivate CTRL
+destroy CTRL
 deactivate UI
-deactivate Player
 @enduml

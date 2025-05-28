@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationUI" as ui
+participant ":Scenario" as s
+
+activate ui
+autonumber 43
+
+    group Subtract Budget
+
+        ui -> s : subtractBudget(cost)
+        activate s
+        s --> ui : return success
+        deactivate s
+
+    end
+
+
+@enduml

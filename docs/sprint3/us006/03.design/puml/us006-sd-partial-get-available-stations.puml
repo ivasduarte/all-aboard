@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationController" as ctrl
+participant ":StationRepository" as st
+
+autonumber 15
+
+activate ctrl
+
+    group Get Available Stations
+
+        ctrl -> st : getAvailableStations(mapName)
+        activate st
+        st --> ctrl : List<Station>
+        deactivate st
+
+    end
+
+@enduml

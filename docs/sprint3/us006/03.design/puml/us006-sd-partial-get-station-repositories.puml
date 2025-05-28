@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationController" as ctrl
+participant ":Repositories" as reps
+
+autonumber 10
+-> ctrl : create()
+activate ctrl
+
+    group Get Station Repositories
+
+        ctrl -> reps : getInstance()
+        activate reps
+        reps --> ctrl : Repositories
+        deactivate reps
+
+        ctrl -> reps : getStationRepository()
+        activate reps
+        reps --> ctrl : StationRepository
+        deactivate reps
+
+    end
+
+@enduml

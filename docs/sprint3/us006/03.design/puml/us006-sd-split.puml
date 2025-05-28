@@ -1,0 +1,100 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant ":UpgradeAStationUI" as UI
+participant ":UpgradeAStationController" as CTRL
+participant ":Scenario" as Scenario
+participant ":StationUpgradeService" as Service
+
+activate Player
+
+Player -> UI : start the simulation
+activate UI
+
+UI --> Player : shows a list of the available maps
+Player -> UI : selects a map
+UI --> Player : shows a list of the available scenarios
+Player -> UI : selects a scenario
+UI --> Player : shows a list of the cities
+Player -> UI : selects a city
+UI --> Player : shows a list of the actions the player can do
+Player -> UI : selects to upgrade a station
+
+UI -> CTRL : create()
+activate CTRL
+
+        ref over CTRL
+            Get Station Repositories
+        end
+
+        ref over CTRL
+            Get Available Stations
+        end
+
+autonumber 17
+CTRL --> UI : send stations
+UI --> Player : show available stations
+Player -> UI : selects a station
+
+UI -> Scenario : getCurrentYear()
+activate Scenario
+Scenario --> UI : currentYear
+deactivate Scenario
+
+UI -> CTRL : removeObsoleteBuildings(station, currentYear)
+
+        ref over CTRL
+            Get Building Repository
+        end
+
+autonumber 27
+UI -> CTRL : getAvailableBuildingTypes()
+
+        ref over CTRL
+            Get Available Building Types
+        end
+
+
+UI --> Player : show filtered buildings
+Player -> UI : selects building type (e.g., "Large Hotel")
+
+autonumber 33
+UI -> CTRL : getBuildingType("Large Hotel")
+
+        ref over CTRL
+            Get Building Type
+        end
+
+        ref over UI
+            Get Budget
+        end
+
+autonumber 39
+UI -> CTRL : upgradeStation(station, "Large Hotel", currentYear)
+
+        ref over CTRL
+            Upgrade Station
+        end
+
+autonumber 42
+CTRL --> UI : result
+
+alt on success
+
+        ref over UI
+            Subtract Budegt
+        end
+
+autonumber 45
+  UI --> Player : Building added successfully
+else on failure
+  UI --> Player : Show error message
+end
+
+deactivate UI
+@enduml

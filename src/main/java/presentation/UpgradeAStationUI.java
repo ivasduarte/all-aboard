@@ -7,6 +7,7 @@ import domain.Map;
 
 import java.util.List;
 import java.util.Scanner;
+
 /**
  * This class provides a user interface for upgrading a station in the simulation.
  * It displays all available stations, filters building types based on the current year,
@@ -30,8 +31,7 @@ public class UpgradeAStationUI implements Runnable {
      * @param scenario The current scenario being simulated.
      */
 
-    public UpgradeAStationUI(Map map, Scenario scenario)
-    {
+    public UpgradeAStationUI(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
     }
@@ -43,7 +43,7 @@ public class UpgradeAStationUI implements Runnable {
      * - Removal of obsolete buildings (e.g., Telegraph after 1920)
      * - Input from the user to select station and building
      * - Upgrade execution and budget deduction
-     *
+     * <p>
      * Provides validation for station selection, building existence, availability by year,
      * and budget constraints.
      */
@@ -132,7 +132,7 @@ public class UpgradeAStationUI implements Runnable {
      * Calls {@code getInput()} to start the interaction.
      */
     @Override
-    
+
     public void run() {
         getInput();
     }

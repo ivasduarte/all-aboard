@@ -6,12 +6,13 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Player
-participant "UpgradeAStationUI" as UI
-participant "UpgradeAStationController" as CTRL
-participant "Repositories" as Repos
-participant "StationRepository" as Station_REPO
-participant "StationUpgradeService" as UpgradeService
-participant "Station" as Station
+participant ":UpgradeAStationUI" as UI
+participant ":UpgradeAStationController" as CTRL
+participant ":Repositories" as Repos
+participant ":StationRepository" as Station_REPO
+participant ":BuildingRepository" as Building_REPO
+participant ":Scenario" as Scenario
+participant ":StationUpgradeService" as Service
 
 activate Player
 
@@ -31,49 +32,85 @@ UI -> CTRL : create controller
 activate CTRL
 
 CTRL -> Repos : getInstance()
-Repos --> CTRL : Repositories instance
+activate Repos
+Repos --> CTRL : Repositories
+deactivate Repos
 
 CTRL -> Repos : getStationRepository()
+activate Repos
 Repos --> CTRL : StationRepository
+deactivate Repos
 
-CTRL -> Station_REPO : getAvailableStations()
+CTRL -> Station_REPO : getAvailableStationsByMapName(mapName)
 activate Station_REPO
-Station_REPO --> CTRL : List<AvailableStation>
+Station_REPO --> CTRL : List<Station>
 deactivate Station_REPO
 
-CTRL --> UI : Send Stations
+CTRL --> UI : send stations
+UI --> Player : show available stations
+Player -> UI : selects a station
+
+UI -> Scenario : getCurrentYear()
+activate Scenario
+Scenario --> UI : currentYear
+deactivate Scenario
+
+UI -> CTRL : removeObsoleteBuildings(station, currentYear)
+activate CTRL
+CTRL -> Repos : getBuildingRepository()
+activate Repos
+Repos --> CTRL : BuildingRepository
+deactivate Repos
+CTRL -> Building_REPO : getBuildingType("Telephone")
+activate Building_REPO
+Building_REPO --> CTRL : BuildingType
+deactivate Building_REPO
 deactivate CTRL
 
-UI --> Player : shows a list of the available stations
-Player -> UI : selects the station
-
-UI --> Player : requests the type of the building to add
-Player -> UI : inserts the type of the building
-
-UI -> CTRL : upgradeStation(selectedStation, buildingType, currentYear)
+UI -> CTRL : getAvailableBuildingTypes()
 activate CTRL
+CTRL -> Building_REPO : getBuildingTypes()
+activate Building_REPO
+Building_REPO --> CTRL : List<BuildingType>
+deactivate Building_REPO
+CTRL --> UI : buildingTypes
+deactivate CTRL
 
-CTRL -> UpgradeService : upgradeStation(selectedStation, new Building(buildingType), currentYear)
-activate UpgradeService
+UI --> Player : show filtered buildings
+Player -> UI : selects building type (e.g., "Large Hotel")
 
-UpgradeService -> UpgradeService : validateData(buildingType, currentYear)
-UpgradeService -> Station : getBuildings()
-UpgradeService -> UpgradeService : checkMutualExclusivity(existingBuildings, buildingType)
-UpgradeService -> UpgradeService : handleReplacement(existingBuildings, buildingType)
-UpgradeService -> Station : addBuilding(building, currentYear)
+UI -> CTRL : getBuildingTypeByName("Large Hotel")
+activate CTRL
+CTRL -> Building_REPO : getBuildingType("Large Hotel")
+activate Building_REPO
+Building_REPO --> CTRL : BuildingType
+deactivate Building_REPO
+CTRL --> UI : BuildingType
+deactivate CTRL
 
-alt Building added successfully
-    UpgradeService --> CTRL : true
-    CTRL --> UI : show success
-    UI --> Player : SUCCESS: Building added
-else Failed to add building
-    UpgradeService --> CTRL : false
-    CTRL --> UI : show error
-    UI --> Player : ERROR: Upgrade failed
+UI -> Scenario : getBudget()
+activate Scenario
+Scenario --> UI : budget
+deactivate Scenario
+
+UI -> CTRL : upgradeStation(station, "Large Hotel", currentYear)
+activate CTRL
+CTRL -> Service : upgradeStation(station, Building, currentYear)
+activate Service
+Service --> CTRL : success/failure
+deactivate Service
+CTRL --> UI : result
+deactivate CTRL
+
+alt on success
+  UI -> Scenario : subtractBudget(cost)
+  activate Scenario
+  Scenario --> UI : return success
+  deactivate Scenario
+  UI --> Player : Building added successfully
+else on failure
+  UI --> Player : Show error message
 end
 
-deactivate UpgradeService
-deactivate CTRL
 deactivate UI
-
 @enduml

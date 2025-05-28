@@ -1,0 +1,23 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationController" as ctrl
+participant ":UpgradeStationService" as sv
+
+activate ctrl
+
+autonumber 39
+-> ctrl : upgradeStation(station, "LargeHotel", currentYear)
+
+    group Upgrade Station
+
+        ctrl -> sv : upgradeStation(station, Building, currentYear)
+        activate sv
+        sv --> ctrl : success/failure
+        deactivate ctrl
+
+    end
+
+@enduml
