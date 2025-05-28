@@ -7,6 +7,7 @@ import domain.HouseBlock;
 import controller.CreateCityController.NameMapError;
 import controller.CreateCityController.CenterError;
 import controller.CreateCityController.BlockError;
+import domain.Map;
 
 import java.util.Scanner;
 
@@ -18,12 +19,20 @@ import java.util.Scanner;
 public class AddCityUI implements Runnable {
     private final CreateCityController ctrl = new CreateCityController();
     private final DisplayMapController controller = new DisplayMapController();
+
+    private Map map;
     private String mapName;
     private String cityName;
     private int centerX;
     private int centerY;
     private char blockMode;
     private int houseBlocks;
+
+    public AddCityUI(Map map) {
+        this.map = map;
+        this.mapName = map.getName();
+
+    }
 
     /**
      * Collects and processes user input to create a new city on a selected map.
@@ -38,10 +47,6 @@ public class AddCityUI implements Runnable {
         Scanner sc = new Scanner(System.in);
 
         do {
-            System.out.print(controller.getMapList());
-            System.out.print("\nSelect a map from the list: ");
-            mapName = sc.nextLine().trim();
-
             System.out.print("Enter the name of the city: ");
             cityName = sc.nextLine().trim();
 

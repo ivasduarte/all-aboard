@@ -95,7 +95,12 @@ public class DisplayMapUI implements Runnable {
      * the user to view them in a textual format.
      */
     private void displayMapList() {
-        System.out.println(ctrl.getMapList());
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Map> maps = mapRepository.getMapList();
+        System.out.println("\n\nChoose a map to play from the list below:");
+        for (int i = 0; i < maps.size(); i++) {
+            System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
+        }
     }
 
 

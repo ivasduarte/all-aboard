@@ -29,6 +29,11 @@ public class CreateScenarioUI implements Runnable {
     private Map map;
     private String mapName;
 
+    public CreateScenarioUI(Map map) {
+        this.map = map;
+
+    }
+
     /**
      * Collects input from the user to configure a new scenario.
      *
@@ -45,24 +50,6 @@ public class CreateScenarioUI implements Runnable {
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
-
-        System.out.print(controller.getMapList());
-        System.out.print("\nSelect a map from the list: ");
-        mapName = sc.nextLine().trim();
-
-        boolean validMap = false;
-        for (Map map: controller.getMapList()) {
-            if(map.getName().trim().equalsIgnoreCase(mapName)) {
-                this.map = map;
-                validMap = true;
-            }
-        }
-
-        if(!validMap)
-        {
-            System.out.println("The entered map does not exist!");
-            return;
-        }
 
         System.out.print("Enter the name of the scenario: ");
         scenarioName = sc.nextLine().trim();

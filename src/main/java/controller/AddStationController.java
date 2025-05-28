@@ -20,7 +20,7 @@ public class AddStationController {
      * @param stationType station type
      * @return return true if successfully added station, false otherwise
      */
-    public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation) {
+    public String AddStation(Map map, Scenario scenario, int positionX, int positionY, int stationType, String rotation) {
         int mapID = -1;
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();

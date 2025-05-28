@@ -3,6 +3,7 @@ package domain;
 import repositories.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -544,10 +545,10 @@ public class Station {
      * @param type the type to be checked
      * @return the id the of the type, returns -1 if it doesn't exist
      */
-    public static int checkStationType(String type) {
+    public static int checkStationType(int type) {
         int id = -1;
         for (int i = 0; i < StationType.values().length; i++) {
-            if (type.equalsIgnoreCase(String.valueOf(StationType.values()[i]))) {
+            if (Arrays.stream(Station.StationType.values()).anyMatch(type1 -> type1.ordinal() == type - 1)) {
                 id = i;
             }
         }
