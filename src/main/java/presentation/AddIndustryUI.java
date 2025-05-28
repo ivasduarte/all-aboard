@@ -56,7 +56,6 @@ public class AddIndustryUI implements Runnable {
         for (int i = 0; i < scenarioList.size(); i++) {
             Scenario scenario = scenarioList.get(i);
             System.out.println((i+1) + ". " + scenario.getScenarioName());
-            System.out.println();
         }
         System.out.println("Enter the scenario ID: ");
         scenarioID = sc.nextInt() - 1;
