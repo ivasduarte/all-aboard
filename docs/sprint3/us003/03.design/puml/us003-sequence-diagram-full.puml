@@ -12,6 +12,8 @@ participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
 participant "mapRepo\n:MapRepository" as mapRepo
 participant "cityRepo\n:CityRepository" as cityRepo
+participant ":MapMapper" as mapper
+participant ":MapDTO" as dto
 participant ":City" as City
 participant ":HouseBlock" as HouseBlock
 
@@ -22,9 +24,8 @@ Editor -> UI : requests to create a new city
 activate UI
 UI -> CTRL** : create
 
-UI -> Editor : prompt for map name and city data
-Editor -> UI : provides map name, city name, and coordinates
-UI -> CTRL : validateNameMap(name, map)
+'Editor -> UI : provides map name, city name, and coordinates
+'UI -> CTRL : validateNameMap(name, map)
 
 activate CTRL
 
@@ -43,46 +44,60 @@ activate PLAT
 PLAT --> CTRL : cityRepository
 deactivate PLAT
 
-CTRL -> mapRepo : getMap(mapName)
+UI -> CTRL: getMapList()
+CTRL -> mapRepo: getMapList()
 activate mapRepo
-mapRepo --> CTRL : Optional<Map>
+mapRepo --> CTRL: list of maps
 deactivate mapRepo
 
-CTRL -> cityRepo : isNameUnique(name, map)
-activate cityRepo
-cityRepo --> CTRL : isUnique
-deactivate cityRepo
+CTRL -> mapper: getMapListDTO(mapList)
+activate mapper
+loop for each map in mapList
+                        mapper --> dto : MapDTO = toDTO(mapList)
+                            activate dto
+                            deactivate dto
+                    end loop
+    mapper --> CTRL: mapDTOList
+    deactivate mapper
+   CTRL --> UI: mapDTOList
+    deactivate CTRL
+UI --> Editor: shows list of maps\n for user to select
+Editor -> UI: selects a map
+UI --> Editor: requests data to add city\n(name, x,y)
+Editor -> UI: inputs data needed to add city
 
-CTRL --> UI : validationResult
-deactivate CTRL
 
 UI -> CTRL : createCity(name, map, x, y)
 activate CTRL
+'this will do the conversion dto -> object
+CTRL -> mapRepo : getMap(mapDTO)
+
+activate mapRepo
+mapRepo --> CTRL : map
+deactivate mapRepo
+
+
+
 
 CTRL -> City** : create(name, map, x, y)
 
-CTRL -> cityRepo : add(city)
-activate cityRepo
-deactivate cityRepo
 
-CTRL -> UI : city
-deactivate CTRL
-
-UI -> CTRL : assignBlocksAuto(city, blockCount, sigma)
-activate CTRL
 
 loop for each block to add
-  CTRL -> HouseBlock** : create(x, y) 
+  CTRL -> HouseBlock** : createBlock(x, y)
   CTRL -> cityRepo : isBlockPositionUnique(map, block)
   activate cityRepo
   cityRepo --> CTRL : isUnique
   deactivate cityRepo
-  CTRL -> City : addBlockManual(block)
+  CTRL -> City : addBlockManual(block, map)
   activate City
   deactivate City
 end
 
+CTRL -> cityRepo : addAndVerify(city)
+activate cityRepo
 CTRL --> UI : success
+deactivate cityRepo
 deactivate CTRL
 
 UI --> Editor : display result

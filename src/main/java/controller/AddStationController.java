@@ -12,61 +12,63 @@ public class AddStationController {
 
     /**
      * Add a station in a map
-     * @param map map of the station
-     * @param scenario scenario in which the budget will be subtracted from
-     * @param positionX station's X position
-     * @param positionY station's Y position
+     *
+     * @param map         map of the station
+     * @param scenario    scenario in which the budget will be subtracted from
+     * @param positionX   station's X position
+     * @param positionY   station's Y position
      * @param stationType station type
      * @return return true if successfully added station, false otherwise
      */
-    public boolean AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation)
-    {
+    public String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation) {
         int mapID = -1;
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
         List<Map> maps = mapRepository.getMapList();
 
-        for(int i = 0; i < maps.size(); i++)
-        {
-            if(maps.get(i).equals(map))
+        for (int i = 0; i < maps.size(); i++) {
+            if (maps.get(i).equals(map))
                 mapID = i;
         }
 
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
-        Station newStation = new Station(mapID, positionX, positionY, stationType, rotation);
-        Map stationMap = newStation.getMap();
 
-        if(scenario == null){
-            System.out.println("No scenario found for the selected map.");
-            return false;
+        int typeID = Station.checkStationType(stationType);
+
+        if (typeID == -1) {
+            return "Invalid station type";
         }
 
-        boolean validStationType = false;
-        int typeID = 0;
-        for(int i = 0; i < Station.stationTypes.length; i++)
-        {
-            if(stationType.equalsIgnoreCase(Station.stationTypes[i]))
-            {
-                typeID = i;
-                validStationType = true;
-            }
+        Station.StationType type = Station.StationType.values()[typeID];
+
+        Station.Orientation orientation;
+        try {
+            orientation = Station.Orientation.fromString(rotation);
+        } catch (IllegalArgumentException e) {
+            return "Invalid orientation";
+        }
+        
+        int size = Station.StationType.values().length / 2;
+
+        int budget = scenario.getBudget().getBudget();
+
+        if (type.getPrice() > budget) {
+            return "Invalid budget";
         }
 
-        if(!validStationType)
-            return false;
+        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation);
 
-        int size = Station.typesSizes[typeID] / 2;
+        if (!newStation.validatePosition(map, size)) {
+            return "Invalid position";
+        }
 
-        if(!newStation.ValidatePosition(stationMap, size))
-            return false;
-
-        if(!newStation.checkOverbuilding())
-            return false;
+        if (!newStation.checkOverbuilding()) {
+            return "Station overbuilding";
+        }
 
         stationRepository.save(newStation);
-        Station.IncreaseTotalStations();
-
-        scenario.subtractBudget(Station.typesPrices[typeID]);
-        return true;
+        Station.increaseTotalStations();
+        scenario.subtractBudget(type.getPrice());
+        return "Station added successfully";
     }
 }

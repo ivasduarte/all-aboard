@@ -6,6 +6,7 @@ import domain.Locomotive;
 import domain.Map;
 import domain.Scenario;
 import repositories.*;
+import ui.utils.DisplayMapUI;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +25,8 @@ public class SimulatorController implements Runnable {
     private final MapRepository mapRep = Repositories.getInstance().getMapRepository();
     private final ScenarioRepository scenarioRep = Repositories.getInstance().getScenarioRepository();
     private final StationRepository stRep = Repositories.getInstance().getStationRepository();
+    private final LocomotiveRepository locoRep = Repositories.getInstance().getLocomotiveRepository();
     private final CityRepository cityRep = Repositories.getInstance().getCityRepository();
-    //private final BudgetRepository budgetRepo = Repositories.getInstance().getBudgetRepository();
     private final List<City> cities = cityRep.getCities();
 
     private final int SIMULATION_SLEEP_TIME = 5000;
@@ -295,6 +296,7 @@ public class SimulatorController implements Runnable {
                 int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
                 displayYearStats(year, totalEarnings);
 
+                processFinancialResults();
                 scenario.addBudget(totalEarnings);
 
                 if (historicalEvents.contains("pandemic")) {
@@ -380,8 +382,6 @@ public class SimulatorController implements Runnable {
         System.out.println("\n----Stats for trains----");
         int totalEarned = 0;
         int totalLost = 0;
-        int trainMaintenanceCost = 0;
-        int trainFuelCost = 0;
 
         for (Locomotive locomotive : locomotives) {
             int fuelCost = (int) (locomotive.getFuelCost() * costMultiplier);
@@ -397,17 +397,27 @@ public class SimulatorController implements Runnable {
 
             totalEarned += routeEarnings;
             totalLost += totalMaintenanceCostPerTrain;
-            trainMaintenanceCost = maintenanceCost;
-            trainFuelCost = fuelCost;
         }
 
         int netEarnings = totalEarned - totalLost;
         System.out.println("You gained a total of " + totalEarned + "€ from trains and lost a total of " +
                 totalLost + "€! Total balance is " + netEarnings + "€!");
 
-        financialController.addFinancialResults(0, trainMaintenanceCost, trainFuelCost, 0);
-
         return netEarnings;
+    }
+
+    private void processFinancialResults() {
+        List<Locomotive> locomotives = locoRep.getPlayerLocomotives();
+
+        int trainMaintenanceCost = 0;
+        int trainFuelCost = 0;
+
+        for (Locomotive locomotive : locomotives) {
+            trainMaintenanceCost += locomotive.getMaintenanceCost();
+            trainFuelCost += locomotive.getFuelCost();
+        }
+
+        financialController.addFinancialResults(0, trainMaintenanceCost, trainFuelCost, 0);
     }
 
     /**
@@ -486,110 +496,5 @@ public class SimulatorController implements Runnable {
 
     public Optional<Simulator> findBy(Map map, Scenario scenario) {
         return simRep.findBy(map, scenario, currentUser);
-    }
-
-    public void displayMapData(Map map, Scenario scenario) {
-        int width = map.getWidth();
-        int height = map.getHeight();
-        String[][] grid = new String[height + 1][width + 1];
-        for (int y = 1; y <= height; y++) {
-            for (int x = 1; x <= width; x++) {
-                grid[y][x] = "⬛";
-            }
-        }
-
-        addCitiesToMap(grid, map);
-        addStationsToMap(grid, map, scenario, width, height);
-
-        for (int y = 1; y <= height; y++) {
-            for (int x = 1; x <= width; x++) {
-                System.out.print(grid[y][x]);
-            }
-            System.out.println();
-        }
-    }
-
-    private void addCitiesToMap(String[][] grid, Map map) {
-        List<City> cities = cityRep.getCities().stream()
-                .filter(c -> c.getMapName().equals(map.getName()))
-                .collect(Collectors.toList());
-        for (City city : cities) {
-            grid[city.getCenterY()][city.getCenterX()] = "🌆";
-            for (HouseBlock hb : city.getBlocks()) {
-                grid[hb.getY()][hb.getX()] = "🏠";
-            }
-        }
-    }
-
-    private void addStationsToMap(String[][] grid, Map map, Scenario scenario, int width, int height) {
-        if (currentUser != null) {
-            String owner = currentUser.getEmail();
-            for (Station st : stRep.getStations()) {
-                if (!st.getMapName().equals(map.getName()) ||
-                        !st.getOwnerPlayer().equals(owner) ||
-                        !st.getScenarioName().equals(scenario.getScenarioName())) {
-                    continue;
-                }
-
-                int w, h, ox, oy;
-                switch (st.getStationType()) {
-                    case DEPOT:
-                        w = h = 3;
-                        ox = st.getPositionX() - 1;
-                        oy = st.getPositionY() - 1;
-                        paintArea(grid, width, height, st.getPositionX(), st.getPositionY(), ox, oy, w, h);
-                        break;
-                    case TERMINAL:
-                        w = h = 5;
-                        ox = st.getPositionX() - 2;
-                        oy = st.getPositionY() - 2;
-                        paintArea(grid, width, height, st.getPositionX(), st.getPositionY(), ox, oy, w, h);
-                        break;
-                    case STATION:
-                        w = h = 4;
-                        ox = st.getPositionX() - 1;
-                        oy = st.getPositionY() - 1;
-                        int sdx = 1, sdy = 1;
-                        switch (st.getOrientation()) {
-                            case NW:
-                                break;
-                            case NE:
-                                sdx = 2;
-                                break;
-                            case SW:
-                                sdy = 2;
-                                break;
-                            case SE:
-                                sdx = 2;
-                                sdy = 2;
-                                break;
-                        }
-                        for (int dy = 0; dy < h; dy++) {
-                            for (int dx = 0; dx < w; dx++) {
-                                int gx = ox + dx;
-                                int gy = oy + dy;
-                                if (gx >= 1 && gx <= width && gy >= 1 && gy <= height) {
-                                    grid[gy][gx] = (dx == sdx && dy == sdy) ? "🚉" : "🅿️";
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        grid[st.getPositionY()][st.getPositionX()] = "🚉";
-                }
-            }
-        }
-    }
-
-    private void paintArea(String[][] grid, int maxW, int maxH, int cx, int cy, int ox, int oy, int w, int h) {
-        for (int dy = 0; dy < h; dy++) {
-            for (int dx = 0; dx < w; dx++) {
-                int x = ox + dx;
-                int y = oy + dy;
-                if (x >= 1 && x <= maxW && y >= 1 && y <= maxH) {
-                    grid[y][x] = (x == cx && y == cy) ? "🚉" : "🅿️";
-                }
-            }
-        }
     }
 }

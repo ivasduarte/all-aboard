@@ -30,20 +30,25 @@ public class Station {
      * Enum representing different types of orientation with their properties.
      */
     public enum Orientation {
-        NW("Northwest"),
-        NE("Northeast"),
-        SW("Southwest"),
-        SE("Southeast");
+        NW("Northwest", "NW"),
+        NE("Northeast", "NE"),
+        SW("Southwest", "SW"),
+        SE("Southeast", "SE");
 
         private final String displayName;
+        private final String shortening;
 
-
-        Orientation(String displayName) {
+        Orientation(String displayName, String shortening) {
             this.displayName = displayName;
+            this.shortening = shortening;
         }
 
         public String getDisplayName() {
             return displayName;
+        }
+
+        public String getShortening() {
+            return shortening;
         }
 
         /**
@@ -63,12 +68,14 @@ public class Station {
             }
             throw new IllegalArgumentException("Invalid orientation: " + orientation);
         }
+
         @Override
         public String toString() {
             return displayName;
         }
 
     }
+
     /**
      * Enum representing different types of stations with their properties.
      */
@@ -115,6 +122,7 @@ public class Station {
             }
             throw new IllegalArgumentException("Invalid station type: " + type);
         }
+
         @Override
         public String toString() {
             return displayName;
@@ -125,13 +133,14 @@ public class Station {
     /**
      * Main constructor for creating a station with all parameters.
      *
-     * @param mapID id of the map
-     * @param positionX station's X position
-     * @param positionY station's Y position
+     * @param mapID       id of the map
+     * @param positionX   station's X position
+     * @param positionY   station's Y position
      * @param stationType station type
      * @param orientation station orientation
      */
-    public Station(int mapID, int positionX, int positionY, StationType stationType, Orientation orientation) {
+    public Station(String mapName, int mapID, int positionX, int positionY, StationType stationType, Orientation orientation) {
+        this.mapName = mapName;
         this.mapID = mapID;
         this.positionX = positionX;
         this.positionY = positionY;
@@ -140,27 +149,6 @@ public class Station {
         this.stationID = totalStations;
         this.buildings = new ArrayList<>();
         this.cargo = 0;
-    }
-
-    /**
-     * Constructor with default NW orientation.
-     */
-    public Station(int mapID, int positionX, int positionY, StationType stationType) {
-        this(mapID, positionX, positionY, stationType, Orientation.NW);
-    }
-
-    /**
-     * Constructor with string parameters (for backward compatibility).
-     */
-    public Station(int mapID, int positionX, int positionY, String stationType, String orientation) {
-        this(mapID, positionX, positionY, StationType.fromString(stationType), Orientation.fromString(orientation));
-    }
-
-    /**
-     * Constructor with string type only (for backward compatibility).
-     */
-    public Station(int mapID, int positionX, int positionY, String stationType) {
-        this(mapID, positionX, positionY, StationType.fromString(stationType), Orientation.NW);
     }
 
     /**
@@ -238,7 +226,7 @@ public class Station {
     /**
      * Validates the station's position on the map.
      *
-     * @param map station's map
+     * @param map  station's map
      * @param size size for each side of the station
      * @return true if position is valid, false otherwise
      */
@@ -295,7 +283,6 @@ public class Station {
                 }
             }
         }
-
         return true;
     }
 
@@ -549,5 +536,21 @@ public class Station {
      */
     public static int getTotalStations() {
         return totalStations;
+    }
+
+    /**
+     * Verify if the given station type exists.
+     *
+     * @param type the type to be checked
+     * @return the id the of the type, returns -1 if it doesn't exist
+     */
+    public static int checkStationType(String type) {
+        int id = -1;
+        for (int i = 0; i < StationType.values().length; i++) {
+            if (type.equalsIgnoreCase(String.valueOf(StationType.values()[i]))) {
+                id = i;
+            }
+        }
+        return id;
     }
 }

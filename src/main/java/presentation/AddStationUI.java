@@ -11,6 +11,7 @@ import domain.UserSession;
 import repositories.MapRepository;
 import repositories.Repositories;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,58 +30,21 @@ public class AddStationUI implements Runnable {
 
         AddStationController stationController = new AddStationController();
 
-        int budget = scenario.getBudget().getBudget();
-
         System.out.println("\n\nStation types:");
-        for (int i = 0; i < Station.stationTypes.length; i++) {
-            System.out.println(Station.stationTypes[i] + " | " + Station.typesPrices[i] + "€");
+        for (int i = 0; i < Station.StationType.values().length; i++) {
+            Station.StationType type = Station.StationType.values()[i];
+            System.out.println((i + 1) + " | " + type.getDisplayName() + " | " + type.getPrice() + "€");
         }
 
         System.out.println("\nYour current budget is " + scenario.getBudget().getBudget() + "€");
         System.out.print("\nEnter the station type you want to add: ");
         String stationType = sc.nextLine();
 
-        boolean typeExists = false;
-        int stationTypeID = -1;
-        for (int i = 0; i < Station.stationTypes.length; i++) {
-            if (stationType.trim().equalsIgnoreCase(Station.stationTypes[i])) {
-                typeExists = true;
-                stationTypeID = i;
-            }
-        }
-
-        if (!typeExists) {
-            System.out.println("Station type not valid");
-            return;
-        } else if (budget < Station.typesPrices[stationTypeID]) {
-            System.out.println("User does not have sufficient budget!");
-            return;
-        }
-
         String stationRotation = "NE";
 
-        if(stationType.equalsIgnoreCase("station"))
-        {
+        if (stationType.equalsIgnoreCase("station")) {
             System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
             stationRotation = sc.nextLine();
-
-            String[] rotations = new String[]{"NE", "NW", "SE", "SW"};
-            boolean valid = false;
-
-            for(String rotation : rotations)
-            {
-                if(stationRotation.equalsIgnoreCase(rotation))
-                {
-                    valid = true;
-                    stationRotation = rotation;
-                }
-            }
-
-            if(!valid)
-            {
-                System.out.println("Rotation is not valid!");
-                return;
-            }
         }
 
         System.out.print("\nEnter the position X of the station: ");
@@ -89,13 +53,9 @@ public class AddStationUI implements Runnable {
         System.out.print("Enter the position Y of the station: ");
         int positionY = sc.nextInt();
 
-        boolean result = stationController.AddStation(map, scenario, positionX, positionY, stationType, stationRotation);
+        String result = stationController.AddStation(map, scenario, positionX, positionY, stationType, stationRotation);
 
-        if (!result) {
-            System.out.println("Station not valid");
-        } else {
-            System.out.println("Station added successfully");
-        }
+        System.out.println(result);
     }
 
     @Override

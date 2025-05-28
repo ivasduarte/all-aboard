@@ -1,0 +1,66 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Editor" as Editor
+
+participant ":CreateCityUI" as UI
+participant ":CreateCityController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "mapRepo\n:MapRepository" as mapRepo
+participant "cityRepo\n:CityRepository" as cityRepo
+participant ":MapMapper" as mapper
+participant ":City" as City
+participant ":HouseBlock" as HouseBlock
+
+activate Editor
+Editor -> UI : requests to create a new city
+
+activate UI
+UI -> CTRL** : create
+
+UI -> CTRL: getMapList()
+activate CTRL
+
+    ref over CTRL, mapRepo, mapper
+        Get Map List
+    end ref
+
+CTRL --> UI: mapDTOList
+deactivate CTRL
+
+UI --> Editor: shows list of maps\n for user to select
+deactivate UI
+
+Editor -> UI: selects a map
+activate UI
+
+UI --> Editor: requests data to add city\n(name, x,y)
+deactivate UI
+
+Editor -> UI: inputs data needed to add city
+activate UI
+
+UI -> CTRL : createCity(name, map, x, y)
+activate CTRL
+
+    ref over CTRL, mapRepo
+        Get Map
+    end ref
+
+    ref over CTRL, City, HouseBlock, cityRepo
+        Create City
+    end ref
+
+CTRL --> UI : success
+deactivate CTRL
+
+UI --> Editor : display result
+deactivate UI
+deactivate Editor
+
+@enduml
