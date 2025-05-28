@@ -76,4 +76,8 @@ public class CreateScenarioController {
     public List<Scenario> getScenarioList() {
         return getScenarioRepository().getScenarioList();
     }
+
+    public List<Scenario> getScenarioListByMap(Map map) {
+        return getScenarioRepository().getScenarioListByMap(map);
+    }
 }
