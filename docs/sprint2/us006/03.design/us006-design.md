@@ -26,6 +26,8 @@ According to the taken rationale, the conceptual classes promoted to software cl
 - Player
 - Station
 - Building
+- BuildingType
+- UpgradeStationService
 
 Other software classes (i.e. Pure Fabrication) identified:
 
@@ -40,11 +42,35 @@ This diagram shows the full sequence of interactions between the classes involve
 
 ![Sequence Diagram - Full](svg/us006-sequence-diagram-full.svg)
 
-### Partial Diagrams
 
-- `us006-sd-partial-upgrade-station.puml`
-- `us006-sd-partial-add-building.puml`
-- `us006-sd-partial-check-mutual-exclusivity.puml`
+### Split Diagrams
+
+The following diagram shows the same sequence of interactions between the classes involved in the realization of this user story, but it is split in partial diagrams to better illustrate the interactions between the classes.
+
+It uses Interaction Occurrence (a.k.a. Interaction Use).
+
+![Sequence Diagram - split](svg/us006-sd-split.svg)
+
+**Get Building Type**
+
+![Sequence Diagram - Partial - Get Building Type](svg/us006-sd-partial-get-building-type.svg)
+
+**Get Station Repository**
+
+![Sequence Diagram - Partial - Get Station Repository](svg/us006-sd-partial-get-station-repo.svg)
+
+**Upgrade A Station**
+
+![Sequence Diagram - Partial - Upgrade A Station](svg/us006-sd-partial-upgrade-station.svg)
+
+**Check mutual exclusivity**
+
+![Sequence Diagram - Partial - Check Mutual Exclusivity](svg/us006-sd-partial-check-mutual-exclusivity.svg)
+
+**Add building**
+
+![Sequence Diagram - Partial - Add building](svg/us006-sd-partial-add-building.svg)
+
 
 ## 3.3. Class Diagram (CD)
 

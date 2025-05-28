@@ -12,10 +12,8 @@ import java.util.Scanner;
  * It displays all available stations, filters building types based on the current year,
  * removes obsolete buildings automatically (e.g., Telegraph after 1920),
  * and allows the player to add a new building to a selected station.
- *
  * The available building types are filtered using historical availability logic,
  * ensuring that players only see and select buildings appropriate to the scenario's current year.
- *
  * This UI also deducts the cost of the selected building from the scenario's budget
  * upon successful construction.
  */

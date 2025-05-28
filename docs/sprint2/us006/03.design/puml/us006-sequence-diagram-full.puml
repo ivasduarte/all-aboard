@@ -10,6 +10,8 @@ participant "UpgradeAStationUI" as UI
 participant "UpgradeAStationController" as CTRL
 participant "Repositories" as Repos
 participant "StationRepository" as Station_REPO
+participant "BuildingRepository" as Building_REPO
+participant "StationUpgradeService" as Service
 
 activate Player
 
@@ -39,9 +41,32 @@ activate Station_REPO
 Station_REPO --> CTRL : List<AvailableStation>
 deactivate Station_REPO
 
-CTRL --> UI : Send Stations
+CTRL --> UI : send stations
+UI --> Player : show available stations
+Player -> UI : selects a station
+
+UI --> Player : show available buildings
+Player -> UI : selects building type (e.g., "Large Hotel")
+
+CTRL -> Repos : getBuildingRepository()
+Repos --> CTRL : BuildingRepository
+
+CTRL -> Building_REPO : getBuildingType("Large Hotel")
+Building_REPO --> CTRL : BuildingType
+
+CTRL -> Service : upgradeStation(station, building, year)
+activate Service
+Service --> CTRL : success/failure (boolean)
+deactivate Service
+
+alt on success
+  CTRL --> UI : return success
+  UI --> Player : Building added successfully
+else on failure
+  CTRL --> UI : return failure
+  UI --> Player : Show error message
+end
 
 destroy CTRL
 deactivate UI
-
 @enduml

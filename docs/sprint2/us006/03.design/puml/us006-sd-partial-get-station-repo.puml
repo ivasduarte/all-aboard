@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "UpgradeAStationController" as CTRL
+participant "Repositories" as Repos
+participant "StationRepository" as StationRepo
+
+activate CTRL
+
+CTRL -> Repos : getInstance()
+activate Repos
+Repos --> CTRL : Repositories instance
+deactivate Repos
+
+CTRL -> Repos : getStationRepository()
+activate Repos
+Repos --> CTRL : StationRepository
+deactivate Repos
+
+CTRL -> StationRepo : getAvailableStations(mapName)
+activate StationRepo
+StationRepo --> CTRL : List<Station>
+deactivate StationRepo
+
+deactivate CTRL
+@enduml

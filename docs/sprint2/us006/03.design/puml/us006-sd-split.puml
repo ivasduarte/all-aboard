@@ -1,0 +1,75 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant ":UpgradeAStationUI" as UI
+participant ":UpgradeAStationController" as CTRL
+participant ":Repositories" as Repos
+participant ":StationRepository" as StationRepo
+participant ":BuildingRepository" as BuildingRepo
+participant ":StationUpgradeService" as Service
+
+activate Player
+
+Player -> UI : requests to upgrade a station
+activate UI
+UI -> CTRL** : create()
+
+== Station Selection ==
+autonumber 3.1
+UI -> CTRL : getAvailableStations(map)
+activate CTRL
+
+ref over CTRL, Repos
+  Get Station Repository
+end ref
+
+ref over CTRL, StationRepo
+  Get Available Stations
+end ref
+
+CTRL --> UI : List<Station>
+deactivate CTRL
+
+UI -> Player : show available stations
+Player -> UI : selects station
+
+UI -> Player : show available building types
+Player -> UI : selects building
+
+== Upgrade Process ==
+autonumber 6
+UI -> CTRL : upgradeStation(station, buildingType, year)
+activate CTRL
+
+ref over CTRL, Repos
+  Get Building Repository
+end ref
+
+ref over CTRL, BuildingRepo
+  Get Building Type
+end ref
+
+ref over CTRL, Service
+  Upgrade Station
+end ref
+
+ref over Service
+  Check Mutual Exclusivity
+end ref
+
+ref over Service, Station
+  Add Building
+end ref
+
+CTRL --> UI : success/failure
+UI -> Player : show message (success or error)
+
+deactivate CTRL
+deactivate UI
+deactivate Player
+@enduml

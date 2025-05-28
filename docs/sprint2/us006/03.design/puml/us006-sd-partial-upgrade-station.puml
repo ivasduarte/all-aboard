@@ -7,18 +7,32 @@ participant "StationUpgradeService" as Service
 participant "Building" as Building
 participant "Station" as Station
 
-CTRL -> Service : upgradeStation(station, new Building(type), year)
+activate CTRL
+
+CTRL -> Building : create(type)
+
+CTRL -> Service : upgradeStation(station, building, year)
 activate Service
 
 Service -> Station : getBuildings()
-Service -> Service : checkMutualExclusivity()
-Service -> Station : addBuilding(building)
+activate Station
+Station --> Service : List<Building>
+deactivate Station
 
-alt Success
+Service -> Service : checkMutualExclusivity(existingBuildings, newType)
+
+Service -> Station : addBuilding(building)
+activate Station
+
+alt success
+    Station --> Service : true
     Service --> CTRL : true
-else Failure
+else failure
+    Station --> Service : false
     Service --> CTRL : false
 end
 
+deactivate Station
 deactivate Service
+deactivate CTRL
 @enduml

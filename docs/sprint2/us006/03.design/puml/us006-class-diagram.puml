@@ -8,50 +8,103 @@ class Station {
   - positionX: int
   - positionY: int
   - stationID: int
-  - stationType: String
+  - stationType: Station.StationType
+  - orientation: Station.Orientation
   - buildings: List<Building>
-  + Station(mapID: int, posX: int, posY: int, stationType: String)
+  + getStationID(): int
+  + getBuildings(): List<Building>
+  + addBuilding(b: Building): boolean
+  + getStationTypeString(): String
+  + getOrientationString(): String
   + isAvailable(): boolean
   + getMap(): Map
-  + getBuildings(): List<Building>
-  + getStationType(): String
-  + getStationID(): int
-  + getPositionX(): int
-  + getPositionY(): int
 }
 
 class Building {
-  - buildingType: String
   + getBuildingType(): String
+  + getCost(): int
+  + getEffect(): String
 }
 
-class ListStationsController {
-  - StationRepo: StationRepository
-  + getStationsByMapName(mapName: String): List<Station>
+class BuildingType {
+  - name: String
+  - cost: int
+  - effect: String
+  - availableYear: int
+  + getName(): String
+  + getCost(): int
+  + getEffect(): String
+  + getAvailableYear(): int
 }
 
-class ListStationsUI <<boundary>> {
-  - map: Map
-  + run(): void
-  + getInput(): void
+class StationUpgradeService {
+  + upgradeStation(station: Station, building: Building, currentYear: int): boolean
+}
+
+class UpgradeAStationController {
+  - stationRepo: StationRepository
+  - buildingRepo: BuildingRepository
+  - upgradeService: StationUpgradeService
+  + getAvailableStations(mapName: String): List<Station>
+  + getAvailableBuildingTypes(): List<BuildingType>
+  + upgradeStation(station: Station, buildingTypeName: String, year: int): boolean
+  + removeObsoleteBuildings(station: Station, year: int): void
 }
 
 class StationRepository {
-  - stations: List<Station>
   + getAvailableStationsByMapName(mapName: String): List<Station>
-  + getStations(): List<Station>
+}
+
+class BuildingRepository {
+  + getBuildingTypes(): List<BuildingType>
+  + getBuildingType(name: String): BuildingType
 }
 
 class Repositories <<singleton>> {
   - instance: Repositories
   - stationRepo: StationRepository
+  - buildingRepo: BuildingRepository
   + getInstance(): Repositories
   + getStationRepository(): StationRepository
+  + getBuildingRepository(): BuildingRepository
 }
 
-ListStationsUI ..> ListStationsController
-ListStationsController ..> StationRepository
+class UpgradeAStationUI {
+  - map: Map
+  - scenario: Scenario
+  + run(): void
+  + getInput(): void
+}
+
+class Map {
+  - name: String
+  - width: int
+  - height: int
+  - scenarios: List<Scenario>
+  + getName(): String
+  + getWidth(): int
+  + getHeight(): int
+  + getScenarios(): List<Scenario>
+  + addNewScenario(s: Scenario): void
+  + removeScenario(s: Scenario): boolean
+  + hasScenario(s: Scenario): boolean
+}
+
+class Scenario {
+}
+
+Station --> Building
+Building --> BuildingType
+
+UpgradeAStationController ..> StationUpgradeService
+UpgradeAStationController ..> StationRepository
+UpgradeAStationController ..> BuildingRepository
+
 Repositories ..> StationRepository
-Station "1" --> "0..*" Building
+Repositories ..> BuildingRepository
+
+UpgradeAStationUI ..> UpgradeAStationController
+Station --> Map
+Map --> Scenario
 
 @enduml

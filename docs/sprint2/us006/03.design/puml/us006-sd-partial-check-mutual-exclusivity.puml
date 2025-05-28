@@ -2,14 +2,19 @@
 skinparam monochrome true
 autonumber
 
+participant "UpgradeAStationController" as Controller
 participant "StationUpgradeService" as Service
 
-Service -> Service : checkMutualExclusivity(existingBuildings, newType)
+activate Controller
+Controller -> Service : checkMutualExclusivity(existingBuildings, newType)
+activate Service
 
 alt Not allowed together
-    Service --> caller : return false
+    Service --> Controller : return false
 else Allowed
-    Service --> caller : return true
+    Service --> Controller : return true
 end
 
+deactivate Service
+deactivate Controller
 @enduml

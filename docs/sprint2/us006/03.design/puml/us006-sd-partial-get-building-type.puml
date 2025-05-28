@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+participant "UpgradeAStationController" as CTRL
+participant "Repositories" as Repos
+participant "BuildingRepository" as BuildingRepo
+
+activate CTRL
+
+CTRL -> Repos : getInstance()
+activate Repos
+Repos --> CTRL : Repositories instance
+deactivate Repos
+
+CTRL -> Repos : getBuildingRepository()
+activate Repos
+Repos --> CTRL : BuildingRepository
+deactivate Repos
+
+CTRL -> BuildingRepo : getBuildingType(name)
+activate BuildingRepo
+BuildingRepo --> CTRL : BuildingType
+deactivate BuildingRepo
+
+deactivate CTRL
+@enduml

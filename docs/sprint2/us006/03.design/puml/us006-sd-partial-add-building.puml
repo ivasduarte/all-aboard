@@ -2,19 +2,23 @@
 skinparam monochrome true
 autonumber
 
+participant "StationUpgradeService" as Service
 participant "Station" as Station
-participant "Building" as Building
 
-Station -> Station : addBuilding(building)
+activate Service
+Service -> Station : addBuilding(building)
+activate Station
 
-alt Building is null
-    Station --> caller : throw IllegalArgumentException
-else Max buildings reached
-    Station --> caller : return false
-else Duplicate building type
-    Station --> caller : return false
-else Success
-    Station --> caller : return true
+alt building == null
+    Station --> Service : throw IllegalArgumentException
+else max buildings reached
+    Station --> Service : return false
+else duplicate building type
+    Station --> Service : return false
+else success
+    Station --> Service : return true
 end
 
+deactivate Station
+deactivate Service
 @enduml
