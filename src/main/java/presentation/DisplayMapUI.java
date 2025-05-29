@@ -1,7 +1,6 @@
-package ui.utils;
+package presentation;
 
 import controller.DisplayMapController;
-import controller.ListStationsController;
 import domain.*;
 import repositories.*;
 
@@ -25,9 +24,6 @@ public class DisplayMapUI implements Runnable {
     private final StationRepository stRep = Repositories.getInstance().getStationRepository();
     private final CityRepository cityRep = Repositories.getInstance().getCityRepository();
     private final IndustryRepository indRep = Repositories.getInstance().getIndustryRepository();
-    private final DisplayMapController ctrl = new DisplayMapController();
-    private String mapName;
-    private String[][] mapArray;
 
     private final Map map;
     private final Scenario scenario;
@@ -48,10 +44,9 @@ public class DisplayMapUI implements Runnable {
      * This method provides a sequential execution of operations to display and populate a map based on user input.
      */
     public void run() {
-        System.out.println("\n\n------------------------ Display Map ------------------------");
-        displayMapList();
-        selectData();
-        submitData();
+        System.out.println("\n\n------------------------ MAP DISPLAY ------------------------");
+        System.out.println();
+        displayMap();
         System.out.println();
     }
 
@@ -86,86 +81,19 @@ public class DisplayMapUI implements Runnable {
         }
     }
 
-
     /**
-     * Displays the list of available maps by retrieving the map data through the {@code ctrl.getMapList()} method
-     * and outputting it to the console.
-     * <p>
-     * This method serves as a utility for presenting all existing maps managed by the system, enabling
-     * the user to view them in a textual format.
-     */
-    private void displayMapList() {
-        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
-        List<Map> maps = mapRepository.getMapList();
-        System.out.println("\n\nChoose a map to play from the list below:");
-        for (int i = 0; i < maps.size(); i++) {
-            System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
-        }
-    }
-
-
-    /**
-     * Requests the user to select a map by invoking the {@code requestMapName()} method
-     * and assigns the result to the {@code mapName} field.
-     * <p>
-     * This method prompts user interaction for map selection and updates the internal
-     * state of the class with the selected map's name.
-     */
-    private void selectData() {
-        mapName = requestMapName();
-    }
-
-
-    /**
-     * Prompts the user to input a map name by displaying a message and reading the user's input.
-     * The input is trimmed to remove leading and trailing whitespace before being returned.
+     * Populates a grid representation of a map with city icons and house block icons
+     * based on the cities associated with the specified map.
      *
-     * @return The trimmed map name entered by the user.
-     */
-    private String requestMapName() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Select a map: ");
-        return sc.nextLine().trim();
-    }
-
-
-    /**
-     * Submits and initializes map data based on the selected map name.
-     * <p>
-     * This method performs the following tasks:
-     * 1. Retrieves the list of available maps and identifies the map matching the specified {@code mapName}.
-     * 2. Verifies if the selected map exists.
-     * 3. Initializes a 2D array representation of the map with specified width and height.
-     * 4. Fills the map with preset data, including the addition of cities and house blocks.
+     * This method retrieves all cities linked to the given map, places a city marker
+     * ("🌆") at the center of each city within the grid, and populates the surrounding
+     * region of each city with house block markers ("🏠") based on the coordinates of
+     * its blocks.
      *
-     * @return A two-dimensional String array representing the initialized map data.
+     * @param grid The grid representation of the map, where each cell corresponds to a specific location.
+     *             The grid is modified to include city and house block markers.
+     * @param map  The map corresponding to the grid, specifying which cities are to be added.
      */
-    private String[][] submitData() {
-        int width = 0, height = 0;
-
-        Optional<Map> matchingMap = Optional.empty();
-        List<Map> mapList = ctrl.getMapList();
-        for (int i = 0; i < mapList.size(); i++) {
-            Map map = mapList.get(i);
-            if (map.getName().equalsIgnoreCase(mapName)) {
-                matchingMap = Optional.of(map);
-                mapName = map.getName();
-                break;
-            }
-        }
-
-        if (ctrl.verifyIfMapExists(mapName)) {
-            width = matchingMap.get().getWidth();
-            height = matchingMap.get().getHeight();
-        } else {
-            System.out.println("\nMap does not exist!");
-            return null;
-        }
-
-        displayMap();
-        return mapArray;
-    }
-
     private void addCitiesToMap(String[][] grid, Map map) {
         List<City> cities = cityRep.getCities().stream()
                 .filter(c -> c.getMapName().equals(map.getName()))
@@ -178,6 +106,24 @@ public class DisplayMapUI implements Runnable {
         }
     }
 
+    /**
+     * Populates a grid representation of a map with station markers based on the stations
+     * associated with the given map, scenario, and current user.
+     *
+     * The method processes multiple types of stations (e.g., DEPOT, TERMINAL, STATION),
+     * determines their layout and orientation, and marks their positions on the grid
+     * accordingly. Each station type has specific dimensions and placement rules to
+     * reflect its representation within the grid.
+     *
+     * @param grid   The grid representation of the map, where each cell corresponds to
+     *               a specific location. The grid is modified to include station markers.
+     * @param map    The map corresponding to the grid, specifying which stations are to
+     *               be added.
+     * @param scenario The scenario associated with the current map, used to filter the
+     *                 stations based on their scenario name.
+     * @param width  The width of the grid, representing the horizontal size of the map.
+     * @param height The height of the grid, representing the vertical size of the map.
+     */
     private void addStationsToMap(String[][] grid, Map map, Scenario scenario, int width, int height) {
         if (currentUser != null) {
             String owner = currentUser.getEmail();
@@ -238,6 +184,20 @@ public class DisplayMapUI implements Runnable {
         }
     }
 
+    /**
+     * Populates a grid representation of a map with industry markers based on
+     * the industries associated with the specified map.
+     *
+     * This method retrieves all industries linked to the given map and places
+     * an industry marker ("🏭") on the grid at the corresponding coordinates of
+     * each industry.
+     *
+     * @param grid The grid representation of the map, where each cell corresponds
+     *             to a specific location. The grid is modified to include industry
+     *             markers.
+     * @param map  The map corresponding to the grid, specifying which industries
+     *             are to be added.
+     */
     private void addIndustriesToMap(String[][] grid, Map map) {
         List<Industry> ind = indRep.getIndustriesByMap(map);
         for (Industry industry : ind) {
@@ -245,6 +205,25 @@ public class DisplayMapUI implements Runnable {
         }
     }
 
+    /**
+     * Paints a specified rectangular area within the grid with station and parking markers.
+     *
+     * The method modifies the provided grid to mark a rectangular area based on the specified
+     * dimensions and offset. Within this area, a station marker ("🚉") is placed at the center,
+     * and parking markers ("🅿️") are placed in the remaining cells. The painting is constrained
+     * by the limits of the grid's dimensions.
+     *
+     * @param grid The grid representation where the area is to be painted. Each cell
+     *             corresponds to a specific location on the map.
+     * @param maxW The maximum width of the grid, used to constrain the painting area.
+     * @param maxH The maximum height of the grid, used to constrain the painting area.
+     * @param cx   The x-coordinate of the center position for the station marker ("🚉").
+     * @param cy   The y-coordinate of the center position for the station marker ("🚉").
+     * @param ox   The x-coordinate of the offset where the rectangular area starts.
+     * @param oy   The y-coordinate of the offset where the rectangular area starts.
+     * @param w    The width of the rectangular area to be painted.
+     * @param h    The height of the rectangular area to be painted.
+     */
     private void paintArea(String[][] grid, int maxW, int maxH, int cx, int cy, int ox, int oy, int w, int h) {
         for (int dy = 0; dy < h; dy++) {
             for (int dx = 0; dx < w; dx++) {

@@ -6,12 +6,10 @@ import domain.Locomotive;
 import domain.Map;
 import domain.Scenario;
 import repositories.*;
-import ui.utils.DisplayMapUI;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  * The SimulatorController class is responsible for managing and executing the simulation

@@ -9,7 +9,7 @@ import presentation.*;
 
 import repositories.MapRepository;
 import repositories.Repositories;
-import ui.utils.DisplayMapUI;
+import presentation.DisplayMapUI;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
@@ -126,7 +126,6 @@ public class PlayerUI implements Runnable {
         }
 
         List<MenuItem> options = new ArrayList<>();
-        options.add(new MenuItem("Display Map List", new DisplayMapUI(currentMap, currentScenario)));
         options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade Type of Station", new ChangeStationTypeUI(currentMap, currentScenario)));
