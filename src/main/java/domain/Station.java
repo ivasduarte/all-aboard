@@ -21,6 +21,8 @@ public class Station {
     private int mapID;
     private int positionX;
     private int positionY;
+    private String name;
+
 
     private StationType stationType;
     private Orientation orientation;
@@ -140,13 +142,14 @@ public class Station {
      * @param stationType station type
      * @param orientation station orientation
      */
-    public Station(String mapName, int mapID, int positionX, int positionY, StationType stationType, Orientation orientation) {
+    public Station(String mapName, int mapID, int positionX, int positionY, StationType stationType, Orientation orientation, String name) {
         this.mapName = mapName;
         this.mapID = mapID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.stationType = stationType;
         this.orientation = orientation;
+        this.name = name;
         this.stationID = totalStations;
         this.buildings = new ArrayList<>();
         this.cargo = 0;
@@ -200,6 +203,15 @@ public class Station {
      */
     public int getCargo() {
         return cargo;
+    }
+
+    /**
+     * Retrieves the name of the station.
+     *
+     * @return the name of the station.
+     */
+    public String getName() {
+        return name;
     }
 
     /**

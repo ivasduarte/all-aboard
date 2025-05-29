@@ -30,6 +30,26 @@ public class CityRepository {
     public List<City> getCities() { return List.copyOf(cities); }
 
     /**
+     * Retrieves an unmodifiable list of cities from a certain map stored in the repository.
+     *
+     * @param mapName The name of the map for the filtered list
+     * @return      An unmodifiable {@code List} of {@code City} objects representing the cities from a certain map in the repository.
+     */
+    public List<City> getCitiesByMap(String mapName) {
+        List<City> citiesByMap = new ArrayList<>();
+
+        for(City city : cities)
+        {
+            if(city.getMapName().equalsIgnoreCase(mapName))
+            {
+                citiesByMap.add(city);
+            }
+        }
+
+        return List.copyOf(citiesByMap);
+    }
+
+    /**
      * Checks if a city name is unique within the specified map.
      *
      * @param name  Name of the city to be checked

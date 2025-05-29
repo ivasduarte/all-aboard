@@ -33,13 +33,11 @@ public class AddStationController {
 
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
 
-        int typeID = Station.checkStationType(stationType);
-
-        if (typeID == -1) {
+        if (stationType < 0 || stationType > Station.StationType.values().length-1) {
             return "Invalid station type";
         }
 
-        Station.StationType type = Station.StationType.values()[typeID];
+        Station.StationType type = Station.StationType.values()[stationType];
 
         Station.Orientation orientation;
         try {
@@ -56,7 +54,8 @@ public class AddStationController {
             return "Invalid budget";
         }
 
-        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation);
+        String stationName = generateStationName(map.getName(), positionX, positionY, type.getDisplayName());
+        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation, stationName);
 
         if (!newStation.validatePosition(map, size)) {
             return "Invalid position";
@@ -69,6 +68,35 @@ public class AddStationController {
         stationRepository.save(newStation);
         Station.increaseTotalStations();
         scenario.subtractBudget(type.getPrice());
-        return "Station added successfully";
+        return "Station added successfully under the name " + stationName;
+    }
+
+    public String generateStationName(String mapName, int posX, int posY, String type)
+    {
+        List<City> cities = Repositories.getInstance().getCityRepository().getCitiesByMap(mapName);
+        String stationName = type;
+
+        if(!cities.isEmpty())
+        {
+            double smallestDistance = Math.sqrt(Math.pow(cities.get(0).getCenterX()-posX, 2) + Math.pow(cities.get(0).getCenterY()-posY, 2));
+            City closestCity = cities.get(0);
+
+            for(City city : cities)
+            {
+                int cityX = city.getCenterX();
+                int cityY = city.getCenterX();
+                double distance = Math.sqrt(Math.pow(cityX-posX, 2) + Math.pow(cityY-posY, 2));
+
+                if(distance < smallestDistance)
+                {
+                    closestCity = city;
+                    smallestDistance = distance;
+                }
+            }
+
+            stationName = closestCity.getName() + " " + type;
+        }
+
+        return stationName;
     }
 }

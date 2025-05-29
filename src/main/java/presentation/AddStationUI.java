@@ -38,12 +38,13 @@ public class AddStationUI implements Runnable {
 
         System.out.println("\nYour current budget is " + scenario.getBudget().getBudget() + "€");
         System.out.print("\nEnter the station type you want to add: ");
-        int stationType = sc.nextInt();
+        int stationType = sc.nextInt() - 1;
 
         String stationRotation = "NE";
 
-        if (Arrays.stream(Station.StationType.values()).anyMatch(type -> type.ordinal() == stationType - 1)) {
+        if (Station.StationType.values()[stationType].getSize() % 2 == 0) {
             System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
+            sc.nextLine();
             stationRotation = sc.nextLine();
         }
 
