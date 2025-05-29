@@ -1,0 +1,34 @@
+graph G {
+  "S_Kyle_of_Lochalsh" -- "D_Attadale" [color=yellow, label="27km"];
+  "D_Attadale" -- "S_Dingwall" [color=yellow, label="109km"];
+  "S_Dingwall" -- "S_Ardgay" [color=black, label="42km"];
+  "S_Ardgay" -- "D_Helmsdale" [color=black, label="63km"];
+  "D_Helmsdale" -- "S_Wick" [color=black, label="56km"];
+  "S_Dingwall" -- "T_Inverness" [color=yellow, label="25km"];
+  "T_Inverness" -- "S_Elgin" [color=yellow, label="61km"];
+  "S_Elgin" -- "T_Aberdeen" [color=yellow, label="106km"];
+  "T_Aberdeen" -- "S_Arbroath" [color=black, label="87km"];
+  "S_Arbroath" -- "T_Dundee" [color=black, label="27km"];
+  "T_Dundee" -- "D_Inverkeithing" [color=black, label="70km"];
+  "D_Inverkeithing" -- "T_Edinburgh" [color=black, label="23km"];
+  "T_Inverness" -- "D_Aviemore" [color=black, label="48km"];
+  "D_Aviemore" -- "S_Kingussie" [color=black, label="21km"];
+  "S_Kingussie" -- "T_Perth" [color=black, label="115km"];
+  "T_Perth" -- "T_Dundee" [color=black, label="36km"];
+  "T_Perth" -- "S_Dunblane" [color=black, label="45km"];
+  "S_Dunblane" -- "T_Stirling" [color=black, label="9km"];
+  "T_Stirling" -- "D_Croy" [color=black, label="27km"];
+  "D_Croy" -- "T_Edinburgh" [color=black, label="66km"];
+  "D_Croy" -- "T_Glasgow_Queen_Street" [color=black, label="22km"];
+  "T_Edinburgh" -- "S_Bathgate" [color=black, label="35km"];
+  "S_Bathgate" -- "S_Airdrie" [color=black, label="26km"];
+  "S_Airdrie" -- "T_Glasgow_Queen_Street" [color=black, label="20km"];
+  "T_Glasgow_Queen_Street" -- "S_Dalmuir" [color=black, label="17km"];
+  "S_Dalmuir" -- "D_Crianlarich" [color=black, label="69km"];
+  "D_Crianlarich" -- "D_Tulloch" [color=black, label="70km"];
+  "D_Tulloch" -- "S_Fort_William" [color=black, label="29km"];
+  "S_Fort_William" -- "S_Mallaig" [color=black, label="68km"];
+  "S_Kyle_of_Lochalsh" [color=green, penwidth=3];
+  "T_Inverness" [color=green, penwidth=3];
+  "T_Aberdeen" [color=green, penwidth=3];
+}

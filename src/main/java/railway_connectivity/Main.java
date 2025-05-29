@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         // getting input
-        String linesFile = askFileName("Enter the name of the lines file: ");         // lines file name
+        String linesFile = askFileName("Enter the name of the lines file: ");
 
         File lines = new File(linesFile);
 
