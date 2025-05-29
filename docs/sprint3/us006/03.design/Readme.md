@@ -43,6 +43,54 @@ This diagram shows the full sequence of interactions between the classes involve
 ![Sequence Diagram - Full](svg/us006-sequence-diagram-full.svg)
 
 
+### Split Diagrams
+
+The following diagram shows the same sequence of interactions between the classes involved in the realization of this user story, but it is split in partial diagrams to better illustrate the interactions between the classes.
+
+It uses Interaction Occurrence (a.k.a. Interaction Use).
+
+![Sequence Diagram - Split](svg/us006-sd-split.svg)
+
+**Get Station Repositories**
+
+![Sequence Diagram - Get Station Repositories](svg/us006-sd-partial-get-station-repositories.svg)
+
+**Get Available Stations**
+
+![Sequence Diagram - Get Available Stations](svg/us006-sd-partial.get-available-stations.svg)
+
+
+**Get Building Repository**
+
+![Sequence Diagram - Get Building Repository](svg/us006-sd-partial-get-building-repository.svg)
+
+
+**Get Available Building Types**
+
+![Sequence Diagram - Get Available Building Types](svg/us006-sd-partial-get-available-building-types.svg)
+
+
+**Get Building Type**
+
+![Sequence Diagram - Get Building Type](svg/us006-sd-partial-get-building-type.svg)
+
+
+
+**Get Bugdet**
+
+![Sequence Diagram - Get Budget](svg/us006-sd-partial-get-budget.svg)
+
+
+**Upgrade Station**
+
+![Sequence Diagram - Upgrade Station](svg/us006-sd-partial-upgrade-station.svg)
+
+
+**Subtract Budget**
+
+![Sequence Diagram - Subtract Budget](svg/us006-sd-partial-subtract-budget.svg)
+
+
 ## 3.3. Class Diagram (CD)
 
 ![Class Diagram](svg/us006-class-diagram.svg)

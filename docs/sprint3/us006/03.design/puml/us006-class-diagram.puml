@@ -5,54 +5,112 @@ skinparam classAttributeIconSize 0
 
 class Station {
   - mapID: int
-  - scenarioID: int
   - positionX: int
   - positionY: int
   - stationID: int
-  - stationName: String
-  - stationType: String
+  - stationType: Station.StationType
+  - orientation: Station.Orientation
   - buildings: List<Building>
-  + Station(mapID: int, scenarioID: int, positionX: int, positionY: int, stationName: String, stationType: String)
-  + addBuilding(b: Building, year: int): boolean
+  + getStationID(): int
   + getBuildings(): List<Building>
-  + getStationName(): String
-  + getStationType(): String
+  + addBuilding(b: Building): boolean
+  + getStationTypeString(): String
+  + getOrientationString(): String
+  + isAvailable(): boolean
+  + getMap(): Map
 }
 
 class Building {
-  - buildingType: String
-  + Building(buildingType: String)
   + getBuildingType(): String
+  + getCost(): int
+  + getEffect(): String
+}
+
+class BuildingType {
+  - name: String
+  - cost: int
+  - effect: String
+  - availableYear: int
+  + getName(): String
+  + getCost(): int
+  + getEffect(): String
+  + getAvailableYear(): int
 }
 
 class StationUpgradeService {
   + upgradeStation(station: Station, building: Building, currentYear: int): boolean
 }
 
-class UpgradeAStationUI <<boundary>>
-
 class UpgradeAStationController {
+  - stationRepo: StationRepository
+  - buildingRepo: BuildingRepository
   - upgradeService: StationUpgradeService
-  - stationRepository: StationRepository
-  + getAvailableStations(): List<Station>
-  + upgradeStation(station: Station, buildingType: String, currentYear: int): boolean
+  + getAvailableStations(mapName: String): List<Station>
+  + getAvailableBuildingTypes(): List<BuildingType>
+  + upgradeStation(station: Station, buildingTypeName: String, year: int): boolean
+  + removeObsoleteBuildings(station: Station, year: int): void
+}
+
+class StationRepository {
+  + getAvailableStationsByMapName(mapName: String): List<Station>
+}
+
+class BuildingRepository {
+  + getBuildingTypes(): List<BuildingType>
+  + getBuildingType(name: String): BuildingType
 }
 
 class Repositories <<singleton>> {
   - instance: Repositories
   - stationRepo: StationRepository
+  - buildingRepo: BuildingRepository
   + getInstance(): Repositories
   + getStationRepository(): StationRepository
+  + getBuildingRepository(): BuildingRepository
 }
 
-class StationRepository {
-  + getAvailableStations(): List<Station>
+class UpgradeAStationUI {
+  - map: Map
+  - scenario: Scenario
+  + run(): void
+  + getInput(): void
 }
 
-UpgradeAStationUI ..> UpgradeAStationController
+interface Runnable <<interface>> {
+    +run(): void
+}
+
+class Map {
+  - name: String
+  - width: int
+  - height: int
+  - scenarios: List<Scenario>
+  + getName(): String
+  + getWidth(): int
+  + getHeight(): int
+  + getScenarios(): List<Scenario>
+  + addNewScenario(s: Scenario): void
+  + removeScenario(s: Scenario): boolean
+  + hasScenario(s: Scenario): boolean
+}
+
+class Scenario {
+}
+
+Station --> Building
+Building --> BuildingType
+
+UpgradeAStationUI ..|> Runnable
+
 UpgradeAStationController ..> StationUpgradeService
 UpgradeAStationController ..> StationRepository
+UpgradeAStationController ..> BuildingRepository
+
 Repositories ..> StationRepository
-Station "1" --> "0..*" Building
+Repositories ..> BuildingRepository
+
+UpgradeAStationUI ..> UpgradeAStationController
+Station --> Map
+Map --> Scenario
 
 @enduml
