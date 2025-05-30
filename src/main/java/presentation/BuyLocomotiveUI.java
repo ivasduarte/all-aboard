@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BuyLocomotiveUI implements Runnable {
-    private BuyLocomotiveController ctrl = new BuyLocomotiveController();
+    private BuyLocomotiveController ctrl;
 
     private String locomotiveModel;
 
@@ -22,6 +22,7 @@ public class BuyLocomotiveUI implements Runnable {
     {
         this.map = map;
         this.scenario = scenario;
+        this.ctrl = new BuyLocomotiveController(this.scenario);
     }
 
     /**
@@ -33,13 +34,8 @@ public class BuyLocomotiveUI implements Runnable {
 
         ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
         List<Scenario> scenarios = scenarioRepository.getScenarioList();
-        int scenarioID = -1;
-
-        for(int i = 0; i < scenarios.size(); i++)
-        {
-            if(scenarios.get(i).equals(scenario))
-                scenarioID = i;
-        }
+        System.out.println(this.scenario.getScenarioName());
+        int scenarioID = scenarios.indexOf(this.scenario);
 
         List<Locomotive> availableLocomotives = getLocomotiveController().getLocomotiveRepository().getAvailableLocomotives(scenarioID);
         for (int i = 0; i < availableLocomotives.size(); i++) {
