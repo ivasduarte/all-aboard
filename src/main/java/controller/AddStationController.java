@@ -66,6 +66,7 @@ public class AddStationController {
         }
 
         stationRepository.save(newStation);
+        map.addNewStation(newStation);
         Station.increaseTotalStations();
         scenario.subtractBudget(type.getPrice());
         return "Station added successfully under the name " + stationName;

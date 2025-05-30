@@ -14,6 +14,9 @@ public class Map implements Serializable {
     private int height;
 
     private List<Scenario> scenarios;
+    private List<Station> stations;
+    private List<City> cities;
+    private List<Industry> industries;
 
     /**
      * Constructs a new Map instance with the specified name, width, and height.
@@ -32,6 +35,9 @@ public class Map implements Serializable {
         this.width = width;
         this.height = height;
         scenarios = new ArrayList<>();
+        stations = new ArrayList<>();
+        cities = new ArrayList<>();
+        industries = new ArrayList<>();
         validateName(name);
         validateSize(width, height);
     }
@@ -74,6 +80,32 @@ public class Map implements Serializable {
         return List.copyOf(scenarios);
     }
 
+    /**
+     * Retrieves the list of stations of the map.
+     *
+     * @return All the stations of the map.
+     */
+    public List<Station> getStations() {
+        return List.copyOf(stations);
+    }
+
+    /**
+     * Retrieves the list of cities of the map.
+     *
+     * @return All the cities of the map.
+     */
+    public List<City> getCities() {
+        return List.copyOf(cities);
+    }
+
+    /**
+     * Retrieves the list of industries of the map.
+     *
+     * @return All the industries of the map.
+     */
+    public List<Industry> getIndustries() {
+        return List.copyOf(industries);
+    }
 
     /**
      * Add a new scenario to the list.
@@ -85,6 +117,42 @@ public class Map implements Serializable {
             throw new IllegalArgumentException("Scenario cannot be null.");
         }
         scenarios.add(scenario);
+    }
+
+    /**
+     * Add a new station to the list.
+     *
+     * @param station The new station to be added.
+     */
+    public void addNewStation(Station station) {
+        if (station == null) {
+            throw new IllegalArgumentException("Station cannot be null.");
+        }
+        stations.add(station);
+    }
+
+    /**
+     * Add a new city to the list.
+     *
+     * @param city The new city to be added.
+     */
+    public void addNewCity(City city) {
+        if (city == null) {
+            throw new IllegalArgumentException("city cannot be null.");
+        }
+        cities.add(city);
+    }
+
+    /**
+     * Add a new industry to the list.
+     *
+     * @param industry The new industry to be added.
+     */
+    public void addNewIndustry(Industry industry) {
+        if (industry == null) {
+            throw new IllegalArgumentException("Station cannot be null.");
+        }
+        industries.add(industry);
     }
 
     public boolean removeScenario(Scenario scenario) {

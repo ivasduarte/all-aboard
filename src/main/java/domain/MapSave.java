@@ -23,28 +23,14 @@ public class MapSave implements Runnable, Serializable {
 
         File file = new File(filePath);
 
-        StationRepository stationRepository = Repositories.getInstance().getStationRepository();
-        CityRepository cityRepository = Repositories.getInstance().getCityRepository();
-        IndustryRepository industryRepository = Repositories.getInstance().getIndustryRepository();
-
-        List<Station> stations = stationRepository.getAvailableStationsByMapName(map.getName());
-        List<City> cities = cityRepository.getCitiesByMap(map.getName());
-        List<Industry> industries = industryRepository.getIndustriesByMap(map);
-
         file.createNewFile();
-        
+
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file, false));
 
             System.out.println("Out made");
             out.writeObject(map);
             System.out.println("map added");
-            out.writeObject(stations);
-            System.out.println("stations added");
-            out.writeObject(cities);
-            System.out.println("cities added");
-            out.writeObject(industries);
-            System.out.println("industries added");
             out.close();
             System.out.println("closed");
 

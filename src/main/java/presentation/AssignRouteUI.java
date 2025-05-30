@@ -56,8 +56,7 @@ public class AssignRouteUI implements Runnable {
             return;
         }
 
-        ListStationsController listStationsController = new ListStationsController();
-        List<Station> stations = listStationsController.getStationsByMapName(map.getName());
+        List<Station> stations = map.getStations();
 
         if(stations.size() < 2)
         {

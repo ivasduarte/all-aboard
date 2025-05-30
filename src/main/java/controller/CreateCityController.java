@@ -118,6 +118,11 @@ public class CreateCityController {
         }
         City c = new City(name, map, x, y);
         cityRepo.add(c);
+        Optional<Map> cityMap = Repositories.getInstance().getMapRepository().getMap(map);
+
+        if(cityMap.isPresent())
+            cityMap.get().addNewCity(c);
+
         return c;
     }
 
