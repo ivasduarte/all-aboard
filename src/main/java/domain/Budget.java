@@ -1,9 +1,11 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Represents a budget with basic functionalities to retrieve and modify its value.
  */
-public class Budget {
+public class Budget implements Serializable {
     int budget;
 
     /**

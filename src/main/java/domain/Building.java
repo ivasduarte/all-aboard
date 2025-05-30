@@ -1,5 +1,7 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Represents a specific building instance that can be constructed at a station.
  * A {@code Building} is based on a {@code BuildingType}, which defines its
@@ -8,7 +10,7 @@ package domain;
  * This class acts as a wrapper around {@code BuildingType} and is used to
  * associate buildings with stations in the simulation.
  */
-public class Building {
+public class Building implements Serializable {
 
     private final BuildingType type;
 

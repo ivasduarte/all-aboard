@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Represents a map with a name, dimensions (width and height), and a list of associated scenarios.
  * This class provides methods to access and manipulate the map's properties and scenarios.
  */
-public class Map {
+public class Map implements Serializable {
     private String name;
     private int width;
     private int height;

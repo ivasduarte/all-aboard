@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Represents a set of restrictions based on time, locomotive types, and historical events.
  * This class is designed to validate these restrictions based on defined criteria.
  */
-public class Restrictions {
+public class Restrictions implements Serializable {
     //time restrictions
     private LocalDate startDate;
     private LocalDate endDate;

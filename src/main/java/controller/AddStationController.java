@@ -51,7 +51,7 @@ public class AddStationController {
         int budget = scenario.getBudget().getBudget();
 
         if (type.getPrice() > budget) {
-            return "Invalid budget";
+            return "Not enough budget for purchase";
         }
 
         String stationName = generateStationName(map.getName(), positionX, positionY, type.getDisplayName());

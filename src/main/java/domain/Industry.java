@@ -4,9 +4,10 @@ import controller.DisplayMapController;
 import repositories.CityRepository;
 import repositories.IndustryRepository;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Industry {
+public class Industry implements Serializable {
     private DisplayMapController mapController = new DisplayMapController();
     private IndustryRepository indRepo = new IndustryRepository();
     private CityRepository cityRepo = new CityRepository();

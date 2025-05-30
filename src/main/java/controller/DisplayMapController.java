@@ -6,6 +6,7 @@ import repositories.CityRepository;
 import repositories.MapRepository;
 import repositories.Repositories;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * MapRepository and CityRepository. It provides methods to retrieve lists of maps and cities, validate the existence
  * of maps by their name, and ensure the initialization of required repositories.
  */
-public class DisplayMapController {
+public class DisplayMapController implements Serializable {
     private MapRepository mapRepository;
     private CityRepository cityRepository;
     private List<Map> maps = new ArrayList<>();

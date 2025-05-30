@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Represents a City consisting of a name, map details, a center position,
  * and a collection of house blocks.
  */
-public class City {
+public class City implements Serializable {
     private final String name;
     private final String mapName;
     private final int centerX;

@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseMapUI implements Runnable {
-    MapRepository mapRepository = Repositories.getInstance().getMapRepository();
-    List<Map> maps = mapRepository.getMapList();
 
     public ChooseMapUI(){}
 
@@ -33,6 +31,8 @@ public class ChooseMapUI implements Runnable {
     }
 
     public Map getInput(){
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Map> maps = mapRepository.getMapList();
         System.out.println("\n\n------------------------ Choose Map ------------------------");
         for (int i = 0; i < maps.size(); i++) {
             System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());

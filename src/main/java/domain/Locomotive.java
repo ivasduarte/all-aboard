@@ -1,8 +1,9 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Locomotive {
+public class Locomotive implements Serializable {
     /**
      * The locomotive model.
      */

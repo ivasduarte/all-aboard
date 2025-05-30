@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Validates the availability of buildings based on the current year, enforces mutual exclusivity rules,
  * and delegates the actual addition of buildings to the station.
  */
-public class StationUpgradeService {
+public class StationUpgradeService implements Serializable {
 
     /**
      * Attempts to upgrade a station by adding the specified building, after verifying:
