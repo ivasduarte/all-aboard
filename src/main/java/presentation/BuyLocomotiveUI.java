@@ -31,19 +31,35 @@ public class BuyLocomotiveUI implements Runnable {
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
+        boolean validInput = false;
 
         ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
         List<Scenario> scenarios = scenarioRepository.getScenarioList();
-        System.out.println(this.scenario.getScenarioName());
         int scenarioID = scenarios.indexOf(this.scenario);
 
         List<Locomotive> availableLocomotives = getLocomotiveController().getLocomotiveRepository().getAvailableLocomotives(scenarioID);
-        for (int i = 0; i < availableLocomotives.size(); i++) {
-            System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + ": " + availableLocomotives.get(i).getPrice() + "€");
-        }
-        System.out.println("Introduce the locomotive model you want to buy: ");
 
-        this.locomotiveModel = sc.nextLine().trim();
+        if (availableLocomotives.isEmpty()) {
+            System.out.println("There's no available locomotives to purchase at this moment.");
+            return;
+        }
+
+        while (!validInput) {
+            System.out.println("Available locomotives:");
+
+            for (int i = 0; i < availableLocomotives.size(); i++) {
+                System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + " | " + availableLocomotives.get(i).getLocomotiveFuelType() + " | " + availableLocomotives.get(i).getPrice() + "€");
+            }
+            System.out.println("Introduce the locomotive model you want to buy: ");
+
+            this.locomotiveModel = sc.nextLine().trim();
+
+            if (ctrl.isModelValid(locomotiveModel, ctrl.getLocomotiveRepository().getAvailableLocomotives(scenarioID))) {
+                validInput = true;
+            } else {
+                System.out.println("The selected model is not valid for purchase!\n");
+            }
+        }
     }
 
     /**

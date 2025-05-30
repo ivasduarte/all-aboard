@@ -5,6 +5,7 @@ import repositories.LocomotiveRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 
+import java.util.List;
 
 
 public class BuyLocomotiveController {
@@ -52,5 +53,15 @@ public class BuyLocomotiveController {
             locomotiveRepository = repositories.getLocomotiveRepository();
         }
         return locomotiveRepository;
+    }
+
+    public boolean isModelValid(String locomotiveModel, List<Locomotive> availableLocomotives) {
+        for (Locomotive loco : availableLocomotives) {
+            if (loco.getLocomotiveModel().equalsIgnoreCase(locomotiveModel)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
