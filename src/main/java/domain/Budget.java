@@ -32,4 +32,5 @@ public class Budget {
     public void setBudget(int budget) {
         this.budget = budget;
     }
+
 }

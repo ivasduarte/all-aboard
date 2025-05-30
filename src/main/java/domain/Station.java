@@ -29,6 +29,9 @@ public class Station {
     private List<Building> buildings;
     private int cargo;
 
+    private int lastYearDeliveries;
+    private int demand;
+
     /**
      * Enum representing different types of orientation with their properties.
      */
@@ -565,5 +568,38 @@ public class Station {
             }
         }
         return id;
+    }
+
+    /**
+     * Calculates the Euclidean distance to another station.
+     *
+     * @param other The destination station
+     * @return The distance between this station and the other station
+     */
+    public double distanceTo(Station other) {
+        if (other == null) {
+            throw new IllegalArgumentException("Destination station cannot be null");
+        }
+
+        int dx = this.positionX - other.positionX;
+        int dy = this.positionY - other.positionY;
+
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public int getLastYearDeliveries() {
+        return lastYearDeliveries;
+    }
+
+    public void setLastYearDeliveries(int lastYearDeliveries) {
+        this.lastYearDeliveries = lastYearDeliveries;
+    }
+
+    public int getDemand() {
+        return demand;
+    }
+
+    public void setDemand(int demand) {
+        this.demand = demand;
     }
 }

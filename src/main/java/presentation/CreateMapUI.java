@@ -78,7 +78,7 @@ public class CreateMapUI implements Runnable {
      */
     private String requestMapName() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the name of the map: ");
+        System.out.print("ENTER MAP NAME: ");
         String mapName = sc.nextLine();
         if (mapRepository.existsByName(mapName)) {
             System.out.print("\nName already exists. Please enter a different name: ");
@@ -94,12 +94,12 @@ public class CreateMapUI implements Runnable {
      */
     private int requestWidth() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the width of the map: ");
+        System.out.print("\nENTER MAP WIDTH (1 to 256): ");
         int width;
         do {
             width = sc.nextInt();
             if (width <= 0 || width > 256) {
-                System.out.println("Invalid width. Please enter a positive integer less than or equal to 256.");
+                System.out.println("ERROR: Invalid width. Please enter a positive integer less than or equal to 256.");
             }
         } while (width <= 0 || width > 256);
         return width;
@@ -113,12 +113,12 @@ public class CreateMapUI implements Runnable {
      */
     private int requestHeight() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the height of the map: ");
+        System.out.print("ENTER MAP HEIGHT (1 to 256): ");
         int height;
         do {
             height = sc.nextInt();
             if (height <= 0 || height > 256) {
-                System.out.println("Invalid height. Please enter a positive integer less than or equal to 256.");
+                System.out.println("ERROR: Invalid height. Please enter a positive integer less than or equal to 256.");
             }
         } while (height <= 0 || height > 256);
         return height;
@@ -141,7 +141,7 @@ public class CreateMapUI implements Runnable {
     private void submitData() {
         try {
             Map map = getController().createMap(mapName, width, height);
-            System.out.println("\nMap '" + map.getName() + "' successfully created!");
+            System.out.println("\nMAP '" + map.getName() + "' SUCCESSFULLY CREATED!");
         } catch (IllegalArgumentException e) {
             System.out.println("\nERROR: " + e.getMessage());
         } catch (Exception e) {

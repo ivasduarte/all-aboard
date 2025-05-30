@@ -51,20 +51,28 @@ public class CreateScenarioUI implements Runnable {
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter the name of the scenario: ");
+        System.out.print("\nENTER SCENARIO NAME: ");
         scenarioName = sc.nextLine().trim();
 
         try {
-            System.out.print("\nEnter Start Date (yyyy-mm-dd): ");
+            System.out.println("\n=== SCENARIO RESTRICTIONS ===");
+
+            System.out.print("\nSCENARIO'S START DATE (yyyy-mm-dd): ");
             LocalDate startDate = LocalDate.parse(sc.nextLine());
 
-            System.out.print("Enter End Date (yyyy-mm-dd): ");
+            System.out.print("SCENARIO'S END DATE (yyyy-mm-dd): ");
             LocalDate endDate = LocalDate.parse(sc.nextLine());
 
-            System.out.print("\nEnter Locomotive Types (comma-separated: steam, diesel, electric): ");
+            System.out.print("\nLOCOMOTIVE RESTRICTIONS: ");
+            System.out.println("\n--> Note: Locomotive types must be comma-seperated. E.g. 'steam, diesel, electric'.");
+            System.out.print("\nENTER LOCOMOTIVE TYPES: ");
             List<String> locoTypes = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
-            System.out.print("\nEnter Historical Events (comma-separated: none, pandemic (cargo demand is lowered, increases every year),\n great war (all costs are increased, cargo demand is greatly increased)): ");
+            System.out.print("\n\nHISTORICAL RESTRICTIONS: ");
+            System.out.println("\n--> Note: Events must be comma-seperated. E.g. 'none, pandemic, great war'.");
+            System.out.println("--> Note: In a pandemic situation, cargo demand is lowered, however increases every year.");
+            System.out.println("--> Note: In a great war situation, all costs are increased, however cargo demand is greatly increased.");
+            System.out.print("\nENTER HISTORICAL EVENTS: ");
             List<String> events = Arrays.asList(sc.nextLine().split("\\s*,\\s*"));
 
             events.replaceAll(String::toLowerCase);

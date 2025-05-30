@@ -63,18 +63,18 @@ public class UpgradeAStationUI implements Runnable {
             return;
         }
 
-        System.out.println("Available Stations:");
+        System.out.println("\nAVAILABLE STATIONS TO UPGRADE:");
         for (int i = 0; i < stations.size(); i++) {
             Station s = stations.get(i);
             System.out.println((i + 1) + ". Station ID: " + s.getStationID() + " | Type: " + s.getStationType() +
                     " | Position: (" + s.getPositionX() + ", " + s.getPositionY() + ")");
         }
 
-        System.out.print("\nSelect a station to upgrade (enter number): ");
+        System.out.print("\nSELECT A STATION TO UPGRADE: ");
         int selectedIndex = Integer.parseInt(sc.nextLine()) - 1;
 
         if (selectedIndex < 0 || selectedIndex >= stations.size()) {
-            System.out.println("Invalid station selection.");
+            System.out.println("ERROR: Invalid station selection.");
             return;
         }
 
@@ -82,15 +82,15 @@ public class UpgradeAStationUI implements Runnable {
 
         System.out.println();
 
-        System.out.println("Your current budget is " + budget + "€");
+        System.out.println("CURRENT BUDGET: " + budget + "€");
 
         int currentYear = scenario.getCurrentYear();
 
-        System.out.println("Year of simulation: " + currentYear);
+        System.out.println("\nCURRENT SIMULATION YEAR: " + currentYear);
 
         controller.removeObsoleteBuildings(selectedStation, currentYear);
 
-        System.out.println("\nAvailable Building Types:");
+        System.out.println("\nAVAILABLE BUILDINGS TO ADD TO STATION: ");
         for (BuildingType bt : controller.getAvailableBuildingTypes()) {
             String name = bt.getName();
 
@@ -103,7 +103,7 @@ public class UpgradeAStationUI implements Runnable {
             }
         }
 
-        System.out.print("\nEnter the type of building to add: ");
+        System.out.print("\nENTER THE BUILDING TYPE YOU WISH TO ADD: ");
         String buildingTypeName = sc.nextLine().trim();
 
         BuildingType selectedBuildingType = controller.getBuildingTypeByName(buildingTypeName);

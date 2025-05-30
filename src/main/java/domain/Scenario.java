@@ -12,6 +12,7 @@ public class Scenario {
     private Budget budget;
 
     private int currentYear;
+    private double modificationRateFor;
 
     /**
      * Creates a new Scenario instance with the specified name, restrictions, and map.
@@ -161,5 +162,13 @@ public class Scenario {
     @Override
     public String toString() {
         return name + " (" + restrictions + ", belongs to map '" + map.getName() + ")";
+    }
+
+    public double getModificationRateFor() {
+        return modificationRateFor;
+    }
+
+    public void setModificationRateFor(double modificationRateFor) {
+        this.modificationRateFor = modificationRateFor;
     }
 }

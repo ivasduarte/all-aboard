@@ -30,28 +30,29 @@ public class AddStationUI implements Runnable {
 
         AddStationController stationController = new AddStationController();
 
-        System.out.println("\n\nStation types:");
+        System.out.println("\n\nSTATION TYPES:");
         for (int i = 0; i < Station.StationType.values().length; i++) {
             Station.StationType type = Station.StationType.values()[i];
             System.out.println((i + 1) + " | " + type.getDisplayName() + " | " + type.getPrice() + "€");
         }
 
-        System.out.println("\nYour current budget is " + scenario.getBudget().getBudget() + "€");
-        System.out.print("\nEnter the station type you want to add: ");
+        System.out.println("\n\nWARNING:");
+        System.out.println("Current budget: " + scenario.getBudget().getBudget() + "€.");
+        System.out.print("\nCHOOSE A STATION FROM LIST ABOVE: ");
         int stationType = sc.nextInt() - 1;
 
         String stationRotation = "NE";
 
         if (Station.StationType.values()[stationType].getSize() % 2 == 0) {
-            System.out.println("Enter the rotation for the station (NE, NW, SE, SW): ");
+            System.out.print("\nINSERT STATION'S ORIENTATION (NE, NW, SE, SW): ");
             sc.nextLine();
             stationRotation = sc.nextLine();
         }
 
-        System.out.print("\nEnter the position X of the station: ");
+        System.out.print("\nSTATION'S X POSITION: ");
         int positionX = sc.nextInt();
 
-        System.out.print("Enter the position Y of the station: ");
+        System.out.print("STATION'S Y POSITION: ");
         int positionY = sc.nextInt();
 
         String result = stationController.AddStation(map, scenario, positionX, positionY, stationType, stationRotation);

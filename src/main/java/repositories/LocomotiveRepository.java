@@ -93,4 +93,26 @@ public class LocomotiveRepository {
         }
         throw new IllegalArgumentException("Locomotive with model " + locomotiveModel + " doesn't exist.");
     }
+
+    public boolean isAvailableToPlayer(Locomotive locomotiveModel) {
+        for (Locomotive locomotive : availableLocomotives) {
+            if (locomotive.getLocomotiveModel() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void unlockForPlayer(Locomotive locomotiveModel) {
+        for (Locomotive locomotive : locomotives) {
+            if (locomotive.getLocomotiveModel() != null) {
+                if (!availableLocomotives.contains(locomotive)) {
+                    availableLocomotives.add(locomotive);
+                }
+                System.out.println("Locomotive " + locomotiveModel + " unlocked for player");
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Locomotive with model " + locomotiveModel + " not found");
+    }
 }
