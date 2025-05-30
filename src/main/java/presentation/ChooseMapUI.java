@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseMapUI implements Runnable {
-    MapRepository mapRepository = Repositories.getInstance().getMapRepository();
-    List<Map> maps = mapRepository.getMapList();
-
+    
     public ChooseMapUI(){}
 
     public void run(){
@@ -33,6 +31,9 @@ public class ChooseMapUI implements Runnable {
     }
 
     public Map getInput(){
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Map> maps = mapRepository.getMapList();
+
         System.out.println("\n\n------------------------ Choose Map ------------------------");
 
         System.out.println("\nMAP LIST:");
