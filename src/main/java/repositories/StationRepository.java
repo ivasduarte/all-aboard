@@ -18,6 +18,15 @@ public class StationRepository {
     public void save(Station station){ stations.add(station); }
 
     /**
+     * Saves a new list of stations
+     * @param stations new stations
+     */
+    public void save(List<Station> stations){
+        for(Station station : stations)
+            save(station);
+    }
+
+    /**
      * Get all the stations
      * @return all stations
      */

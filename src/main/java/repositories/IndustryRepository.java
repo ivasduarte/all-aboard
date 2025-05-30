@@ -20,6 +20,16 @@ public class IndustryRepository implements Serializable {
     }
 
     /**
+     * This method will be responsible to add a list of industries to the industry list.
+     *
+     * @param industries industries that are being created
+     */
+    public void save(List<Industry> industries) {
+        for(Industry industry : industries)
+            save(industry);
+    }
+
+    /**
      * This method allows other classes to get the list with all the industries.
      *
      * @return industry list

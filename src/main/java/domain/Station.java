@@ -603,4 +603,10 @@ public class Station implements Serializable {
     public void setDemand(int demand) {
         this.demand = demand;
     }
+
+    @Override
+    public String toString()
+    {
+        return name + " | " + stationType.displayName + " | (" + positionX + "," + positionY + ")";
+    }
 }

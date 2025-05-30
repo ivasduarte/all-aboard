@@ -16,13 +16,13 @@ class CityRepositoryTest {
     @BeforeEach
     void setUp() {
         repo = new CityRepository();
-        repo.add(new City("A","Map1",1,1));
-        repo.add(new City("B","Map1",2,2));
+        repo.save(new City("A","Map1",1,1));
+        repo.save(new City("B","Map1",2,2));
     }
 
     @Test
     void add_IncreasesSize() {
-        repo.add(new City("C","Map1",3,3));
+        repo.save(new City("C","Map1",3,3));
         assertEquals(3, repo.getCities().size());
     }
 
@@ -49,7 +49,7 @@ class CityRepositoryTest {
         City city = new City("X","Map1",5,5);
         HouseBlock hb = new HouseBlock(7,7);
         city.addBlockManual(hb);
-        repo.add(city);
+        repo.save(city);
         assertFalse(repo.isBlockPositionUnique("Map1", new HouseBlock(7,7)));
     }
 

@@ -1,12 +1,6 @@
 package domain;
 
-import repositories.CityRepository;
-import repositories.IndustryRepository;
-import repositories.Repositories;
-import repositories.StationRepository;
-
 import java.io.*;
-import java.util.List;
 
 public class MapSave implements Runnable, Serializable {
 
@@ -28,13 +22,10 @@ public class MapSave implements Runnable, Serializable {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file, false));
 
-            System.out.println("Out made");
             out.writeObject(map);
-            System.out.println("map added");
             out.close();
-            System.out.println("closed");
 
-            System.out.println(map.getName() + " has been saved!");
+            System.out.println("\n" + map.getName() + " has been saved!");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

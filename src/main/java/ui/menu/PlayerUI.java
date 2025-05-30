@@ -134,6 +134,7 @@ public class PlayerUI implements Runnable {
         options.add(new MenuItem("Play Simulation", new SimulationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Check Financial Results", new ShowFinancialResultsUI(currentScenario)));
         options.add(new MenuItem("Save current Map", new MapSave(mapSaveFilePath, currentMap)));
+        options.add(new MenuItem("Load a Map", new MapLoad()));
 
 
         int option;

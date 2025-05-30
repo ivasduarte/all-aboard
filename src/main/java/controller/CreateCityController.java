@@ -117,7 +117,7 @@ public class CreateCityController {
             throw new IllegalStateException("Cannot create city: validation failed");
         }
         City c = new City(name, map, x, y);
-        cityRepo.add(c);
+        cityRepo.save(c);
         Optional<Map> cityMap = Repositories.getInstance().getMapRepository().getMap(map);
 
         if(cityMap.isPresent())

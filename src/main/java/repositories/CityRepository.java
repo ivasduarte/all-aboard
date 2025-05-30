@@ -19,9 +19,20 @@ public class CityRepository implements Serializable {
     /**
      * Adds a city to the repository's collection of cities.
      *
-     * @param c     {@code City} object to be added to the repository
+     * @param city     {@code City} object to be added to the repository
      */
-    public void add(City c) { cities.add(c); }
+    public void save(City city) { cities.add(city); }
+
+    /**
+     * Adds a list of cities to the repository's collection of cities.
+     *
+     * @param cities     {@code List<City>} cities to be added to the repository
+     */
+    public void save(List<City> cities) {
+        for(City city : cities)
+            save(city);
+    }
+
 
     /**
      * Retrieves an unmodifiable list of cities stored in the repository.

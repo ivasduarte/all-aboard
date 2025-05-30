@@ -179,9 +179,11 @@ public class CreateCityController {
     /**
      * The possible errors that can occur when creating a city.
      */
-    public enum NameMapError { OK, MAP_NOT_FOUND, NAME_DUPLICATE }
-    public enum CenterError { OK, OUT_OF_BOUNDS, POSITION_TAKEN, BLOCK_PRESENT }
-    public enum BlockError { OK, OUT_OF_BOUNDS, COLLIDES_CITY_CENTER, COLLIDES_BLOCK }
+    public enum NameMapError {OK, MAP_NOT_FOUND, NAME_DUPLICATE}
+
+    public enum CenterError {OK, OUT_OF_BOUNDS, POSITION_TAKEN, BLOCK_PRESENT}
+
+    public enum BlockError {OK, OUT_OF_BOUNDS, COLLIDES_CITY_CENTER, COLLIDES_BLOCK}
 
     /**
      * The constructor of the class, initializing repositories to be used.
@@ -197,7 +199,7 @@ public class CreateCityController {
      *
      * @param name  Name of the city to be created.
      * @param map   Map to be used.
-     * @return      NameMapError.OK if the city can be created, or one of the following:
+     * @return NameMapError.OK if the city can be created, or one of the following:
      *              NameMapError.MAP_NOT_FOUND if the map does not exist;
      *              NameMapError.NAME_DUPLICATE if the name is already used by another city in the map.
      */
@@ -215,7 +217,7 @@ public class CreateCityController {
      * @param map   Map where the city will be created.
      * @param x     The X-coordinate of the city center.
      * @param y     The Y-coordinate of the city center.
-     * @return      CenterError.OK if the city can be created, or one of the following:
+     * @return CenterError.OK if the city can be created, or one of the following:
      *              CenterError.OUT_OF_BOUNDS if the coordinates are outside the map bounds;
      *              CenterError.POSITION_TAKEN if the coordinates are already occupied by another city;
      *              CenterError.BLOCK_PRESENT if the coordinates are already occupied by a block.
@@ -236,7 +238,7 @@ public class CreateCityController {
      *
      * @param map   Map where the block will be placed.
      * @param b     House block to be validated.
-     * @return      BlockError.OK if the block can be placed, or one of the following:
+     * @return BlockError.OK if the block can be placed, or one of the following:
      *              BlockError.OUT_OF_BOUNDS if the coordinates are outside the map bounds;
      *              BlockError.COLLIDES_CITY_CENTER if the coordinates are already occupied by another city;
      *              BlockError.COLLIDES_BLOCK if the coordinates are already occupied by another block.
@@ -259,15 +261,15 @@ public class CreateCityController {
      * @param map   Map where the city will be created.
      * @param x     Center X coordinate of the city.
      * @param y     Center Y coordinate of the city.
-     * @return      Created city.
-     * @throws      IllegalStateException if the city cannot be created for any reason.
+     * @return Created city.
+     * @throws IllegalStateException if the city cannot be created for any reason.
      */
     public City createCity(String name, String map, int x, int y) {
         if (validateNameMap(name, map) != NameMapError.OK || validateCenter(name, map, x, y) != CenterError.OK) {
             throw new IllegalStateException("Cannot create city: validation failed");
         }
         City c = new City(name, map, x, y);
-        cityRepo.add(c);
+        cityRepo.save(c);
         return c;
     }
 
@@ -318,7 +320,7 @@ public class CreateCityController {
      *
      * @return the {@code CityRepository} instance for city management
      */
-    public CityRepository getCityRepo(){
+    public CityRepository getCityRepo() {
         var repos = Repositories.getInstance();
         return repos.getCityRepository();
     }
