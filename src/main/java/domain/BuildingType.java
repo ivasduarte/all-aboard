@@ -1,11 +1,13 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Represents a building that can be constructed at a station.
  * Each building type includes a name, cost, in-game effect, and the year it becomes available.
  * Building types are used to determine upgrade options for stations based on the scenario year.
  */
-public class BuildingType {
+public class BuildingType implements Serializable {
 
     private final String name;
     private final int cost;

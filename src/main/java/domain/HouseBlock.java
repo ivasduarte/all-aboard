@@ -1,11 +1,12 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Represents a single block within a grid or map, identified by its x and y coordinates.
  */
-public class HouseBlock {
+public class HouseBlock implements Serializable {
     private final int x;
     private final int y;
 

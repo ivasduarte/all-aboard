@@ -1,8 +1,12 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Locomotive {
+public class Locomotive implements Serializable {
+    /**
+     * The locomotive model.
+     */
     private String locomotiveModel;
     private String fuelType;
     private int maxSpeed; // Changed from `speed`

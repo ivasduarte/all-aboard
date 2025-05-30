@@ -2,6 +2,7 @@ package domain;
 
 import repositories.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Represents a station in the railway system with buildings, cargo management,
  * and position validation capabilities.
  */
-public class Station {
+public class Station implements Serializable {
     private static final int MAX_SLOTS = 7;
     private static int totalStations = 0;
 

@@ -1,10 +1,7 @@
 package ui.menu;
 
 import controller.SimulatorController;
-import domain.Budget;
-import domain.Map;
-import domain.Restrictions;
-import domain.Scenario;
+import domain.*;
 import presentation.*;
 
 import repositories.MapRepository;
@@ -125,6 +122,8 @@ public class PlayerUI implements Runnable {
             return;
         }
 
+        String mapSaveFilePath = currentMap.getName() + ".map";
+
         List<MenuItem> options = new ArrayList<>();
         options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario)));
@@ -134,6 +133,7 @@ public class PlayerUI implements Runnable {
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario)));
         options.add(new MenuItem("Play Simulation", new SimulationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Check Financial Results", new ShowFinancialResultsUI(currentScenario)));
+        options.add(new MenuItem("Save current Map", new MapSave(mapSaveFilePath, currentMap)));
 
 
         int option;

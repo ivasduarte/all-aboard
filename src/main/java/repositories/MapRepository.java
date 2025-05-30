@@ -2,6 +2,7 @@ package repositories;
 
 import domain.Map;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.Optional;
  * The MapRepository class is used to manage a collection of Map instances.
  * It provides methods to add, retrieve, and perform operations on the stored maps.
  */
-public class MapRepository{
+public class MapRepository implements Serializable {
     private List<Map> maps;
 
     /**

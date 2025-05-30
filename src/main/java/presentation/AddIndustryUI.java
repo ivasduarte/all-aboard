@@ -51,7 +51,7 @@ public class AddIndustryUI implements Runnable {
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
         Map map = mapRepository.getMapList().get(mapID);
-        List<Scenario> scenarioList = scenarioController.getScenarioListByMap(map);
+        List<Scenario> scenarioList = map.getScenarios();
 
         System.out.println("\n\nSCENARIOS LIST:");
         for (int i = 0; i < scenarioList.size(); i++) {

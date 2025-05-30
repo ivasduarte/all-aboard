@@ -1,6 +1,7 @@
 package controller;
 
 import domain.Industry;
+import domain.Map;
 import repositories.IndustryRepository;
 import repositories.Repositories;
 
@@ -30,6 +31,8 @@ public class AddIndustryController {
         }
 
         industryRepository.save(industry);
+        Map map = Repositories.getInstance().getMapRepository().getMapList().get(mapID);
+        map.addNewIndustry(industry);
         return "Industry [" + positionX + ", " + positionY + "] saved successfully.";
     }
 

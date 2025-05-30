@@ -1,11 +1,13 @@
 package domain;
 
 
+import java.io.Serializable;
+
 /**
  * Represents a scenario with a specific name, associated restrictions, and map details.
  * This class includes functionality to validate its properties to ensure they meet specified requirements.
  */
-public class Scenario {
+public class Scenario implements Serializable {
     private String name;
     private Restrictions restrictions;
     private Map map;

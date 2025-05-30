@@ -3,10 +3,11 @@ package repositories;
 import domain.Industry;
 import domain.Map;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndustryRepository {
+public class IndustryRepository implements Serializable {
     private List<Industry> industries = new ArrayList<>();
 
     /**

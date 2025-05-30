@@ -29,9 +29,7 @@ public class ListStationsUI implements Runnable {
      * along with their buildings and cargo stored.
      */
     public void getInput() {
-        ListStationsController controller = new ListStationsController();
-
-        List<Station> stations = controller.getStationsByMapName(map.getName());
+        List<Station> stations = map.getStations();
 
         if (stations.isEmpty()) {
             System.out.println("No stations found");

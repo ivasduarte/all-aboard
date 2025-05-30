@@ -4,6 +4,7 @@ import controller.CreateCityController;
 import domain.City;
 import domain.HouseBlock;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * This class provides methods for adding new cities, retrieving existing cities,
  * and validating city-related data, such as uniqueness of names and positions.
  */
-public class CityRepository {
+public class CityRepository implements Serializable {
     private final List<City> cities = new ArrayList<>();
 
     /**
