@@ -84,10 +84,11 @@ public class ShowFinancialResultsUI implements Runnable {
      * This method will be responsible to show the UI related to showing financial results to the player.
      */
     public void run() {
-        System.out.println("\n\n------------------------ Financial Results ------------------------");
+        System.out.println("\n\n------------------------ FINANCIAL RESULTS ------------------------");
         if (!getInput()) {
             return;
         }
+        System.out.println("\n------------------------ " + (yearSelected + currentScenario.getRestrictions().getStartDate().getYear()) + " - Financial Results ------------------------");
         System.out.println(ctrl.getFinancialResultsByYear(yearSelected));
     }
 }

@@ -5,10 +5,16 @@ import repositories.LocomotiveRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 
+import java.util.List;
 
 
 public class BuyLocomotiveController {
+    private Scenario scenario;
     private LocomotiveRepository locomotiveRepository;
+
+    public BuyLocomotiveController(Scenario scenario) {
+        this.scenario = scenario;
+    }
 
     /**
      * This method will be responsible to add the bought locomotive to the repository.
@@ -20,15 +26,6 @@ public class BuyLocomotiveController {
      */
     public String buyLocomotive(String locomotiveModel, String mapName) {
         LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
-        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
-
-        Scenario scenario = null;
-
-        for (Scenario s : scenarioRepository.getScenarioList()) {
-            if (s.getMap().getName().equalsIgnoreCase(mapName)) {
-                scenario = s;
-            }
-        }
 
         if (scenario == null) {
             return "ERROR: No scenario found for the selected map.";
@@ -56,5 +53,15 @@ public class BuyLocomotiveController {
             locomotiveRepository = repositories.getLocomotiveRepository();
         }
         return locomotiveRepository;
+    }
+
+    public boolean isModelValid(String locomotiveModel, List<Locomotive> availableLocomotives) {
+        for (Locomotive loco : availableLocomotives) {
+            if (loco.getLocomotiveModel().equalsIgnoreCase(locomotiveModel)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

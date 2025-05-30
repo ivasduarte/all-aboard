@@ -56,6 +56,16 @@ public class AssignRouteUI implements Runnable {
             return;
         }
 
+        ListStationsController listStationsController = new ListStationsController();
+        List<Station> stations = listStationsController.getStationsByMapName(map.getName());
+
+        if(stations.size() < 2)
+        {
+            System.out.println("There's not enough stations to create a route!");
+            return;
+        }
+
+        System.out.println("\n------------------------ Assign Route ------------------------");
         for(int i = 0; i < locomotives.size(); i++)
         {
             System.out.println((i+1) + ". " + locomotives.get(i).getLocomotiveModel() + " - " + locomotives.get(i).getLocomotiveFuelType());
@@ -64,19 +74,12 @@ public class AssignRouteUI implements Runnable {
         int trainID = sc.nextInt();
         trainID -= 1;
 
-        ListStationsController listStationsController = new ListStationsController();
-        List<Station> stations = listStationsController.getStationsByMapName(map.getName());
-
-        if(stations.isEmpty())
-        {
-            System.out.println("No available stations!");
-            return;
-        }
-
         List<Integer> stationIDs = new ArrayList<>();
 
         int value;
         do {
+            System.out.println();
+
             for(Station station : stations)
             {
                 System.out.println(station.getStationID() + ". " + station.getStationType() + " (" + station.getPositionX() + "," + station.getPositionY() + ")");
@@ -118,6 +121,8 @@ public class AssignRouteUI implements Runnable {
             }
 
         }while(value >= 0);
+
+        System.out.println("\nRoute assigned successfully!");
 
         Locomotive locomotive = locomotiveRepository.getAvailableLocomotives(scenarioID).get(trainID);
 

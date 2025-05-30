@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseMapUI implements Runnable {
-
-    public ChooseMapUI(){}
-
     public void run(){
         Map selectedMap = getInput();
         List<MenuItem> options = new ArrayList<MenuItem>();
@@ -34,14 +31,16 @@ public class ChooseMapUI implements Runnable {
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
         List<Map> maps = mapRepository.getMapList();
         System.out.println("\n\n------------------------ Choose Map ------------------------");
+
+        System.out.println("\nMAP LIST:");
         for (int i = 0; i < maps.size(); i++) {
             System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
         }
 
-        System.out.print("\nEnter the number of the map you want to play: ");
+        System.out.print("\nCHOOSE A MAP FROM LIST ABOVE: ");
         int mapID = Integer.parseInt(System.console().readLine()) - 1;
         if(mapID < 0 || mapID >= maps.size()){
-            System.out.println("Invalid map selection.");
+            System.out.println("ERROR: Invalid map selection.");
             return null;
         }
         return maps.get(mapID);

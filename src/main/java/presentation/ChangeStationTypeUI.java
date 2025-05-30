@@ -30,30 +30,31 @@ public class ChangeStationTypeUI implements Runnable {
 
         List<Station> stations = controller.getAvailableStations(map.getName());
 
-        System.out.println("\nAvailable Stations:");
+        System.out.println("\n\nAVAILABLE STATIONS TYPES TO UPGRADE:");
         for (int i = 0; i < stations.size(); i++) {
             Station s = stations.get(i);
             System.out.println((i + 1) + ". Station ID: " + s.getStationID() + " | Type: " + s.getStationType() +
                     " | Position: (" + s.getPositionX() + ", " + s.getPositionY() + ")");
         }
 
-        System.out.print("\nSelect a station to upgrade (enter number): ");
+        System.out.print("\n\nSELECT STATION'S NUMBER: ");
         int stationID = Integer.parseInt(sc.nextLine()) - 1;
 
         if (stationID < 0 || stationID >= stations.size()) {
-            System.out.println("Invalid station selection.");
+            System.out.println("ERROR: Invalid station selection.");
             return;
         }
 
         Station station = stationRepository.getStations().get(stationID);
 
         if (station.getStationTypeID() >= Station.StationType.values().length - 1) {
-            System.out.println("Station is already a " + station.getStationType() + ". Cannot be further upgraded");
+            System.out.println("WARNING:");
+            System.out.println("Chosen station is already a " + station.getStationType() + ". Cannot be further upgraded.");
             return;
         }
 
-        System.out.println("\nStation type is: " + station.getStationType());
-        System.out.println("\nStation can be upgraded into: ");
+        System.out.println("\n\nSTATION TYPE: " + station.getStationType());
+        System.out.println("\nAVAILABLE UPGRADES: ");
 
         List<String> availableStationTypes = new ArrayList<>();
 
@@ -64,7 +65,7 @@ public class ChangeStationTypeUI implements Runnable {
             }
         }
 
-        System.out.print("\nSelect the new station type: ");
+        System.out.print("\nSELECT NEW STATION: ");
         String newType = sc.nextLine();
 
         boolean validType = false;
@@ -75,7 +76,7 @@ public class ChangeStationTypeUI implements Runnable {
         }
 
         if (!validType) {
-            System.out.println("New type isn't valid!");
+            System.out.println("ERROR: New type isn't valid!");
             return;
         }
 

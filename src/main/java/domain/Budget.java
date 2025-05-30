@@ -34,4 +34,5 @@ public class Budget implements Serializable {
     public void setBudget(int budget) {
         this.budget = budget;
     }
+
 }

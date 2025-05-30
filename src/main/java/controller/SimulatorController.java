@@ -1,31 +1,17 @@
 package controller;
 
 import domain.*;
-import domain.Industry;
-import domain.Locomotive;
-import domain.Map;
-import domain.Scenario;
 import repositories.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
-/**
- * The SimulatorController class is responsible for managing and executing the simulation
- * logic of a game scenario. It handles the simulation loop, including processing the
- * financial gains, industry activities, locomotive operations, and impacts of historical events.
- * The simulation runs based on the defined parameters in the provided map and scenario objects.
- */
 public class SimulatorController implements Runnable {
     private final User currentUser = UserSession.getInstance().getUser();
     private final SimulatorRepository simRep = Repositories.getInstance().getSimRep();
-    private final MapRepository mapRep = Repositories.getInstance().getMapRepository();
-    private final ScenarioRepository scenarioRep = Repositories.getInstance().getScenarioRepository();
     private final StationRepository stRep = Repositories.getInstance().getStationRepository();
     private final LocomotiveRepository locoRep = Repositories.getInstance().getLocomotiveRepository();
     private final CityRepository cityRep = Repositories.getInstance().getCityRepository();
-    private final List<City> cities = cityRep.getCities();
 
     private final int SIMULATION_SLEEP_TIME = 5000;
     private final double PANDEMIC_INITIAL_MULTIPLIER = 0.25;
@@ -36,95 +22,48 @@ public class SimulatorController implements Runnable {
 
     private final ShowFinancialResultsController financialController = new ShowFinancialResultsController();
     private boolean running = true;
+    private boolean paused = false;
 
     private final Map map;
     private final Scenario scenario;
+    private Simulator simulator;
 
-    /**
-     * Constructs a new SimulatorController object with the specified map and scenario.
-     *
-     * @param map      The map on which the simulation is based. Must not be null.
-     * @param scenario The scenario to simulate within the given map. Must not be null.
-     * @throws IllegalArgumentException if either the map or scenario is null.
-     */
     public SimulatorController(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
     }
 
-    /**
-     * Simulates the game by initializing and starting the simulation process.
-     * <p>
-     * This method manages the overall simulation behavior and ensures that it starts only when
-     * valid conditions are met.
-     */
-    public void SimulateGame() {
-        if (!canStartSimulation()) {
-            return;
+    public void pauseSimulation() {
+        paused = true;
+    }
+
+    public void resumeSimulation() {
+        paused = false;
+    }
+
+    public Simulator startOrResumeSimulation() {
+        Optional<Simulator> optionalSim = findBy(map, scenario);
+        if (optionalSim.isPresent()) {
+            this.simulator = optionalSim.get();
+        } else {
+            this.simulator = new Simulator(currentUser, map, scenario, scenario.getBudget(), scenario.getCurrentYear());
+            simRep.add(simulator);
         }
         displaySimulationHeader();
-
-        running = true;
-        initializeAndRunSimulation();
+        return simulator;
     }
 
-    /**
-     * Executes the main simulation process by invoking the {@code SimulateGame} method.
-     * <p>
-     * This method is defined as part of the {@code Runnable} interface implementation, enabling
-     * instances of the containing class to be executed in a multithreaded environment.
-     */
-    @Override
-    public void run() {
-        SimulateGame();
-    }
-
-    /**
-     * Determines whether the simulation can start based on the current year and restriction end year.
-     *
-     * @return {@code true} if the simulation can start; {@code false} otherwise.
-     */
-    private boolean canStartSimulation() {
-        int endYear = scenario.getRestrictions().getEndDate().getYear();
-        if (scenario.getCurrentYear() > endYear) {
-            System.out.println("\nCannot start simulation, game is over!");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Displays the header information for the simulation, including the scenario name, map name,
-     * simulation start and end dates, initial budget, and historical events associated with the scenario.
-     * <p>
-     * The information displayed includes:
-     * - Scenario name and map name.
-     * - Start and end dates of the simulation.
-     * - Initial budget for the simulation.
-     * - Historical events that may influence the simulation.
-     */
     private void displaySimulationHeader() {
-        System.out.println("Starting simulation in " + scenario.getScenarioName() + ", " + map.getName());
-        System.out.println("The starting date is " + scenario.getRestrictions().getStartDate() +
-                " and the end date is " + scenario.getRestrictions().getEndDate());
-        System.out.println("The budget is " + scenario.getBudget().getBudget() + "€");
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("\nSIMULATION STARTING IN SCENARIO " + scenario.getScenarioName() + ", FROM " + scenario.getRestrictions().getStartDate() + " TO " + scenario.getRestrictions().getEndDate());
+        System.out.println("\nYOUR CURRENT BUDGET IS " + scenario.getBudget().getBudget() + "€.");
         displayHistoricalEvents();
     }
 
-    /**
-     * Displays the historical events associated with the current simulation scenario.
-     * <p>
-     * Tasks:
-     * - Retrieves the list of historical events.
-     * - Filters out events labeled as "none".
-     * - Prints the filtered events.
-     * <p>
-     * Note that this method assumes the scenario and its restrictions are properly initialized,
-     * and the historical events list is non-null.
-     */
     private void displayHistoricalEvents() {
         List<String> historicalEvents = scenario.getRestrictions().getHistoricalEvents();
-        System.out.println("Historical events: ");
+
+        System.out.println("YOUR SIMULATION WILL BE CONTINUED WITH THE FOLLOWING EVENTS: ");
         for (String event : historicalEvents) {
             if (!event.equalsIgnoreCase("none")) {
                 System.out.print(event + " ");
@@ -133,366 +72,272 @@ public class SimulatorController implements Runnable {
         System.out.println();
     }
 
-    /**
-     * Displays the statistics for a specified year, including the total earnings for that year
-     * and the current budget.
-     *
-     * @param year          The year for which the statistics are being displayed.
-     * @param totalEarnings The total earnings accumulated during the specified year.
-     */
-    private void displayYearStats(int year, int totalEarnings) {
-        System.out.println("\n\n------------STATS OF YEAR " + year + "------------");
-        System.out.println("You have earned a total of " + totalEarnings + "€. Your budget is now " +
-                scenario.getBudget().getBudget() + "€");
+    private void displayStats(int currentYear, int totalEarnings, Scenario scenario) {
+        System.out.println("\n\n------------STATS OF YEAR " + currentYear + "------------");
+        System.out.println("\nYOU'VE EARNED A TOTAL OF " + totalEarnings + "€.");
+        System.out.println("YOUR BUDGET IS NOW " + scenario.getBudget().getBudget() + "€.");
     }
 
-    /**
-     * Displays the statistics for a specific industry, including its type, location,
-     * the amount of cargo it has generated, and the total budget it has earned.
-     *
-     * @param industry       The industry whose statistics are being displayed. Must not be null.
-     * @param cargoGenerated The amount of cargo generated by the industry.
-     * @param budgetEarned   The total budget earned by the industry (in euros).
-     */
-    private void displayIndustryStats(Industry industry, int cargoGenerated, int budgetEarned) {
-        System.out.println("Industry of type " + industry.getIndustryType() +
-                " (" + industry.getPositionX() + "," + industry.getPositionY() +
-                ") has generated " + cargoGenerated + " cargo, producing a total of " +
-                budgetEarned + "€");
+    private void displayIndustryStats(Industry industry, int cargo, int value) {
+        System.out.println("\n\n------------INDUSTRY STATS------------");
+        System.out.println("\nINDUSTRY '" + industry.getIndustryType() + "', LOCATED AT (" + industry.getPositionX() + "," + industry.getPositionY() +
+                ") HAS GENERATED " + cargo + " CARGO, PRODUCING A TOTAL OF " + value + "€.");
     }
 
-    /**
-     * Displays the statistics for a specified locomotive, including its model and maintenance cost.
-     *
-     * @param locomotive      The locomotive whose statistics are being displayed. Must not be null.
-     * @param maintenanceCost The annual maintenance cost of the locomotive, in euros.
-     */
     private void displayLocomotiveStats(Locomotive locomotive, int maintenanceCost) {
-        System.out.println("The train of model " + locomotive.getLocomotiveModel() +
-                " does not have a route. The maintenance cost is " + maintenanceCost + "€");
+        System.out.println("\n\n------------LOCOMOTIVE STATS------------");
+        System.out.println("\n");
     }
 
-    /**
-     * Initializes and starts the simulation process based on the given scenario and map data.
-     * <p>
-     * Components involved:
-     * - Industries and locomotives are fetched from their respective repositories to form the basis for the simulation.
-     * - Historical events influence the behavior of the simulation through pre-defined multipliers.
-     * <p>
-     * Preconditions:
-     * - The map and scenario must be properly initialized.
-     * - Repository instances must be accessible and populated with valid data.
-     * - The fetched historical events list should not be null or empty.
-     * <p>
-     * Postconditions:
-     * - The simulation process is initiated in a separate thread.
-     * - The simulation continues until user input is provided to halt it.
-     */
+    public void SimulateGame() {
+        if (!canStartSimulation()) return;
+        running = true;
+        initializeAndRunSimulation();
+    }
+
+    @Override
+    public void run() {
+        SimulateGame();
+    }
+
+    private boolean canStartSimulation() {
+        return scenario.getCurrentYear() <= scenario.getRestrictions().getEndDate().getYear();
+    }
+
     private void initializeAndRunSimulation() {
-        List<String> historicalEvents = scenario.getRestrictions().getHistoricalEvents();
-        double cargoGeneratorMultiplier = calculateCargoMultiplier(historicalEvents);
-        double costMultiplier = calculateCostMultiplier(historicalEvents);
+        List<String> events = scenario.getRestrictions().getHistoricalEvents();
+        double cargoMultiplier = calculateCargoMultiplier(events);
+        double costMultiplier = calculateCostMultiplier(events);
 
         List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
-        List<Locomotive> locomotives = Repositories.getInstance().getLocomotiveRepository().getPlayerLocomotives();
-
-        Thread simulatorThread = createSimulatorThread(industries, locomotives, cargoGeneratorMultiplier,
-                costMultiplier, historicalEvents);
-        simulatorThread.start();
-
-        waitForUserInput();
-        stopSimulation(simulatorThread);
-    }
-
-    /**
-     * Calculates a multiplier for cargo generation based on historical events.
-     * <p>
-     * The multiplier starts at 1.0 and is adjusted based on specific historical events:
-     * - If the list contains "pandemic", the multiplier is multiplied by PANDEMIC_INITIAL_MULTIPLIER.
-     * - If the list contains "war", the multiplier is multiplied by WAR_CARGO_MULTIPLIER.
-     *
-     * @param historicalEvents a list of strings representing historical events. Must not be null.
-     * @return the calculated cargo multiplier as a double.
-     */
-    private double calculateCargoMultiplier(List<String> historicalEvents) {
-        double multiplier = 1.0;
-        if (historicalEvents.contains("pandemic")) {
-            multiplier *= PANDEMIC_INITIAL_MULTIPLIER;
-        }
-        if (historicalEvents.contains("war")) {
-            multiplier *= WAR_CARGO_MULTIPLIER;
-        }
-        return multiplier;
-    }
-
-    /**
-     * Calculates a cost multiplier based on historical events.
-     * <p>
-     * The multiplier starts at 1.0 and is adjusted based on specific events:
-     * - If the list contains "war", the multiplier is multiplied by {@code WAR_COST_MULTIPLIER}.
-     *
-     * @param historicalEvents a list of strings representing historical events. Must not be null.
-     * @return the calculated cost multiplier as a double.
-     */
-    private double calculateCostMultiplier(List<String> historicalEvents) {
-        double multiplier = 1.0;
-        if (historicalEvents.contains("war")) {
-            multiplier *= WAR_COST_MULTIPLIER;
-        }
-        return multiplier;
-    }
-
-    /**
-     * Creates a new simulator thread to handle the simulation process for the given industries, locomotives,
-     * and historical event-driven multipliers.
-     * <p>
-     * The created thread executes the simulation loop and terminates gracefully when interrupted.
-     *
-     * @param industries               A list of industries to be included in the simulation. Must not be null.
-     * @param locomotives              A list of locomotives to be included in the simulation. Must not be null.
-     * @param cargoGeneratorMultiplier The multiplier affecting cargo generation rates. Must be greater than 0.
-     * @param costMultiplier           The multiplier affecting operational costs. Must be greater than 0.
-     * @param historicalEvents         A list of historical events influencing the simulation. Must not be null.
-     * @return A new thread that runs the simulation process.
-     */
-    private Thread createSimulatorThread(List<Industry> industries, List<Locomotive> locomotives,
-                                         double cargoGeneratorMultiplier, double costMultiplier,
-                                         List<String> historicalEvents) {
-        return new Thread(() -> {
-            try {
-                runSimulationLoop(industries, locomotives, cargoGeneratorMultiplier, costMultiplier, historicalEvents);
-            } catch (InterruptedException e) {
-                System.out.println("Simulator interrupted.");
-            }
-            System.out.println("Stopped simulator.");
-        });
-    }
-
-    /**
-     * Executes the main simulation loop for the given industries, locomotives, and multipliers.
-     * The loop runs annually until the simulation reaches the scenario's end year
-     * or until the simulation is manually stopped.
-     *
-     * @param industries               A list of industries participating in the simulation. Must not be null.
-     * @param locomotives              A list of locomotives participating in the simulation. Must not be null.
-     * @param cargoGeneratorMultiplier The multiplier influencing cargo generation rates. Must be greater than 0.
-     * @param costMultiplier           The multiplier influencing operational costs. Must be greater than 0.
-     * @param historicalEvents         A list of historical events that can influence multipliers. Must not be null.
-     * @throws InterruptedException If the simulation thread is interrupted while sleeping.
-     */
-    private void runSimulationLoop(List<Industry> industries, List<Locomotive> locomotives,
-                                   double cargoGeneratorMultiplier, double costMultiplier,
-                                   List<String> historicalEvents) throws InterruptedException {
-        int year = scenario.getCurrentYear();
-        int endYear = scenario.getRestrictions().getEndDate().getYear();
-        double currentCargoMultiplier = cargoGeneratorMultiplier;
-
-        while (running && year <= endYear) {
-            Thread.sleep(SIMULATION_SLEEP_TIME);
-
-            if (running) {
-                int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
-                displayYearStats(year, totalEarnings);
-
-                processFinancialResults();
-                scenario.addBudget(totalEarnings);
-
-                if (historicalEvents.contains("pandemic")) {
-                    currentCargoMultiplier += PANDEMIC_RECOVERY_RATE;
-                }
-
-                year++;
-                scenario.setCurrentYear(year);
-            }
-        }
-    }
-
-    /**
-     * Simulates the operations and earnings for a single year in the simulation.
-     * Calculates earnings from both industries and locomotives using the provided multipliers.
-     *
-     * @param industries               A list of industries participating in the simulation. Must not be null.
-     * @param locomotives              A list of locomotives contributing to the simulation. Must not be null.
-     * @param cargoGeneratorMultiplier The multiplier applied to cargo generation rates. Must be greater than 0.
-     * @param costMultiplier           The multiplier applied to operational costs. Must be greater than 0.
-     * @return The total earnings for the simulated year, as an integer.
-     */
-    private int processYearSimulation(List<Industry> industries, List<Locomotive> locomotives,
-                                      double cargoGeneratorMultiplier, double costMultiplier) {
-        int total = 0;
-
-        int industryEarnings = processIndustries(industries, cargoGeneratorMultiplier, costMultiplier);
-        total += industryEarnings;
-
-        int locomotiveEarnings = processLocomotives(locomotives, costMultiplier);
-        total += locomotiveEarnings;
-
-        return total;
-    }
-
-    /**
-     * Processes a list of industries to calculate cargo generation, earnings,
-     * and facilitates interaction with the closest station.
-     *
-     * @param industries               the list of industries to process; must not be null or empty
-     * @param cargoGeneratorMultiplier the multiplier applied to each industry's cargo generation
-     * @param costMultiplier           the multiplier applied to each industry's cargo pricing
-     * @return the total earnings from all processed industries based on cargo generation and pricing calculations
-     */
-    private int processIndustries(List<Industry> industries, double cargoGeneratorMultiplier, double costMultiplier) {
-        if (industries == null || industries.isEmpty()) {
-            return 0;
-        }
-
-        System.out.println("----Stats for industries----");
-        int totalEarned = 0;
-
-        for (Industry industry : industries) {
-            int cargoGenerated = (int) (industry.getCargoAmount() * cargoGeneratorMultiplier);
-            int budgetEarned = (int) (industry.getCargoPrice() * cargoGenerated * costMultiplier);
-
-            Station closestStation = findClosestStation(industry);
-            if (closestStation != null) {
-                closestStation.addCargo(cargoGenerated);
-            }
-
-            displayIndustryStats(industry, cargoGenerated, budgetEarned);
-            totalEarned += budgetEarned;
-        }
-
-        System.out.println("You gained a total of " + totalEarned + "€ from industries!");
-        return totalEarned;
-    }
-
-    /**
-     * Processes a list of locomotives by calculating their earnings and costs based on the provided cost multiplier.
-     * Displays statistical details for each locomotive and computes the net financial earnings.
-     *
-     * @param locomotives    the list of locomotives to process; may be null or empty
-     * @param costMultiplier the multiplier applied to fuel and maintenance costs as well as earnings
-     * @return the net earnings after deducting costs from total earnings
-     */
-    private int processLocomotives(List<Locomotive> locomotives, double costMultiplier) {
-        if (locomotives == null || locomotives.isEmpty()) {
-            return 0;
-        }
-
-        System.out.println("\n----Stats for trains----");
-        int totalEarned = 0;
-        int totalLost = 0;
-
-        for (Locomotive locomotive : locomotives) {
-            int fuelCost = (int) (locomotive.getFuelCost() * costMultiplier);
-            int maintenanceCost = (int) (locomotive.getMaintenanceCost() * costMultiplier);
-            int totalMaintenanceCostPerTrain = fuelCost + maintenanceCost;
-
-            int routeEarnings = 0;
-            if (locomotive.getRoute() != null && !locomotive.getRoute().isEmpty()) {
-                routeEarnings = (int) (locomotive.getRoute().size() * ROUTE_EARNINGS_PER_STATION * costMultiplier);
-            } else {
-                displayLocomotiveStats(locomotive, totalMaintenanceCostPerTrain);
-            }
-
-            totalEarned += routeEarnings;
-            totalLost += totalMaintenanceCostPerTrain;
-        }
-
-        int netEarnings = totalEarned - totalLost;
-        System.out.println("You gained a total of " + totalEarned + "€ from trains and lost a total of " +
-                totalLost + "€! Total balance is " + netEarnings + "€!");
-
-        return netEarnings;
-    }
-
-    private void processFinancialResults() {
         List<Locomotive> locomotives = locoRep.getPlayerLocomotives();
 
-        int trainMaintenanceCost = 0;
-        int trainFuelCost = 0;
+        Thread simThread = createSimulatorThread(industries, locomotives, cargoMultiplier, costMultiplier, events);
+        simThread.start();
 
-        for (Locomotive locomotive : locomotives) {
-            trainMaintenanceCost += locomotive.getMaintenanceCost();
-            trainFuelCost += locomotive.getFuelCost();
-        }
-
-        financialController.addFinancialResults(0, trainMaintenanceCost, trainFuelCost, 0);
-    }
-
-    /**
-     * Finds the closest station to the given industry.
-     *
-     * @param industry the industry for which the closest station is to be found
-     * @return the closest station to the specified industry, or null if no suitable station is found
-     */
-    private Station findClosestStation(Industry industry) {
-        List<Station> stations = Repositories.getInstance().getStationRepository().getStations();
-        Station closest = null;
-        int closestDistance = Integer.MAX_VALUE;
-
-        for (Station station : stations) {
-            if (station.getMap().getName().equalsIgnoreCase(map.getName())) {
-                int distance = calculateDistance(station, industry);
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    closest = station;
-                }
-            }
-        }
-
-        return closest;
-    }
-
-    /**
-     * Calculates the squared distance between a station and an industry based on their positions.
-     *
-     * @param station  the station object whose position is used in the calculation
-     * @param industry the industry object whose position is used in the calculation
-     * @return the squared distance between the station and the industry
-     */
-    private int calculateDistance(Station station, Industry industry) {
-        int dx = station.getPositionX() - industry.getPositionX();
-        int dy = station.getPositionY() - industry.getPositionY();
-        return dx * dx + dy * dy;
-    }
-
-    /**
-     * Pauses the execution of the program and waits for user input.
-     * Displays a prompt to the user instructing them to press the ENTER key.
-     * Once the user presses ENTER, the method sets the 'running' flag to false,
-     * signaling the program or simulator to stop.
-     * <p>
-     * This method uses the Scanner class to read input from the standard input stream.
-     * It is intended to block program execution until the user provides the required input.
-     */
-    private void waitForUserInput() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Press ENTER to stop the simulator");
-        scanner.nextLine();
-        running = false;
-    }
-
-    /**
-     * Stops the simulation by waiting for the provided simulator thread to finish execution.
-     *
-     * @param simulatorThread the thread running the simulation that needs to be stopped
-     */
-    private void stopSimulation(Thread simulatorThread) {
         try {
-            simulatorThread.join();
+            simThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private double calculateCargoMultiplier(List<String> events) {
+        double m = 1.0;
+        if (events.contains("pandemic")) m *= PANDEMIC_INITIAL_MULTIPLIER;
+        if (events.contains("war")) m *= WAR_CARGO_MULTIPLIER;
+        return m;
+    }
+
+    private double calculateCostMultiplier(List<String> events) {
+        return events.contains("war") ? WAR_COST_MULTIPLIER : 1.0;
+    }
+
+    private Thread createSimulatorThread(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier, List<String> events) {
+        return new Thread(() -> {
+            try {
+                runSimulationLoop(industries, locomotives, cargoMultiplier, costMultiplier, events);
+            } catch (InterruptedException e) {
+                System.out.println("Simulator interrupted.");
+            }
+        });
+    }
+
+    private void runSimulationLoop(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
+        int year = scenario.getCurrentYear();
+        int endYear = scenario.getRestrictions().getEndDate().getYear();
+        double currentCargoMultiplier = cargoMultiplier;
+
+        while (running && year <= endYear) {
+            while (paused) {
+                Thread.sleep(500);
+            }
+
+            Thread.sleep(SIMULATION_SLEEP_TIME);
+
+            int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
+            processFinancialResults();
+            scenario.addBudget(totalEarnings);
+            updateStationDemand();
+            checkNewLocomotives(year);
+
+            if (events.contains("pandemic")) currentCargoMultiplier += PANDEMIC_RECOVERY_RATE;
+            year++;
+            scenario.setCurrentYear(year);
+        }
+
+    }
+
+    private int processYearSimulation(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier) {
+        return processIndustries(industries, cargoMultiplier, costMultiplier)
+                + processHouseBlockCargo()
+                + processLocomotives(locomotives, costMultiplier);
+    }
+
+    private int processIndustries(List<Industry> industries, double cargoMultiplier, double costMultiplier) {
+        int total = 0;
+        for (Industry industry : industries) {
+            double modRate = scenario.getModificationRateFor();
+            int cargo = (int) (industry.getCargoAmount() * cargoMultiplier * modRate);
+            int value = (int) (industry.getCargoPrice() * cargo * costMultiplier);
+            Station s = findClosestStation(industry);
+            if (s != null) s.addCargo(cargo);
+            total += value;
+            displayIndustryStats(industry, cargo, value);
+        }
+        System.out.println("\n\nYOU HAVE GAINED A TOTAL OF " + total + "€ FROM INDUSTRIES.");
+        return total;
+    }
+
+    private int processHouseBlockCargo() {
+
+        int total = 0;
+        for (City city : cityRep.getCities()) {
+            int blocks = city.getBlocks().size();
+            int cargo = blocks * 2;
+            stRep.getStations().stream().filter(s -> s.getMapName().equals(city.getMapName())).filter(s -> currentUser.getEmail().equals(s.getOwnerPlayer())).forEach(s -> s.addCargo(cargo));
+            total += cargo;
+        }
+        return total;
+    }
+
+    private int processLocomotives(List<Locomotive> locomotives, double costMultiplier) {
+        if(locomotives == null || locomotives.isEmpty()){
+            return 0;
+        }
+
+        int totalEarned = 0, totalLost = 0;
+        for (Locomotive l : locomotives) {
+            int fuel = (int) (l.getFuelCost() * costMultiplier);
+            int maintenance = (int) (l.getMaintenanceCost() * costMultiplier);
+            int totalCost = fuel + maintenance;
+
+            int earnings = 0;
+            if (l.getRoute() != null && !l.getRoute().isEmpty()) {
+                double dist = calculateRouteDistance(l.getRoute());
+                double bMulti = calculateStationBuildingMultiplier(l.getRoute().get(l.getRoute().size() - 1));
+                earnings = simulateTrainTrip(l, costMultiplier);
+            } else {
+                displayLocomotiveStats(l, totalCost);
+            }
+            totalEarned += earnings;
+            totalLost += totalCost;
+        }
+        int net = totalEarned - totalLost;
+        System.out.println("\n\nYOU'VE GAINED A TOTAL OF " + totalEarned + "€ FROM TRAINS.");
+        System.out.println("HOWEVER, YOU'VE LOST A TOTAL OF " + totalLost + "€.");
+        System.out.println("YOUR CURRENT BALANCE IS " + net + "€.");
+        return net;
+    }
+
+    private double calculateArrivalTime(Locomotive loco, List<Station> route, boolean isDoubleTrack, Train train) {
+        double baseSpeed = loco.getMaxSpeed();
+        if (!isDoubleTrack) {
+            baseSpeed *= 0.8; // penalidade por trilho simples
+        }
+
+        int degradation = Math.min(30, train.getNumberOfCarriages() * 5);
+        double effectiveSpeed = baseSpeed * (1 - degradation / 100.0);
+
+        double distance = calculateRouteDistance(route);
+        return distance / effectiveSpeed; // tempo em "unidades de tempo"
+    }
+
+    private int simulateTrainTrip(Locomotive loco, double costMultiplier) {
+        if (loco.getRoute() == null || loco.getRoute().isEmpty()) return 0;
+
+        List<Station> route = loco.getRoute();
+        boolean isDoubleTrack = loco.isOnDoubleTrack();
+
+        double timeToArrive = calculateArrivalTime(loco, route, isDoubleTrack, new Train(loco, route.get(0), route.get(route.size() - 1), 2011, 5, false));
+
+        double distance = calculateRouteDistance(route);
+        double buildingMultiplier = calculateStationBuildingMultiplier(route.get(route.size() - 1));
+
+        return (int) (distance * ROUTE_EARNINGS_PER_STATION * buildingMultiplier * costMultiplier);
+    }
+
+
+    private double calculateRouteDistance(List<Station> route) {
+        double dist = 0;
+        for (int i = 0; i < route.size() - 1; i++) {
+            int dx = route.get(i).getPositionX() - route.get(i + 1).getPositionX();
+            int dy = route.get(i).getPositionY() - route.get(i + 1).getPositionY();
+            dist += Math.sqrt(dx * dx + dy * dy);
+        }
+        return dist;
+    }
+
+    private double calculateStationBuildingMultiplier(Station station) {
+        double m = 1.0;
+        for (Building b : station.getBuildings()) {
+            switch (b.getBuildingType()) {
+                case "PassengerTerminal":
+                    m += 0.2;
+                    break;
+                case "Warehouse":
+                    m += 0.1;
+                    break;
+            }
+        }
+        return m;
+    }
+
+    private void updateStationDemand() {
+        for (Station s : stRep.getStations()) {
+            int lastDelivered = s.getLastYearDeliveries();
+            int currentDemand = s.getDemand();
+            s.setDemand((int) (currentDemand * 0.8 + lastDelivered * 0.2));
+        }
+    }
+
+    private void checkNewLocomotives(int year) {
+        for (Locomotive l : locoRep.getAllLocomotives()) {
+            if (l.getStartYear() == year && !locoRep.isAvailableToPlayer(l)) {
+                locoRep.unlockForPlayer(l);
+                System.out.println("New locomotive available: " + l.getLocomotiveModel());
+            }
+        }
+    }
+
+    private void processFinancialResults() {
+        int maintenance = 0, fuel = 0;
+        for (Locomotive l : locoRep.getPlayerLocomotives()) {
+            maintenance += l.getMaintenanceCost();
+            fuel += l.getFuelCost();
+        }
+        financialController.addFinancialResults(0, maintenance, fuel, 0);
+    }
+
+    private Station findClosestStation(Industry i) {
+        Station closest = null;
+        int minDist = Integer.MAX_VALUE;
+        for (Station s : stRep.getStations()) {
+            if (!s.getMap().getName().equalsIgnoreCase(map.getName())) continue;
+            int dx = s.getPositionX() - i.getPositionX();
+            int dy = s.getPositionY() - i.getPositionY();
+            int dist = dx * dx + dy * dy;
+            if (dist < minDist) {
+                minDist = dist;
+                closest = s;
+            }
+        }
+        return closest;
     }
 
     public Map getMap() {
         return map;
     }
 
-    public Scenario getScenario(Map map) {
+    public Scenario getScenario() {
         return scenario;
     }
 
     public Optional<Simulator> findBy(Map map, Scenario scenario) {
         return simRep.findBy(map, scenario, currentUser);
+    }
+
+    public void saveSimulation(Simulator simulator) {
+        simRep.add(simulator);
     }
 }
