@@ -21,8 +21,9 @@ public class SimulatorController implements Runnable {
     private final int ROUTE_EARNINGS_PER_STATION = 50;
 
     private final ShowFinancialResultsController financialController = new ShowFinancialResultsController();
-    private boolean running = true;
-    private boolean paused = false;
+    private volatile boolean running = false;
+    private volatile boolean paused = false;
+    private volatile boolean stopped = false;
 
     private final Map map;
     private final Scenario scenario;
@@ -35,10 +36,31 @@ public class SimulatorController implements Runnable {
 
     public void pauseSimulation() {
         paused = true;
+        System.out.println("Simulation pause requested...");
     }
 
     public void resumeSimulation() {
         paused = false;
+        System.out.println("Simulation resumed...");
+    }
+
+    public void stopSimulation() {
+        running = false;
+        stopped = true;
+        paused = false;
+        System.out.println("Simulation stop requested...");
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public boolean isStopped() {
+        return stopped;
     }
 
     public Simulator startOrResumeSimulation() {
@@ -78,10 +100,10 @@ public class SimulatorController implements Runnable {
         System.out.println("YOUR BUDGET IS NOW " + scenario.getBudget().getBudget() + "€.");
     }
 
-    private void displayIndustryStats(Industry industry, int cargo, int value) {
+    private void displayIndustryStats(Industry industry, int cargo) {
         System.out.println("\n\n------------INDUSTRY STATS------------");
         System.out.println("\nINDUSTRY '" + industry.getIndustryType() + "', LOCATED AT (" + industry.getPositionX() + "," + industry.getPositionY() +
-                ") HAS GENERATED " + cargo + " CARGO, PRODUCING A TOTAL OF " + value + "€.");
+                ") HAS GENERATED " + cargo + " CARGO.");
     }
 
     private void displayLocomotiveStats(Locomotive locomotive, int maintenanceCost) {
@@ -92,6 +114,7 @@ public class SimulatorController implements Runnable {
     public void SimulateGame() {
         if (!canStartSimulation()) return;
         running = true;
+        stopped = false;
         initializeAndRunSimulation();
     }
 
@@ -112,13 +135,10 @@ public class SimulatorController implements Runnable {
         List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
         List<Locomotive> locomotives = locoRep.getPlayerLocomotives();
 
-        Thread simThread = createSimulatorThread(industries, locomotives, cargoMultiplier, costMultiplier, events);
-        simThread.start();
-
         try {
-            simThread.join();
+            runSimulationLoop(industries, locomotives, cargoMultiplier, costMultiplier, events);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Simulation was interrupted.");
         }
     }
 
@@ -133,39 +153,39 @@ public class SimulatorController implements Runnable {
         return events.contains("war") ? WAR_COST_MULTIPLIER : 1.0;
     }
 
-    private Thread createSimulatorThread(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier, List<String> events) {
-        return new Thread(() -> {
-            try {
-                runSimulationLoop(industries, locomotives, cargoMultiplier, costMultiplier, events);
-            } catch (InterruptedException e) {
-                System.out.println("Simulator interrupted.");
-            }
-        });
-    }
-
     private void runSimulationLoop(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
         int year = scenario.getCurrentYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
         double currentCargoMultiplier = cargoMultiplier;
 
-        while (running && year <= endYear) {
-            while (paused) {
+        while (running && !stopped && year <= endYear) {
+            // Handle pause state
+            while (paused && !stopped) {
                 Thread.sleep(500);
             }
 
             Thread.sleep(SIMULATION_SLEEP_TIME);
 
-            int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
-            processFinancialResults();
-            scenario.addBudget(totalEarnings);
-            updateStationDemand();
-            checkNewLocomotives(year);
+            if (!paused && !stopped) {
+                int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
+                scenario.addBudget(totalEarnings);
+                displayStats(year, totalEarnings, scenario);
+                processFinancialResults();
+                updateStationDemand();
+                checkNewLocomotives(year);
 
-            if (events.contains("pandemic")) currentCargoMultiplier += PANDEMIC_RECOVERY_RATE;
-            year++;
-            scenario.setCurrentYear(year);
+                if (events.contains("pandemic")) currentCargoMultiplier += PANDEMIC_RECOVERY_RATE;
+                year++;
+                scenario.setCurrentYear(year);
+            }
         }
 
+        running = false;
+        if (year > endYear) {
+            System.out.println("\n\nSIMULATION COMPLETED! End year reached.");
+        } else if (stopped) {
+            System.out.println("\n\nSIMULATION STOPPED by user.");
+        }
     }
 
     private int processYearSimulation(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier) {
@@ -179,14 +199,14 @@ public class SimulatorController implements Runnable {
         for (Industry industry : industries) {
             double modRate = scenario.getModificationRateFor();
             int cargo = (int) (industry.getCargoAmount() * cargoMultiplier * modRate);
-            int value = (int) (industry.getCargoPrice() * cargo * costMultiplier);
+            // int value = (int) (industry.getCargoPrice() * cargo * costMultiplier);
             Station s = findClosestStation(industry);
             if (s != null) s.addCargo(cargo);
-            total += value;
-            displayIndustryStats(industry, cargo, value);
+            // total += value;
+            displayIndustryStats(industry, cargo); // tirar o value deste display
         }
-        System.out.println("\n\nYOU HAVE GAINED A TOTAL OF " + total + "€ FROM INDUSTRIES.");
-        return total;
+        // System.out.println("\n\nYOU HAVE GAINED A TOTAL OF " + total + "€ FROM INDUSTRIES.");
+        return total; // podes apagar esta linha se quiseres mas acredito que nao faca diferenca
     }
 
     private int processHouseBlockCargo() {
@@ -196,7 +216,7 @@ public class SimulatorController implements Runnable {
             int blocks = city.getBlocks().size();
             int cargo = blocks * 2;
             stRep.getStations().stream().filter(s -> s.getMapName().equals(city.getMapName())).filter(s -> currentUser.getEmail().equals(s.getOwnerPlayer())).forEach(s -> s.addCargo(cargo));
-            total += cargo;
+            //total += cargo;
         }
         return total;
     }
