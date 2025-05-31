@@ -56,7 +56,6 @@ Scenario --> UI : currentYear
 deactivate Scenario
 
 UI -> CTRL : removeObsoleteBuildings(station, currentYear)
-activate CTRL
 CTRL -> Repos : getBuildingRepository()
 activate Repos
 Repos --> CTRL : BuildingRepository
@@ -65,28 +64,23 @@ CTRL -> Building_REPO : getBuildingType("Telephone")
 activate Building_REPO
 Building_REPO --> CTRL : BuildingType
 deactivate Building_REPO
-deactivate CTRL
 
 UI -> CTRL : getAvailableBuildingTypes()
-activate CTRL
 CTRL -> Building_REPO : getBuildingTypes()
 activate Building_REPO
 Building_REPO --> CTRL : List<BuildingType>
 deactivate Building_REPO
 CTRL --> UI : buildingTypes
-deactivate CTRL
 
 UI --> Player : show filtered buildings
 Player -> UI : selects building type (e.g., "Large Hotel")
 
 UI -> CTRL : getBuildingTypeByName("Large Hotel")
-activate CTRL
 CTRL -> Building_REPO : getBuildingType("Large Hotel")
 activate Building_REPO
 Building_REPO --> CTRL : BuildingType
 deactivate Building_REPO
 CTRL --> UI : BuildingType
-deactivate CTRL
 
 UI -> Scenario : getBudget()
 activate Scenario
@@ -94,13 +88,11 @@ Scenario --> UI : budget
 deactivate Scenario
 
 UI -> CTRL : upgradeStation(station, "Large Hotel", currentYear)
-activate CTRL
 CTRL -> Service : upgradeStation(station, Building, currentYear)
 activate Service
 Service --> CTRL : success/failure
 deactivate Service
 CTRL --> UI : result
-deactivate CTRL
 
 alt on success
   UI -> Scenario : subtractBudget(cost)

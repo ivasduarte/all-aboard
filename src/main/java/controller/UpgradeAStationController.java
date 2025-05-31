@@ -5,7 +5,9 @@ import repositories.BuildingRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 import repositories.StationRepository;
+import domain.Station;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -127,5 +129,81 @@ public class UpgradeAStationController {
                 }
             }
         }
+    }
+
+    public List<BuildingType> getFilteredAvailableBuildingTypes(Station station, int currentYear) {
+
+        List<BuildingType> filteredBuildingTypes = new ArrayList<>();
+
+        List<BuildingType> allTypes = buildingRepository.getBuildingTypes();
+
+        List<Building> existingBuildings = station.getBuildings();
+
+        boolean HasHotel = false;
+
+        boolean HasCafe = false;
+
+        for (Building building : existingBuildings) {
+
+            String type = building.getBuildingType().toLowerCase();
+
+            if(type.contains("hotel")) {
+
+                HasHotel = true;
+
+            }
+
+            if(type.contains("cafe")) {
+
+                HasCafe = true;
+
+            }
+        }
+
+        for(BuildingType type : allTypes) {
+
+            String name = type.getName();
+
+            String namelower = name.toLowerCase();
+
+            boolean exists = false;
+
+            for (int i = 0; i < existingBuildings.size(); i++) {
+
+                if(existingBuildings.get(i).getBuildingType().toLowerCase().equals(namelower)) {
+                    exists = true;
+
+                    i = existingBuildings.size();
+
+                }
+
+            }
+            if (exists) {
+                continue;
+            }
+
+            if (namelower.contains("hotel") && HasHotel) {
+                continue;
+            }
+
+            if (namelower.contains("cafe") && HasCafe) {
+                continue;
+            }
+
+            if (type.getAvailableYear() > currentYear) {
+                continue;
+            }
+
+            if (namelower.equals("telegraph") && currentYear >= 1920) {
+                continue;
+            }
+
+            filteredBuildingTypes.add(type);
+
+
+        }
+
+        return filteredBuildingTypes;
+
     }
 }

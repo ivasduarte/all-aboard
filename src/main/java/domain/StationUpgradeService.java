@@ -70,9 +70,7 @@ public class StationUpgradeService implements Serializable {
 
         for (Building building : existingBuildings) {
             String existing = building.getBuildingType().toLowerCase();
-            if (!existing.equals(newLower) &&
-                    existing.contains("hotel") &&
-                    newLower.contains("hotel")) {
+            if ((!existing.equals(newLower) && existing.contains("hotel") && newLower.contains("hotel")) || (!existing.equals(newLower) && existing.contains("cafe") && newLower.contains("cafe"))) {
                 return existing;
             }
         }

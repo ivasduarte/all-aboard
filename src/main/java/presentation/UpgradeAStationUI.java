@@ -91,15 +91,14 @@ public class UpgradeAStationUI implements Runnable {
         controller.removeObsoleteBuildings(selectedStation, currentYear);
 
         System.out.println("\nAVAILABLE BUILDINGS TO ADD TO STATION: ");
-        for (BuildingType bt : controller.getAvailableBuildingTypes()) {
-            String name = bt.getName();
 
-            if (name.equalsIgnoreCase("Telegraph") && currentYear >= 1920) {
-                continue;
-            }
+        List<BuildingType> availableBuildings = controller.getFilteredAvailableBuildingTypes(selectedStation, currentYear);
 
-            if (bt.getAvailableYear() <= currentYear) {
-                System.out.println(name + " | " + bt.getCost() + "€ | Effect: " + bt.getEffect());
+        if (availableBuildings.isEmpty()) {
+            System.out.println("No available buildings for this station at this time.");
+        } else {
+            for (BuildingType bt : availableBuildings) {
+                System.out.println(bt.getName() + " | " + bt.getCost() + "€ | Effect: " + bt.getEffect());
             }
         }
 
