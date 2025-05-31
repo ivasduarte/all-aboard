@@ -110,7 +110,6 @@ public class LocomotiveRepository implements Serializable {
                 if (!availableLocomotives.contains(locomotive)) {
                     availableLocomotives.add(locomotive);
                 }
-                System.out.println("Locomotive " + locomotiveModel + " unlocked for player");
                 return;
             }
         }
