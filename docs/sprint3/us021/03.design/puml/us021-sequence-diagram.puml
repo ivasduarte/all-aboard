@@ -8,74 +8,82 @@ autonumber
 actor Editor
 
 participant ":SaveScenarioUI" as UI
+participant ":SaveScenarioController" as ctrl
+participant ":Repositories" as reps
+participant "mapRepository\n:MapRepository" as repo
+participant "scenarioRepository\n:ScenarioRepository" as srepo
+
 
 activate Editor
 Editor -> UI : requests to save a scenario
-
-create ":SaveScenarioController" as ctrl
-
 activate UI
-UI -> ctrl : create()
 
-participant ":Repositories" as reps
-participant "repositories\n:Repositories" as repositories
-participant "mapRepository\n:MapRepositories" as repo
-participant "scenarioRepository\n:ScenarioRepositories" as srepo
+create ctrl
+UI -> ctrl : constructor
 
-
-
-UI -> ctrl : getMapsList()
+UI -> ctrl : getMapList()
 activate ctrl
-
 ctrl -> reps : getInstance()
 activate reps
-
 reps --> ctrl : instance
 deactivate reps
 
 ctrl -> repo : getMapRepository()
 activate repo
-
 repo --> ctrl : mapRepository
-
-ctrl -> repo: getMapsList()
-
-
-repo --> ctrl: mapsList
+ctrl -> repo : getMapList()
+repo --> ctrl : mapsList
 deactivate repo
-
-ctrl --> UI: mapsList
+ctrl --> UI : mapsList
 deactivate ctrl
 
-UI --> Editor: shows maps to select
-deactivate UI
-Editor -> UI: selects map
-activate UI
+UI --> Editor : shows maps to select
+Editor -> UI : selects map
 
-UI -> ctrl: getScenariosList(map)
-deactivate UI
+UI -> ctrl : getScenarioList(map)
 activate ctrl
-
-ctrl -> repo: getScenariosList(map)
-activate repo
-repo --> ctrl:
-deactivate repo
-ctrl --> UI:  scenarios list
-activate UI
-deactivate ctrl
-UI --> Editor: asks to select a scenario
-
-Editor -> UI: selects a scenario
-
-UI -> ctrl: saveScenarioInFile(scenario)
-activate ctrl
-ctrl -> srepo: saveScenarioInFile(scenario)
+ctrl -> srepo : getScenarioListByMap(map)
 activate srepo
-srepo --> ctrl: saved scenario
+srepo --> ctrl : scenariosList
 deactivate srepo
-ctrl --> UI: saved scenario
+ctrl --> UI : scenariosList
 deactivate ctrl
-UI --> Editor: shows message of success in saving the scenario
+
+UI --> Editor : asks to select a scenario
+Editor -> UI : selects a scenario
+
+UI -> ctrl : saveScenarioInFile(scenario)
+activate ctrl
+ctrl -> srepo : scenarioToFile(scenario)
+activate srepo
+
+alt file does not exist
+    srepo -> srepo : save file directly
+    srepo --> ctrl : saved scenario
+    ctrl --> UI: operation success
+    UI --> Editor: shows message of success
+else file already exists
+    srepo -> UI : ask overwrite confirmation
+    UI -> Editor : confirm overwrite
+    Editor --> UI : Y/N
+
+    opt if user says N
+        srepo -> srepo : cancel save
+        srepo --> ctrl : save cancelled
+        ctrl --> UI : scenario not saved
+        UI --> Editor : operation cancelled
+        deactivate srepo
+        deactivate ctrl
+
+    end
+
+end
+
+deactivate srepo
+ctrl --> UI : saved scenario
+deactivate ctrl
+
+UI --> Editor : shows message of success
 deactivate UI
 
 @enduml
