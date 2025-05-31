@@ -3,10 +3,12 @@ package presentation;
 import controller.CreateScenarioController;
 import controller.DisplayMapController;
 import domain.Map;
+import domain.PortBehavior;
 import domain.Restrictions;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -77,16 +79,53 @@ public class CreateScenarioUI implements Runnable {
 
             events.replaceAll(String::toLowerCase);
 
-            restrictions = new Restrictions(startDate, endDate, locoTypes, events);
+            System.out.println("\n\nPORT BEHAVIOR:");
+            System.out.println("\nAVAILABLE PORTS:");
+            PortBehavior[] portValues = PortBehavior.values();
+            for (int i = 0; i < portValues.length; i++) {
+                PortBehavior port = portValues[i];
+                String imports = String.join(", ", port.getImports());
+                String exports = String.join(", ", port.getExports());
+                String transforms = String.join(", ", port.getTransformations());
+                System.out.println((i + 1) + ". " + port.name() +
+                        " (Imports: " + imports +
+                        ", Exports: " + exports +
+                        ", Transforms: " + transforms + ")");
+            }
+
+
+            System.out.print("\nENTER PORT NUMBERS FOR PORT BEHAVIOR: ");
+            String[] portIndexes = sc.nextLine().split(",");
+
+            List<PortBehavior> ports = new ArrayList<>();
+            for (String indexStr : portIndexes) {
+                try {
+                    int index = Integer.parseInt(indexStr.trim());
+                    if (index >= 0 && index < portValues.length) {
+                        ports.add(portValues[index]);
+                    } else {
+                        System.out.println("Invalid port index: " + index);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input (not a number): " + indexStr);
+                }
+            }
+
+            if (ports.isEmpty()) {
+                showError("ERROR: At least one valid port behavior must be selected.");
+                return;
+            }
+
+            restrictions = new Restrictions(startDate, endDate, locoTypes, events, ports);
 
             if (!restrictions.validate()) {
                 showError("ERROR: Invalid restrictions provided.");
                 restrictions = null;
             }
         } catch (DateTimeParseException e) {
-            showError("ERROR: Invalid date format. Use yyyy-mm-dd.");
+            showError("\nERROR: Invalid date format.");
         } catch (Exception e) {
-            showError("ERROR: " + e.getMessage());
+            showError("\nERROR: " + e.getMessage());
         }
     }
 
@@ -122,7 +161,7 @@ public class CreateScenarioUI implements Runnable {
      */
     public void submitData() {
         if (restrictions == null) {
-            showError("Scenario creation aborted due to invalid input.");
+            showError("\nERROR: Scenario creation aborted due to invalid input.");
             return;
         }
 

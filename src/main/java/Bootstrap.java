@@ -122,14 +122,15 @@ public class Bootstrap implements Runnable {
 
         List<String> locomotiveTypes = new ArrayList<>();
         List<String> historicalEvents = new ArrayList<>();
+        List<PortBehavior> portBehaviors = new ArrayList<>();
         locomotiveTypes.add("steam");
 
         List<Scenario> scenarios = List.of(
-                new Scenario("ExampleScenario1", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents), null, new Budget(1000)),
-                new Scenario("ExampleScenario2", new Restrictions(LocalDate.parse("1998-01-01"), LocalDate.parse("2001-12-31"), locomotiveTypes, historicalEvents), null, new Budget(1500)),
-                new Scenario("ExampleScenario3", new Restrictions(LocalDate.parse("1993-01-01"), LocalDate.parse("2015-12-31"), locomotiveTypes, historicalEvents), null, new Budget(2000)),
-                new Scenario("ExampleScenario4", new Restrictions(LocalDate.parse("2006-01-01"), LocalDate.parse("2020-12-31"), locomotiveTypes, historicalEvents), null, new Budget(5000)),
-                new Scenario("ExampleScenario5", new Restrictions(LocalDate.parse("2001-01-01"), LocalDate.parse("2010-12-31"), locomotiveTypes, historicalEvents), null, new Budget(10000))
+                new Scenario("ExampleScenario1", new Restrictions(LocalDate.parse("1880-01-01"), LocalDate.parse("1890-12-31"), locomotiveTypes, historicalEvents, portBehaviors), null, new Budget(1000)),
+                new Scenario("ExampleScenario2", new Restrictions(LocalDate.parse("1998-01-01"), LocalDate.parse("2001-12-31"), locomotiveTypes, historicalEvents, portBehaviors), null, new Budget(1500)),
+                new Scenario("ExampleScenario3", new Restrictions(LocalDate.parse("1993-01-01"), LocalDate.parse("2015-12-31"), locomotiveTypes, historicalEvents, portBehaviors), null, new Budget(2000)),
+                new Scenario("ExampleScenario4", new Restrictions(LocalDate.parse("2006-01-01"), LocalDate.parse("2020-12-31"), locomotiveTypes, historicalEvents, portBehaviors), null, new Budget(5000)),
+                new Scenario("ExampleScenario5", new Restrictions(LocalDate.parse("2001-01-01"), LocalDate.parse("2010-12-31"), locomotiveTypes, historicalEvents, portBehaviors), null, new Budget(10000))
         );
 
         List<Map> allMaps = mr.getMapList();
