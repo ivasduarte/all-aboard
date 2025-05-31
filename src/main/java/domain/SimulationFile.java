@@ -1,52 +1,48 @@
 package domain;
 
-import repositories.Repositories;
-import repositories.BuildingRepository;
-import repositories.StationRepository;
 import repositories.SimulatorRepository;
+import repositories.BuildingRepository;
+import repositories.Repositories;
+import repositories.StationRepository;
 
 import java.io.*;
 
 public class SimulationFile {
-    public static final String FILE = "simulator.sim";
+    public static final String FILE = "simulations.sim";
 
     public boolean load(SimulatorRepository simRep, StationRepository stRep, BuildingRepository bdRep) {
         return load(FILE, simRep, stRep, bdRep);
     }
 
-    public boolean load(String fileName, SimulatorRepository simRepo, StationRepository stationRepo, BuildingRepository buildingRepo) {
-        return load(new File(fileName), simRepo, stationRepo, buildingRepo);
+    public boolean load(String fileName, SimulatorRepository simRep, StationRepository stRep, BuildingRepository bdRep) {
+        return load(new File(fileName), simRep, stRep, bdRep);
     }
 
     public boolean load(File file, SimulatorRepository simRep, StationRepository stRep, BuildingRepository bdRep) {
         if (!file.exists()) {
-            System.out.println("File not found.");
+            System.out.println("Error: File does not exist.");
             return true;
         }
 
-        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(file))) {
-            SimulatorRepository repo = (SimulatorRepository) input.readObject();
-            StationRepository rep2 = (StationRepository) input.readObject();
-            BuildingRepository rep3 = (BuildingRepository) input.readObject();
-            System.out.println("File loaded successfully.");
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            SimulatorRepository rep = (SimulatorRepository) in.readObject();
+            StationRepository stRepo = (StationRepository) in.readObject();
+            BuildingRepository bdRepo = (BuildingRepository) in.readObject();
+            System.out.println("SUCCESS: File load complete.");
 
-            simRep.copyFrom(repo);
-            stRep.copyFrom(rep2);
-            bdRep.copyFrom(rep3);
+            simRep.copyFrom(rep);
+            stRep.copyFrom(stRepo);
+            bdRep.copyFrom(bdRepo);
             return true;
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error loading file: " + e.getMessage());
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println("Error loading file '" + ex.getMessage() + "'.");
             return false;
         }
     }
 
-    public boolean save() {
-        return save(FILE);
-    }
+    public boolean save() { return save(FILE); }
 
-    public boolean save(String fileName) {
-        return save(new File(fileName));
-    }
+    public boolean save(String fileName) { return save(new File(fileName)); }
 
     public boolean save(File file) {
         SimulatorRepository simulationRepo = Repositories.getInstance().getSimRep();
