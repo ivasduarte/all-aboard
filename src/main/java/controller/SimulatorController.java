@@ -319,10 +319,18 @@ public class SimulatorController implements Runnable, Serializable {
 
     private void processFinancialResults() {
         int maintenance = 0, fuel = 0;
+
         for (Locomotive l : locoRep.getPlayerLocomotives()) {
             maintenance += l.getMaintenanceCost();
-            fuel += l.getFuelCost();
+
+            if (l.getRoute() != null) {
+                double dist = calculateRouteDistance(l.getRoute());
+                int fuelCost = l.getFuelCost();
+
+                fuel += (int) (dist * fuelCost) / 100;
+            }
         }
+
         financialController.addFinancialResults(0, maintenance, fuel, 0);
     }
 
