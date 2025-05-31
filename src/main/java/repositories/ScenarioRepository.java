@@ -119,7 +119,7 @@ public class ScenarioRepository implements Serializable {
     }
 
 
-    public Scenario loadScenarioFromFile(String fileName) {
+    public Scenario loadScenarioFromFile(String fileName, Map selectedMap) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             Object obj = in.readObject();
 
@@ -129,12 +129,14 @@ public class ScenarioRepository implements Serializable {
 
             Scenario scenario = (Scenario) obj;
 
-            MapRepository mapRepository = Repositories.getInstance().getMapRepository();
-            Optional<Map> realMap = mapRepository.getMap(scenario.getMap().getName());
-            realMap.ifPresent(scenario::setMap);
+            scenario.setMap(selectedMap);
 
-            if (!scenarios.contains(scenario)) {
+            if (!existsByName(scenario.getScenarioName())) {
                 scenarios.add(scenario);
+            }else{
+
+                System.out.printf("Scenario \"%s\" already exists in memory and won't be added again.%n", scenario.getScenarioName());
+
             }
 
             return scenario;

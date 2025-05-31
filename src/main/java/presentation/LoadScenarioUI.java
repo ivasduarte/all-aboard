@@ -1,6 +1,7 @@
 package presentation;
 
 import controller.SaveScenarioController;
+import domain.Map;
 import domain.Scenario;
 
 import java.io.File;
@@ -11,6 +12,12 @@ public class LoadScenarioUI implements Runnable {
     static Scanner ler = new Scanner(System.in);
 
     private final SaveScenarioController controller = new SaveScenarioController();
+
+    private final Map selectedMap;
+
+    public LoadScenarioUI(Map selectedMap) {
+        this.selectedMap = selectedMap;
+    }
 
     @Override
     public void run() {
@@ -47,7 +54,7 @@ public class LoadScenarioUI implements Runnable {
                 return;
             }
 
-            Scenario scenario = controller.loadScenarioFromFile(scenarioFiles[option - 1].getPath());
+            Scenario scenario = controller.loadScenarioFromFile(scenarioFiles[option - 1].getPath(), selectedMap);
             System.out.printf("Loaded Scenario: %s | Map: %s | Budget: %d%n", scenario.getScenarioName(), scenario.getMap().getName(), scenario.getBudget().getBudget());
 
         } catch (NumberFormatException e) {
