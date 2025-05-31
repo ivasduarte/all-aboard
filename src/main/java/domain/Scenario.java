@@ -122,6 +122,7 @@ public class Scenario implements Serializable {
         return map != null;
     }
 
+    public void setMap(Map map) { this.map = map; }
 
     /**
      * Validates the state of the current scenario.
@@ -171,4 +172,6 @@ public class Scenario implements Serializable {
     public void setModificationRateFor(double modificationRateFor) {
         this.modificationRateFor = modificationRateFor;
     }
+
+
 }

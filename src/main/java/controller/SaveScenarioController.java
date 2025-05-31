@@ -23,7 +23,7 @@ public class SaveScenarioController {
         if (scenario == null){
             throw new IllegalArgumentException("Scenario is null");
         }
-        scenarioRepository.scenarioToFile(scenario);
+        scenarioRepository.saveScenarioToFile(scenario);
     }
 
 
@@ -34,5 +34,9 @@ public class SaveScenarioController {
 
     public List<Scenario> getScenarioList() {
         return scenarioRepository.getScenarioList();
+    }
+
+    public Scenario loadScenarioFromFile(String fileName) {
+        return scenarioRepository.loadScenarioFromFile(fileName);
     }
 }

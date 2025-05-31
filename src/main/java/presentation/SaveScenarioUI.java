@@ -12,6 +12,7 @@ public class SaveScenarioUI implements Runnable {
 
     private final SaveScenarioController controller = new SaveScenarioController();
     private final Map selectedMap;
+    Scanner ler = new Scanner(System.in);
 
     public SaveScenarioUI(Map selectedMap) {
         this.selectedMap = selectedMap;
@@ -33,11 +34,16 @@ public class SaveScenarioUI implements Runnable {
             System.out.printf("%d - %s%n", i + 1, scenarios.get(i).getScenarioName());
         }
 
-        System.out.print("Select a scenario number to save: ");
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("0 - Cancel");
 
+        System.out.print("Select a scenario number to save: ");
         try {
-            int option = Integer.parseInt(scanner.nextLine());
+            int option = Integer.parseInt(ler.nextLine());
+
+            if (option == 0) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
 
             if (option < 1 || option > scenarios.size()) {
                 System.out.println("Invalid option.");
