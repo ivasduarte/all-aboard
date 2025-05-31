@@ -41,7 +41,7 @@ public class CreateScenarioController {
             scenarioRepository.add(scenario);
             map.addNewScenario(scenario);
 
-            return "Scenario '" + name + "' created successfully.";
+            return "\nScenario '" + name + "' created successfully.";
         } catch (IllegalArgumentException e){
             return "ERROR: " + e.getMessage();
         } catch (Exception e){

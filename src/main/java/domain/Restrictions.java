@@ -19,6 +19,9 @@ public class Restrictions implements Serializable {
     //historical restrictions (event descriptions)
     private List<String> historicalEvents;
 
+    //port behavior restrictions
+    private List<PortBehavior> portBehaviors;
+
     /**
      * Constructs a new instance of the Restrictions class with specified start date, end date,
      * locomotive types, and historical events.
@@ -28,11 +31,12 @@ public class Restrictions implements Serializable {
      * @param locomotiveTypes       A list of locomotive types associated with the restriction. Cannot be null or empty.
      * @param historicalEvents      A list of historical events associated with the restriction. Cannot be null or empty.
      */
-    public Restrictions(LocalDate startDate, LocalDate endDate, List<String> locomotiveTypes, List<String> historicalEvents) {
+    public Restrictions(LocalDate startDate, LocalDate endDate, List<String> locomotiveTypes, List<String> historicalEvents, List<PortBehavior> portBehaviors) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.locomotiveTypes = locomotiveTypes;
         this.historicalEvents = historicalEvents;
+        this.portBehaviors = portBehaviors;
     }
 
     /**
@@ -87,21 +91,48 @@ public class Restrictions implements Serializable {
     }
 
     /**
-     * Validates the time restrictions by checking if the start date and end date
-     * are non-null and ensuring that the start date is not after the end date.
+     * Validates the time restrictions by checking the validity and consistency
+     * of the start and end dates.
      *
-     * @return  true if the time restrictions are valid (both dates are non-null
-     *          and start date is not after end date); false otherwise.
+     * This method ensures:
+     * - Neither startDate nor endDate is null.
+     * - The startDate does not occur after the endDate.
+     * - Both startDate and endDate are valid according to custom validation rules
+     *   defined in the isValidDate method.
+     *
+     * @return true if both startDate and endDate are valid and satisfy the conditions,
+     *         false otherwise.
      */
     private boolean validateTimeRestrictions(){
-        if(startDate == null || endDate == null){
+        if (startDate == null || endDate == null) {
             return false;
         }
 
-        if(startDate.isAfter(endDate)){
+        if (startDate.isAfter(endDate)) {
             return false;
         }
+
+        if (!isValidDate(startDate) || !isValidDate(endDate)) {
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Checks if the provided date is valid based on specific constraints.
+     * A valid date must have a year greater than or equal to 1770, a month
+     * value between 1 and 12 (inclusive), and a day value between 1 and 31 (inclusive).
+     *
+     * @param date the {@code LocalDate} to validate
+     * @return true if the date is valid according to the defined constraints, false otherwise
+     */
+    private boolean isValidDate(LocalDate date) {
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        int day = date.getDayOfMonth();
+
+        return year >= 1770 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
     }
 
     /**
@@ -148,5 +179,9 @@ public class Restrictions implements Serializable {
             }
         }
         return true;
+    }
+
+    public List<PortBehavior> getPorts(){
+        return portBehaviors;
     }
 }
