@@ -1,10 +1,12 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * Represents a user in the system with attributes such as name, email, role ID, and password.
  * This class provides getter and setter methods to access and modify user properties.
  */
-public class User {
+public class User implements Serializable {
     private String name;
     private String email;
     private String roleId;

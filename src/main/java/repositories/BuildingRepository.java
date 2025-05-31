@@ -2,6 +2,7 @@ package repositories;
 
 import domain.BuildingType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * The building types are initialized with predefined names, costs, effects, and availability years.
  */
-public class BuildingRepository {
+public class BuildingRepository implements Serializable {
 
     private final List<BuildingType> buildingTypes = new ArrayList<>();
 

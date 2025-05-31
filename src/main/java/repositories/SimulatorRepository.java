@@ -51,11 +51,6 @@ public class SimulatorRepository implements Serializable {
         return Optional.empty();
     }
 
-/*
-    public Optional<Simulator> findBy(Map map, Scenario scenario){
-        return findBy(map, scenario, null);
-    }
-*/
 
     public void update(Map map, Scenario scenario, User user, int year, Budget b){
         for(Simulator sim : simulations){

@@ -2,10 +2,11 @@ package repositories;
 
 import domain.Station;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StationRepository {
+public class StationRepository implements Serializable {
 
     private List<Station> stations;
 

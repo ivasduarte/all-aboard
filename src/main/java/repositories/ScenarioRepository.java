@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +18,10 @@ import java.util.Scanner;
  * The {@code ScenarioRepository} class provides functionality to manage a collection of {@code Scenario} objects.
  * It allows adding, validating, retrieving, and checking the existence of scenarios by their names.
  */
-public class ScenarioRepository {
+
+public class ScenarioRepository implements Serializable {
 
     static Scanner ler = new Scanner(System.in);
-
     private List<Scenario> scenarios;
 
     /**

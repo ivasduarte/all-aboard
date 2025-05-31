@@ -4,10 +4,11 @@ import domain.Locomotive;
 import domain.Restrictions;
 import domain.Scenario;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocomotiveRepository {
+public class LocomotiveRepository implements Serializable {
     private List<Locomotive> locomotives = new ArrayList<>();
     private List<Locomotive> availableLocomotives = new ArrayList<>();
     private List<Locomotive> playerLocomotives = new ArrayList<>();
