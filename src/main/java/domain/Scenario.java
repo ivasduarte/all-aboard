@@ -85,7 +85,7 @@ public class Scenario implements Serializable {
     /**
      * Validates the name of the scenario against specific constraints.
      * The name must not be null or empty, must have a maximum length of 15 characters,
-     * must contain at least one uppercase letter, and must consist only of alphanumeric characters.
+     * must consist only of alphanumeric characters.
      *
      * @return true if the name satisfies all constraints; false otherwise.
      */
@@ -94,9 +94,7 @@ public class Scenario implements Serializable {
             return false;
         } else if(name.length() > 15){
             return false;
-        } else if(!name.matches(".*[A-Z].*")){
-            return false;
-        } else if(!name.matches("[A-Za-z0-9]+")){
+        } else if(!name.matches("[A-Za-z0-9_]+")){
             return false;
         }
         return true;
