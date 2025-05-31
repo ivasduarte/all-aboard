@@ -3,10 +3,11 @@ package controller;
 import domain.*;
 import repositories.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public class SimulatorController implements Runnable {
+public class SimulatorController implements Runnable, Serializable {
     private final User currentUser = UserSession.getInstance().getUser();
     private final SimulatorRepository simRep = Repositories.getInstance().getSimRep();
     private final StationRepository stRep = Repositories.getInstance().getStationRepository();
@@ -159,7 +160,6 @@ public class SimulatorController implements Runnable {
         double currentCargoMultiplier = cargoMultiplier;
 
         while (running && !stopped && year <= endYear) {
-            // Handle pause state
             while (paused && !stopped) {
                 Thread.sleep(500);
             }
@@ -184,7 +184,7 @@ public class SimulatorController implements Runnable {
         if (year > endYear) {
             System.out.println("\n\nSIMULATION COMPLETED! End year reached.");
         } else if (stopped) {
-            System.out.println("\n\nSIMULATION STOPPED by user.");
+            System.out.println("\n\nSIMULATION STOPPED BY USER.");
         }
     }
 
@@ -199,14 +199,11 @@ public class SimulatorController implements Runnable {
         for (Industry industry : industries) {
             double modRate = scenario.getModificationRateFor();
             int cargo = (int) (industry.getCargoAmount() * cargoMultiplier * modRate);
-            // int value = (int) (industry.getCargoPrice() * cargo * costMultiplier);
             Station s = findClosestStation(industry);
             if (s != null) s.addCargo(cargo);
-            // total += value;
-            displayIndustryStats(industry, cargo); // tirar o value deste display
+            displayIndustryStats(industry, cargo);
         }
-        // System.out.println("\n\nYOU HAVE GAINED A TOTAL OF " + total + "€ FROM INDUSTRIES.");
-        return total; // podes apagar esta linha se quiseres mas acredito que nao faca diferenca
+        return total;
     }
 
     private int processHouseBlockCargo() {
@@ -253,14 +250,14 @@ public class SimulatorController implements Runnable {
     private double calculateArrivalTime(Locomotive loco, List<Station> route, boolean isDoubleTrack, Train train) {
         double baseSpeed = loco.getMaxSpeed();
         if (!isDoubleTrack) {
-            baseSpeed *= 0.8; // penalidade por trilho simples
+            baseSpeed *= 0.8;
         }
 
         int degradation = Math.min(30, train.getNumberOfCarriages() * 5);
         double effectiveSpeed = baseSpeed * (1 - degradation / 100.0);
 
         double distance = calculateRouteDistance(route);
-        return distance / effectiveSpeed; // tempo em "unidades de tempo"
+        return distance / effectiveSpeed;
     }
 
     private int simulateTrainTrip(Locomotive loco, double costMultiplier) {

@@ -1,6 +1,9 @@
 package repositories;
 
-import domain.SimulationFile;
+import domain.SimulationLoad;
+import domain.SimulationSave;
+
+import java.io.Serializable;
 
 /**
  * The Repositories class acts as a centralized container for various repository instances
@@ -10,7 +13,7 @@ import domain.SimulationFile;
  * This class follows the Singleton design pattern to ensure that only one instance of
  * the Repositories class is created during the application's lifecycle.
  */
-public class Repositories {
+public class Repositories implements Serializable {
     private static Repositories instance = new Repositories();
 
     private final MapRepository mapRepository;
@@ -48,7 +51,7 @@ public class Repositories {
         simRep = new SimulatorRepository();
 
 
-        SimulationFile simFile = new SimulationFile();
+        SimulationLoad simFile = new SimulationLoad("simulations.sim");
         simFile.load(this.simRep, this.stationRepo, this.buildingRepo);
     }
 
