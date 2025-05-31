@@ -23,7 +23,8 @@ public class BuildingRepository {
     public BuildingRepository() {
         buildingTypes.add(new BuildingType("Telegraph", 50, "Improves communication", 1850));
         buildingTypes.add(new BuildingType("Telephone", 80, "Replaces Telegraph", 1920));
-        buildingTypes.add(new BuildingType("Cafe", 30, "Improves satisfaction", 1880));
+        buildingTypes.add(new BuildingType("Small Cafe", 30, "Slightly improves satisfaction", 1880));
+        buildingTypes.add(new BuildingType("Large Cafe", 50, "Greatly improves satisfaction", 1880));
         buildingTypes.add(new BuildingType("Post Office", 60, "Handles mail", 1870));
         buildingTypes.add(new BuildingType("Small Hotel", 100, "Short-term cargo", 1860));
         buildingTypes.add(new BuildingType("Large Hotel", 150, "Long-term cargo", 1890));

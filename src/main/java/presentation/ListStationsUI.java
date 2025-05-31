@@ -6,6 +6,7 @@ import domain.Map;
 import domain.Station;
 
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * User Interface class responsible for listing all stations of a given map,
@@ -14,6 +15,9 @@ import java.util.List;
 public class ListStationsUI implements Runnable {
 
     private Map map;
+
+    static Scanner ler = new Scanner(System.in);
+
 
     /**
      * Constructs the UI with the specified map.
@@ -38,23 +42,45 @@ public class ListStationsUI implements Runnable {
 
         System.out.println("\n\n------------------------- List of Stations -------------------------");
 
-        for (Station station : stations) {
-            System.out.println(station.getName() + " | ID: " + station.getStationID()
+        for (int i = 0; i < stations.size(); i++) {
+            Station station = stations.get(i);
+            System.out.println((i + 1) + ". " + station.getName() + " | ID: " + station.getStationID()
                     + " | Type: " + station.getStationType()
                     + " | Position: (" + station.getPositionX() + ", " + station.getPositionY() + ")");
-            System.out.println("\nExisting buildings of this station: ");
-
-            if (station.getBuildings().isEmpty()) {
-                System.out.println("No buildings found");
-            } else {
-                for (Building building : station.getBuildings()) {
-                    System.out.print(building.getBuildingType());
-                    System.out.println();
-                }
-            }
-
-            System.out.println("\nCargo stored: " + station.getCargo());
         }
+
+        System.out.print("\nSelect a station by number: ");
+        int index;
+        try {
+            index = Integer.parseInt(ler.nextLine()) - 1;
+            if (index < 0 || index >= stations.size()) {
+                System.out.println("Invalid selection.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+            return;
+        }
+
+        Station selectedStation = stations.get(index);
+
+        System.out.println("\n--- Station Details ---");
+        System.out.println("Name: " + selectedStation.getName());
+        System.out.println("ID: " + selectedStation.getStationID());
+        System.out.println("Type: " + selectedStation.getStationType());
+        System.out.println("Position: (" + selectedStation.getPositionX() + ", " + selectedStation.getPositionY() + ")");
+
+        System.out.println("\nExisting buildings of this station: ");
+        List<Building> buildings = selectedStation.getBuildings();
+        if (buildings.isEmpty()) {
+            System.out.println("No buildings found");
+        } else {
+            for (Building building : buildings) {
+                System.out.println("- " + building.getBuildingType());
+            }
+        }
+
+        System.out.println("\nCargo stored: " + selectedStation.getCargo());
     }
 
     /**
