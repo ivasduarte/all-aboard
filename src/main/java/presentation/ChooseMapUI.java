@@ -1,6 +1,7 @@
 package presentation;
 
 import domain.Map;
+import domain.MapSave;
 import repositories.MapRepository;
 import repositories.Repositories;
 import ui.menu.MenuItem;
@@ -18,8 +19,7 @@ public class ChooseMapUI implements Runnable {
         options.add(new MenuItem("Add an Industry", new AddIndustryUI(selectedMap)));
         options.add(new MenuItem("Save Scenario to File", new SaveScenarioUI(selectedMap)));
         options.add(new MenuItem("Load a Scenario from file", new LoadScenarioUI(selectedMap)));
-
-
+        options.add(new MenuItem("Save Map to file", new MapSave(selectedMap)));
 
         int option = 0;
         do {

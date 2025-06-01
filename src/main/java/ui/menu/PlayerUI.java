@@ -124,7 +124,6 @@ public class PlayerUI implements Runnable {
             return;
         }
 
-        String mapSaveFilePath = currentMap.getName() + ".map";
         String simulatorSaveFilePath = currentMap.getName() + ".simu";
 
         List<MenuItem> options = new ArrayList<>();
@@ -136,8 +135,6 @@ public class PlayerUI implements Runnable {
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario)));
         options.add(new MenuItem("Play Simulation", new SimulationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Check Financial Results", new ShowFinancialResultsUI(currentScenario)));
-        options.add(new MenuItem("Save Current Map", new MapSave(mapSaveFilePath, currentMap)));
-        options.add(new MenuItem("Load a Map", new MapLoad()));
         options.add(new MenuItem("Load Simulation", new SimulationLoad(simulatorSaveFilePath)));
 
 

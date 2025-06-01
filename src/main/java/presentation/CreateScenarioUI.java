@@ -100,7 +100,7 @@ public class CreateScenarioUI implements Runnable {
             List<PortBehavior> ports = new ArrayList<>();
             for (String indexStr : portIndexes) {
                 try {
-                    int index = Integer.parseInt(indexStr.trim());
+                    int index = Integer.parseInt(indexStr.trim()) - 1;
                     if (index >= 0 && index < portValues.length) {
                         ports.add(portValues[index]);
                     } else {
