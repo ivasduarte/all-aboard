@@ -1,5 +1,6 @@
 package ui.menu;
 
+import domain.MapLoad;
 import presentation.*;
 import ui.utils.Utils;
 
@@ -49,6 +50,7 @@ public class EditorUI implements Runnable {
         List<MenuItem> options = new ArrayList<MenuItem>();
         options.add(new MenuItem("Create Map", new CreateMapUI()));
         options.add(new MenuItem("Choose Map", new ChooseMapUI()));
+        options.add(new MenuItem("Load Map from File", new MapLoad()));
 
         int option = 0;
         do {

@@ -4,19 +4,22 @@ import java.io.*;
 
 public class MapSave implements Runnable, Serializable {
 
-    private final String filePath;
     private final Map map;
 
-    public MapSave(String fileName, Map map)
+    public MapSave(Map map)
     {
-        this.filePath = fileName;
         this.map = map;
     }
 
-    public void save(String filePath, Map map) throws IOException {
+    public void save(Map map) throws IOException {
 
-        File file = new File(filePath);
+        String directory = "maps";
+        File directoryFile = new File(directory);
+        directoryFile.mkdirs();
 
+        String fileName = directory + "/" + map.getName() + ".map";
+
+        File file = new File(fileName);
         file.createNewFile();
 
         try {
@@ -35,7 +38,7 @@ public class MapSave implements Runnable, Serializable {
     public void run()
     {
         try {
-            save(filePath, map);
+            save(map);
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
