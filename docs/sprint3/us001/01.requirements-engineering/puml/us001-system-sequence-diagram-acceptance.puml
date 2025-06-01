@@ -10,28 +10,37 @@ participant "System" as System
 
 activate Editor
 
-    Editor -> System : Request to create a new map
+    Editor -> System : Requests to create new map
     activate System
-
 
     System --> Editor : Prompt for map name
     deactivate System
 
-
     Editor -> System : Submit **valid** map name
     activate System
 
-    System --> Editor: Provides size list
+    System --> Editor: Prompt for map width
     deactivate System
 
-    Editor -> System: Submit **valid** size option
+    Editor -> System: Submit **valid** map width
+    activate System
+
+    System --> Editor: Prompt for map height
+    deactivate System
+
+    Editor -> System: Submit **valid** map height
+    activate System
+
+    System --> Editor: Prompt for cell block size
+    deactivate System
+
+    Editor -> System: Submit **valid** cell block size
     activate System
 
     System --> Editor: Display success message: "Map created successfully."
 
     deactivate System
     deactivate Editor
-
 
 
 @enduml

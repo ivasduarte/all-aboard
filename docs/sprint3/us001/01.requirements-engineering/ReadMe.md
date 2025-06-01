@@ -39,6 +39,20 @@ As an Editor, I want to create a map with a size and a name.
 > 
 > **Question:** Should map names be unique within the system?
 > **Answer:** Yes.
+> 
+> 
+> **Question:** Should the map scale be user-specified or system retrieved? In case of the latter, are there any 
+> guidelines in place to get that value?
+> **Answer:** 
+> 
+> 
+> **Question:**
+Considering the map will need to accommodate multiple cities, industries and stations with their respective connections,
+> would it be acceptable to establish a minimum map size like 20x20 or 50x50? A smaller size might not provide enough 
+> space for meaningful simulation elements. Can we also suggest to the editor the default map size of 100x100 or 
+> another one that you indicate to us?
+> **Answer:** Yes, you can define a minimum and suggest a default size.
+
 
 
 ### 1.3. Acceptance Criteria
@@ -60,12 +74,15 @@ As an Editor, I want to create a map with a size and a name.
 **Input Data:**
 
 *Type Data:*
-- The name of the wished map.
-- Size of map.
+- Map name;
+- Map width;
+- Map height;
+- Cell block value in kms.
+
 
 **Output Data:**
 
-- Message of success indicating that the city has been added
+- Message of success indicating that the map has been created;
 - Error message, in case of failed map creation, indicating failure cause.
 
 
@@ -76,16 +93,20 @@ As an Editor, I want to create a map with a size and a name.
 > - *Invalid name input:*
 >
 > ERROR. Invalid name.
-> Name shouldn't start with a space, hyphen, or underline.
-> Must be under 15 characters.
-> Must have, at least, one upper case character.
+> Name already exists. Please enter a different name:
+> ERROR: Map name is too long. Max length is 15 characters.
+> ERROR: Map name contains invalid characters.
 >
 >
 > - *Invalid size input:*
->
-> ERROR: Invalid size of map.
-> Must be integers.
-> Map size must be under 256x256.
+> - 
+> ERROR: Invalid width. Please enter a positive integer less than or equal to 256.
+> ERROR: Invalid height. Please enter a positive integer less than or equal to 256.
+> 
+> 
+> - *Invalid cell block input:*
+> 
+> ERROR: Invalid size. Please enter a positive integer.
 
 
 ### 1.7. System Sequence Diagram (SSD)

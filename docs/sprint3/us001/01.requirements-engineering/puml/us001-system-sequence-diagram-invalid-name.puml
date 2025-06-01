@@ -19,19 +19,35 @@ activate Editor
     Editor -> System : Submit **invalid** map name
     activate System
 
-    System --> Editor: Display error message:\n"ERROR. Invalid name. Name shouldn't start with a space, \nhyphen, or underline. Must be under 15 characters. Must have, at least, one upper\ncase character."
-    deactivate System
+    alt name already exists
+        System --> Editor: Display error message:\n"Name already exists. Please enter a different name:"
+    else invalid name format
+        System --> Editor : Display error message: ""ERROR: Map name is\ntoo long. Max length is 15 characters. ERROR: Map name contains\ninvalid characters."
+        deactivate System
+    end
 
-    Editor -> System: Submit **valid** map name
-    activate System
+     Editor -> System : Submit **valid** map name
+        activate System
 
-    System --> Editor: Provides size list
-    deactivate System
+        System --> Editor: Prompt for map width
+        deactivate System
 
-    Editor -> System: Submit **valid** size option
-    activate System
+        Editor -> System: Submit **valid** map width
+        activate System
 
-    System --> Editor: Display success message:\n"Map created successfully."
+        System --> Editor: Prompt for map height
+        deactivate System
+
+        Editor -> System: Submit **valid** map height
+        activate System
+
+        System --> Editor: Prompt for cell block size
+        deactivate System
+
+        Editor -> System: Submit **valid** cell block size
+        activate System
+
+        System --> Editor: Display success message: "Map created successfully."
 
     deactivate System
     deactivate Editor

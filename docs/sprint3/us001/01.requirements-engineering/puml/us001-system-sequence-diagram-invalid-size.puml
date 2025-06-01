@@ -16,22 +16,48 @@ activate Editor
     System --> Editor : Prompt for map name
     deactivate System
 
-    Editor -> System : Submit **valid** map name
-    activate System
+     Editor -> System : Submit **valid** map name
+        activate System
 
-    System --> Editor: Provides size list
-    deactivate System
+        System --> Editor: Prompt for map width
+        deactivate System
 
-    Editor -> System: Chose "Custom size"
-    activate System
+        alt invalid map width
+            Editor -> System: Submit **invalid** map width
+            activate System
 
-    System --> Editor: Requires size input
-    deactivate System
+            System --> Editor: Display error message: "ERROR: Invalid width. Please enter\na positive integer less than or equal to 256."
+            deactivate System
+        else invalid map height
+            Editor -> System: Submit **invalid** map height
+            activate System
 
-    Editor -> System: Submit **invalid** size option
-    activate System
+            System --> Editor: Display error message: "ERROR: Invalid height. Please enter\na positive integer less than or equal to 256."
+            deactivate System
+        else invalid cell block size
+            Editor -> System: Submit **invalid** cell block size
+            activate System
 
-    System --> Editor: Display success message:\n"ERROR: Invalid size of map. Must be integers.\nMap size must be under 256x256."
+            System --> Editor: Display error message: "ERROR: Invalid size. Please enter\na positive integer."
+            deactivate System
+        end
+
+        Editor -> System: Submit **valid** map width
+        activate System
+
+        System --> Editor: Prompt for map height
+        deactivate System
+
+        Editor -> System: Submit **valid** map height
+        activate System
+
+        System --> Editor: Prompt for cell block size
+        deactivate System
+
+        Editor -> System: Submit **valid** cell block size
+        activate System
+
+        System --> Editor: Display success message: "Map created successfully."
 
     deactivate System
     deactivate Editor
