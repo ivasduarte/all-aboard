@@ -36,7 +36,7 @@ public class ChooseMapUI implements Runnable {
 
         System.out.println("\nMAP LIST:");
         for (int i = 0; i < maps.size(); i++) {
-            System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
+            System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight() + " | Cell size: " + maps.get(i).getCellSizeKm() + " km | Map area: " + maps.get(i).getAreaKm() + " km²");
         }
 
         System.out.print("\nCHOOSE A MAP FROM LIST ABOVE: ");

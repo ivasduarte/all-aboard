@@ -20,7 +20,7 @@ public class CreateMapUI implements Runnable {
     private MapRepository mapRepository = new MapRepository();
 
     private String mapName;
-    private int width = 0, height = 0;
+    private int width = 0, height = 0, size = 0;
 
     /**
      * Retrieves the instance of {@code CreateMapController} associated with this class.
@@ -64,6 +64,7 @@ public class CreateMapUI implements Runnable {
         mapName = requestMapName();
         width = requestWidth();
         height = requestHeight();
+        size = requestSize();
     }
 
     /**
@@ -124,6 +125,21 @@ public class CreateMapUI implements Runnable {
         return height;
     }
 
+    private int requestSize() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nEACH MAP CONTAINS CELL BLOCKS THAT REPRESENT THE MAP'S WIDTH AND HEIGHT, AND EACH CELL BLOCK WILL REPRESENT KMS.");
+        System.out.print("ENTER THE SIZE OF EACH CELL BLOCK (IN KMS): ");
+
+        int size;
+        do {
+            size = sc.nextInt();
+            if (size <= 0) {
+                System.out.println("ERROR: Invalid size. Please enter a positive integer.");
+            }
+        } while (size <= 0);
+        return size;
+    }
+
     /**
      * Validates user input data and creates a new map using the provided name, width, and height.
      *
@@ -140,7 +156,7 @@ public class CreateMapUI implements Runnable {
      */
     private void submitData() {
         try {
-            Map map = getController().createMap(mapName, width, height);
+            Map map = getController().createMap(mapName, width, height, size);
             System.out.println("\nMAP '" + map.getName() + "' SUCCESSFULLY CREATED!");
         } catch (IllegalArgumentException e) {
             System.out.println("\nERROR: " + e.getMessage());

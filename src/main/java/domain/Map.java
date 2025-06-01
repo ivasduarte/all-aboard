@@ -12,6 +12,7 @@ public class Map implements Serializable {
     private String name;
     private int width;
     private int height;
+    private int cellSizeKm;
 
     private List<Scenario> scenarios;
     private List<Station> stations;
@@ -22,7 +23,7 @@ public class Map implements Serializable {
      * Constructs a new Map instance with the specified name, width, and height.
      * <p>
      * This constructor initializes the map's attributes, including its name, dimensions,
-     * and an empty list of scenarios. It also validates the name and size of the map
+     * and an empty list of scenarios. It also validates the name and cellSizeKm of the map
      * during initialization.
      *
      * @param name   The name of the map. Must not be null or empty.
@@ -30,16 +31,20 @@ public class Map implements Serializable {
      * @param height The height of the map. Must be a positive integer.
      * @throws IllegalArgumentException if the name is null or empty, or if the width or height is non-positive.
      */
-    public Map(String name, int width, int height) {
+    public Map(String name, int width, int height, int cellSizeKm) {
         this.name = name;
         this.width = width;
         this.height = height;
+        this.cellSizeKm = cellSizeKm;
+
         scenarios = new ArrayList<>();
         stations = new ArrayList<>();
         cities = new ArrayList<>();
         industries = new ArrayList<>();
+
         validateName(name);
         validateSize(width, height);
+        validateCellSize(cellSizeKm);
     }
 
     /**
@@ -194,15 +199,48 @@ public class Map implements Serializable {
     }
 
     /**
-     * Returns a string representation of the map, including its name and dimensions.
-     * <p>
-     * The string is formatted as "name (widthxheight)", where `name` is the
-     * name of the map, and `width` and `height` represent the dimensions of the map.
+     * Validates the cellSizeKm of the map in kilometers.
      *
-     * @return A string representation of the map's name and dimensions.
+     * This method ensures that the provided map cellSizeKm is a positive value.
+     * If the cellSizeKm is less than or equal to 0, an {@code IllegalArgumentException}
+     * is thrown to enforce validity.
+     *
+     * @param cellSizeKm The cellSizeKm of the map in kilometers to be validated.
+     *             Must be a positive integer.
+     * @throws IllegalArgumentException if the cellSizeKm is less than or equal to 0.
+     */
+    public void validateCellSize(int cellSizeKm){
+        if(cellSizeKm < 0){
+            throw new IllegalArgumentException("Cell size must be positive.");
+        }
+    }
+
+    public int getCellSizeKm() {
+        return cellSizeKm;
+    }
+
+    public double getTotalWidthKm() {
+        return width * cellSizeKm;
+    }
+
+    public double getTotalHeightKm() {
+        return height * cellSizeKm;
+    }
+
+    public double getAreaKm() {
+        return getTotalWidthKm() * getTotalHeightKm();
+    }
+
+
+    /**
+     * Returns a string representation of the Map object.
+     * The string representation includes the map's name,
+     * dimensions (width and height), and the cellSizeKm of the space it covers in kilometers.
+     *
+     * @return A string describing the map's name, dimensions, and corresponding cellSizeKm in kilometers.
      */
     @Override
     public String toString() {
-        return "" + name + " (" + width + "x" + height + ")";
+        return "Map '" + name + "' (" + width + "x" + height + "), Cell size: " + cellSizeKm + " km, Area: " + getAreaKm() + " km²";
     }
 }

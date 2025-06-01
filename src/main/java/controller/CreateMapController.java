@@ -19,11 +19,11 @@ public class CreateMapController {
      * @return          A newly created {@code Map} instance with the specified name and dimensions.
      * @throws          IllegalArgumentException if a map with the same name already exists or if the dimensions are invalid.
      */
-    public Map createMap(String name, int width, int height){
+    public Map createMap(String name, int width, int height, int size){
         if(Repositories.getInstance().getMapRepository().existsByName(name)){
             throw new IllegalArgumentException("Map with this name already exists.");
         }
-        Map map = new Map(name, width, height);
+        Map map = new Map(name, width, height, size);
         Repositories.getInstance().getMapRepository().add(map);
         return map;
     }

@@ -77,12 +77,12 @@ public class Bootstrap implements Runnable {
     public Optional<Map> createMap() {
         MapRepository mr = Repositories.getInstance().getMapRepository();
 
-        Map map1 = new Map("ExampleMap1", 20, 20);
-        Map map2 = new Map("ExampleMap2", 36, 36);
-        Map map3 = new Map("ExampleMap3", 50, 50);
-        Map map4 = new Map("ExampleMap4", 100, 100);
-        Map map5 = new Map("ExampleMap5", 200, 200);
-        Map map6 = new Map("ExampleMap6", 256, 256);
+        Map map1 = new Map("ExampleMap1", 20, 20, 1);
+        Map map2 = new Map("ExampleMap2", 36, 36, 8);
+        Map map3 = new Map("ExampleMap3", 50, 50, 13);
+        Map map4 = new Map("ExampleMap4", 100, 100, 25);
+        Map map5 = new Map("ExampleMap5", 200, 200, 5);
+        Map map6 = new Map("ExampleMap6", 256, 256, 10);
 
         mr.add(map1);
         mr.add(map2);

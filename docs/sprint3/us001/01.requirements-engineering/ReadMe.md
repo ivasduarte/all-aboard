@@ -44,11 +44,13 @@ As an Editor, I want to create a map with a size and a name.
 ### 1.3. Acceptance Criteria
 
 > **AC1:** The system must allow the Editor to create a map by providing a name and size.
-> **AC2:** The map name must be unique and cannot contain special characters or be left empy.
+> **AC2:** The map name must be unique and cannot contain special characters or be left empty.
 > **AC3:** The map size must be within a predefined range.
 > **AC4:** Upon successful creation, the system must display a confirmation message.
 > **AC5** If creation fails, the system must provide a descriptive error message indicating the cause.
 > **AC6:** Names of scenarios and maps must be different.
+> **AC7:** Map name should be a valid file name.
+> **AC8:** The maps should have a scale that states the size of the cell map in kms.
 
 ### 1.4. Found out Dependencies
 
@@ -57,12 +59,9 @@ As an Editor, I want to create a map with a size and a name.
 
 **Input Data:**
 
-*Select Data:*
-- Size list, with "Custom Sizes", so that users can create personalized maps.
-
 *Type Data:*
-- Name
-- Size, if chosen said option on predefined size list.
+- The name of the wished map.
+- Size of map.
 
 **Output Data:**
 
@@ -92,11 +91,14 @@ As an Editor, I want to create a map with a size and a name.
 ### 1.7. System Sequence Diagram (SSD)
 
 **Acceptance Sequence Diagram:**
+
 ![System Sequence Diagram](svg\us001-system-sequence-diagram-acceptance.svg)
 
 
 **Invalid Name Input Sequence Diagram:**
+
 ![System Sequence Diagram](svg\us001-system-sequence-diagram-invalid-name.svg)
 
 **Invalid Size Input Sequence Diagram:**
+
 ![System Sequence Diagram](svg\us001-system-sequence-diagram-invalid-size.svg)
