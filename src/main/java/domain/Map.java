@@ -177,10 +177,17 @@ public class Map implements Serializable {
      *
      * @throws IllegalArgumentException if the name is null or an empty string.
      */
-    private void validateName(String name) {
+    private boolean validateName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Map name cannot be empty.");
+        }   else if(name.length() > 15){
+            System.out.println("ERROR: Map name is too long. Max length is 15 characters.");
+            return false;
+        } else if(!name.matches("[A-Za-z0-9_]+")){
+            System.out.println("ERROR: Map name contains invalid characters.");
+            return false;
         }
+        return true;
     }
 
     /**
