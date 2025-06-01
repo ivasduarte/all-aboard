@@ -5,7 +5,8 @@ class Map {
     -name: String
     -width: int
     -height: int
-    +Map(name, width, height)
+    -cellSizeKm: int
+    +Map(name, width, height, cellSizeKm)
     +getMapName(): String
     +getWidth(): int
     +getHeight(): int
@@ -14,7 +15,7 @@ class Map {
     +toString(): String
 }
 
-interface Runnable <<interface>>{
+interface Runnable <<interface>> {
     +run(): void
 }
 
@@ -31,15 +32,16 @@ class CreateMapUI {
     +requestMapName(): String
     +requestWidth(): int
     +requestHeight(): int
+    +requestSize(): int
     +submitData(): void
 }
 
 class CreateMapController {
-    +createMap(name, width, height): Map
+    +createMap(name, width, height, cellSizeKm): Map
 }
 
 class MapRepository {
-    -maps: List <Map>
+    -maps: List<Map>
     +add(map: Map): void
     +validateMap(map: Map): boolean
     +existsByName(name: String): boolean
@@ -47,18 +49,8 @@ class MapRepository {
     +getMap(name: String): Optional<Map>
 }
 
-class Editor {
-    -name: String
-    -ID: String
-    -password: String
-    +Editor(name, id, password)
-    +getEditorName(): String
-    +getPassword(): String
-    +getID(): String
-}
-
 class Repositories {
-    -instance: Repositories{static}
+    -instance: Repositories {static}
     -mapRepository: MapRepository
     +Repositories()
     +getInstance(): Repositories
@@ -66,34 +58,30 @@ class Repositories {
 }
 
 class ApplicationSession {
-    -instance: ApplicationSession{static}
+    -instance: ApplicationSession {static}
     -userSession: UserSession
-    +getInstance(): ApplicationSession{static}
+    +getInstance(): ApplicationSession {static}
     +getCurrentSession(): UserSession
     +setUserSession(): void
 }
 
 class UserSession {
-    -instance: UserSession{static}
+    -instance: UserSession {static}
     -user: UserSession
-    +getInstance(): UserSession{static}
+    +getInstance(): UserSession {static}
 }
 
-Repositories -> Repositories : instance
-ApplicationSession -> ApplicationSession : instance
-
 CreateMapUI ..|> Runnable
-CreateMapUI .> CreateMapController
-CreateMapController ..> Map
-CreateMapController ..> ApplicationSession
-CreateMapController ..> UserSession
-CreateMapController ..> MapRepository : mapRepository
 
-Repositories --> "1" MapRepository
+CreateMapUI --> CreateMapController : controller (1)
+CreateMapUI --> MapRepository : mapRepository (1)
 
-ApplicationSession --> "1" UserSession : userSession
-Map --> Editor : createdBy
+CreateMapController --> Map : creates
+CreateMapController --> MapRepository : uses (1)
+CreateMapController --> ApplicationSession : accesses
+ApplicationSession --> UserSession : currentSession (1)
 
-mapRepository "1" --> "*" Map
+Repositories --> MapRepository : provides (1)
+MapRepository --> "*" Map : manages
 
 @enduml

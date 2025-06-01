@@ -8,7 +8,7 @@
 |:--------------|:----------------------------------------------------|:--------------------|:-------------------------------------------------------------------------------------------------------------------|
 | Step 1        | ... interacting with the actor?                     | CreateMapUI         | Pure Fabrication: handles user interactions and there's no existing domain class suitable for this responsibility. |
 |               | ... coordinating the US?                            | CreateMapController | Controller: coordinates the creation process and delegates to domain classes.                                      |
-|               | ... knowing the user using the system?              | UserSession         | IE: part of A&A component, knows current user.                                                                     |
+|               | ... knowing the user using the system?              | UserSession         | IE: part of authentication/authorization, knows current user.                                                      |
 |               | ... ensuring name uniqueness and compliance?        | MapRepository       | HC/LC: central point for checking existing map names and constrains.                                               |
 | Step 2        | ... receiving input name and dimensions?            | CreateMapUI         | IE: responsible for capturing user input.                                                                          |
 | Step 3        | ... validating input (local name and size)?         | Map                 | IE: owns and validates its own data (name, size) locally.                                                          |
@@ -22,7 +22,6 @@
 
 According to the taken rationale, the conceptual classes promoted to software classes are:
 
-* Editor
 * Map
 
 Other software classes (i.e. Pure Fabrication) identified:
@@ -30,7 +29,6 @@ Other software classes (i.e. Pure Fabrication) identified:
 * CreateMapUI
 * CreateMapController
 * MapRepository
-* ApplicationSession
 * UserSession
 
 

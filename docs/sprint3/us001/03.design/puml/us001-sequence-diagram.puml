@@ -8,75 +8,105 @@ autonumber
 actor Editor
 
 participant ":CreateMapUI" as UI
+participant ":CreateMapController" as ctrl
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repositories
+participant "mapRepository\n:MapRepository" as repo
+participant ":MapMapper" as mapper
+participant "MapDTO" as dto
+participant ":Map" as Map
 
 activate Editor
 Editor -> UI : requests to create a map
 
-create ":CreateMapController" as ctrl
-
 activate UI
 UI -> ctrl : create()
-
-participant ":Repositories" as reps
-participant "repositories\n:Repositories" as repositories
-participant "mapRepository\n:MapRepositories" as repo
-participant ":Map" as Map
-
-UI -> Editor : requestMapName()
-deactivate UI
-
-Editor --> UI : provides mapName
-activate UI
-
-UI -> ctrl : submitData()
 activate ctrl
 
 ctrl -> reps : getInstance()
 activate reps
-
 reps --> ctrl : instance
 deactivate reps
 
 ctrl -> repo : getMapRepository()
 activate repo
-
 repo --> ctrl : mapRepository
 deactivate repo
 
-loop while mapName exists
-  ctrl -> repo : existsByName(mapName)
-  activate repo
+ctrl -> UI : requestMapName()
+deactivate ctrl
 
-  repo --> ctrl : true
-  deactivate repo
+loop while mapName already exists
+    UI --> Editor: prompt for mapName
+    deactivate UI
 
-  ctrl -> UI : show error "Map name already exists"
-  deactivate ctrl
+    Editor --> UI : provides mapName
+    activate UI
 
-  UI --> ctrl : new mapName
-  activate ctrl
+    UI -> ctrl : submitData(mapName)
+    activate ctrl
+
+    ctrl -> repo : existsByName(mapName)
+    activate repo
+    repo --> ctrl : true
+    deactivate repo
+
+    ctrl -> UI : showError("Map name already exists.")
+    deactivate ctrl
+
+    UI --> Editor: display error message
+    UI --> Editor: prompt for new mapName
+    deactivate UI
 end
 
-ctrl -> repo : existsByName(mapName)
-activate repo
+Editor -> UI: provides unique mapName
+activate UI
 
-repo --> ctrl : false
-deactivate repo
+UI --> ctrl : submitData(mapName)
+activate ctrl
 
-UI -> Editor : requestWidth()
+ctrl -> UI : requestWidth()
+deactivate ctrl
+
+UI --> Editor: prompt for map width
 deactivate UI
 
 Editor --> UI : provides width
 activate UI
 
-UI -> Editor : requestHeight()
+UI --> ctrl : submitWidth(width)
+activate ctrl
+
+ctrl -> UI : requestHeight()
+deactivate ctrl
+
+UI --> Editor: prompt for map height
 deactivate UI
 
 Editor --> UI : provides height
 activate UI
 
-UI -> ctrl : submitData()
-ctrl -> Map : new Map(mapName, width, height)
+UI --> ctrl : submitHeight(height)
+activate ctrl
+
+ctrl -> UI : requestCellSize()
+deactivate ctrl
+
+UI --> Editor: prompt for cell block size
+deactivate UI
+
+Editor --> UI: provides cellSizeKm
+activate UI
+
+UI --> ctrl : requestMapDTO(mapName, width, height, cellSizeKm)
+activate ctrl
+
+ctrl -> mapper : createMapDTO(mapName, width, height, cellSizeKm)
+activate mapper
+mapper --> ctrl : MapDTO
+deactivate mapper
+
+ctrl -> Map : new Map(dto)
 activate Map
 
 Map -> Map : validateName()
@@ -88,7 +118,7 @@ ctrl -> repo : add(map)
 activate repo
 
 repo -> repo : validateMap(map)
-repo --> ctrl : void
+repo --> ctrl : map
 deactivate repo
 
 ctrl --> UI : map
@@ -96,4 +126,5 @@ deactivate ctrl
 
 UI --> Editor : "Map (name) successfully created!"
 deactivate UI
+
 @enduml

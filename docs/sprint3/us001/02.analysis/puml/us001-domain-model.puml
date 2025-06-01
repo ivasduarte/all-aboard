@@ -8,29 +8,27 @@ hide circle
 hide methods
 
 class Map {
-    - name
-    - width: int
-    - height: int
-}
-
-class Editor{
-    - name
-    - password
+    - name: String
+    - size: Size
+    - scenarios: List<Scenario>
+    - stations: List<Station>
+    - cities: List<City>
+    - industries: List<Industry>
 }
 
 class Size {
     - width: int
     - height: int
+    - cellSizeKm: int
 }
 
-class PredefinedSzie {
-    - label
-    - width: int
-    - height: int
-}
+class Scenario
+class Station
+class City
+class Industry
 
 class NameValidationRule {
-    - message
+    - message: String
 }
 
 class SizeValidationRule {
@@ -38,11 +36,24 @@ class SizeValidationRule {
     - maxHeight: int = 256
 }
 
-Editor "1" -- "*" Map : creates
-Map "1" -- "1" Size : uses
-Map "1" -- "*" NameValidationRule : validatedBy
-Map "1" -- "*" SizeValidationRule : validatedBy
-PredefinedSzie --> Size
+class CellSizeValidationRule {
+    - minCellSize: int = 1
+}
 
+class User {
+    - email: String
+    - password: String
+}
+
+User "1" -- "*" Map : creates
+Map "1" -- "1" Size : has
+Map "1" -- "*" Scenario : includes
+Map "1" -- "*" Station : contains
+Map "1" -- "*" City : contains
+Map "1" -- "*" Industry : contains
+
+Map "1" -- "*" NameValidationRule : validatedBy
+Size "1" -- "*" SizeValidationRule : validatedBy
+Size "1" -- "*" CellSizeValidationRule : validatedBy
 
 @enduml

@@ -16,7 +16,7 @@ Editor -> UI : requests to create a map
 
 
 activate UI
-UI -> ctrl** : create()
+UI -> ctrl : create()
 
 UI -> Editor : requestMapName()
 deactivate UI
