@@ -6,6 +6,8 @@ import repositories.MapRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 public class SaveScenarioController {
@@ -20,10 +22,10 @@ public class SaveScenarioController {
     }
 
     public void saveScenarioInFile(Scenario scenario) {
-        if (scenario == null){
+        if (scenario == null) {
             throw new IllegalArgumentException("Scenario is null");
         }
-        scenarioRepository.scenarioToFile(scenario);
+        scenarioRepository.saveScenarioToFile(scenario);
     }
 
 
@@ -34,5 +36,9 @@ public class SaveScenarioController {
 
     public List<Scenario> getScenarioList() {
         return scenarioRepository.getScenarioList();
+    }
+
+    public Scenario loadScenarioFromFile(String fileName, Map selectedMap) {
+        return scenarioRepository.loadScenarioFromFile(fileName, selectedMap);
     }
 }

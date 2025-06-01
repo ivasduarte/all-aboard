@@ -7,6 +7,7 @@ import presentation.*;
 import repositories.MapRepository;
 import repositories.Repositories;
 import presentation.DisplayMapUI;
+import repositories.ScenarioRepository;
 import ui.utils.Utils;
 
 import java.util.ArrayList;
@@ -86,7 +87,8 @@ public class PlayerUI implements Runnable {
             }
         } while (currentMap == null);
 
-        List<Scenario> scenarios = currentMap.getScenarios();
+        ScenarioRepository scenarioRepo = Repositories.getInstance().getScenarioRepository();
+        List<Scenario> scenarios = scenarioRepo.getScenarioListByMap(currentMap);
 
         if (scenarios == null || scenarios.isEmpty()) {
             System.out.println("\nIt seems that there are no scenarios available! You must have at least 1 scenario to play!");

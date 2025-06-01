@@ -17,6 +17,8 @@ public class ChooseMapUI implements Runnable {
         options.add(new MenuItem("Add a City", new AddCityUI(selectedMap)));
         options.add(new MenuItem("Add an Industry", new AddIndustryUI(selectedMap)));
         options.add(new MenuItem("Save Scenario to File", new SaveScenarioUI(selectedMap)));
+        options.add(new MenuItem("Load a Scenario from file", new LoadScenarioUI(selectedMap)));
+
 
 
         int option = 0;

@@ -7,12 +7,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import java.util.Scanner;
+
 
 /**
  * The {@code ScenarioRepository} class provides functionality to manage a collection of {@code Scenario} objects.
@@ -117,8 +118,35 @@ public class ScenarioRepository implements Serializable {
         return scenarios.stream().filter(s -> s.getScenarioName().equals(name)).findFirst();
     }
 
-    public void scenarioToFile(Scenario scenario) {
 
+    public Scenario loadScenarioFromFile(String fileName, Map selectedMap) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+            Object obj = in.readObject();
+
+            if (!(obj instanceof Scenario)) {
+                throw new IllegalArgumentException("File does not contain a valid Scenario.");
+            }
+
+            Scenario scenario = (Scenario) obj;
+
+            scenario.setMap(selectedMap);
+
+            if (!existsByName(scenario.getScenarioName())) {
+                scenarios.add(scenario);
+            }else{
+
+                System.out.printf("Scenario \"%s\" already exists in memory and won't be added again.%n", scenario.getScenarioName());
+
+            }
+
+            return scenario;
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Failed to load scenario from file: " + fileName, e);
+        }
+    }
+
+    public void saveScenarioToFile(Scenario scenario) {
         if (scenario == null) {
             throw new IllegalArgumentException("Scenario is null.");
         }
@@ -139,13 +167,12 @@ public class ScenarioRepository implements Serializable {
         File file = new File(fileName);
         if (file.exists()) {
             System.out.println("File already exists. Overwrite? (Y/N)");
-            String input = new Scanner(System.in).nextLine();
+            String input = ler.nextLine();
             if (!input.equalsIgnoreCase("Y")) {
                 System.out.println("Operation cancelled.");
                 return;
             }
         }
-
 
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(scenario);
