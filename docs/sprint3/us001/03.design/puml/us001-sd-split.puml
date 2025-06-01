@@ -3,69 +3,115 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-autonumber
+autonumber 1
 
 actor Editor
 
 participant ":CreateMapUI" as UI
 participant ":CreateMapController" as ctrl
+participant ":MapMapper" as mapper
 participant ":Map" as Map
 
 activate Editor
 Editor -> UI : requests to create a map
 
-
 activate UI
 UI -> ctrl : create()
-
-UI -> Editor : requestMapName()
-deactivate UI
-
-Editor --> UI : provides mapName
-activate UI
-
-UI -> ctrl : submitData()
 activate ctrl
 
-    ref over ctrl
-        Get Map Repository
-    end
+ref over ctrl
+    Get Map Repository
+end
+
+autonumber 7
+ctrl -> UI : requests map name
+deactivate ctrl
+
+loop while mapName already exists
+    UI --> Editor: requestMapName()
+    deactivate UI
+
+    Editor --> UI : provides mapName
+    activate UI
+
+    UI -> ctrl : submitMapName(mapName)
+    activate ctrl
 
     ref over ctrl
-        Check Name Uniqueness
+        Check Map Name Uniqueness
     end
 
+    alt name exists
+    autonumber 13
+        ctrl -> UI : showError("Map name already exists.")
+        deactivate ctrl
 
-UI -> Editor : requestWidth()
+        UI --> Editor: display error message
+        UI --> Editor: requestMapName()
+        deactivate UI
+    end
+end
+
+Editor -> UI : provides unique mapName
+activate UI
+
+UI -> ctrl : submitMapName(mapName)
+activate ctrl
+
+ctrl -> UI : requests map width
+deactivate ctrl
+
+UI --> Editor: requestWidth()
 deactivate UI
 
 Editor --> UI : provides width
 activate UI
 
-UI -> Editor : requestHeight()
+UI -> ctrl : submitWidth(width)
+activate ctrl
+
+ctrl -> UI : requests map height
+deactivate ctrl
+
+UI --> Editor: requestHeight()
 deactivate UI
 
 Editor --> UI : provides height
 activate UI
 
-UI -> ctrl : submitData()
-ctrl -> Map : new Map(mapName, width, height)
-activate Map
+UI -> ctrl : submitHeight(height)
+activate ctrl
 
-    ref over Map
-        Validate Map
-    end
+ctrl -> UI : requests cell size
+deactivate ctrl
 
-Map --> ctrl : map
-deactivate Map
+UI --> Editor: requestCellSize()
+deactivate UI
 
-    ref over ctrl
-        Add Map
-    end
+Editor --> UI: provides cellSizeKm
+activate UI
 
+UI -> mapper : createMapDTO(mapName, width, height, cellSizeKm)
+activate mapper
+mapper --> UI : MapDTO
+deactivate mapper
+
+UI -> ctrl : submitMapDTO(dto)
+activate ctrl
+
+ref over ctrl
+    Validate Map from DTO
+end
+
+ref over ctrl
+    Add Map
+end
+
+autonumber 39
 ctrl --> UI : map
 deactivate ctrl
 
 UI --> Editor : "Map (name) successfully created!"
 deactivate UI
+
 @enduml

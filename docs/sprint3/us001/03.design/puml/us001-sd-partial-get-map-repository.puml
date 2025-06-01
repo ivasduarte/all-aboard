@@ -1,30 +1,22 @@
 @startuml
-skinparam monochrome true
-skinparam packageStyle rectangle
-skinparam shadowing false
+autonumber 3
 
 participant ":CreateMapController" as ctrl
-participant "Repositories" as Reps
-participant "repositories\n:Repositories" as reps
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as repositories
 participant "mapRepository\n:MapRepository" as repo
 
-autonumber 5
-
-   -> ctrl : submitData()
-   activate ctrl
+activate ctrl
 
 group Get Map Repository
-   ctrl -> reps : getInstance()
-   activate reps
+    ctrl -> reps : getInstance()
+    activate reps
+    reps --> ctrl : instance
+    deactivate reps
 
-   reps --> ctrl : instance
-   deactivate reps
-
-   ctrl -> repo : getMapRepository()
-   activate repo
-
-   repo --> ctrl : mapRepository
-   deactivate repo
+    ctrl -> repo : getMapRepository()
+    activate repo
+    repo --> ctrl : mapRepository
+    deactivate repo
 end
-
 @enduml

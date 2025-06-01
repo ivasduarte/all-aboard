@@ -1,11 +1,11 @@
 @startuml
+autonumber 36
 
 participant ":CreateMapController" as ctrl
-participant "mapRepository\n:MapRepositories" as repo
-
-autonumber 25
+participant "mapRepository\n:MapRepository" as repo
 
 activate ctrl
+
 group Add Map
     ctrl -> repo : add(map)
     activate repo

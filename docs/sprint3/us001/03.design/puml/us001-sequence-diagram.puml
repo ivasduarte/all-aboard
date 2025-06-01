@@ -33,17 +33,17 @@ activate repo
 repo --> ctrl : mapRepository
 deactivate repo
 
-ctrl -> UI : requestMapName()
+ctrl -> UI : requests map name
 deactivate ctrl
 
 loop while mapName already exists
-    UI --> Editor: prompt for mapName
+    UI --> Editor: requestMapName()
     deactivate UI
 
     Editor --> UI : provides mapName
     activate UI
 
-    UI -> ctrl : submitData(mapName)
+    UI -> ctrl : submitMapName(mapName)
     activate ctrl
 
     ctrl -> repo : existsByName(mapName)
@@ -62,49 +62,49 @@ end
 Editor -> UI: provides unique mapName
 activate UI
 
-UI --> ctrl : submitData(mapName)
+UI -> ctrl : submitMapName(mapName)
 activate ctrl
 
-ctrl -> UI : requestWidth()
+ctrl -> UI : requests map width
 deactivate ctrl
 
-UI --> Editor: prompt for map width
+UI --> Editor: requestWidth()
 deactivate UI
 
 Editor --> UI : provides width
 activate UI
 
-UI --> ctrl : submitWidth(width)
+UI -> ctrl : submitWidth(width)
 activate ctrl
 
-ctrl -> UI : requestHeight()
+ctrl -> UI : requests map height
 deactivate ctrl
 
-UI --> Editor: prompt for map height
+UI --> Editor: requestHeight()
 deactivate UI
 
 Editor --> UI : provides height
 activate UI
 
-UI --> ctrl : submitHeight(height)
+UI -> ctrl : submitHeight(height)
 activate ctrl
 
-ctrl -> UI : requestCellSize()
+ctrl -> UI : requests cell size
 deactivate ctrl
 
-UI --> Editor: prompt for cell block size
+UI --> Editor: requestCellSize()
 deactivate UI
 
 Editor --> UI: provides cellSizeKm
 activate UI
 
-UI --> ctrl : requestMapDTO(mapName, width, height, cellSizeKm)
-activate ctrl
-
-ctrl -> mapper : createMapDTO(mapName, width, height, cellSizeKm)
+UI -> mapper : createMapDTO(mapName, width, height, cellSizeKm)
 activate mapper
-mapper --> ctrl : MapDTO
+mapper --> UI : MapDTO
 deactivate mapper
+
+UI -> ctrl : submitMapDTO(dto)
+activate ctrl
 
 ctrl -> Map : new Map(dto)
 activate Map
