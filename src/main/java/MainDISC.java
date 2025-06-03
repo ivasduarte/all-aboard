@@ -8,11 +8,13 @@ public class MainDISC {
 
         while(true){
 
-            System.out.println("\n\n-------------------------- DISC MENU --------------------------");
+            System.out.println("\n\n-------------------------- MENU --------------------------");
             System.out.println("1. Verify if a train can travel between two stations.");
             System.out.println("2. Maintenance in a railway.");
+            System.out.println("3. Find the shortest route considering must pass stations.");
             System.out.println("0. Exit");
 
+            System.out.println("\nSelect a option from above: ");
             String option = ler.nextLine();
 
             try {
@@ -21,8 +23,10 @@ public class MainDISC {
                         railway_connectivity.Main.main(new String[0]);
                         break;
                     case "2":
-                        shortest_route_finder.Main.main(new String[0]);
+                        maintenance_route_finder.Main.main(new String[0]);
                         break;
+                    case "3":
+                        shortest_route_finder.Main.main(new String[0]);
                     case "0":
                         System.out.println("Exiting...");
                         return;
