@@ -18,11 +18,6 @@ public class Industry implements Serializable {
     private int mapID;
 
     /**
-     * The scenario ID.
-     */
-    private int scenarioID;
-
-    /**
      * The position X that the industry will take on the map.
      */
     private int positionX;
@@ -51,15 +46,13 @@ public class Industry implements Serializable {
      * This method is the constructor of the industry.
      *
      * @param mapID The ID of a map.
-     * @param scenarioID The ID of a scenario.
      * @param positionX The position X of the industry.
      * @param positionY The position Y of the industry.
      * @param industryType The type of the industry.
      * @param cargoAmount The amount of cargo generated, per year.
      */
-    public Industry(int mapID, int scenarioID, int positionX, int positionY, String industryType, int cargoAmount, int cargoPrice) {
+    public Industry(int mapID, int positionX, int positionY, String industryType, int cargoAmount, int cargoPrice) {
         this.mapID = mapID;
-        this.scenarioID = scenarioID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.industryType = industryType;
@@ -74,15 +67,6 @@ public class Industry implements Serializable {
      */
     public int getMapID() {
         return mapID;
-    }
-
-    /**
-     * This method returns the ID of the used scenario.
-     *
-     * @return The scenario ID.
-     */
-    public int getScenarioID() {
-        return scenarioID;
     }
 
     /**
