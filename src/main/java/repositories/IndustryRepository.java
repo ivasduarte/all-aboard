@@ -69,25 +69,4 @@ public class IndustryRepository implements Serializable {
 
         return filteredIndustries;
     }
-
-    /**
-     * This method is responsible to show the industry list in the form of a list.
-     */
-    public void displayIndustryList() {
-        for (int i = 0; i < industries.size(); i++) {
-            System.out.println((i+1) + ". " + industries.get(i));
-        }
-    }
-
-    /**
-     * This method is responsible to verify if the industry that is trying to be created already exists.
-     *
-     * @param industry industry that is being created
-     *
-     * @return True if the industry doesn't exist yet
-     */
-    private boolean validateIndustry(Industry industry) {
-        boolean isValid = !industries.contains(industry);
-        return isValid;
-    }
 }

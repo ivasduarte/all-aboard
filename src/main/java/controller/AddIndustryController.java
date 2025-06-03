@@ -11,11 +11,10 @@ public class AddIndustryController {
     /**
      * This method will be responsible to add the created industry to the repository.
      *
-     * @param mapID id of the map in which the industry is being added
-     * @param positionX position X the industry will be placed
-     * @param positionY position Y the industry will be placed
+     * @param mapID        id of the map in which the industry is being added
+     * @param positionX    position X the industry will be placed
+     * @param positionY    position Y the industry will be placed
      * @param industryType type of industry
-     *
      * @return Will show a success message if it is possible to create the industry. Otherwise, it will show a message related to the error that occurred.
      */
     public String addIndustry(int mapID, int positionX, int positionY, String industryType, int cargoAmount, int cargoPrice) {
@@ -23,9 +22,7 @@ public class AddIndustryController {
 
         Industry industry = new Industry(mapID, positionX, positionY, industryType, cargoAmount, cargoPrice);
 
-        if (!industry.validatePosition()) {
-            return "ERROR: Invalid position";
-        } else if (!industry.checkOverbuilding()) {
+        if (!industry.checkOverbuilding()) {
             return "ERROR: Position is already occupied.";
         }
 
