@@ -20,9 +20,8 @@ public class SaveScenarioUI implements Runnable {
 
     @Override
     public void run() {
-        List<Scenario> scenarios = controller.getScenarioList().stream()
-                .filter(s -> s.getMap().equals(selectedMap))
-                .collect(Collectors.toList());
+        List<Scenario> scenarios = selectedMap.getScenarios();
+
 
         if (scenarios.isEmpty()) {
             System.out.println("No scenarios available for this map.");

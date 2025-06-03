@@ -96,8 +96,11 @@ public class ScenarioRepository implements Serializable {
         List<Scenario> filteredScenarios = new ArrayList<>();
 
         for (Scenario scenario : scenarios) {
+
             if (scenario.getMap().equals(map)) {
+
                 filteredScenarios.add(scenario);
+
             }
         }
 
@@ -129,15 +132,23 @@ public class ScenarioRepository implements Serializable {
 
             Scenario scenario = (Scenario) obj;
 
-            scenario.setMap(selectedMap);
+            Map mapFromFile = scenario.getMap();
 
-            if (!existsByName(scenario.getScenarioName())) {
-                scenarios.add(scenario);
-            }else{
+            if (mapFromFile.getName().equalsIgnoreCase(selectedMap.getName())) {
 
-                System.out.printf("Scenario \"%s\" already exists in memory and won't be added again.%n", scenario.getScenarioName());
+                if (!selectedMap.hasScenario(scenario)) {
 
+                    selectedMap.addNewScenario(scenario);
+                    System.out.printf("\nSuccessfully loaded \"%s\" into map \"%s\".%n",
+                            scenario.getScenarioName(), selectedMap.getName());
+                } else {
+                    System.out.printf("Scenario \"%s\" already exists in this map.%n", scenario.getScenarioName());
+                }
+            } else {
+                System.out.printf("Scenario \"%s\" belongs to map \"%s\" and cannot be loaded into \"%s\".%n",
+                        scenario.getScenarioName(), mapFromFile.getName(), selectedMap.getName());
             }
+
 
             return scenario;
 

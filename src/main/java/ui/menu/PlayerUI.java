@@ -88,7 +88,7 @@ public class PlayerUI implements Runnable {
         } while (currentMap == null);
 
         ScenarioRepository scenarioRepo = Repositories.getInstance().getScenarioRepository();
-        List<Scenario> scenarios = scenarioRepo.getScenarioListByMap(currentMap);
+        List<Scenario> scenarios = currentMap.getScenarios();
 
         if (scenarios == null || scenarios.isEmpty()) {
             System.out.println("\nIt seems that there are no scenarios available! You must have at least 1 scenario to play!");
