@@ -25,7 +25,6 @@ public class AddIndustryUI implements Runnable {
 
     private Map map;
     private int mapID;
-    private int scenarioID;
     private int positionX;
     private int positionY;
     private String industryType;
@@ -48,18 +47,6 @@ public class AddIndustryUI implements Runnable {
      */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
-
-        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
-        Map map = mapRepository.getMapList().get(mapID);
-        List<Scenario> scenarioList = map.getScenarios();
-
-        System.out.println("\n\nSCENARIOS LIST:");
-        for (int i = 0; i < scenarioList.size(); i++) {
-            Scenario scenario = scenarioList.get(i);
-            System.out.println((i + 1) + ". " + scenario.getScenarioName());
-        }
-        System.out.print("\n\nCHOOSE A SCENARIO TO ADD THE INDUSTRY TO: ");
-        scenarioID = sc.nextInt() - 1;
 
         System.out.print("\nINDUSTRY'S X POSITION: ");
         positionX = sc.nextInt();
@@ -112,7 +99,7 @@ public class AddIndustryUI implements Runnable {
      * This method will be responsible to show the success or error message to the Editor.
      */
     private void submitData() {
-        Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, scenarioID, positionX, positionY, industryType, cargoAmount, cargoPrice));
+        Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, positionX, positionY, industryType, cargoAmount, cargoPrice));
 
         if (result.isPresent()) {
             System.out.println("\nIndustry successfully added!");
