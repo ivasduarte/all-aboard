@@ -64,38 +64,15 @@ public class PlayerUI implements Runnable {
         System.out.println("\n------------------------------------------------------------");
         System.out.println("\nWelcome!");
 
-
-        System.out.println("\n\nChoose a map to play from the list below:");
-        for (int i = 0; i < maps.size(); i++) {
-            System.out.println((i + 1) + ". " + maps.get(i).getName() + " | " + maps.get(i).getWidth() + "x" + maps.get(i).getHeight());
-        }
-
-        Map currentMap = null;
-
-        do {
-            System.out.print("\nEnter the number of the map you wish to play: ");
-            try{
-                int mapChoice = Integer.parseInt(sc.nextLine());
-
-                if (mapChoice <= maps.size() && mapChoice >= 1) {
-                    currentMap = maps.get(mapChoice - 1);
-                } else {
-                    System.out.println("\nSelected map does not exist, try a new one!");
-                }
-            } catch(NumberFormatException e){
-                System.out.println("\nPlease enter a valid number.");
-            }
-        } while (currentMap == null);
-
         ScenarioRepository scenarioRepo = Repositories.getInstance().getScenarioRepository();
-        List<Scenario> scenarios = currentMap.getScenarios();
+        List<Scenario> scenarios = scenarioRepo.getScenarioList();
 
         if (scenarios == null || scenarios.isEmpty()) {
             System.out.println("\nIt seems that there are no scenarios available! You must have at least 1 scenario to play!");
             return;
         }
 
-        System.out.println("\nChoose a scenario for the map " + currentMap.getName() + " from the list below:");
+        System.out.println("\nChoose a scenario from the list below:");
         for (int i = 0; i < scenarios.size(); i++) {
             Restrictions restrictions = scenarios.get(i).getRestrictions();
             System.out.println((i + 1) + ". " + scenarios.get(i).getScenarioName() + " | From " + restrictions.getStartDate() + " to " + restrictions.getEndDate() + "");
@@ -124,6 +101,7 @@ public class PlayerUI implements Runnable {
             return;
         }
 
+        Map currentMap = currentScenario.getMap();
         String simulatorSaveFilePath = currentMap.getName() + ".simu";
 
         List<MenuItem> options = new ArrayList<>();

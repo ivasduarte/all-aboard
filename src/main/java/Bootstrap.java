@@ -64,6 +64,7 @@ public class Bootstrap implements Runnable {
 
         ctrl.createNewUser("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR);
         ctrl.createNewUser("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
+
     }
 
     /**
