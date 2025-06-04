@@ -282,7 +282,7 @@ public class SimulatorController implements Runnable, Serializable {
             int dy = route.get(i).getPositionY() - route.get(i + 1).getPositionY();
             dist += Math.sqrt(dx * dx + dy * dy);
         }
-        return dist;
+        return dist * map.getCellSizeKm();
     }
 
     private double calculateStationBuildingMultiplier(Station station) {
@@ -327,7 +327,7 @@ public class SimulatorController implements Runnable, Serializable {
                 double dist = calculateRouteDistance(l.getRoute());
                 int fuelCost = l.getFuelCost();
 
-                fuel += (int) (dist * fuelCost) / 100;
+                fuel += (int) (dist * fuelCost) / 500;
             }
         }
 
