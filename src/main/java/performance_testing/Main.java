@@ -13,7 +13,7 @@ public class Main {
     }
 
     private static void us29Implementation() throws IOException {
-        System.out.println("Insert the directory path to the test files: ");
+        System.out.println("\nInsert the directory path to the test files: ");
         String dirPath = sc.nextLine();
 
         File directory = new File(dirPath);
@@ -53,17 +53,18 @@ public class Main {
             return Integer.compare(num1, num2);
         });
 
-        System.out.println("Found " + scenarioFiles.size() + " scenario files and " + stationsFiles.size() + " station files\n");
+        System.out.println("\nFound " + scenarioFiles.size() + " scenario files and " + stationsFiles.size() + " station files\n");
 
+        System.out.println("=".repeat(10) + " PERFORMANCE SUMMARY " + "=".repeat(10));
         System.out.println();
 
-        System.out.println("-".repeat(10) + "Testing US13 Performance" + "-".repeat(10));
+        System.out.println("Testing US13 Performance...");
         testUS13Implementation(scenarioFiles, stationsFiles);
 
         System.out.println("\n" + "=".repeat(63) + "\n");
 
-        System.out.println("-".repeat(10) + "Testing US14 Performance" + "-".repeat(10));
-        // inserir metodo de teste da us14
+        System.out.println("Testing US14 Performance...");
+        testUS14Implementation(scenarioFiles);
     }
 
     private static int extractNumberFromFilename(String fileName) {
@@ -120,7 +121,7 @@ public class Main {
                 resultsUS13.add(new PerformanceResult("US13-" + trainTypesNames[i] + "-" + edges.size(), stations.size(), edges.size(), averageTime));
             }
         }
-        printPerformanceSummary("User Story 13", resultsUS13);
+        printPerformanceSummaryUS13("User Story 13", resultsUS13);
     }
 
     private static File findMatchingFile(File scenarioFile, List<File> stationFiles) {
@@ -217,7 +218,89 @@ public class Main {
         return false;
     }
 
-    private static void printPerformanceSummary(String US, List<PerformanceResult> results) {
+    private static void testUS14Implementation(List<File> scenariosFiles) throws FileNotFoundException {
+        List<PerformanceResult> resultsUS14 = new ArrayList<>();
+
+        for (File file : scenariosFiles) {
+            if (!file.exists()) {
+                System.out.println("File not found - " + file.getName());
+                continue;
+            }
+
+            List<String[]> scenarioEdges = getScenarioLines(file);
+
+            boolean[] maintenanceTypes = {false, true};     // False = All Lines | True = Electrified Lines Only
+            String[] typeNames = {"All Lines", "Electrified Only"};
+
+            for (int i = 0; i < maintenanceTypes.length; i++) {
+                boolean onlyElectricLines = maintenanceTypes[i];
+
+                long startTime = System.nanoTime();
+
+                List<String[]> edges = new ArrayList<>();
+                Scanner sc = new Scanner(file);
+                while (sc.hasNextLine()) {
+                    String[] parts = sc.nextLine().trim().split(";");
+                    if (parts.length >= 3) {
+                        if (!onlyElectricLines || parts[2].equals("1")) {
+                            edges.add(parts);
+                        }
+                    }
+                }
+                sc.close();
+
+                if (edges.isEmpty()) {
+                    System.out.println(typeNames[i] + ": Not Applicable");
+                    continue;
+                }
+
+                Map<String, List<String>> graph = new HashMap<>();
+                for (String[] edge : edges) {
+                    graph.putIfAbsent(edge[0], new ArrayList<>());
+                    graph.putIfAbsent(edge[1], new ArrayList<>());
+                    graph.get(edge[0]).add(edge[1]);
+                    graph.get(edge[1]).add(edge[0]);
+                }
+
+                List<String> odd = new ArrayList<>();
+                for (String node : graph.keySet()) {
+                    if (graph.get(node).size() % 2 != 0) {
+                        odd.add(node);
+                    }
+                }
+
+                Set<String> visited = new HashSet<>();
+                String start = graph.keySet().stream().filter(k -> !graph.get(k).isEmpty()).findFirst().orElse(null);
+                if (start != null) dfsUS14(start, graph, visited);
+
+                boolean connected = graph.entrySet().stream()
+                        .filter(e -> !e.getValue().isEmpty())
+                        .allMatch(e -> visited.contains(e.getKey()));
+
+                if (!connected) {
+                    return;
+                }
+
+                long endTime = System.nanoTime();
+
+                long executionTime = endTime - startTime;
+                resultsUS14.add(new PerformanceResult(("US14-" + typeNames[i].replace(" ", "_") + "-" + edges.size()), 0, edges.size(), executionTime));
+            }
+        }
+
+        printPerformanceSummaryUS14("User Story 14", resultsUS14);
+    }
+
+    public static void dfsUS14(String node, Map<String, List<String>> graph, Set<String> visited) {
+        visited.add(node);
+        for (String neighbor : graph.get(node)) {
+            if (!visited.contains(neighbor)) {
+                dfsUS14(neighbor, graph, visited);
+            }
+        }
+    }
+
+    private static void printPerformanceSummaryUS13(String US, List<PerformanceResult> results) {
         System.out.println("\n-----" + US + " PERFORMANCE SUMMARY -----");
         System.out.printf("%-25s %10s %10s %15s%n",
                 "Test Case", "Vertices", "Edges", "Avg Time (ms)");
@@ -225,6 +308,17 @@ public class Main {
 
         for (PerformanceResult result : results) {
             System.out.printf("%-25s %10d %10d %15.3f%n", result.testName, result.vertexCount, result.edgeCount, result.avgTime / 1_000_000.0);
+        }
+    }
+
+    private static void printPerformanceSummaryUS14(String US, List<PerformanceResult> results) {
+        System.out.println("\n-----" + US + " PERFORMANCE SUMMARY -----");
+        System.out.printf("%-26s %10s %15s%n",
+                "Test Case", "Edges", "Avg Time (ms)");
+        System.out.println("-".repeat(63));
+
+        for (PerformanceResult result : results) {
+            System.out.printf("%-26s %10d %15.3f%n", result.testName, result.edgeCount, result.avgTime / 1_000_000.0);
         }
     }
 
