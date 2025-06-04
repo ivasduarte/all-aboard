@@ -69,9 +69,11 @@ public class ChangeStationTypeUI implements Runnable {
         String newType = sc.nextLine();
 
         boolean validType = false;
+        int typeID = 0;
         for (int i = 0; i < availableStationTypes.size(); i++) {
             if (availableStationTypes.get(i).equalsIgnoreCase(newType)) {
                 validType = true;
+                typeID = i;
             }
         }
 
@@ -80,7 +82,7 @@ public class ChangeStationTypeUI implements Runnable {
             return;
         }
 
-        boolean result = changeStationTypeController.ChangeStationType(station, newType);
+        boolean result = changeStationTypeController.ChangeStationType(station, typeID);
 
         if (!result)
             System.out.println("Station type change failed! Station does not fit!");
