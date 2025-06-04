@@ -14,6 +14,7 @@ public class Scenario implements Serializable {
     private Budget budget;
 
     private int currentYear;
+    private int finalYear;
     private double modificationRateFor;
 
     /**
@@ -34,6 +35,7 @@ public class Scenario implements Serializable {
         this.budget = budget;
 
         this.currentYear = restrictions.getStartDate().getYear();
+        this.finalYear = restrictions.getEndDate().getYear();
         validateName();
     }
 
@@ -153,6 +155,11 @@ public class Scenario implements Serializable {
         return budget.getBudget();
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     /**
      * Returns a string representation of the Scenario object.
      * The representation includes the scenario name, its restrictions,
@@ -160,10 +167,8 @@ public class Scenario implements Serializable {
      *
      * @return A string describing the scenario, formatted as "name (restrictions, belongs to map 'mapName')".
      */
-    @Override
-    public String toString() {
-        return name + " (" + restrictions + ", belongs to map '" + map.getName() + ")";
-    }
+
+
 
     public double getModificationRateFor() {
         return modificationRateFor;

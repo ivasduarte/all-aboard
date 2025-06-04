@@ -27,18 +27,12 @@ public class LoginController {
     private Label messageLabel;
 
     private final AuthenticationController authController = new AuthenticationController();
-    private final AuthenticationRepository authRepository = new AuthenticationRepository();
 
     private Runnable onLoginSuccess;
 
     public void setOnLoginSuccess(Runnable callback) {
         this.onLoginSuccess = callback;
     }
-
-    public void bootstrap() {
-        authRepository.createNewUser(new User("Player", "player@isep.ipp.pt", "player", "player"));
-    }
-
 
     @FXML
     private void handleLoginButton() {

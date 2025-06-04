@@ -21,7 +21,9 @@ public class ChooseScenarioController {
     @FXML
     private Label budgetLabel;
     @FXML
-    private Label yearLabel;
+    private Label startLabel;
+    @FXML
+    private Label endLabel;
     @FXML
     private VBox menuBox;
 
@@ -50,7 +52,8 @@ public class ChooseScenarioController {
         Budget budget = currentScenario.getBudget();
 
         mapLabel.setText("Map: " + currentMap.getName());
-        yearLabel.setText("Current Year: " + currentScenario.getCurrentYear());
+        startLabel.setText("Start Date: " + currentScenario.getRestrictions().getStartDate());
+        endLabel.setText("End Date: " + currentScenario.getRestrictions().getEndDate());
         budgetLabel.setText("Budget: " + budget.getBudget() + "€");
 
         menuBox.getChildren().clear();

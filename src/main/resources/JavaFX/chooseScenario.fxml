@@ -8,36 +8,41 @@
 
    <children>
 
-      <Text fill="WHITE" layoutX="132.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER">
+      <Text fill="WHITE" layoutX="132.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER">
          <font>
             <Font name="Arial Rounded MT Bold" size="37.0" />
          </font>
       </Text>
 
-      <Text fill="WHITE" layoutX="51.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a scenario from the list below:">
+      <Text fill="WHITE" layoutX="51.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a scenario from the list below:">
          <font>
             <Font name="Arial Rounded MT Bold" size="14.0" />
          </font>
       </Text>
 
-      <ComboBox fx:id="scenarioComboBox" layoutX="51.0" layoutY="140.0" prefHeight="26.0" prefWidth="336.0" onAction="#updateScenarioInfo" />
+      <ComboBox fx:id="scenarioComboBox" layoutX="51.0" layoutY="140.0" onAction="#updateScenarioInfo" prefHeight="26.0" prefWidth="336.0" />
 
       <Label fx:id="mapLabel" layoutX="51.0" layoutY="180.0" text="Map: " textFill="WHITE">
          <font>
             <Font name="Arial Nova Cond" size="13.0" />
          </font></Label>
-      <Label fx:id="yearLabel" layoutX="51.0" layoutY="210.0" text="Year: " textFill="WHITE">
+      <Label fx:id="endLabel" layoutX="51.0" layoutY="229.0" text="End Date: " textFill="WHITE">
          <font>
             <Font name="Arial Nova Cond" size="13.0" />
          </font></Label>
-      <Label fx:id="budgetLabel" layoutX="51.0" layoutY="240.0" text="Budget: " textFill="WHITE">
+      <Label fx:id="budgetLabel" layoutX="51.0" layoutY="255.0" text="Current Budget: " textFill="WHITE">
          <font>
             <Font name="Arial Nova Cond" size="13.0" />
          </font></Label>
 
-      <Button layoutX="51.0" layoutY="280.0" onAction="#handleContinue" text="Continue" />
+      <Button layoutX="51.0" layoutY="293.0" onAction="#handleContinue" text="Continue" />
 
-      <VBox fx:id="menuBox" layoutX="51.0" layoutY="320.0" prefHeight="120.0" prefWidth="336.0" spacing="10.0" />
+      <VBox fx:id="menuBox" layoutX="51.0" layoutY="333.0" prefHeight="120.0" prefWidth="336.0" spacing="10.0" />
+      <Label fx:id="startLabel" layoutX="51.0" layoutY="204.0" text="Start Date: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Cond" size="13.0" />
+         </font>
+      </Label>
 
    </children>
 </AnchorPane>
