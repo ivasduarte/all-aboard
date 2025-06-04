@@ -13,7 +13,7 @@ Only algorithms developed using **primitive operations**, without relying on Jav
 
 ## 2. Efficiency Analysis of US13
 
-User Story 13 requires checking whether a specific train can travel between two different stations belonging to the rail network.
+User Story 13 requires verifying whether a specific train — defined by its propulsion type (steam, diesel, or electric) — can travel between two selected stations on the railway network. This involves checking the connectivity of the network while considering constraints such as electrification of railway lines (in the case of electric trains) and ensuring that a valid path exists between the selected stations, using only permitted types of lines.
 
 #### 2.1 Graph Representation
 
@@ -21,7 +21,7 @@ The railway network is modeled as an undirected graph \( G = (V, E) \), where:
 - \( V \): set of vertices (stations)
 - \( E \): set of edges (railway lines)
 
-Each edge \( V \) indicates a line between two stations, which each one represents a vertice \( V \), with a different color representing whether it's a electrified line or not.
+Each edge \( E \) indicates a line between two stations, which each one represents a vertex \( V \), with a different color representing whether it's a electrified line or not.
 
 #### 2.2 Train Type Filtering
 
@@ -66,3 +66,132 @@ Then, the worst-case time complexity is:
 - **DFS traversal**:  
   In the worst case, all vertices and edges are visited  
   → `O(V + E)`
+
+#### 2.5 Pseudocode
+
+Below are the key algorithms implemented the US13, described in pseudocode.
+
+#### a) Graph Construction (`buildGraph`)
+
+This function reads the list of edges and constructs the adjacency list representation of the graph, applying the electrification filter if the train type is Electric.
+
+    Function buildGraph(edgeList, trainType):
+    graph <- empty map
+    For each (stationA, stationB, isElectrified) in edgeList:
+    If trainType = 'Electric' and isElectrified = 0:
+        Skip this edge
+    If stationA not in graph:
+        graph[stationA] ← empty list
+    If stationB not in graph:
+        graph[stationB] ← empty list
+
+    Add stationB to graph[stationA]
+    Add stationA to graph[stationB]
+    Return Graph
+
+#### b) Path Search using dfs
+
+This function determines if the destination station is reachable from the start station by using a depth-first search (DFS) traversal over the graph.
+
+
+    Function isConnected(graph, start, end):
+        visited ← empty set
+    Return dfs(graph, start, end, visited)
+
+    Function dfs(graph, current, end, visited):
+        If current = end:
+    Return True
+
+## 3. Efficiency Analysis of US14
+
+User Story 14 requires that, given a railway network (represented as a graph with stations and railway lines), the system should verify whether it is possible to find a maintenance route that traverses each railway line exactly once.
+
+This corresponds to detecting the existence of an Eulerian Path (or Eulerian Circuit) in an undirected graph.
+
+An Eulerian Path exists in a connected undirected graph if:
+
+- Exactly two vertices have an odd degree (start and end points);
+- All vertices have an even degree, in which case an Eulerian Circuit is possible (start and end at the same station).
+
+If the graph is disconnected, or has more than two vertices with odd degree, no Eulerian path is possible.
+
+#### 3.1 Graph Representation
+
+The railway network is modeled as an undirected graph \( G = (V, E) \), where:
+- \( V \): set of vertices (stations)
+- \( E \): set of edges (railway lines), which can be electrified or non-electrified.
+
+Depending on the user's selection, the algorithm may consider:
+
+- All the railway lines (Electrified ones and non-Electrified);
+- Only the electrified ones.
+
+#### 3.2 Worst-Case Time complexity
+
+The algorithm performs the next following steps:
+
+1. Graph construction - `O(E)`: each edge is added to the adjacency list of both connected vertices;
+2. Connectivity using DFS - `O(V + E)`: verifies that all non-isolated vertices belong to a single connected component;
+3. Counting odd-degree vertices - `O(V)`: iterates through each vertex to compute its degree.
+
+Then, the worst-case time complexity is:
+
+`O(V + E)`
+
+#### 3.3 Pseudocode
+
+#### a) Connectivity check ('isConnected')
+
+This function performs a depth-first search (DFS) starting from a vertex with neighbors, and verifies if all reachable vertices are part of the same connected component. Only non-isolated vertices are considered.
+
+    Function isConnected(graph):
+        visited ← empty set
+        start ← any vertex in graph with neighbors
+        DFS(start, graph, visited)
+
+    For each vertex in graph:
+        If vertex has neighbors and vertex not in visited:
+            Return False
+    Return True
+
+#### b) Odd-degree Vertices Count ('countOddDegreeVertices')
+
+This function iterates through all vertices in the graph and counts how many have an odd number of connections (degree). This is used to determine the feasibility of an Eulerian path or circuit.
+
+    Function countOddDegreeVertices(graph):
+        odd ← 0
+        For each vertex in graph:
+            If degree(vertex) mod 2 ≠ 0:
+                odd ← odd + 1
+    Return odd
+
+#### c) Eulerian Path Verification ('hasEulerianPath')
+
+This function combines the two previous ones. It first checks if the graph is connected. If it is, it analyzes the number of odd-degree vertices to determine whether an Eulerian circuit or path exists.
+
+    Function hasEulerianPath(graph):
+        If not isConnected(graph):
+        Return "No Eulerian path – graph is disconnected"
+    odd ← countOddDegreeVertices(graph)
+    If odd == 0:
+        Return "Eulerian circuit possible"
+    Else if odd == 2:
+        Return "Eulerian path possible"
+    Else:
+        Return "No Eulerian path – more than 2 vertices with odd degree"
+
+
+## 4. Summary Table
+
+| Algorithm                        | Description                           | Time Complexity |
+|----------------------------------|---------------------------------------|-----------------|
+| Graph construction (US13 & US14) | Create adjacency list from edge list  | O(E)            |
+| DFS traversal (US13 & US14)      | Explore network to check connectivity | O(V + E)        |
+| Odd-degree count (US14)          | Count vertices with odd degrees       | O(V)            |
+| **Overall (US13 & US14)**        | -                                     | **O(V + E)**    |
+
+
+
+
+
+
