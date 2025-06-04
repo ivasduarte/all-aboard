@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Locomotive implements Serializable {
-    /**
-     * The locomotive model.
-     */
+
     private String locomotiveModel;
     private String fuelType;
-    private int maxSpeed; // Changed from `speed`
+    private int maxSpeed;
     private int startYear;
     private int endYear;
     private int price;
@@ -17,8 +15,7 @@ public class Locomotive implements Serializable {
     private int maintenanceCost;
     private List<Station> route;
 
-    public Locomotive(String locomotiveModel, String fuelType, int startYear, int endYear,
-                      int price, int maintenanceCost, int fuelCost, int maxSpeed) {
+    public Locomotive(String locomotiveModel, String fuelType, int startYear, int endYear, int price, int maintenanceCost, int fuelCost, int maxSpeed) {
         this.locomotiveModel = locomotiveModel;
         this.fuelType = fuelType;
         this.startYear = startYear;
