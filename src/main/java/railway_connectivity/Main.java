@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import static guru.nidi.graphviz.attribute.Attributes.attr;
 import static guru.nidi.graphviz.engine.Engine.DOT;
 import static guru.nidi.graphviz.model.Factory.*;
 
