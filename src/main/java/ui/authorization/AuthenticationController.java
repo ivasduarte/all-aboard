@@ -49,9 +49,42 @@ public class AuthenticationController{
      *                      false if the user already exists.
      */
     public boolean createNewUser(String name, String email, String password, String roleID) {
+        if (!isValidPassword(password)) {
+            System.out.println("Password does not meet the requirements.");
+            return false;
+        }
 
         User user = new User(name, email, roleID, password);
         return authenticationRepository.createNewUser(user);
+    }
+
+
+    /**
+     * Validates the given password according to the client specifications:
+     * - Exactly 7 alphanumeric characters
+     * - At least 3 uppercase letters
+     * - At least 2 digits
+     *
+     * @param password The password to validate.
+     * @return True if the password is valid, false otherwise.
+     */
+    public static boolean isValidPassword(String password) {
+        if (password == null || password.length() != 7 || !password.matches("[a-zA-Z0-9]+")) {
+            return false;
+        }
+
+        int uppercaseCount = 0;
+        int digitCount = 0;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                uppercaseCount++;
+            } else if (Character.isDigit(c)) {
+                digitCount++;
+            }
+        }
+
+        return uppercaseCount >= 3 && digitCount >= 2;
     }
 
     /**

@@ -62,8 +62,8 @@ public class Bootstrap implements Runnable {
     public void addUsers() {
         AuthenticationController ctrl = new AuthenticationController();
 
-        ctrl.createNewUser("editor", "editor@isep.ipp.pt", "editor", AuthenticationController.ROLE_EDITOR);
-        ctrl.createNewUser("player", "player@isep.ipp.pt", "player", AuthenticationController.ROLE_PLAYER);
+        ctrl.createNewUser("editor", "editor@isep.ipp.pt", "ETesT01", AuthenticationController.ROLE_EDITOR);
+        ctrl.createNewUser("player", "player@isep.ipp.pt", "PTesT01", AuthenticationController.ROLE_PLAYER);
 
     }
 
@@ -139,10 +139,7 @@ public class Bootstrap implements Runnable {
         for (Map map : allMaps) {
             for (Scenario baseScenario : scenarios) {
                 Scenario scenarioForMap = new Scenario(
-                        baseScenario.getScenarioName() + "_for_" + map.getName(),
-                        baseScenario.getRestrictions(),
-                        map,
-                        baseScenario.getBudget()
+                        baseScenario.getScenarioName(), baseScenario.getRestrictions(), map, baseScenario.getBudget()
                 );
                 map.addNewScenario(scenarioForMap);
                 sr.add(scenarioForMap);
