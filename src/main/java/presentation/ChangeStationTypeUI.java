@@ -25,19 +25,19 @@ public class ChangeStationTypeUI implements Runnable {
         Scanner sc = new Scanner(System.in);
 
         ChangeStationTypeController changeStationTypeController = new ChangeStationTypeController();
-        StationRepository stationRepository = Repositories.getInstance().getStationRepository();
+
         UpgradeAStationController controller = new UpgradeAStationController();
 
         List<Station> stations = controller.getAvailableStations(map.getName());
 
-        System.out.println("\n\nAVAILABLE STATIONS TYPES TO UPGRADE:");
+        System.out.println("\nAVAILABLE STATIONS TYPES TO UPGRADE:");
         for (int i = 0; i < stations.size(); i++) {
             Station s = stations.get(i);
             System.out.println((i + 1) + ". Station ID: " + s.getStationID() + " | Type: " + s.getStationType() +
                     " | Position: (" + s.getPositionX() + ", " + s.getPositionY() + ")");
         }
 
-        System.out.print("\n\nSELECT STATION'S NUMBER: ");
+        System.out.println("\nSELECT STATION'S NUMBER: ");
         int stationID = Integer.parseInt(sc.nextLine()) - 1;
 
         if (stationID < 0 || stationID >= stations.size()) {
@@ -45,7 +45,7 @@ public class ChangeStationTypeUI implements Runnable {
             return;
         }
 
-        Station station = stationRepository.getStations().get(stationID);
+        Station station = stations.get(stationID);
 
         if (station.getStationTypeID() >= Station.StationType.values().length - 1) {
             System.out.println("WARNING:");
@@ -53,7 +53,10 @@ public class ChangeStationTypeUI implements Runnable {
             return;
         }
 
-        System.out.println("\n\nSTATION TYPE: " + station.getStationType());
+        System.out.println("\nSTATION TYPE: " + station.getStationType());
+
+        int StationInitialPrice = station.getStationPrice();
+
         System.out.println("\nAVAILABLE UPGRADES: ");
 
         List<String> availableStationTypes = new ArrayList<>();
@@ -70,8 +73,8 @@ public class ChangeStationTypeUI implements Runnable {
 
         boolean validType = false;
         int typeID = 0;
-        for (int i = 0; i < availableStationTypes.size(); i++) {
-            if (availableStationTypes.get(i).equalsIgnoreCase(newType)) {
+        for (int i = 0; i < Station.StationType.values().length; i++) {
+            if (Station.StationType.values()[i].getDisplayName().equalsIgnoreCase(newType)) {
                 validType = true;
                 typeID = i;
             }
@@ -88,6 +91,16 @@ public class ChangeStationTypeUI implements Runnable {
             System.out.println("Station type change failed! Station does not fit!");
         else
             System.out.println("\nType of station successfully changed.");
+
+        int stationFinalPrice = station.getStationPrice();
+
+        int DecreasedBudget = stationFinalPrice - StationInitialPrice;
+
+        scenario.subtractBudget(DecreasedBudget);
+
+        System.out.println("\nTotal Remaining Budget: " + scenario.getBudget().getBudget());
+
+
     }
 
     @Override

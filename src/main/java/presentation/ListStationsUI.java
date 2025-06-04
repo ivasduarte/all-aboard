@@ -45,7 +45,7 @@ public class ListStationsUI implements Runnable {
         for (int i = 0; i < stations.size(); i++) {
             Station station = stations.get(i);
             System.out.println((i + 1) + ". " + station.getName() + " | ID: " + station.getStationID()
-                    + " | Type: " + station.getStationType()
+                    + " | Type: " + station.getStationType().getDisplayName()
                     + " | Position: (" + station.getPositionX() + ", " + station.getPositionY() + ")");
         }
 
