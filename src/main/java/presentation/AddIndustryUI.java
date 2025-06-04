@@ -3,8 +3,7 @@ package presentation;
 import controller.AddIndustryController;
 import controller.CreateScenarioController;
 import controller.DisplayMapController;
-import domain.Map;
-import domain.Scenario;
+import domain.*;
 import repositories.MapRepository;
 import repositories.Repositories;
 
@@ -20,8 +19,6 @@ import java.util.Scanner;
  */
 public class AddIndustryUI implements Runnable {
     private AddIndustryController ctrl = new AddIndustryController();
-    private DisplayMapController controller = new DisplayMapController();
-    private CreateScenarioController scenarioController = new CreateScenarioController();
 
     private Map map;
     private int mapID;
@@ -46,7 +43,7 @@ public class AddIndustryUI implements Runnable {
      * map, and reported to the user. If errors occur during the input process,
      * appropriate error messages are displayed to guide the user.
      */
-    public void getInput() {
+    public boolean getInput() {
         Scanner sc = new Scanner(System.in);
 
         do {
@@ -68,6 +65,27 @@ public class AddIndustryUI implements Runnable {
         } while (positionY < 1 || positionY > map.getWidth());
 
         System.out.println();
+
+        List<Industry> mapIndustries = map.getIndustries();
+        List<City> mapCities = map.getCities();
+
+        for (int i = 0; i < mapIndustries.size(); i++) {
+            if (mapIndustries.get(i).getPositionX() == positionX && mapIndustries.get(i).getPositionY() == positionY) {
+                System.out.println("Position is already occupied.");
+                return false;
+            }
+        }
+
+        for (int i = 0; i < mapCities.size(); i++) {
+            for (int j = 0; j < mapCities.get(i).getBlocks().size(); j++) {
+                List<HouseBlock> hb = mapCities.get(i).getBlocks();
+
+                if (hb.get(j).getX() == positionX && hb.get(j).getY() == positionY) {
+                    System.out.println("Position is already occupied.");
+                    return false;
+                }
+            }
+        }
 
         List<String> industryTypes = new ArrayList<>();
         industryTypes.add("Primary Sector Industry");
@@ -103,6 +121,8 @@ public class AddIndustryUI implements Runnable {
                 System.out.println("ERROR: Each cargo must give positive money to the player.");
             }
         } while (cargoPrice <= 0);
+
+        return true;
     }
 
     @Override
@@ -111,38 +131,11 @@ public class AddIndustryUI implements Runnable {
      */
     public void run() {
         System.out.println("\n\n------------------------ Add Industry ------------------------");
-        getInput();
-        submitData();
-    }
-
-    /**
-     * This method will be responsible to show the success or error message to the Editor.
-     */
-    private void submitData() {
-        Optional<String> result = Optional.ofNullable(ctrl.addIndustry(mapID, positionX, positionY, industryType, cargoAmount, cargoPrice));
-
-        if (result.isPresent()) {
-            System.out.println("\nIndustry successfully added!");
+        if (getInput()) {
+            String result = ctrl.addIndustry(mapID, positionX, positionY, industryType, cargoAmount, cargoPrice);
+            System.out.println(result);
         } else {
-            System.out.println("\nIndustry not added!");
+            System.out.println("It is not possible to create this industry!");
         }
-    }
-
-    /**
-     * This method will be responsible to show an error message if the industry cannot be created.
-     *
-     * @param result error message
-     */
-    public void showError(String result) {
-        System.out.println("ERROR: " + result);
-    }
-
-    /**
-     * This method will be responsible to show a message of success, if the industry is added.
-     *
-     * @param result success message
-     */
-    public void showSuccess(String result) {
-        System.out.println("SUCCESS: " + result);
     }
 }

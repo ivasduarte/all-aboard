@@ -22,15 +22,12 @@ public class AddIndustryController {
 
         Industry industry = new Industry(mapID, positionX, positionY, industryType, cargoAmount, cargoPrice);
 
-        if (!industry.checkOverbuilding()) {
-            return "ERROR: Position is already occupied.";
-        }
-
         industryRepository.save(industry);
         Map map = Repositories.getInstance().getMapRepository().getMapList().get(mapID);
+
         map.addNewIndustry(industry);
 
-        return "Industry [" + positionX + ", " + positionY + "] saved successfully.";
+        return "\nIndustry addedd successfully at (" + positionX + ", " + positionY + ").\nIndustry Type: " + industryType;
     }
 
     /**
