@@ -11,7 +11,7 @@ group Add Map
     activate repo
 
     repo -> repo : validateMap(map)
-    repo --> ctrl : void
+    repo --> ctrl : map
     deactivate repo
 end
 

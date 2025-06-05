@@ -9,7 +9,6 @@ actor Editor
 
 participant ":CreateMapUI" as UI
 participant ":CreateMapController" as ctrl
-participant ":MapMapper" as mapper
 participant ":Map" as Map
 
 activate Editor
@@ -91,17 +90,18 @@ deactivate UI
 Editor --> UI: provides cellSizeKm
 activate UI
 
-UI -> mapper : createMapDTO(mapName, width, height, cellSizeKm)
-activate mapper
-mapper --> UI : MapDTO
-deactivate mapper
-
-UI -> ctrl : submitMapDTO(dto)
+UI -> ctrl : submitData(mapName, width, height, cellSizeKm)
 activate ctrl
 
-ref over ctrl
-    Validate Map from DTO
+ctrl -> Map : createMap(mapName, width, height, cellSizeKm)
+activate Map
+
+ref over Map
+    Validate Map
 end
+
+Map --> ctrl : Map object
+deactivate Map
 
 ref over ctrl
     Add Map

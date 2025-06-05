@@ -12,8 +12,6 @@ participant ":CreateMapController" as ctrl
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as repositories
 participant "mapRepository\n:MapRepository" as repo
-participant ":MapMapper" as mapper
-participant "MapDTO" as dto
 participant ":Map" as Map
 
 activate Editor
@@ -98,22 +96,17 @@ deactivate UI
 Editor --> UI: provides cellSizeKm
 activate UI
 
-UI -> mapper : createMapDTO(mapName, width, height, cellSizeKm)
-activate mapper
-mapper --> UI : MapDTO
-deactivate mapper
-
-UI -> ctrl : submitMapDTO(dto)
+UI -> ctrl : submitData(mapName, width, height, cellSizeKm)
 activate ctrl
 
-ctrl -> Map : new Map(dto)
+ctrl -> Map : createMap(mapName, width, height, cellSizeKm)
 activate Map
 
 Map -> Map : validateName()
 Map -> Map : validateSize()
+
 Map --> ctrl : Map object
 deactivate Map
-
 ctrl -> repo : add(map)
 activate repo
 
@@ -124,7 +117,7 @@ deactivate repo
 ctrl --> UI : map
 deactivate ctrl
 
-UI --> Editor : "Map (name) successfully created!"
+UI --> Editor : "Map successfully created!"
 deactivate UI
 
 @enduml

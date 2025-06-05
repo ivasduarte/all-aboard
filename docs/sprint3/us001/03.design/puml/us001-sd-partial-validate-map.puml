@@ -6,8 +6,8 @@ participant ":Map" as Map
 
 activate ctrl
 
-group Validate Map from DTO
-    ctrl -> Map : new Map(dto)
+group Validate Map
+    ctrl -> Map : createMap(mapName, width,\nheight, cellSizeKm)
     activate Map
 
     Map -> Map : validateName()
