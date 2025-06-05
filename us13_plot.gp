@@ -7,8 +7,8 @@ set xlabel 'Number of Edges' font 'Arial,14'
 set ylabel 'Average Execution Time (ms)' font 'Arial,14'
 set grid
 set key outside right
+set autoscale
 
 set datafile separator ','
-set style data linespoints
 
-plot 'us13_results.csv' using 4:5 every ::1 title 'All Data' with linespoints pt 7 ps 1 lw 2
+plot 'us13_results.csv' every ::1 using 4:5 with points pt 7 ps 1

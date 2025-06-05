@@ -81,18 +81,25 @@ public class Main {
                 for (PerformanceResult result : results) {
                     String[] parts = result.testName.split("-");
                     String trainType = parts.length > 1 ? parts[1] : "Unknown";
-                    writer.printf("%s,%s,%d,%d,%.3f%n",
-                            result.testName, trainType, result.vertexCount,
-                            result.edgeCount, result.avgTime / 1_000_000.0);
+                    writer.printf(
+                            Locale.US, "%s,%s,%d,%d,%.3f%n",
+                            result.testName,
+                            trainType,
+                            result.vertexCount,
+                            result.edgeCount,
+                            result.avgTime / 1_000_000.0);
                 }
             } else {
                 writer.println("TestCase,MaintenanceType,Edges,AvgTimeMs");
                 for (PerformanceResult result : results) {
                     String[] parts = result.testName.split("-");
                     String maintenanceType = parts.length > 1 ? parts[1].replace("_", " ") : "Unknown";
-                    writer.printf("%s,%s,%d,%.3f%n",
-                            result.testName, maintenanceType,
-                            result.edgeCount, result.avgTime / 1_000_000.0);
+                    writer.printf(
+                            Locale.US, "%s,%s,%d,%.3f%n",
+                            result.testName,
+                            maintenanceType,
+                            result.edgeCount,
+                            result.avgTime / 1_000_000.0);
                 }
             }
         }
@@ -109,11 +116,11 @@ public class Main {
             writer.println("set ylabel 'Average Execution Time (ms)' font 'Arial,14'");
             writer.println("set grid");
             writer.println("set key outside right");
+            writer.println("set autoscale");
             writer.println();
             writer.println("set datafile separator ','");
-            writer.println("set style data linespoints");
             writer.println();
-            writer.println("plot 'us13_results.csv' using 4:5 every ::1 title 'All Data' with linespoints pt 7 ps 1 lw 2");
+            writer.println("plot 'us13_results.csv' every ::1 using 4:5 with points pt 7 ps 1");
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("us14_plot.gp"))) {
@@ -126,15 +133,15 @@ public class Main {
             writer.println("set ylabel 'Average Execution Time (ms)' font 'Arial,14'");
             writer.println("set grid");
             writer.println("set key outside right");
+            writer.println("set autoscale");
             writer.println();
             writer.println("set datafile separator ','");
-            writer.println("set style data linespoints");
             writer.println();
-            writer.println("plot 'us14_results.csv' using 3:4 every ::1 title 'All Data' with linespoints pt 7 ps 1 lw 2");
+            writer.println("plot 'us14_results.csv' every ::1 using 3:4 with points pt 7 ps 1");
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter("combined_plot.gp"))) {
-            writer.println("# Combined Performance Comparison - Simplified");
+            writer.println("# Combined Performance Comparison");
             writer.println("set terminal pngcairo enhanced font 'Arial,12' size 1400,1000");
             writer.println("set output 'combined_performance.png'");
             writer.println();
@@ -146,16 +153,18 @@ public class Main {
             writer.println("set ylabel 'Avg Time (ms)'");
             writer.println("set grid");
             writer.println("set key top left");
+            writer.println("set autoscale");
             writer.println("set datafile separator ','");
             writer.println();
-            writer.println("plot 'us13_results.csv' using 4:5 every ::1 title 'US13' with linespoints lw 2");
+            writer.println("plot 'us13_results.csv' every ::1 using 4:5 with points pt 7 ps 1");
             writer.println();
             writer.println("# US14 subplot");
             writer.println("set title 'US14: Performance vs Graph Size' font 'Arial,14'");
             writer.println("set xlabel 'Number of Edges'");
             writer.println("set ylabel 'Avg Time (ms)'");
+            writer.println("set autoscale");
             writer.println();
-            writer.println("plot 'us14_results.csv' using 3:4 every ::1 title 'US14' with linespoints lw 2");
+            writer.println("plot 'us14_results.csv' every ::1 using 3:4 with points pt 5 ps 1");
             writer.println();
             writer.println("unset multiplot");
         }
