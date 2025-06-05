@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="540.0" prefWidth="509.0" style="-fx-background-color: #7A9D96;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PlayerMenuController">
+   <children>
+      <Text fill="WHITE" layoutX="120.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER MENU" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="37.0" />
+         </font>
+      </Text>
+      <VBox fx:id="menuBox" layoutX="73.0" layoutY="129.0" prefHeight="338.0" prefWidth="362.0" spacing="10.0" />
+      <Label fx:id="messageLabel" layoutX="-4.0" layoutY="-1.0" />
+   </children>
+</AnchorPane>

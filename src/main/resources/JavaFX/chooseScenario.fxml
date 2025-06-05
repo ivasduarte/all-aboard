@@ -14,7 +14,7 @@
          </font>
       </Text>
 
-      <Text fill="WHITE" layoutX="51.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a scenario from the list below:">
+      <Text fill="WHITE" layoutX="51.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Scenario from the list below:">
          <font>
             <Font name="Arial Rounded MT Bold" size="14.0" />
          </font>
@@ -43,6 +43,7 @@
             <Font name="Arial Nova Cond" size="13.0" />
          </font>
       </Label>
+      <Label fx:id="messageLabel" />
 
    </children>
 </AnchorPane>
