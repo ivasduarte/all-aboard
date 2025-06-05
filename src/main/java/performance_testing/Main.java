@@ -1,8 +1,7 @@
 package performance_testing;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Main {
@@ -59,12 +58,152 @@ public class Main {
         System.out.println();
 
         System.out.println("Testing US13 Performance...");
-        testUS13Implementation(scenarioFiles, stationsFiles);
+        List<PerformanceResult> resultsUS13 = testUS13Implementation(scenarioFiles, stationsFiles);
 
         System.out.println("\n" + "=".repeat(63) + "\n");
 
         System.out.println("Testing US14 Performance...");
-        testUS14Implementation(scenarioFiles);
+        List<PerformanceResult> resultsUS14 = testUS14Implementation(scenarioFiles);
+
+        exportToCSV(resultsUS13, "us13_results.csv", true);
+        exportToCSV(resultsUS14, "us14_results.csv", false);
+
+        generateGnuplotScripts();
+
+        System.out.println("\nData exported to CSV files and gnuplot scripts generated!");
+        executeGnuplotScripts();
+    }
+
+    private static void exportToCSV(List<PerformanceResult> results, String filename, boolean includeVertices) throws IOException {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            if (includeVertices) {
+                writer.println("TestCase,TrainType,Vertices,Edges,AvgTimeMs");
+                for (PerformanceResult result : results) {
+                    String[] parts = result.testName.split("-");
+                    String trainType = parts.length > 1 ? parts[1] : "Unknown";
+                    writer.printf("%s,%s,%d,%d,%.3f%n",
+                            result.testName, trainType, result.vertexCount,
+                            result.edgeCount, result.avgTime / 1_000_000.0);
+                }
+            } else {
+                writer.println("TestCase,MaintenanceType,Edges,AvgTimeMs");
+                for (PerformanceResult result : results) {
+                    String[] parts = result.testName.split("-");
+                    String maintenanceType = parts.length > 1 ? parts[1].replace("_", " ") : "Unknown";
+                    writer.printf("%s,%s,%d,%.3f%n",
+                            result.testName, maintenanceType,
+                            result.edgeCount, result.avgTime / 1_000_000.0);
+                }
+            }
+        }
+    }
+
+    private static void generateGnuplotScripts() throws IOException {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("us13_plot.gp"))) {
+            writer.println("# US13 Performance Visualization");
+            writer.println("set terminal pngcairo enhanced font 'Arial,12' size 1200,800");
+            writer.println("set output 'us13_performance.png'");
+            writer.println();
+            writer.println("set title 'US13 Performance: Execution Time vs Graph Size' font 'Arial,16'");
+            writer.println("set xlabel 'Number of Edges' font 'Arial,14'");
+            writer.println("set ylabel 'Average Execution Time (ms)' font 'Arial,14'");
+            writer.println("set grid");
+            writer.println("set key outside right");
+            writer.println();
+            writer.println("set datafile separator ','");
+            writer.println("set style data linespoints");
+            writer.println();
+            writer.println("plot 'us13_results.csv' using 4:5 every ::1 title 'All Data' with linespoints pt 7 ps 1 lw 2");
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("us14_plot.gp"))) {
+            writer.println("# US14 Performance Visualization");
+            writer.println("set terminal pngcairo enhanced font 'Arial,12' size 1200,800");
+            writer.println("set output 'us14_performance.png'");
+            writer.println();
+            writer.println("set title 'US14 Performance: Execution Time vs Graph Size' font 'Arial,16'");
+            writer.println("set xlabel 'Number of Edges' font 'Arial,14'");
+            writer.println("set ylabel 'Average Execution Time (ms)' font 'Arial,14'");
+            writer.println("set grid");
+            writer.println("set key outside right");
+            writer.println();
+            writer.println("set datafile separator ','");
+            writer.println("set style data linespoints");
+            writer.println();
+            writer.println("plot 'us14_results.csv' using 3:4 every ::1 title 'All Data' with linespoints pt 7 ps 1 lw 2");
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("combined_plot.gp"))) {
+            writer.println("# Combined Performance Comparison - Simplified");
+            writer.println("set terminal pngcairo enhanced font 'Arial,12' size 1400,1000");
+            writer.println("set output 'combined_performance.png'");
+            writer.println();
+            writer.println("set multiplot layout 2,1 title 'Performance Comparison: US13 vs US14' font 'Arial,18'");
+            writer.println();
+            writer.println("# US13 subplot");
+            writer.println("set title 'US13: Performance vs Graph Size' font 'Arial,14'");
+            writer.println("set xlabel 'Number of Edges'");
+            writer.println("set ylabel 'Avg Time (ms)'");
+            writer.println("set grid");
+            writer.println("set key top left");
+            writer.println("set datafile separator ','");
+            writer.println();
+            writer.println("plot 'us13_results.csv' using 4:5 every ::1 title 'US13' with linespoints lw 2");
+            writer.println();
+            writer.println("# US14 subplot");
+            writer.println("set title 'US14: Performance vs Graph Size' font 'Arial,14'");
+            writer.println("set xlabel 'Number of Edges'");
+            writer.println("set ylabel 'Avg Time (ms)'");
+            writer.println();
+            writer.println("plot 'us14_results.csv' using 3:4 every ::1 title 'US14' with linespoints lw 2");
+            writer.println();
+            writer.println("unset multiplot");
+        }
+    }
+
+    private static void executeGnuplotScripts() {
+        String[] gnuplotScripts = {
+                "us13_plot.gp",
+                "us14_plot.gp",
+                "combined_plot.gp"
+        };
+
+        System.out.println("\nExecuting gnuplot visualizations...");
+
+        for (String script : gnuplotScripts) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("gnuplot", script);
+                pb.directory(new File("."));
+                pb.redirectErrorStream(true);
+
+                Process process = pb.start();
+
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println("gnuplot: " + line);
+                    }
+                }
+
+                int exitCode = process.waitFor();
+
+                if (exitCode == 0) {
+                    System.out.println("Successfully generated plot from: " + script);
+                } else {
+                    System.err.println("Failed to execute: " + script + " (exit code: " + exitCode + ")");
+                }
+
+            } catch (IOException e) {
+                System.err.println("Error: It was not possible to execute " + script + ": " + e.getMessage());
+                if (e.getMessage().contains("Cannot run program \"gnuplot\"")) {
+                    System.err.println("Make sure Gnuplot is installed!");
+                }
+            } catch (InterruptedException e) {
+                System.err.println("Process interrupted for: " + script);
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     private static int extractNumberFromFilename(String fileName) {
@@ -77,7 +216,7 @@ public class Main {
         return 0;
     }
 
-    private static void testUS13Implementation(List<File> scenarioFiles, List<File> stationFiles) throws IOException {
+    private static List<PerformanceResult> testUS13Implementation(List<File> scenarioFiles, List<File> stationFiles) throws IOException {
         List<PerformanceResult> resultsUS13 = new ArrayList<>();
 
         for (File file : scenarioFiles) {
@@ -122,6 +261,7 @@ public class Main {
             }
         }
         printPerformanceSummaryUS13("User Story 13", resultsUS13);
+        return resultsUS13;
     }
 
     private static File findMatchingFile(File scenarioFile, List<File> stationFiles) {
@@ -218,7 +358,7 @@ public class Main {
         return false;
     }
 
-    private static void testUS14Implementation(List<File> scenariosFiles) throws FileNotFoundException {
+    private static List<PerformanceResult> testUS14Implementation(List<File> scenariosFiles) throws FileNotFoundException {
         List<PerformanceResult> resultsUS14 = new ArrayList<>();
 
         for (File file : scenariosFiles) {
@@ -278,7 +418,7 @@ public class Main {
                         .allMatch(e -> visited.contains(e.getKey()));
 
                 if (!connected) {
-                    return;
+                    return resultsUS14;
                 }
 
                 long endTime = System.nanoTime();
@@ -289,6 +429,7 @@ public class Main {
         }
 
         printPerformanceSummaryUS14("User Story 14", resultsUS14);
+        return resultsUS14;
     }
 
     public static void dfsUS14(String node, Map<String, List<String>> graph, Set<String> visited) {
