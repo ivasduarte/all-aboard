@@ -35,4 +35,8 @@ public class Budget implements Serializable {
         this.budget = budget;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(budget);
+    }
 }

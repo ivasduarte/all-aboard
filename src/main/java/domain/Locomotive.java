@@ -87,4 +87,8 @@ public class Locomotive implements Serializable {
         return distance < 15;
     }
 
+    @Override
+    public String toString() {
+        return locomotiveModel;
+    }
 }
