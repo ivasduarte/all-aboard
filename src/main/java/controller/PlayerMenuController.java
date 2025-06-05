@@ -41,7 +41,7 @@ public class PlayerMenuController {
         addMenuButton("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario));
         addMenuButton("Upgrade Type of Station", new ChangeStationTypeUI(currentMap, currentScenario));
         addMenuButton("List All Stations", new ListStationsUI(currentMap));
-        addMenuButton("Buy a Locomotive", new BuyLocomotiveUI(currentMap, currentScenario));
+        addMenuButton("Buy a Locomotive", () -> handleButton());
         addMenuButton("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario));
         addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
         addMenuButton("Check Financial Results", new ShowFinancialResultsUI(currentScenario));
@@ -59,7 +59,6 @@ public class PlayerMenuController {
     private void handleButton() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/buyLocomotive.fxml");
-            System.out.println("FXML URL: " + fxmlURL);
 
             if (fxmlURL == null) {
                 messageLabel.setText("Error: FXML URL not found.");
@@ -69,11 +68,10 @@ public class PlayerMenuController {
             FXMLLoader loader = new FXMLLoader(fxmlURL);
             Parent root = loader.load();
             BuyLocomotiveController controller = loader.getController();
-
-            controller.setData(currentScenario);
+            controller.setData(currentMap, currentScenario);
 
             Stage stage = new Stage();
-            stage.setTitle("Player Menu.");
+            stage.setTitle("Buy Locomotive");
             stage.setScene(new Scene(root));
             stage.show();
 

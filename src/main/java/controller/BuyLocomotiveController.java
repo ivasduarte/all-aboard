@@ -36,14 +36,15 @@ public class BuyLocomotiveController {
 
     private Locomotive selectedLocomotive;
 
+    public BuyLocomotiveController() {}
+
     public BuyLocomotiveController(Scenario scenario) {
         this.scenario = scenario;
     }
 
-    public void setData(Scenario scenario) {
+    public void setData(Map currentMap, Scenario scenario) {
+        this.currentMap = currentMap;
         this.scenario = scenario;
-        this.currentMap = scenario.getMap();
-        initialize();
     }
 
     /**
@@ -104,6 +105,8 @@ public class BuyLocomotiveController {
 
     @FXML
     public void initialize() {
+        if (scenario == null) return; // ainda não foi injetado
+
         List<Scenario> scenarios = Repositories.getInstance().getScenarioRepository().getScenarioList();
         int scenarioId = scenarios.indexOf(scenario);
 
@@ -118,6 +121,7 @@ public class BuyLocomotiveController {
         locomotiveComboBox.getItems().addAll(availableLocos);
         locomotiveComboBox.setOnAction(e -> updateLocomotiveInfo());
     }
+
 
     @FXML
     private void updateLocomotiveInfo() {
