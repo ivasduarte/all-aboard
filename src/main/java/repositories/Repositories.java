@@ -19,6 +19,7 @@ public class Repositories implements Serializable {
     private final MapRepository mapRepository;
     private final IndustryRepository industryRepository;
     private final LocomotiveRepository locomotiveRepository;
+    private final TrainRepository trainRepository;
     private final AuthenticationRepository authenticationRepository;
     private final CityRepository cityRepo;
     private final StationRepository stationRepo;
@@ -42,6 +43,7 @@ public class Repositories implements Serializable {
         mapRepository = new MapRepository();
         industryRepository = new IndustryRepository();
         locomotiveRepository = new LocomotiveRepository();
+        trainRepository = new TrainRepository();
         cityRepo = new CityRepository();
         scenarioRepository = new ScenarioRepository();
         authenticationRepository = new AuthenticationRepository();
@@ -98,6 +100,18 @@ public class Repositories implements Serializable {
      */
     public LocomotiveRepository getLocomotiveRepository() {
         return locomotiveRepository;
+    }
+
+    /**
+     * Retrieves the instance of the TrainRepository.
+     * The TrainRepository is responsible for managing collections
+     * of trains, including owned trains,
+     * and provides methods for interaction with the stored data.
+     *
+     * @return The TrainRepository instance used by the application.
+     */
+    public TrainRepository getTrainRepository() {
+        return trainRepository;
     }
 
     /**

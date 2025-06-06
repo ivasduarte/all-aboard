@@ -107,7 +107,7 @@ public class SimulatorController implements Runnable, Serializable {
                 ") HAS GENERATED " + cargo + " CARGO.");
     }
 
-    private void displayLocomotiveStats(Locomotive locomotive, int maintenanceCost) {
+    private void displayLocomotiveStats() {
         System.out.println("\n\n------------LOCOMOTIVE STATS------------");
         System.out.println("\n");
     }
@@ -134,10 +134,10 @@ public class SimulatorController implements Runnable, Serializable {
         double costMultiplier = calculateCostMultiplier(events);
 
         List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
-        List<Locomotive> locomotives = locoRep.getPlayerLocomotives();
+        List<Train> trains = Repositories.getInstance().getTrainRepository().getAlltrains();
 
         try {
-            runSimulationLoop(industries, locomotives, cargoMultiplier, costMultiplier, events);
+            runSimulationLoop(industries, trains, cargoMultiplier, costMultiplier, events);
         } catch (InterruptedException e) {
             System.out.println("Simulation was interrupted.");
         }
@@ -154,7 +154,7 @@ public class SimulatorController implements Runnable, Serializable {
         return events.contains("war") ? WAR_COST_MULTIPLIER : 1.0;
     }
 
-    private void runSimulationLoop(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
+    private void runSimulationLoop(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
         int year = scenario.getCurrentYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
         double currentCargoMultiplier = cargoMultiplier;
@@ -167,7 +167,7 @@ public class SimulatorController implements Runnable, Serializable {
             Thread.sleep(SIMULATION_SLEEP_TIME);
 
             if (!paused && !stopped) {
-                int totalEarnings = processYearSimulation(industries, locomotives, currentCargoMultiplier, costMultiplier);
+                int totalEarnings = processYearSimulation(industries, trains, currentCargoMultiplier, costMultiplier);
                 scenario.addBudget(totalEarnings);
                 displayStats(year, totalEarnings, scenario);
                 processFinancialResults();
@@ -188,10 +188,10 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
-    private int processYearSimulation(List<Industry> industries, List<Locomotive> locomotives, double cargoMultiplier, double costMultiplier) {
+    private int processYearSimulation(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier) {
         return processIndustries(industries, cargoMultiplier, costMultiplier)
                 + processHouseBlockCargo()
-                + processLocomotives(locomotives, costMultiplier);
+                + processLocomotives(trains, costMultiplier);
     }
 
     private int processIndustries(List<Industry> industries, double cargoMultiplier, double costMultiplier) {
@@ -218,24 +218,24 @@ public class SimulatorController implements Runnable, Serializable {
         return total;
     }
 
-    private int processLocomotives(List<Locomotive> locomotives, double costMultiplier) {
-        if(locomotives == null || locomotives.isEmpty()){
+    private int processLocomotives(List<Train> trains, double costMultiplier) {
+        if(trains == null || trains.isEmpty()){
             return 0;
         }
 
         int totalEarned = 0, totalLost = 0;
-        for (Locomotive l : locomotives) {
-            int fuel = (int) (l.getFuelCost() * costMultiplier);
-            int maintenance = (int) (l.getMaintenanceCost() * costMultiplier);
+        for (Train train : trains) {
+            int fuel = (int) (train.getLocomotive().getFuelCost() * costMultiplier);
+            int maintenance = (int) (train.getLocomotive().getMaintenanceCost() * costMultiplier);
             int totalCost = fuel + maintenance;
 
             int earnings = 0;
-            if (l.getRoute() != null && !l.getRoute().isEmpty()) {
-                double dist = calculateRouteDistance(l.getRoute());
-                double bMulti = calculateStationBuildingMultiplier(l.getRoute().get(l.getRoute().size() - 1));
-                earnings = simulateTrainTrip(l, costMultiplier);
+            if (train.getRoute() != null && !train.getRoute().isEmpty()) {
+                double dist = calculateRouteDistance(train.getRoute());
+                double bMulti = calculateStationBuildingMultiplier(train.getRoute().get(train.getRoute().size() - 1));
+                earnings = simulateTrainTrip(train, costMultiplier);
             } else {
-                displayLocomotiveStats(l, totalCost);
+                displayLocomotiveStats();
             }
             totalEarned += earnings;
             totalLost += totalCost;
@@ -260,13 +260,10 @@ public class SimulatorController implements Runnable, Serializable {
         return distance / effectiveSpeed;
     }
 
-    private int simulateTrainTrip(Locomotive loco, double costMultiplier) {
-        if (loco.getRoute() == null || loco.getRoute().isEmpty()) return 0;
+    private int simulateTrainTrip(Train train, double costMultiplier) {
+        if (train.getRoute() == null || train.getRoute().isEmpty()) return 0;
 
-        List<Station> route = loco.getRoute();
-        boolean isDoubleTrack = loco.isOnDoubleTrack();
-
-        double timeToArrive = calculateArrivalTime(loco, route, isDoubleTrack, new Train(loco, route, 2011, 5, false));
+        List<Station> route = train.getRoute();
 
         double distance = calculateRouteDistance(route);
         double buildingMultiplier = calculateStationBuildingMultiplier(route.get(route.size() - 1));
@@ -323,8 +320,9 @@ public class SimulatorController implements Runnable, Serializable {
         for (Locomotive l : locoRep.getPlayerLocomotives()) {
             maintenance += l.getMaintenanceCost();
 
-            if (l.getRoute() != null) {
-                double dist = calculateRouteDistance(l.getRoute());
+            Train train = Repositories.getInstance().getTrainRepository().gettrainByLocomotive(l);
+            if (train.getRoute() != null) {
+                double dist = calculateRouteDistance(train.getRoute());
                 int fuelCost = l.getFuelCost();
 
                 fuel += (int) (dist * fuelCost) / 500;
