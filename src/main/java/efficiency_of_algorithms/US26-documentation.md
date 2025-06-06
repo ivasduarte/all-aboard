@@ -89,6 +89,23 @@ This function reads the list of edges and constructs the adjacency list represen
     Add stationA to graph[stationB]
     Return Graph
 
+| Pseudocode                                               | Type    |
+|----------------------------------------------------------|---------|
+| graph <- empty map                                       | 1A      |       
+| For each(stationA, stationB, isElectrified) in edgeList: | nA + nC |       
+| if trainType = 'Electric' and isElectrified = 0          | nC      |       
+| Skip this edge                                           | -       |       
+| If stationA not in graph:                                | nC      |      
+| graph[stationA] <- empty list                            | nA      |       
+| If stationB not in graph:                                | nC      |       
+| graph[stationB] <- empty list                            | nA      |       
+| Add stationB to graph[stationA]                          | nOp     |       
+| Add stationA to graph[stationB]                          | nOp     |       
+| Return Graph                                             | 1R      |       
+| Big-O                                                    | O(n)    |  
+
+
+
 #### b) Path Search using dfs
 
 This function determines if the destination station is reachable from the start station by using a depth-first search (DFS) traversal over the graph.
