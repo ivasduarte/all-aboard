@@ -11,7 +11,7 @@
             <Font name="Arial Rounded MT Bold" size="37.0" />
          </font>
       </Text>
-      <VBox fx:id="menuBox" layoutX="73.0" layoutY="129.0" onMouseClicked="#handleButton" prefHeight="338.0" prefWidth="362.0" spacing="10.0" />
+      <VBox fx:id="menuBox" layoutX="73.0" layoutY="129.0" onMouseClicked="#handleBuyLocomotive" prefHeight="338.0" prefWidth="362.0" spacing="10.0" />
       <Label fx:id="messageLabel" layoutX="-4.0" layoutY="-1.0" />
    </children>
 </AnchorPane>

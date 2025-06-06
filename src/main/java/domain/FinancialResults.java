@@ -64,6 +64,6 @@ public class FinancialResults {
      * @return train maintenance cost, train fuel cost, cargo deliveries
      */
     public String toString() {
-        return "\nTrain Maintenance Cost: " + getTrainMaintenance() + "€\nTrain Fuel Cost: " + getFuelCost() + "€\nCargo Deliveries: " + getCargoDeliveries();
+        return "\nTrack Maintenance Cost: " + getTrackMaintenance() + "\nTrain Maintenance Cost: " + getTrainMaintenance() + "€\nTrain Fuel Cost: " + getFuelCost() + "€\nCargo Deliveries: " + getCargoDeliveries();
     }
 }

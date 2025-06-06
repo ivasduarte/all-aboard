@@ -41,10 +41,10 @@ public class PlayerMenuController {
         addMenuButton("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario));
         addMenuButton("Upgrade Type of Station", new ChangeStationTypeUI(currentMap, currentScenario));
         addMenuButton("List All Stations", new ListStationsUI(currentMap));
-        addMenuButton("Buy a Locomotive", () -> handleButton());
+        addMenuButton("Buy a Locomotive", () -> handleBuyLocomotive());
         addMenuButton("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario));
         addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
-        addMenuButton("Check Financial Results", new ShowFinancialResultsUI(currentScenario));
+        addMenuButton("Check Financial Results", () -> handleShowFinancialResults());
         addMenuButton("Load Simulation", new SimulationLoad(currentMap.getName() + ".simu"));
     }
 
@@ -56,7 +56,7 @@ public class PlayerMenuController {
     }
 
     @FXML
-    private void handleButton() {
+    private void handleBuyLocomotive() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/buyLocomotive.fxml");
 
@@ -81,6 +81,36 @@ public class PlayerMenuController {
         } catch (IOException e) {
             e.printStackTrace();
             messageLabel.setText("Error: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleShowFinancialResults() {
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/financialResults.fxml");
+
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: Financial Results FXML URL not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+            ShowFinancialResultsController controller = loader.getController();
+
+            controller.setData(currentMap, currentScenario);
+
+            Stage stage = new Stage();
+            stage.setTitle("Financial Results");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) menuBox.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            messageLabel.setText("Error loading Financial Results: " + e.getMessage());
         }
     }
 }
