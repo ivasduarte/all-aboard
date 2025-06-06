@@ -1,20 +1,19 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Train implements Serializable {
     private final Locomotive locomotive;
-    private final Station origin;
-    private final Station destination;
+    private List<Station> route;
     private final int departureYear;
     private double arrivalTime;
     private final int numberOfCarriages;
     private final boolean isDoubleTrack;
 
-    public Train(Locomotive locomotive, Station origin, Station destination, int departureYear, int numberOfCarriages, boolean isDoubleTrack) {
+    public Train(Locomotive locomotive, List<Station> route, int departureYear, int numberOfCarriages, boolean isDoubleTrack) {
         this.locomotive = locomotive;
-        this.origin = origin;
-        this.destination = destination;
+        this.route = route;
         this.departureYear = departureYear;
         this.numberOfCarriages = numberOfCarriages;
         this.isDoubleTrack = isDoubleTrack;
@@ -31,7 +30,12 @@ public class Train implements Serializable {
             effectiveSpeed *= 0.8;
         }
 
-        double distance = origin.distanceTo(destination);
+        double distance = 0;
+        for(int i = 0; i < route.size() - 1; i++)
+        {
+            distance += route.get(i).distanceTo(route.get(i+1));
+        }
+
         double travelTime = distance / effectiveSpeed;
 
         return departureYear + travelTime;
@@ -45,13 +49,7 @@ public class Train implements Serializable {
         return arrivalTime;
     }
 
-    public Station getOrigin() {
-        return origin;
-    }
-
-    public Station getDestination() {
-        return destination;
-    }
+    public List<Station> getRoute() { return route; }
 
     public Locomotive getLocomotive() {
         return locomotive;

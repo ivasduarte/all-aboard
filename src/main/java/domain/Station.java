@@ -87,9 +87,9 @@ public class Station implements Serializable {
      * Enum representing different types of stations with their properties.
      */
     public enum StationType {
-        DEPOT("Depot", 3, 50),
-        STATION("Station", 4, 100),
-        TERMINAL("Terminal", 5, 200);
+        DEPOT("Depot", 3, 50000),
+        STATION("Station", 4, 10000),
+        TERMINAL("Terminal", 5, 200000);
 
         private final String displayName;
         private final int size;

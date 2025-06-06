@@ -266,7 +266,7 @@ public class SimulatorController implements Runnable, Serializable {
         List<Station> route = loco.getRoute();
         boolean isDoubleTrack = loco.isOnDoubleTrack();
 
-        double timeToArrive = calculateArrivalTime(loco, route, isDoubleTrack, new Train(loco, route.get(0), route.get(route.size() - 1), 2011, 5, false));
+        double timeToArrive = calculateArrivalTime(loco, route, isDoubleTrack, new Train(loco, route, 2011, 5, false));
 
         double distance = calculateRouteDistance(route);
         double buildingMultiplier = calculateStationBuildingMultiplier(route.get(route.size() - 1));
