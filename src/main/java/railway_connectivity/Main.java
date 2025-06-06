@@ -18,32 +18,31 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        // getting input
-        String linesFile = askFileName("Enter the name of the lines file: ");
+        System.out.print("Enter the path to the folder containing the CSV files: ");
+        String directoryPath = sc.nextLine().trim();
+        File dir = new File(directoryPath);
 
-        File lines = new File(linesFile);
+        if (!dir.exists() || !dir.isDirectory()) {
+            System.out.println("Directory does not exist.");
+            return;
+        }
+
+        File[] files = dir.listFiles((d, name) -> name.endsWith(".csv"));
+        if (files == null || files.length < 1) {
+            System.out.println("No CSV files found.");
+            return;
+        }
+
+        for (int i = 0; i < files.length; i++) {
+            System.out.println("[" + (i + 1) + "] " + files[i].getName());
+        }
+
+        System.out.print("Choose file number with railway lines: ");
+        int fileNum = sc.nextInt();
+        sc.nextLine();
+        File lines = files[fileNum - 1];
 
         us13Implementation(lines);
-    }
-
-    // utilities methods
-    public static String askFileName(String prompt) {
-        String name = "";
-        boolean isCSV = false;
-
-        while (!isCSV) {
-            System.out.println(prompt);
-            name = sc.nextLine().trim();
-
-            if (name.endsWith(".csv")) {
-                isCSV = true;
-            }
-
-            if (!isCSV) {
-                System.out.println("This file is not CSV.");
-            }
-        }
-        return name;
     }
 
     private static List<String[]> getScenarioLines(File linesFile) throws FileNotFoundException {
@@ -62,12 +61,15 @@ public class Main {
 
     private static Map<String, List<String>> buildGraph(List<String[]> scenarioEdges, String trainType) {
         Map<String, List<String>> graph = new HashMap<>();
+
         for (String[] edge : scenarioEdges) {
             String departure = edge[0];
             String arrival = edge[1];
-            String type = edge[2];
+            String lineType = edge[2];
 
-            if (trainType.equals("3") && type.equals("0")) continue;
+            if (!canTrainUseLineType(trainType, lineType)) {
+                continue;
+            }
 
             graph.putIfAbsent(departure, new ArrayList<>());
             graph.putIfAbsent(arrival, new ArrayList<>());
@@ -77,7 +79,23 @@ public class Main {
         return graph;
     }
 
+    private static boolean canTrainUseLineType(String trainType, String lineType) {
+        switch (trainType) {
+            case "1":
+            case "2":
+                return true;
+            case "3":
+                return lineType.equals("1");
+            default:
+                return false;
+        }
+    }
+
     private static boolean isConnected(Map<String, List<String>> graph, String departure, String arrival) {
+        if (!graph.containsKey(departure) || !graph.containsKey(arrival)) {
+            return false;
+        }
+
         Set<String> visited = new HashSet<>();
         return dfs(graph, departure, arrival, visited);
     }
@@ -96,35 +114,50 @@ public class Main {
         return false;
     }
 
-    // User stories implementation
     private static void us13Implementation(File linesFile) throws IOException {
-        // getting railway data
         List<String[]> edges = getScenarioLines(linesFile);
 
-        // selection menu for train type
-        System.out.println("Select a train type from the following list.");
-        System.out.println("1. Steam");
-        System.out.println("2. Diesel");
-        System.out.println("3. Electric");
-        System.out.println("Train type: ");
-        String trainType = sc.nextLine().trim();
-
-        // getting start and destination stations
-        System.out.println("Enter the station where the route will start: ");
-        String startStation = sc.nextLine().trim();
-        System.out.println("Enter the station where the route will end: ");
-        String destinationStation = sc.nextLine().trim();
-
-        List<String> vertices = new ArrayList<>();
+        Set<String> allStations = new HashSet<>();
         for (String[] edge : edges) {
-            if (!vertices.contains(edge[0])) vertices.add(edge[0]);
-            if (!vertices.contains(edge[1])) vertices.add(edge[1]);
+            allStations.add(edge[0]);
+            allStations.add(edge[1]);
+        }
+        List<String> vertices = new ArrayList<>(allStations);
+
+        String trainType = "";
+        while (!trainType.equals("1") && !trainType.equals("2") && !trainType.equals("3")) {
+            System.out.println("\nSelect a train type from the following list.");
+            System.out.println("1. Steam");
+            System.out.println("2. Diesel");
+            System.out.println("3. Electric");
+            System.out.print("Train type: ");
+            trainType = sc.nextLine().trim();
+
+            if (!trainType.equals("1") && !trainType.equals("2") && !trainType.equals("3")) {
+                System.out.println("Invalid selection. Please choose 1, 2, or 3.");
+            }
         }
 
-        // building adjacency list
+        String startStation = "";
+        while (!allStations.contains(startStation)) {
+            System.out.print("\nEnter the station where the route will start: ");
+            startStation = sc.nextLine().trim();
+            if (!allStations.contains(startStation)) {
+                System.out.println("Station '" + startStation + "' not found. Available stations: " + vertices);
+            }
+        }
+
+        String destinationStation = "";
+        while (!allStations.contains(destinationStation)) {
+            System.out.print("Enter the station where the route will end: ");
+            destinationStation = sc.nextLine().trim();
+            if (!allStations.contains(destinationStation)) {
+                System.out.println("Station '" + destinationStation + "' not found. Available stations: " + vertices);
+            }
+        }
+
         Map<String, List<String>> graph = buildGraph(edges, trainType);
 
-        // checking connectivity
         boolean canTravel = isConnected(graph, startStation, destinationStation);
         if (canTravel) {
             System.out.println("The train can travel between " + startStation + " and " + destinationStation + ".");
@@ -132,14 +165,16 @@ public class Main {
             System.out.println("It isn't possible for the train to travel between " + startStation + " and " + destinationStation + ".");
         }
 
-        // graphical representation
         Map<String, MutableNode> nodeMap = new HashMap<>();
-        for (String v : vertices) nodeMap.put(v, mutNode(v).add(Color.BLACK));
+        for (String v : vertices) {
+            nodeMap.put(v, mutNode(v).add(Color.BLACK));
+        }
 
         MutableGraph builtGraph = mutGraph("StationsMap").setDirected(false).add(nodeMap.values().toArray(new MutableNode[0]));
+
         for (String[] edge : edges) {
-            String a = edge[0], b = edge[1];
-            Color c = edge[2].equals("1") ? Color.BLUE : Color.YELLOW;
+            String a = edge[0], b = edge[1], lineType = edge[2];
+            Color c = lineType.equals("1") ? Color.RED : Color.YELLOW;
             builtGraph.add(nodeMap.get(a).addLink(to(nodeMap.get(b)).with(c)));
         }
 
