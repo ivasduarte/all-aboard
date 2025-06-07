@@ -4,56 +4,61 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #7A9D96; -fx-pref-width: 509; -fx-pref-height: 540;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShowFinancialResultsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #7A9D96; -fx-pref-width: 509; -fx-pref-height: 540;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShowFinancialResultsController">
    <children>
-
-      <Text fill="WHITE" layoutX="115.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Yearly Financial Results" textAlignment="CENTER" underline="true">
+      <Text fill="WHITE" layoutX="74.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YEARLY FINANCIAL">
          <font>
-            <Font name="Arial Rounded MT Bold" size="24.0" />
+            <Font name="Arial Rounded MT Bold" size="37.0" />
          </font>
       </Text>
 
-      <Label fx:id="budget" layoutX="115.0" layoutY="45.0" prefHeight="17.0" prefWidth="278.0" text="Current Budget: ">
+      <Text fill="WHITE" layoutX="167.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RESULTS">
          <font>
-            <Font name="Arial Rounded MT Bold" size="14.0" />
+            <Font name="Arial Rounded MT Bold" size="37.0" />
+         </font>
+      </Text>
+
+      <Label fx:id="budget" layoutX="115.0" layoutY="480.0" prefHeight="17.0" prefWidth="278.0" text="CURRENT BUDGET: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Light" size="14.0" />
          </font>
       </Label>
 
-      <Text fill="WHITE" layoutX="115.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select the year you want:" wrappingWidth="278.3671875">
+      <Text fill="WHITE" layoutX="77.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select the year you want:" wrappingWidth="278.3671875">
          <font>
             <Font name="Arial Rounded MT Bold" size="14.0" />
          </font>
       </Text>
 
-      <ComboBox fx:id="financialResultsComboBox" layoutX="115.0" layoutY="98.0" onAction="#updateFinancialResultsYears" prefHeight="25.0" prefWidth="278.0" promptText="Available years" visibleRowCount="7" />
+      <ComboBox fx:id="financialResultsComboBox" layoutX="77.0" layoutY="202.0" onAction="#updateFinancialResultsYears" prefHeight="26.0" prefWidth="355.0" visibleRowCount="7" />
 
-      <Label fx:id="trackLabel" layoutX="115.0" layoutY="155.0" prefHeight="30.0" prefWidth="278.0" text="Track Maintenance Cost:" textFill="WHITE">
+      <Label fx:id="trackLabel" layoutX="68.0" layoutY="280.0" prefHeight="30.0" prefWidth="278.0" text="Track Maintenance Cost:" textFill="WHITE">
          <font>
-            <Font name="Arial Rounded MT Bold" size="12.0" />
+            <Font name="Arial Nova Cond" size="16.0" />
          </font>
       </Label>
 
-      <Label fx:id="maintenanceLabel" layoutX="115.0" layoutY="185.0" prefHeight="30.0" prefWidth="278.0" text="Train Maintenance Cost:" textFill="WHITE">
+      <Label fx:id="maintenanceLabel" layoutX="68.0" layoutY="327.0" prefHeight="30.0" prefWidth="278.0" text="Train Maintenance Cost:" textFill="WHITE">
          <font>
-            <Font name="Arial Rounded MT Bold" size="12.0" />
+            <Font name="Arial Nova Cond" size="16.0" />
          </font>
       </Label>
 
-      <Label fx:id="fuelLabel" layoutX="115.0" layoutY="215.0" prefHeight="30.0" prefWidth="278.0" text="Train Fuel Cost:" textFill="WHITE">
+      <Label fx:id="fuelLabel" layoutX="68.0" layoutY="412.0" prefHeight="30.0" prefWidth="278.0" text="Train Fuel Cost:" textFill="WHITE">
          <font>
-            <Font name="Arial Rounded MT Bold" size="12.0" />
+            <Font name="Arial Nova Cond" size="16.0" />
          </font>
       </Label>
 
-      <Label fx:id="cargoLabel" layoutX="115.0" layoutY="245.0" prefHeight="30.0" prefWidth="278.0" text="Cargo Deliveries:" textFill="WHITE">
+      <Label fx:id="cargoLabel" layoutX="68.0" layoutY="367.0" prefHeight="30.0" prefWidth="278.0" text="Cargo Deliveries:" textFill="WHITE">
          <font>
-            <Font name="Arial Rounded MT Bold" size="12.0" />
+            <Font name="Arial Nova Cond" size="16.0" />
          </font>
       </Label>
 
-      <Button layoutX="205.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleButton" prefHeight="40.0" prefWidth="100.0" text="BACK">
+      <Button layoutX="21.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleButton" prefHeight="16.0" prefWidth="62.0" text="BACK">
          <font>
-            <Font name="Arial Rounded MT Bold" size="18.0" />
+            <Font size="10.0" />
          </font>
       </Button>
    </children>
