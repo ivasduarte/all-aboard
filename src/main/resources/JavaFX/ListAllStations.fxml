@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="540.0" prefWidth="509.0" style="-fx-background-color: #7A9D96;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ListStationsController">
+
+   <children>
+
+      <Text fill="WHITE" layoutX="146.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List Stations" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="36.0" />
+         </font>
+      </Text>
+
+      <VBox layoutX="50.0" layoutY="100.0" prefWidth="400.0" spacing="10.0">
+
+         <Label text="Select Station:" textFill="white" />
+
+         <ComboBox fx:id="stationComboBox" prefWidth="400.0" />
+
+         <Label text="Details:" textFill="white" />
+
+         <TextArea fx:id="stationDetails" editable="false" prefHeight="300.0" prefWidth="400.0" wrapText="true" />
+      </VBox>
+
+   </children>
+</AnchorPane>
