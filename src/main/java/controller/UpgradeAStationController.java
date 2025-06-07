@@ -1,11 +1,16 @@
 package controller;
 
 import domain.*;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import repositories.BuildingRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 import repositories.StationRepository;
 import domain.Station;
+import domain.Scenario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,11 @@ public class UpgradeAStationController {
     private final StationUpgradeService upgradeService;
     private final StationRepository stationRepository;
     private final BuildingRepository buildingRepository;
+
+    @FXML  private ComboBox<Station> stationComboBox;
+    @FXML  private ComboBox<BuildingType> buildingComboBox;
+    @FXML  private Label labelTest;
+
 
     /**
      * Constructs a new instance of {@code UpgradeAStationController},
@@ -206,4 +216,83 @@ public class UpgradeAStationController {
         return filteredBuildingTypes;
 
     }
+
+    public boolean DeductBudget(Station station, BuildingType Building, Scenario Scenario){
+
+        int CurrentBudget = Scenario.getBudget().getBudget();
+
+        int BuildingBudget = Building.getCost();
+
+        if(CurrentBudget >= BuildingBudget) {
+
+            Scenario.subtractBudget(BuildingBudget);
+
+            return true;
+
+
+        }else{
+
+            System.out.println("ERROR: Budget exceeds budget");
+
+            return false;
+
+        }
+    }
+
+    @FXML public void initialize() {
+
+        List<Station> station = stationRepository.getStations();
+
+        stationComboBox.getItems().setAll(station);
+
+    }
+
+    @FXML public void setBuildingComboBox(javafx.event.ActionEvent event) {
+
+        Station station = stationComboBox.getValue();
+
+        String ScenarioName = station.getScenarioName();
+
+        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+
+        Scenario scenario = scenarioRepository.getScenarioByName(ScenarioName);
+
+        int Year = scenario.getCurrentYear();
+
+        List<BuildingType> buildings = getFilteredAvailableBuildingTypes(station, Year);
+
+        buildingComboBox.getItems().setAll(buildings);
+
+    }
+
+
+    @FXML
+    public void onUpgrade() {
+        Station station = stationComboBox.getValue();
+        BuildingType selectedType = buildingComboBox.getValue();
+
+        if (station == null || selectedType == null) {
+            labelTest.setText("Please select both a station and a building.");
+            return;
+        }
+
+        boolean alreadyExists = false;
+
+        for (Building b : station.getBuildings()) {
+
+            if (b.getBuildingType().equalsIgnoreCase(selectedType.getName())) {
+
+                alreadyExists = true;
+
+            }
+        }
+
+        if (alreadyExists) {
+            labelTest.setText("This building is already bought, please try again.");
+        } else {
+            station.addBuilding(new Building(selectedType));
+            labelTest.setText("Building successfully bought.");
+        }
+    }
+
 }
