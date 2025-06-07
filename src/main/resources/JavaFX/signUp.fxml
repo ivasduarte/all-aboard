@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="484.0" prefWidth="539.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+   <children>
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleBackButton" text="Back" />
+      <Text layoutX="48.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER REGISTRATION">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="37.0" />
+         </font>
+      </Text>
+      <Text layoutX="48.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your data in the fields below.">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="14.0" />
+         </font></Text>
+      <Text layoutX="68.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="13.0" />
+         </font></Text>
+      <TextField fx:id="nameField" layoutX="63.0" layoutY="180.0" prefHeight="26.0" prefWidth="402.0" />
+      <Text layoutX="69.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="13.0" />
+         </font></Text>
+      <TextField fx:id="emailField" layoutX="63.0" layoutY="259.0" prefHeight="26.0" prefWidth="402.0" />
+      <Text layoutX="68.0" layoutY="327.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="13.0" />
+         </font>
+      </Text>
+      <TextField fx:id="passField" layoutX="63.0" layoutY="340.0" prefHeight="26.0" prefWidth="402.0" />
+      <Label fx:id="messageLabel" layoutX="63.0" layoutY="384.0" lineSpacing="1.0" textOverrun="WORD_ELLIPSIS" />
+      <Button fx:id="signUpButton" layoutX="235.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleSignUpButton" text="Sign Up" />
+   </children>
+</AnchorPane>

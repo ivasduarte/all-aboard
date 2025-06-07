@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,15 +17,20 @@ import java.io.IOException;
 import java.net.URL;
 
 public class LoginController {
-
     @FXML
     private TextField emailField;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Label messageLabel;
+    @FXML
+    private Button loginButton;
+    @FXML
+    private Button signUpButton;
+    @FXML
+    private Button signButton;
+    @FXML
+    private Button devButton;
 
     private final AuthenticationController authController = new AuthenticationController();
 
@@ -131,7 +137,20 @@ public class LoginController {
 
     @FXML
     private void handleSignUpButton() {
-        messageLabel.setText("To be implemented.");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/JavaFX/signUp.fxml"));
+            Parent root = loader.load();
+
+            SignUpController signUpController = loader.getController();
+            signUpController.setController(authController);
+
+            Stage stage = new Stage();
+            stage.setTitle("Sign Up");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -142,5 +161,28 @@ public class LoginController {
     @FXML
     private void handlePasswordFieldClick() {
         messageLabel.setText("");
+    }
+
+    @FXML
+    private void handleDevButton() {
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/devTeam.fxml");
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: " + fxmlURL + " not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Development Team");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            messageLabel.setText("Error: " + e.getMessage());
+        }
     }
 }
