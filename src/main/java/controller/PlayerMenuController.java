@@ -135,6 +135,10 @@ public class PlayerMenuController {
 
             Parent root = loader.load();
 
+            UpgradeAStationController controller = loader.getController();
+
+            controller.setData(currentScenario);
+
             Stage stage = new Stage();
 
             stage.setTitle("Upgrade a Station");
@@ -176,7 +180,11 @@ public class PlayerMenuController {
 
             Parent root = loader.load();
 
+            ListStationsController controller = loader.getController();
+            controller.setData(currentScenario);
+
             Stage stage = new Stage();
+
 
             stage.setTitle("List All Stations");
 

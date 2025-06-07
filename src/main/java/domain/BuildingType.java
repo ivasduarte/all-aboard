@@ -68,5 +68,10 @@ public class BuildingType implements Serializable {
         return AvailableYear;
     }
 
+    @Override
+    public String toString() {
+        return name + " (" + cost + "€)";
+    }
+
 
 }

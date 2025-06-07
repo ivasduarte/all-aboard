@@ -3,8 +3,12 @@ package controller;
 import domain.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import repositories.BuildingRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
@@ -12,6 +16,7 @@ import repositories.StationRepository;
 import domain.Station;
 import domain.Scenario;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +32,14 @@ public class UpgradeAStationController {
     private final StationUpgradeService upgradeService;
     private final StationRepository stationRepository;
     private final BuildingRepository buildingRepository;
+    private Scenario currentScenario;
+    private Map currentMap;
 
     @FXML  private ComboBox<Station> stationComboBox;
     @FXML  private ComboBox<BuildingType> buildingComboBox;
     @FXML  private Label labelTest;
+
+
 
 
     /**
@@ -139,6 +148,14 @@ public class UpgradeAStationController {
                 }
             }
         }
+    }
+
+    public void setData(Scenario scenario){
+
+        this.currentScenario = scenario;
+
+        this.currentMap = scenario.getMap();
+
     }
 
     public List<BuildingType> getFilteredAvailableBuildingTypes(Station station, int currentYear) {
@@ -251,15 +268,14 @@ public class UpgradeAStationController {
 
         Station station = stationComboBox.getValue();
 
-        String ScenarioName = station.getScenarioName();
+        if (station == null || currentScenario == null) {
+            labelTest.setText("Error: Missing station or scenario");
+            return;
+        }
 
-        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+        int year = currentScenario.getCurrentYear();
 
-        Scenario scenario = scenarioRepository.getScenarioByName(ScenarioName);
-
-        int Year = scenario.getCurrentYear();
-
-        List<BuildingType> buildings = getFilteredAvailableBuildingTypes(station, Year);
+        List<BuildingType> buildings = getFilteredAvailableBuildingTypes(station, year);
 
         buildingComboBox.getItems().setAll(buildings);
 
@@ -292,6 +308,29 @@ public class UpgradeAStationController {
         } else {
             station.addBuilding(new Building(selectedType));
             labelTest.setText("Building successfully bought.");
+        }
+    }
+
+
+    @FXML
+    private void handleBackToMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/JavaFX/playerMenu.fxml"));
+            Parent root = loader.load();
+
+            PlayerMenuController controller = loader.getController();
+            controller.setData(currentScenario);  // passa os dados
+
+            Stage stage = new Stage();
+            stage.setTitle("Player Menu");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) stationComboBox.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

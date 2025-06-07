@@ -1,13 +1,20 @@
 package controller;
 
 import domain.Building;
+import domain.Map;
+import domain.Scenario;
 import domain.Station;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import repositories.Repositories;
 import repositories.StationRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,11 +30,17 @@ public class ListStationsController {
 
     private final StationRepository StationRepo;
 
-    /**
-     * Constructs a ListStationsController and initializes the station repository.
-     */
+    private Scenario currentScenario;
 
+    private Map currentMap;
 
+    public void setData(Scenario scenario){
+
+        this.currentScenario = scenario;
+
+        this.currentMap = scenario.getMap();
+
+    }
     public ListStationsController() {
         this.StationRepo = Repositories.getInstance().getStationRepository();
     }
@@ -95,5 +108,25 @@ public class ListStationsController {
         stationDetails.setText(details.toString());
     }
 
+    @FXML
+    private void handleBackToMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/JavaFX/playerMenu.fxml"));
+            Parent root = loader.load();
 
+            PlayerMenuController controller = loader.getController();
+            controller.setData(currentScenario);  // passa os dados
+
+            Stage stage = new Stage();
+            stage.setTitle("Player Menu");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) stationComboBox.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
