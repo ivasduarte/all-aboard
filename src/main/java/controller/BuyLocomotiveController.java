@@ -191,6 +191,11 @@ public class BuyLocomotiveController {
         navigateToPlayerMenu();
     }
 
+    @FXML
+    public void handleBackButton() {
+        navigateToPlayerMenu();
+    }
+
     private void navigateToPlayerMenu() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/playerMenu.fxml");

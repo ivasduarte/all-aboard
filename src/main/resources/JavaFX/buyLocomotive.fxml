@@ -60,5 +60,11 @@
          </font>
       </Button>
 
+      <Button layoutX="219.0" layoutY="470.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="40.0" prefWidth="70.0" text="BACK">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="14.0" />
+         </font>
+      </Button>
+
    </children>
 </AnchorPane>
