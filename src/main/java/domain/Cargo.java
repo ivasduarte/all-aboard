@@ -6,12 +6,11 @@ public class Cargo implements Serializable {
 
     private final Type type;
 
-    public Cargo(Type type)
-    {
+    public Cargo(Type type) {
         this.type = type;
     }
 
-    public enum Type{
+    public enum Type {
         AUTO("Auto", 28000),
         COAL("Coal", 28000),
         IRON("Iron", 28000),
@@ -29,9 +28,15 @@ public class Cargo implements Serializable {
         }
     }
 
-    public Type getType(){ return type; }
+    public Type getType() {
+        return type;
+    }
 
-    public String getName(){ return type.name; }
+    public String getName() {
+        return type.name;
+    }
 
-    public int getPrice(){ return type.price; }
+    public int getPrice() {
+        return type.price;
+    }
 }

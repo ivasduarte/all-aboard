@@ -21,23 +21,17 @@ import java.util.List;
  * Controller responsible for handling operations related to listing stations.
  */
 public class ListStationsController {
-
     @FXML
     private ComboBox<Station> stationComboBox;
-
     @FXML
     private TextArea stationDetails;
 
     private final StationRepository StationRepo;
-
     private Scenario currentScenario;
-
     private Map currentMap;
 
     public void setData(Scenario scenario){
-
         this.currentScenario = scenario;
-
         this.currentMap = scenario.getMap();
 
     }
@@ -64,12 +58,10 @@ public class ListStationsController {
         return Repositories.getInstance().getStationRepository().getAvailableStationsByMapName(mapName);
     }
 
-    @FXML public void setStationComboBox(){
-
+    @FXML
+    public void setStationComboBox(){
         List<Station> stations = StationRepo.getStations();
-
         stationComboBox.getItems().setAll(stations);
-
     }
 
     @FXML
@@ -104,7 +96,6 @@ public class ListStationsController {
                 details.append("  - ").append(building.getBuildingType()).append("\n");
             }
         }
-
         stationDetails.setText(details.toString());
     }
 

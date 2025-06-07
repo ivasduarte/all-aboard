@@ -31,9 +31,8 @@ public class Train implements Serializable {
         }
 
         double distance = 0;
-        for(int i = 0; i < route.size() - 1; i++)
-        {
-            distance += route.get(i).distanceTo(route.get(i+1));
+        for (int i = 0; i < route.size() - 1; i++) {
+            distance += route.get(i).distanceTo(route.get(i + 1));
         }
 
         double travelTime = distance / effectiveSpeed;
@@ -49,7 +48,9 @@ public class Train implements Serializable {
         return arrivalTime;
     }
 
-    public List<Station> getRoute() { return route; }
+    public List<Station> getRoute() {
+        return route;
+    }
 
     public Locomotive getLocomotive() {
         return locomotive;
@@ -58,8 +59,6 @@ public class Train implements Serializable {
     public int getNumberOfCarriages() {
         return carriages.size();
     }
-
-
 
     public boolean isOnDoubleTrack() {
         if (route == null || route.size() < 2) return true;

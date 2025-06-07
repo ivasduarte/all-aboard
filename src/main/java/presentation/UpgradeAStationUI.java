@@ -18,9 +18,7 @@ import java.util.Scanner;
  * This UI also deducts the cost of the selected building from the scenario's budget
  * upon successful construction.
  */
-
 public class UpgradeAStationUI implements Runnable {
-
     private Map map;
     private Scenario scenario;
 
@@ -30,7 +28,6 @@ public class UpgradeAStationUI implements Runnable {
      * @param map      The current map in the simulation.
      * @param scenario The current scenario being simulated.
      */
-
     public UpgradeAStationUI(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
@@ -47,15 +44,11 @@ public class UpgradeAStationUI implements Runnable {
      * Provides validation for station selection, building existence, availability by year,
      * and budget constraints.
      */
-
     public void getInput() {
         System.out.println("\n\n------------------------ Upgrade Station ----------------------");
         Scanner sc = new Scanner(System.in);
-
         UpgradeAStationController controller = new UpgradeAStationController();
-
         int budget = scenario.getBudget().getBudget();
-
         List<Station> stations = controller.getAvailableStations(map.getName());
 
         if (stations.isEmpty()) {
@@ -79,19 +72,16 @@ public class UpgradeAStationUI implements Runnable {
         }
 
         Station selectedStation = stations.get(selectedIndex);
-
         System.out.println();
 
         System.out.println("CURRENT BUDGET: " + budget + "€");
 
         int currentYear = scenario.getCurrentYear();
-
         System.out.println("\nCURRENT SIMULATION YEAR: " + currentYear);
 
         controller.removeObsoleteBuildings(selectedStation, currentYear);
 
         System.out.println("\nAVAILABLE BUILDINGS TO ADD TO STATION: ");
-
         List<BuildingType> availableBuildings = controller.getFilteredAvailableBuildingTypes(selectedStation, currentYear);
 
         if (availableBuildings.isEmpty()) {
@@ -119,13 +109,9 @@ public class UpgradeAStationUI implements Runnable {
         boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
         controller.DeductBudget(selectedStation, selectedBuildingType, scenario);
 
-
         if (success) {
-
             System.out.println("SUCCESS: Building '" + buildingTypeName + "' added to station.");
-
         } else {
-
             System.out.println("ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
         }
     }
@@ -135,7 +121,6 @@ public class UpgradeAStationUI implements Runnable {
      * Calls {@code getInput()} to start the interaction.
      */
     @Override
-
     public void run() {
         getInput();
     }

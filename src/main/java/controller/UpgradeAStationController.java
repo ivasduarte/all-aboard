@@ -1,7 +1,6 @@
 package controller;
 
 import domain.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,23 +23,22 @@ import java.util.List;
  * Controller responsible for managing the logic of upgrading stations with buildings.
  * Handles validation of building availability, retrieval of building types,
  * replacement of obsolete buildings, and budget checks.
- *
+ * <p>
  * Acts as the bridge between the UI and domain services like {@code StationUpgradeService}.
  */
 public class UpgradeAStationController {
-
     private final StationUpgradeService upgradeService;
     private final StationRepository stationRepository;
     private final BuildingRepository buildingRepository;
     private Scenario currentScenario;
     private Map currentMap;
 
-    @FXML  private ComboBox<Station> stationComboBox;
-    @FXML  private ComboBox<BuildingType> buildingComboBox;
-    @FXML  private Label labelTest;
-
-
-
+    @FXML
+    private ComboBox<Station> stationComboBox;
+    @FXML
+    private ComboBox<BuildingType> buildingComboBox;
+    @FXML
+    private Label labelTest;
 
     /**
      * Constructs a new instance of {@code UpgradeAStationController},
@@ -75,9 +73,9 @@ public class UpgradeAStationController {
      * Attempts to upgrade the given station with the specified building type,
      * considering the current simulation year.
      *
-     * @param station           The station to upgrade.
-     * @param buildingTypeName  The name of the building type to add.
-     * @param currentYear       The current year of the scenario (used to check availability).
+     * @param station          The station to upgrade.
+     * @param buildingTypeName The name of the building type to add.
+     * @param currentYear      The current year of the scenario (used to check availability).
      * @return {@code true} if the building was successfully added; {@code false} otherwise.
      */
     public boolean upgradeStation(Station station, String buildingTypeName, int currentYear) {
@@ -133,15 +131,10 @@ public class UpgradeAStationController {
         boolean hadTelegraph = false;
 
         if (currentYear >= 1920) {
-            hadTelegraph = station.getBuildings().removeIf(b ->
-                    b.getBuildingType().equalsIgnoreCase("Telegraph")
-            );
+            hadTelegraph = station.getBuildings().removeIf(b -> b.getBuildingType().equalsIgnoreCase("Telegraph"));
 
             if (hadTelegraph) {
-                BuildingType telephone = Repositories.getInstance()
-                        .getBuildingRepository()
-                        .getBuildingType("Telephone");
-
+                BuildingType telephone = Repositories.getInstance().getBuildingRepository().getBuildingType("Telephone");
                 if (telephone != null) {
                     station.addBuilding(new Building(telephone));
                     System.out.println("INFO: Telegraph was replaced by Telephone at station " + station.getStationID());
@@ -150,70 +143,52 @@ public class UpgradeAStationController {
         }
     }
 
-    public void setData(Scenario scenario){
-
+    public void setData(Scenario scenario) {
         this.currentScenario = scenario;
-
         this.currentMap = scenario.getMap();
-
     }
 
     public List<BuildingType> getFilteredAvailableBuildingTypes(Station station, int currentYear) {
-
         List<BuildingType> filteredBuildingTypes = new ArrayList<>();
-
         List<BuildingType> allTypes = buildingRepository.getBuildingTypes();
-
         List<Building> existingBuildings = station.getBuildings();
 
-        boolean HasHotel = false;
-
-        boolean HasCafe = false;
+        boolean hasHotel = false;
+        boolean hasCafe = false;
 
         for (Building building : existingBuildings) {
-
             String type = building.getBuildingType().toLowerCase();
 
-            if(type.contains("hotel")) {
-
-                HasHotel = true;
-
+            if (type.contains("hotel")) {
+                hasHotel = true;
             }
 
-            if(type.contains("cafe")) {
-
-                HasCafe = true;
-
+            if (type.contains("cafe")) {
+                hasCafe = true;
             }
         }
 
-        for(BuildingType type : allTypes) {
-
+        for (BuildingType type : allTypes) {
             String name = type.getName();
-
             String namelower = name.toLowerCase();
 
             boolean exists = false;
 
             for (int i = 0; i < existingBuildings.size(); i++) {
-
-                if(existingBuildings.get(i).getBuildingType().toLowerCase().equals(namelower)) {
+                if (existingBuildings.get(i).getBuildingType().toLowerCase().equals(namelower)) {
                     exists = true;
-
                     i = existingBuildings.size();
-
                 }
-
             }
             if (exists) {
                 continue;
             }
 
-            if (namelower.contains("hotel") && HasHotel) {
+            if (namelower.contains("hotel") && hasHotel) {
                 continue;
             }
 
-            if (namelower.contains("cafe") && HasCafe) {
+            if (namelower.contains("cafe") && hasCafe) {
                 continue;
             }
 
@@ -224,48 +199,32 @@ public class UpgradeAStationController {
             if (namelower.equals("telegraph") && currentYear >= 1920) {
                 continue;
             }
-
             filteredBuildingTypes.add(type);
-
-
         }
-
         return filteredBuildingTypes;
-
     }
 
-    public boolean DeductBudget(Station station, BuildingType Building, Scenario Scenario){
+    public boolean DeductBudget(Station station, BuildingType Building, Scenario Scenario) {
+        int currentBudget = Scenario.getBudget().getBudget();
+        int buildingBudget = Building.getCost();
 
-        int CurrentBudget = Scenario.getBudget().getBudget();
-
-        int BuildingBudget = Building.getCost();
-
-        if(CurrentBudget >= BuildingBudget) {
-
-            Scenario.subtractBudget(BuildingBudget);
-
+        if (currentBudget >= buildingBudget) {
+            Scenario.subtractBudget(buildingBudget);
             return true;
-
-
-        }else{
-
+        } else {
             System.out.println("ERROR: Budget exceeds budget");
-
             return false;
-
         }
     }
 
-    @FXML public void initialize() {
-
+    @FXML
+    public void initialize() {
         List<Station> station = stationRepository.getStations();
-
         stationComboBox.getItems().setAll(station);
-
     }
 
-    @FXML public void setBuildingComboBox(javafx.event.ActionEvent event) {
-
+    @FXML
+    public void setBuildingComboBox(javafx.event.ActionEvent event) {
         Station station = stationComboBox.getValue();
 
         if (station == null || currentScenario == null) {
@@ -276,9 +235,7 @@ public class UpgradeAStationController {
         int year = currentScenario.getCurrentYear();
 
         List<BuildingType> buildings = getFilteredAvailableBuildingTypes(station, year);
-
         buildingComboBox.getItems().setAll(buildings);
-
     }
 
 
@@ -295,11 +252,8 @@ public class UpgradeAStationController {
         boolean alreadyExists = false;
 
         for (Building b : station.getBuildings()) {
-
             if (b.getBuildingType().equalsIgnoreCase(selectedType.getName())) {
-
                 alreadyExists = true;
-
             }
         }
 
@@ -319,7 +273,7 @@ public class UpgradeAStationController {
             Parent root = loader.load();
 
             PlayerMenuController controller = loader.getController();
-            controller.setData(currentScenario);  // passa os dados
+            controller.setData(currentScenario);
 
             Stage stage = new Stage();
             stage.setTitle("Player Menu");
@@ -333,5 +287,4 @@ public class UpgradeAStationController {
             e.printStackTrace();
         }
     }
-
 }
