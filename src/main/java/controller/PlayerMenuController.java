@@ -40,9 +40,8 @@ public class PlayerMenuController {
         addMenuButton("List All Stations", () -> handleListAllStations());
         addMenuButton("Buy a Locomotive", () -> handleBuyLocomotive());
         addMenuButton("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario));
-        addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
         addMenuButton("Check Financial Results", () -> handleShowFinancialResults());
-        addMenuButton("Load Simulation", new SimulationLoad(currentMap.getName() + ".simu"));
+        addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
     }
 
     private void addMenuButton(String label, Runnable action) {
