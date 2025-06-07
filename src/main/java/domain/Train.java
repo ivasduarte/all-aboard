@@ -59,10 +59,7 @@ public class Train implements Serializable {
         return carriages.size();
     }
 
-    public double calculateRouteDistance()
-    {
 
-    }
 
     public boolean isOnDoubleTrack() {
         if (route == null || route.size() < 2) return true;

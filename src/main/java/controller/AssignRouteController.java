@@ -11,7 +11,7 @@ public class AssignRouteController {
 
     public void AssignRoute(Locomotive locomotive, List<Station> stations)
     {
-        locomotive.setRoute(stations);
+
     }
 
 }
