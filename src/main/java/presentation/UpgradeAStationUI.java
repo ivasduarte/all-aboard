@@ -20,7 +20,6 @@ import java.util.Scanner;
  */
 
 public class UpgradeAStationUI implements Runnable {
-
     private Map map;
     private Scenario scenario;
 
@@ -79,19 +78,16 @@ public class UpgradeAStationUI implements Runnable {
         }
 
         Station selectedStation = stations.get(selectedIndex);
-
         System.out.println();
 
         System.out.println("CURRENT BUDGET: " + budget + "€");
 
         int currentYear = scenario.getCurrentYear();
-
         System.out.println("\nCURRENT SIMULATION YEAR: " + currentYear);
 
         controller.removeObsoleteBuildings(selectedStation, currentYear);
 
         System.out.println("\nAVAILABLE BUILDINGS TO ADD TO STATION: ");
-
         List<BuildingType> availableBuildings = controller.getFilteredAvailableBuildingTypes(selectedStation, currentYear);
 
         if (availableBuildings.isEmpty()) {
@@ -121,11 +117,8 @@ public class UpgradeAStationUI implements Runnable {
 
 
         if (success) {
-
             System.out.println("SUCCESS: Building '" + buildingTypeName + "' added to station.");
-
         } else {
-
             System.out.println("ERROR: Failed to upgrade the station with building '" + buildingTypeName + "'.");
         }
     }
@@ -135,7 +128,6 @@ public class UpgradeAStationUI implements Runnable {
      * Calls {@code getInput()} to start the interaction.
      */
     @Override
-
     public void run() {
         getInput();
     }

@@ -46,8 +46,6 @@ public class PlayerMenuController {
         addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
         addMenuButton("Check Financial Results", () -> handleShowFinancialResults());
         addMenuButton("Load Simulation", new SimulationLoad(currentMap.getName() + ".simu"));
-
-
     }
 
     private void addMenuButton(String label, Runnable action) {
@@ -118,83 +116,55 @@ public class PlayerMenuController {
 
     @FXML
     private void handleUpgradeAStation(){
-
         try {
-
             URL fxmlURL = getClass().getResource("/JavaFX/UpgradeAStationWithABuilding.fxml");
 
             if (fxmlURL == null) {
-
                 messageLabel.setText("Error: FXML URL not found.");
-
                 return;
-
             }
 
             FXMLLoader loader = new FXMLLoader(fxmlURL);
-
             Parent root = loader.load();
-
             Stage stage = new Stage();
 
             stage.setTitle("Upgrade a Station");
-
             stage.setScene(new Scene(root));
-
             stage.show();
 
             Stage currentStage = (Stage) menuBox.getScene().getWindow();
             currentStage.close();
-
         }
         catch (Exception e) {
-
             e.printStackTrace();
-
             messageLabel.setText("Error: " + e.getMessage());
-
         }
-
     }
 
     @FXML
     private void handleListAllStations(){
-
         try {
-
             URL fxmlURL = getClass().getResource("/JavaFX/ListAllStations.fxml");
 
             if (fxmlURL == null) {
-
                 messageLabel.setText("Error: FXML URL not found.");
-
                 return;
-
             }
 
             FXMLLoader loader = new FXMLLoader(fxmlURL);
-
             Parent root = loader.load();
-
             Stage stage = new Stage();
 
             stage.setTitle("List All Stations");
-
             stage.setScene(new Scene(root));
-
             stage.show();
 
             Stage currentStage = (Stage) menuBox.getScene().getWindow();
             currentStage.close();
-
         }
         catch (Exception e) {
-
             e.printStackTrace();
-
             messageLabel.setText("Error: " + e.getMessage());
-
         }
-
     }
 }

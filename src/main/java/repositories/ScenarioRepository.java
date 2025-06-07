@@ -193,15 +193,10 @@ public class ScenarioRepository implements Serializable {
         }
     }
 
-
     public Scenario getScenarioByName(String name) {
-
         for (Scenario scenario : scenarios) {
-
             if (scenario.getScenarioName().equalsIgnoreCase(name)) {
-
                 return scenario;
-
             }
         }
         return null;
