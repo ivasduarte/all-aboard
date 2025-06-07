@@ -192,4 +192,18 @@ public class ScenarioRepository implements Serializable {
             System.err.println("Failed to save scenario: " + e.getMessage());
         }
     }
+
+
+    public Scenario getScenarioByName(String name) {
+
+        for (Scenario scenario : scenarios) {
+
+            if (scenario.getScenarioName().equalsIgnoreCase(name)) {
+
+                return scenario;
+
+            }
+        }
+        return null;
+    }
 }

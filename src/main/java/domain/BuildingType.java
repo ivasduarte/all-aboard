@@ -1,6 +1,9 @@
 package domain;
 
 import java.io.Serializable;
+import repositories.BuildingRepository;
+import repositories.Repositories;
+import repositories.StationRepository;
 
 /**
  * Represents a building that can be constructed at a station.
@@ -64,4 +67,6 @@ public class BuildingType implements Serializable {
     public int getAvailableYear() {
         return AvailableYear;
     }
+
+
 }
