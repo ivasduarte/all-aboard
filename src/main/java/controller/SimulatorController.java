@@ -191,7 +191,7 @@ public class SimulatorController implements Runnable, Serializable {
     private int processYearSimulation(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier) {
         return processIndustries(industries, cargoMultiplier, costMultiplier)
                 + processHouseBlockCargo()
-                + processLocomotives(trains, costMultiplier);
+                + processTrains(trains, costMultiplier);
     }
 
     private int processIndustries(List<Industry> industries, double cargoMultiplier, double costMultiplier) {
@@ -218,7 +218,7 @@ public class SimulatorController implements Runnable, Serializable {
         return total;
     }
 
-    private int processLocomotives(List<Train> trains, double costMultiplier) {
+    private int processTrains(List<Train> trains, double costMultiplier) {
         if(trains == null || trains.isEmpty()){
             return 0;
         }
@@ -296,7 +296,7 @@ public class SimulatorController implements Runnable, Serializable {
         for (Locomotive l : locoRep.getPlayerLocomotives()) {
             maintenance += l.getMaintenanceCost();
 
-            Train train = Repositories.getInstance().getTrainRepository().gettrainByLocomotive(l);
+            Train train = Repositories.getInstance().getTrainRepository().getTrainByLocomotive(l);
             if (train.getRoute() != null) {
                 double dist = train.calculateRouteDistance();
                 int fuelCost = l.getFuelCost();

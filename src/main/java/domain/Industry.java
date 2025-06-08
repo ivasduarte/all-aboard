@@ -1,16 +1,8 @@
 package domain;
 
-import controller.DisplayMapController;
-import repositories.CityRepository;
-import repositories.IndustryRepository;
-
 import java.io.Serializable;
 
 public class Industry implements Serializable {
-    private DisplayMapController mapController = new DisplayMapController();
-    private IndustryRepository indRepo = new IndustryRepository();
-    private CityRepository cityRepo = new CityRepository();
-
     /**
      * The map ID.
      */
@@ -29,17 +21,12 @@ public class Industry implements Serializable {
     /**
      * The type of industry.
      */
-    private String industryType;
+    private IndustryInfo industryType;
 
     /**
      * The amount of cargo generated, per year.
      */
     private int cargoAmount;
-
-    /**
-     * The amount of money the cargo gives to the player.
-     */
-    private int cargoPrice;
 
     /**
      * This method is the constructor of the industry.
@@ -50,13 +37,59 @@ public class Industry implements Serializable {
      * @param industryType The type of the industry.
      * @param cargoAmount  The amount of cargo generated, per year.
      */
-    public Industry(int mapID, int positionX, int positionY, String industryType, int cargoAmount, int cargoPrice) {
+    public Industry(int mapID, int positionX, int positionY, IndustryInfo industryType, int cargoAmount) {
         this.mapID = mapID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.industryType = industryType;
         this.cargoAmount = cargoAmount;
-        this.cargoPrice = cargoPrice;
+    }
+
+    public enum IndustryInfo {
+        COAL_MINE("Coal Mine", new Cargo.Type[]{ Cargo.Type.COAL }, null, IndustryType.PRIMARY),
+        HOUSING("Housing", new Cargo.Type[]{ Cargo.Type.PASSENGERS, Cargo.Type.MAIL }, null, IndustryType.PRIMARY),
+        IRON_MINE("Iron Mine", new Cargo.Type[]{ Cargo.Type.IRON }, null, IndustryType.PRIMARY),
+        STEEL_MILL("Steel Mill", new Cargo.Type[]{ Cargo.Type.STEEL }, new Cargo.Type[]{ Cargo.Type.COAL, Cargo.Type.IRON }, IndustryType.TRANSFORMING),
+        TOOL_AND_DIE_FACTORY("Tool and Die Factory", new Cargo.Type[]{ Cargo.Type.MFG_GOODS }, new Cargo.Type[]{ Cargo.Type.IRON, Cargo.Type.STEEL }, IndustryType.MIXED ),
+        AUTO_PLANT("Auto Plant", new Cargo.Type[]{Cargo.Type.AUTO}, new Cargo.Type[]{Cargo.Type.STEEL}, IndustryType.TRANSFORMING)
+        ;
+
+        IndustryInfo(String name, Cargo.Type[] supply, Cargo.Type[] demand, IndustryType type)
+        {
+            this.name = name;
+            this.supply = supply;
+            this.demand = demand;
+            this.type = type;
+        }
+
+        private final String name;
+        private final Cargo.Type[] supply;
+        private final Cargo.Type[] demand;
+        private final IndustryType type;
+
+        public enum IndustryType {
+            PRIMARY("Primary sector"), TRANSFORMING("Transforming"), MIXED("Mixed");
+
+            IndustryType(String name)
+            {
+                this.name = name;
+            }
+
+            private final String name;
+
+            public String getName() {return name;}
+        }
+
+        public String getName() {return name;}
+        public Cargo.Type[] getSupply() {return supply;}
+        public Cargo.Type[] getDemand() {return demand;}
+        public IndustryType getType() {return type;}
+
+        @Override
+        public String toString()
+        {
+            return name;
+        }
     }
 
     /**
@@ -91,7 +124,7 @@ public class Industry implements Serializable {
      *
      * @return The industry type.
      */
-    public String getIndustryType() {
+    public IndustryInfo getIndustryType() {
         return industryType;
     }
 
@@ -102,14 +135,5 @@ public class Industry implements Serializable {
      */
     public int getCargoAmount() {
         return cargoAmount;
-    }
-
-    /**
-     * This method returns the amount of money the cargo gives to the player.
-     *
-     * @return The amount of money the cargo gives to the player.
-     */
-    public int getCargoPrice() {
-        return cargoPrice;
     }
 }

@@ -15,6 +15,7 @@ public class Train implements Serializable {
     public Train(Locomotive locomotive, int departureYear) {
         this.locomotive = locomotive;
         this.route = new ArrayList<>();
+        this.carriages = new ArrayList<>();
         this.departureYear = departureYear;
     }
 

@@ -17,17 +17,17 @@ public class AddIndustryController {
      * @param industryType type of industry
      * @return Will show a success message if it is possible to create the industry. Otherwise, it will show a message related to the error that occurred.
      */
-    public String addIndustry(int mapID, int positionX, int positionY, String industryType, int cargoAmount, int cargoPrice) {
+    public String addIndustry(int mapID, int positionX, int positionY, Industry.IndustryInfo industryType, int cargoAmount) {
         IndustryRepository industryRepository = Repositories.getInstance().getIndustryRepository();
 
-        Industry industry = new Industry(mapID, positionX, positionY, industryType, cargoAmount, cargoPrice);
+        Industry industry = new Industry(mapID, positionX, positionY, industryType, cargoAmount);
 
         industryRepository.save(industry);
         Map map = Repositories.getInstance().getMapRepository().getMapList().get(mapID);
 
         map.addNewIndustry(industry);
 
-        return "\nIndustry addedd successfully at (" + positionX + ", " + positionY + ").\nIndustry Type: " + industryType;
+        return "\n"+ industryType.getName() + " addedd successfully at (" + positionX + ", " + positionY + ").\nIndustry Type: " + industryType.getType().getName();
     }
 
     /**

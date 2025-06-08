@@ -35,7 +35,7 @@ public class TrainRepository implements Serializable {
      *
      * @return corresponding train
      */
-    public Train gettrainByLocomotive(Locomotive locomotive) {
+    public Train getTrainByLocomotive(Locomotive locomotive) {
         for (Train train : trains) {
             if (train.getLocomotive().equals(locomotive)) {
                 return train;
