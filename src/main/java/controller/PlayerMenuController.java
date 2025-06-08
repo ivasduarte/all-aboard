@@ -19,20 +19,17 @@ import java.net.URL;
 public class PlayerMenuController {
     @FXML
     private VBox menuBox;
-
     @FXML
     private Label messageLabel;
 
     private Scenario currentScenario;
     private Map currentMap;
 
-
     public void setData(Scenario currentScenario) {
         this.currentScenario = currentScenario;
         this.currentMap = currentScenario.getMap();
         initialize();
     }
-
 
     private void initialize() {
         menuBox.getChildren().clear();
@@ -43,9 +40,8 @@ public class PlayerMenuController {
         addMenuButton("List All Stations", () -> handleListAllStations());
         addMenuButton("Buy a Locomotive", () -> handleBuyLocomotive());
         addMenuButton("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario));
-        addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
         addMenuButton("Check Financial Results", () -> handleShowFinancialResults());
-        addMenuButton("Load Simulation", new SimulationLoad(currentMap.getName() + ".simu"));
+        addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
     }
 
     private void addMenuButton(String label, Runnable action) {
@@ -126,8 +122,10 @@ public class PlayerMenuController {
 
             FXMLLoader loader = new FXMLLoader(fxmlURL);
             Parent root = loader.load();
-            Stage stage = new Stage();
+            UpgradeAStationController controller = loader.getController();
+            controller.setData(currentScenario);
 
+            Stage stage = new Stage();
             stage.setTitle("Upgrade a Station");
             stage.setScene(new Scene(root));
             stage.show();
@@ -145,7 +143,6 @@ public class PlayerMenuController {
     private void handleListAllStations(){
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/ListAllStations.fxml");
-
             if (fxmlURL == null) {
                 messageLabel.setText("Error: FXML URL not found.");
                 return;
@@ -153,8 +150,10 @@ public class PlayerMenuController {
 
             FXMLLoader loader = new FXMLLoader(fxmlURL);
             Parent root = loader.load();
-            Stage stage = new Stage();
+            ListStationsController controller = loader.getController();
+            controller.setData(currentScenario);
 
+            Stage stage = new Stage();
             stage.setTitle("List All Stations");
             stage.setScene(new Scene(root));
             stage.show();

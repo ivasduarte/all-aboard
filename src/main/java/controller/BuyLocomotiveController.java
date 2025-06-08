@@ -35,7 +35,7 @@ public class BuyLocomotiveController {
     @FXML
     private Label priceLabel;
     @FXML
-    private Label budget;
+    private Label budgetLabel;
 
     private Locomotive selectedLocomotive;
 
@@ -158,7 +158,7 @@ public class BuyLocomotiveController {
     }
 
     private void viewBudget() {
-        budget.setText("Player Budget: " + scenario.getBudget() + " €");
+        budgetLabel.setText("CURRENT BUDGET: " + scenario.getBudget() + " €");
     }
 
     @FXML
@@ -172,7 +172,7 @@ public class BuyLocomotiveController {
         modelLabel.setText("Locomotive Model: " + selectedLocomotive.getLocomotiveModel());
         typeLabel.setText("Type: " + selectedLocomotive.getLocomotiveFuelType());
         topSpeedLabel.setText("Top Speed: " + selectedLocomotive.getMaxSpeed() + "km/h");
-        priceLabel.setText("PRICE: " + selectedLocomotive.getPrice() + "€");
+        priceLabel.setText("Price: " + selectedLocomotive.getPrice() + "€");
     }
 
     @FXML

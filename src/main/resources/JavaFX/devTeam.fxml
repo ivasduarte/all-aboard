@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="428.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DevTeamController">
+    <children>
+        <Text layoutX="65.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEVELOPMENT TEAM">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="37.0" />
+            </font>
+        </Text>
+        <Button fx:id="backButton" layoutX="241.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleBackButton" text="Back" />
+
+        <TableView fx:id="tableView" layoutX="70.0" layoutY="122.0" prefHeight="200.0" prefWidth="381.0">
+            <columns>
+                <TableColumn fx:id="nameColumn" minWidth="125.0" prefWidth="125.0" text="NAME" />
+                <TableColumn fx:id="idColumn" minWidth="125.0" prefWidth="125.0" text="IDENTIFICATION" />
+                <TableColumn fx:id="emailColumn" minWidth="125.0" prefWidth="128.0" text="CONTACT" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

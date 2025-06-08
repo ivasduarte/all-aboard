@@ -18,7 +18,6 @@ import java.util.Scanner;
  * This UI also deducts the cost of the selected building from the scenario's budget
  * upon successful construction.
  */
-
 public class UpgradeAStationUI implements Runnable {
     private Map map;
     private Scenario scenario;
@@ -29,7 +28,6 @@ public class UpgradeAStationUI implements Runnable {
      * @param map      The current map in the simulation.
      * @param scenario The current scenario being simulated.
      */
-
     public UpgradeAStationUI(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
@@ -46,15 +44,11 @@ public class UpgradeAStationUI implements Runnable {
      * Provides validation for station selection, building existence, availability by year,
      * and budget constraints.
      */
-
     public void getInput() {
         System.out.println("\n\n------------------------ Upgrade Station ----------------------");
         Scanner sc = new Scanner(System.in);
-
         UpgradeAStationController controller = new UpgradeAStationController();
-
         int budget = scenario.getBudget().getBudget();
-
         List<Station> stations = controller.getAvailableStations(map.getName());
 
         if (stations.isEmpty()) {
@@ -114,7 +108,6 @@ public class UpgradeAStationUI implements Runnable {
 
         boolean success = controller.upgradeStation(selectedStation, buildingTypeName, currentYear);
         controller.DeductBudget(selectedStation, selectedBuildingType, scenario);
-
 
         if (success) {
             System.out.println("SUCCESS: Building '" + buildingTypeName + "' added to station.");

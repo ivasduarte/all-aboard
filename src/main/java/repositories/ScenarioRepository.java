@@ -19,9 +19,7 @@ import java.util.Scanner;
  * The {@code ScenarioRepository} class provides functionality to manage a collection of {@code Scenario} objects.
  * It allows adding, validating, retrieving, and checking the existence of scenarios by their names.
  */
-
 public class ScenarioRepository implements Serializable {
-
     static Scanner ler = new Scanner(System.in);
     private List<Scenario> scenarios;
 
@@ -96,14 +94,10 @@ public class ScenarioRepository implements Serializable {
         List<Scenario> filteredScenarios = new ArrayList<>();
 
         for (Scenario scenario : scenarios) {
-
             if (scenario.getMap().equals(map)) {
-
                 filteredScenarios.add(scenario);
-
             }
         }
-
         return List.copyOf(filteredScenarios);
     }
 
@@ -135,9 +129,7 @@ public class ScenarioRepository implements Serializable {
             Map mapFromFile = scenario.getMap();
 
             if (mapFromFile.getName().equalsIgnoreCase(selectedMap.getName())) {
-
                 if (!selectedMap.hasScenario(scenario)) {
-
                     selectedMap.addNewScenario(scenario);
                     System.out.printf("\nSuccessfully loaded \"%s\" into map \"%s\".%n",
                             scenario.getScenarioName(), selectedMap.getName());
@@ -148,10 +140,7 @@ public class ScenarioRepository implements Serializable {
                 System.out.printf("Scenario \"%s\" belongs to map \"%s\" and cannot be loaded into \"%s\".%n",
                         scenario.getScenarioName(), mapFromFile.getName(), selectedMap.getName());
             }
-
-
             return scenario;
-
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Failed to load scenario from file: " + fileName, e);
         }

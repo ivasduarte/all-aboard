@@ -1,30 +1,36 @@
 package controller;
 
-import domain.User;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import repositories.AuthenticationRepository;
 import ui.authorization.AuthenticationController;
+import ui.menu.EditorUI;
 
 import java.io.IOException;
 import java.net.URL;
 
 public class LoginController {
-
     @FXML
     private TextField emailField;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Label messageLabel;
+    @FXML
+    private Button loginButton;
+    @FXML
+    private Button signUpButton;
+    @FXML
+    private Button signButton;
+    @FXML
+    private Button devButton;
 
     private final AuthenticationController authController = new AuthenticationController();
 
@@ -53,38 +59,98 @@ public class LoginController {
 
         if (success) {
             messageLabel.setText("Logged in successfully.");
-            try {
-                URL fxmlURL = getClass().getResource("/JavaFX/chooseScenario.fxml");
-                System.out.println("FXML URL: " + fxmlURL);
-
-                if (fxmlURL == null) {
-                    messageLabel.setText("Error: FXML URL not found.");
-                    return;
-                }
-
-                FXMLLoader loader = new FXMLLoader(fxmlURL);
-                Parent root = loader.load();
-
-                Stage stage = new Stage();
-                stage.setTitle("Choose Scenario.");
-                stage.setScene(new Scene(root));
-                stage.show();
-
-                Stage currentStage = (Stage) emailField.getScene().getWindow();
-                currentStage.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                messageLabel.setText("Error: " + e.getMessage());
+            if (isCurrentUserEditor()) {
+                startEditorConsole();
+            } else {
+                openPlayerInterface();
             }
         } else {
             messageLabel.setText("Invalid credentials.");
         }
     }
 
+    /**
+     * Checks if current user is an editor
+     */
+    private boolean isCurrentUserEditor() {
+        String currentUserEmail = authController.getCurrentUserEmail();
+        if (currentUserEmail != null) {
+            String role = authController.getRole(currentUserEmail);
+            return AuthenticationController.ROLE_EDITOR.equals(role);
+        }
+        return false;
+    }
+
+    /**
+     * Starts editor menu
+     */
+    private void startEditorConsole() {
+        Stage currentStage = (Stage) emailField.getScene().getWindow();
+        currentStage.close();
+
+        Platform.runLater(() -> {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                    EditorUI editorUI = new EditorUI();
+                    editorUI.run();
+                } catch (Exception e) {
+                    System.err.println("Error starting editor: " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    System.out.println("\nEditor session ended.");
+                    System.exit(0);
+                }
+            }).start();
+        });
+    }
+
+    /**
+     * Opens graphical interface for players
+     */
+    private void openPlayerInterface() {
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/chooseScenario.fxml");
+            System.out.println("FXML URL: " + fxmlURL);
+
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: FXML URL not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Choose Scenario.");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) emailField.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            messageLabel.setText("Error: " + e.getMessage());
+        }
+    }
+
     @FXML
     private void handleSignUpButton() {
-        messageLabel.setText("To be implemented.");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/JavaFX/signUp.fxml"));
+            Parent root = loader.load();
+
+            SignUpController signUpController = loader.getController();
+            signUpController.setController(authController);
+
+            Stage stage = new Stage();
+            stage.setTitle("Sign Up");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -95,5 +161,28 @@ public class LoginController {
     @FXML
     private void handlePasswordFieldClick() {
         messageLabel.setText("");
+    }
+
+    @FXML
+    private void handleDevButton() {
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/devTeam.fxml");
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: " + fxmlURL + " not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Development Team");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            messageLabel.setText("Error: " + e.getMessage());
+        }
     }
 }

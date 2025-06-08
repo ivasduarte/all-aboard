@@ -1,13 +1,21 @@
 package controller;
 
 import domain.Building;
+import domain.Map;
+import domain.Scenario;
 import domain.Station;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import repositories.Repositories;
 import repositories.StationRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,78 +23,132 @@ import java.util.List;
  */
 public class ListStationsController {
     @FXML
-    private ComboBox<Station> stationComboBox;
-
+    private ComboBox selectBox;
     @FXML
-    private TextArea stationDetails;
+    private Label nameLabel;
+    @FXML
+    private Label idLabel;
+    @FXML
+    private Label typeLabel;
+    @FXML
+    private Label positionLabel;
+    @FXML
+    private Label cargoLabel;
+    @FXML
+    private Label buildingLabel;
 
     private final StationRepository StationRepo;
+    private Scenario currentScenario;
+    private Map currentMap;
+    private Station currentStation;
 
     /**
-     * Constructs a ListStationsController and initializes the station repository.
+     * Sets the current scenario and updates the associated map.
+     *
+     * @param scenario The scenario object to be set. Must not be null.
+     *                 Contains details including the map, restrictions, and other scenario data.
+     */
+    public void setData(Scenario scenario) {
+        this.currentScenario = scenario;
+        this.currentMap = scenario.getMap();
+    }
+
+    /**
+     * Constructs a new instance of the ListStationsController class.
+     * This constructor initializes the StationRepo field by obtaining the
+     * StationRepository instance from the Repositories singleton.
      */
     public ListStationsController() {
         this.StationRepo = Repositories.getInstance().getStationRepository();
     }
 
     /**
-     * Retrieves all stations from the repository.
-     *
-     * @return a list of all stations
+     * Initializes the controller by populating the select box with a list of stations
+     * and setting up an event handler for station selection.
      */
-    public List<Station> getAllStations() {
-        return StationRepo.getStations();
-    }
-
-    /**
-     * Retrieves all stations from a specific map that still have available building slots.
-     *
-     * @param mapName the name of the map
-     * @return a list of stations with available slots in the specified map
-     */
-    public List<Station> getStationsByMapName(String mapName) {
-        return Repositories.getInstance().getStationRepository().getAvailableStationsByMapName(mapName);
-    }
-
     @FXML
-    public void setStationComboBox(){
+    public void initialize() {
         List<Station> stations = StationRepo.getStations();
-        stationComboBox.getItems().setAll(stations);
-
-    }
-
-    @FXML
-    private void initialize() {
-        List<Station> stations = StationRepo.getStations();
-        stationComboBox.getItems().setAll(stations);
-        stationComboBox.setOnAction(e -> showStationDetails());
-    }
-
-
-    private void showStationDetails() {
-        Station station = stationComboBox.getValue();
-
-        if (station == null) {
-            stationDetails.setText("Choose a station.");
+        if (stations == null || stations.isEmpty()) {
+            showAlert("No stations available.");
             return;
         }
 
-        StringBuilder details = new StringBuilder();
-        details.append("Name: ").append(station.getName()).append("\n");
-        details.append("ID: ").append(station.getStationID()).append("\n");
-        details.append("Type: ").append(station.getStationType()).append("\n");
-        details.append("Position: (").append(station.getPositionX()).append(", ").append(station.getPositionY()).append(")\n");
-        details.append("Cargo: ").append(station.getCargo()).append("\n");
+        selectBox.getItems().addAll(stations);
+        selectBox.setOnAction(e -> showStationDetails());
+    }
 
-        List<Building> buildings = station.getBuildings();
+    /**
+     * Updates the UI to display detailed information about the currently selected station.
+     */
+    @FXML
+    private void showStationDetails() {
+        currentStation = (Station) selectBox.getValue();
+        if (currentStation == null) return;
+
+        String name = currentStation.getName();
+        int id = currentStation.getStationID();
+        Station.StationType type = currentStation.getStationType();
+        int x = currentStation.getPositionX();
+        int y = currentStation.getPositionY();
+        int cargo = currentStation.getCargo();
+        List<Building> buildings = currentStation.getBuildings();
+
+
+        nameLabel.setText("Name: " + name);
+        idLabel.setText("ID: " + id);
+        typeLabel.setText("Type: " + type);
+        positionLabel.setText("Position: (" + x + ", " + y + ")");
+        cargoLabel.setText("Cargo: " + cargo);
+
         if (buildings.isEmpty()) {
-            details.append("Buildings: none");
+            buildingLabel.setText("Buildings: none");
         } else {
-            details.append("Buildings:\n");
+            StringBuilder buildingsText = new StringBuilder("Buildings:\n");
             for (Building building : buildings) {
-                details.append("  - ").append(building.getBuildingType()).append("\n");
+                buildingsText.append("  - ").append(building.getBuildingType()).append("\n");
             }
+            buildingLabel.setText(buildingsText.toString());
         }
-        stationDetails.setText(details.toString());
+    }
+
+    /**
+     * Displays an error alert dialog with the specified message.
+     *
+     * @param msg The message to be displayed in the alert dialog. Cannot be null or empty.
+     */
+    private void showAlert(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+    /**
+     * Handles the action event when navigating back to the player menu screen.
+     * This method loads the "playerMenu.fxml" file, initializes the PlayerMenuController
+     * with the current scenario data, and displays the player menu in a new stage.
+     * It also closes the current stage associated with the selectBox element.
+     */
+    @FXML
+    private void handleBackToMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/JavaFX/playerMenu.fxml"));
+            Parent root = loader.load();
+
+            PlayerMenuController controller = loader.getController();
+            controller.setData(currentScenario);
+
+            Stage stage = new Stage();
+            stage.setTitle("Player Menu");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) selectBox.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

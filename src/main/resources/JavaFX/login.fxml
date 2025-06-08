@@ -14,10 +14,11 @@
          <font>
             <Font name="Arial Rounded MT Bold" size="13.0" />
          </font></Label>
-      <TextField fx:id="emailField" layoutX="51.0" layoutY="155.0" onMouseClicked="#handleEmailFieldClick" prefHeight="26.0" prefWidth="246.0" />
-      <PasswordField fx:id="passwordField" layoutX="50.0" layoutY="226.0" onMouseClicked="#handlePasswordFieldClick" prefHeight="26.0" prefWidth="246.0" />
+      <TextField fx:id="emailField" layoutX="51.0" layoutY="155.0" onMouseClicked="#handleEmailFieldClick" prefHeight="26.0" prefWidth="268.0" />
+      <PasswordField fx:id="passwordField" layoutX="50.0" layoutY="226.0" onMouseClicked="#handlePasswordFieldClick" prefHeight="26.0" prefWidth="268.0" />
       <Button layoutX="52.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleLoginButton" onMouseClicked="#handleLoginButton" prefHeight="26.0" prefWidth="58.0" text="Login" />
-      <Button layoutX="122.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleSignUpButton" onMouseClicked="#handleSignUpButton" prefHeight="26.0" prefWidth="58.0" text="Sign Up" />
+      <Button fx:id="signButton" layoutX="122.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleSignUpButton" prefHeight="26.0" prefWidth="58.0" text="Sign Up" />
+      <Button fx:id="devButton" layoutX="191.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleDevButton" text="Development Team" />
       <Label fx:id="messageLabel" layoutX="355.0" layoutY="98.0" text=" " />
       <Text layoutX="30.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" textAlignment="CENTER" wrappingWidth="117.1367130279541">
          <font>

@@ -9,6 +9,9 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="540.0" prefWidth="509.0" style="-fx-background-color: #7A9D96;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpgradeAStationController">
+
+   <Button layoutX="20.0" layoutY="31.0" onAction="#handleBackToMenu" style="-fx-background-color: White;" text="Back" />
+
    <children>
       <Text fill="WHITE" layoutX="91.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Upgrade a Station" textAlignment="CENTER">
          <font>

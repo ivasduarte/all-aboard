@@ -6,10 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
-import presentation.*;
 
 import repositories.Repositories;
 import repositories.ScenarioRepository;
@@ -19,7 +17,6 @@ import java.net.URL;
 import java.util.List;
 
 public class ChooseScenarioController {
-
     @FXML
     private ComboBox<Scenario> scenarioComboBox;
     @FXML
