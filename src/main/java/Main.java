@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -6,9 +7,9 @@ import javafx.stage.Stage;
 import controller.LoginController;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Platform.setImplicitExit(false);
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.run();
 
@@ -17,23 +18,13 @@ public class Main extends Application {
 
         LoginController loginController = loader.getController();
 
-        loginController.setOnLoginSuccess(() -> {
-            try {
-                FXMLLoader chooseLoader = new FXMLLoader(getClass().getResource("/JavaFX/chooseScenario.fxml"));
-                Parent chooseRoot = chooseLoader.load();
-
-                Stage chooseStage = new Stage();
-                chooseStage.setTitle("Choose Scenario");
-                chooseStage.setScene(new Scene(chooseRoot));
-                chooseStage.show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
         primaryStage.setTitle("Login");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        Platform.setImplicitExit(false);
+        launch(args);
     }
 }

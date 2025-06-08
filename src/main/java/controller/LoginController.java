@@ -16,6 +16,12 @@ import ui.menu.EditorUI;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * The LoginController class manages user interactions for the login screen
+ * in a JavaFX application. It provides methods for handling login attempts,
+ * navigating to the sign-up screen, and interacting with other components
+ * based on user roles.
+ */
 public class LoginController {
     @FXML
     private TextField emailField;
@@ -23,23 +29,25 @@ public class LoginController {
     private PasswordField passwordField;
     @FXML
     private Label messageLabel;
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Button signUpButton;
-    @FXML
-    private Button signButton;
-    @FXML
-    private Button devButton;
 
     private final AuthenticationController authController = new AuthenticationController();
-
     private Runnable onLoginSuccess;
 
+    /**
+     * Sets a callback to be executed when a login operation is successful.
+     *
+     * @param callback The {@link Runnable} callback to be executed upon a successful login.
+     *                 Must not be null.
+     */
     public void setOnLoginSuccess(Runnable callback) {
         this.onLoginSuccess = callback;
     }
 
+    /**
+     * Handles the login button click event by validating the input credentials and attempting to authenticate
+     * the user. Displays appropriate feedback messages for invalid inputs, failed login attempts,
+     * or successful authentication.
+     */
     @FXML
     private void handleLoginButton() {
         String email = emailField.getText();
@@ -70,7 +78,12 @@ public class LoginController {
     }
 
     /**
-     * Checks if current user is an editor
+     * Checks whether the current user is assigned the role of "EDITOR".
+     * This method retrieves the email of the currently authenticated user
+     * and determines their role by querying the authentication controller.
+     *
+     * @return true if the currently authenticated user has the role "EDITOR",
+     *         false otherwise or if no user is authenticated.
      */
     private boolean isCurrentUserEditor() {
         String currentUserEmail = authController.getCurrentUserEmail();
@@ -82,36 +95,34 @@ public class LoginController {
     }
 
     /**
-     * Starts editor menu
+     * Initializes and starts the editor console interface within a separate thread.
+     * This method is invoked to display the editor functionality to the user after
+     * closing the current login window.
      */
     private void startEditorConsole() {
+        Platform.setImplicitExit(false);
         Stage currentStage = (Stage) emailField.getScene().getWindow();
         currentStage.close();
 
-        Platform.runLater(() -> {
-            new Thread(() -> {
-                try {
-                    Thread.sleep(500);
-                    EditorUI editorUI = new EditorUI();
-                    editorUI.run();
-                } catch (Exception e) {
-                    System.err.println("Error starting editor: " + e.getMessage());
-                    e.printStackTrace();
-                } finally {
-                    System.out.println("\nEditor session ended.");
-                    System.exit(0);
-                }
-            }).start();
-        });
+        new Thread(() -> {
+            try {
+                EditorUI editorUI = new EditorUI();
+                editorUI.run();
+            } catch (Exception e) {
+                System.err.println("Error starting editor: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     /**
-     * Opens graphical interface for players
+     * Opens the player interface by loading the "chooseScenario.fxml" file
+     * and displaying it in a new stage. Closes the current login window
+     * after successfully displaying the new interface.
      */
     private void openPlayerInterface() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/chooseScenario.fxml");
-            System.out.println("FXML URL: " + fxmlURL);
 
             if (fxmlURL == null) {
                 messageLabel.setText("Error: FXML URL not found.");
@@ -135,6 +146,14 @@ public class LoginController {
         }
     }
 
+    /**
+     * Handles the action of the "Sign Up" button in the login interface.
+     *
+     * This method loads the "signUp.fxml" user interface from the resources, initializes
+     * the corresponding controller, and links it with the current authentication controller.
+     * It then displays the sign-up stage (a new window) to the user. If an error occurs
+     * while loading the FXML resource, the stack trace of the exception is printed to the console.
+     */
     @FXML
     private void handleSignUpButton() {
         try {
@@ -153,22 +172,32 @@ public class LoginController {
         }
     }
 
+    /**
+     * Handles the click event on the email text field in the login interface.
+     * This method clears any text displayed in the message label, typically resetting
+     * feedback messages displayed to the user.
+     */
     @FXML
     private void handleEmailFieldClick() {
         messageLabel.setText("");
     }
 
+    /**
+     * Handles the click event on the password field in the login interface.
+     */
     @FXML
     private void handlePasswordFieldClick() {
         messageLabel.setText("");
     }
 
+    /**
+     * Handles the click event for the "Development Team" button.
+     */
     @FXML
     private void handleDevButton() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/devTeam.fxml");
             if (fxmlURL == null) {
-                messageLabel.setText("Error: " + fxmlURL + " not found.");
                 return;
             }
 

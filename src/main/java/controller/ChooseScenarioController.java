@@ -76,8 +76,6 @@ public class ChooseScenarioController {
 
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/playerMenu.fxml");
-            System.out.println("FXML URL: " + fxmlURL);
-
             if (fxmlURL == null) {
                 messageLabel.setText("Error: FXML URL not found.");
                 return;
