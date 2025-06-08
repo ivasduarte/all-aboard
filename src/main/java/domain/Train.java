@@ -1,6 +1,7 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Train implements Serializable {
@@ -9,15 +10,12 @@ public class Train implements Serializable {
     private final int departureYear;
     private double arrivalTime;
     private List<Carriage> carriages;
-    private final boolean isDoubleTrack;
+    private boolean isDoubleTrack;
 
-    public Train(Locomotive locomotive, List<Station> route, int departureYear, List<Carriage> carriages, boolean isDoubleTrack) {
+    public Train(Locomotive locomotive, int departureYear) {
         this.locomotive = locomotive;
-        this.route = route;
+        this.route = new ArrayList<>();
         this.departureYear = departureYear;
-        this.carriages = carriages;
-        this.isDoubleTrack = isDoubleTrack;
-        this.arrivalTime = calculateArrivalTime();
     }
 
     private double calculateArrivalTime() {
@@ -31,13 +29,12 @@ public class Train implements Serializable {
         }
 
         double distance = 0;
-        for (int i = 0; i < route.size() - 1; i++) {
-            distance += route.get(i).distanceTo(route.get(i + 1));
+        for(int i = 0; i < route.size() - 1; i++)
+        {
+            distance += route.get(i).distanceTo(route.get(i+1));
         }
 
-        double travelTime = distance / effectiveSpeed;
-
-        return departureYear + travelTime;
+        return distance / effectiveSpeed;
     }
 
     public boolean hasArrived(int currentYear) {
@@ -48,9 +45,7 @@ public class Train implements Serializable {
         return arrivalTime;
     }
 
-    public List<Station> getRoute() {
-        return route;
-    }
+    public List<Station> getRoute() { return route; }
 
     public Locomotive getLocomotive() {
         return locomotive;
@@ -59,7 +54,18 @@ public class Train implements Serializable {
     public int getNumberOfCarriages() {
         return carriages.size();
     }
-    
+
+    public double calculateRouteDistance()
+    {
+        double distance = 0;
+        for(int i = 0; i < route.size() - 1; i++)
+        {
+            distance += route.get(i).distanceTo(route.get(i+1));
+        }
+
+        return distance;
+    }
+
     public boolean isOnDoubleTrack() {
         if (route == null || route.size() < 2) return true;
 

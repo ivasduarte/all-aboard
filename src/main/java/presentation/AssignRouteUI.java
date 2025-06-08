@@ -3,14 +3,8 @@ package presentation;
 import controller.AssignRouteController;
 import controller.DisplayMapController;
 import controller.ListStationsController;
-import domain.Locomotive;
-import domain.Map;
-import domain.Scenario;
-import domain.Station;
-import repositories.LocomotiveRepository;
-import repositories.Repositories;
-import repositories.ScenarioRepository;
-import repositories.StationRepository;
+import domain.*;
+import repositories.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,22 +31,11 @@ public class AssignRouteUI implements Runnable {
     {
         Scanner sc = new Scanner(System.in);
 
-        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
-        List<Scenario> scenarios = scenarioRepository.getScenarioList();
-        int scenarioID = -1;
+        List<Train> trains = scenario.getTrains();
 
-        for(int i = 0; i < scenarios.size(); i++)
+        if(trains.isEmpty())
         {
-            if(scenarios.get(i).equals(scenario))
-                scenarioID = i;
-        }
-
-        LocomotiveRepository locomotiveRepository = Repositories.getInstance().getLocomotiveRepository();
-        List<Locomotive> locomotives = locomotiveRepository.getPlayerLocomotives();
-
-        if(locomotives.isEmpty())
-        {
-            System.out.println("No available locomotives!");
+            System.out.println("No available trains!");
             return;
         }
 
@@ -65,75 +48,61 @@ public class AssignRouteUI implements Runnable {
         }
 
         System.out.println("\n------------------------ Assign Route ------------------------");
-        for(int i = 0; i < locomotives.size(); i++)
+        for(int i = 0; i < trains.size(); i++)
         {
-            System.out.println((i+1) + ". " + locomotives.get(i).getLocomotiveModel() + " - " + locomotives.get(i).getLocomotiveFuelType());
+            System.out.println((i+1) + ". " + trains.get(i).getLocomotive().getLocomotiveModel() + " - " + trains.get(i).getLocomotive().getLocomotiveFuelType());
         }
         System.out.println("Select the number of a train to assign the route:");
-        int trainID = sc.nextInt();
-        trainID -= 1;
+        int trainID = sc.nextInt() - 1;
+        Train train = trains.get(trainID);
 
-        List<Integer> stationIDs = new ArrayList<>();
+        List<Station> stationsToAdd = new ArrayList<>();
 
         int value;
         do {
-            System.out.println();
+            System.out.println("\n");
 
-            for(Station station : stations)
-            {
-                System.out.println(station.getStationID() + ". " + station.getStationType() + " (" + station.getPositionX() + "," + station.getPositionY() + ")");
-            }
+            int counter = 0;
+            List<Station> availableStations = new ArrayList<>();
+            for (Station station : stations) {
 
-            System.out.print("Enter the ID of the station you wish to add (enter a negative number to exit): ");
-            value = sc.nextInt();
+                boolean added = false;
 
-            boolean exists = false;
-            for(Station station : stations)
-            {
-                if(station.getStationID() == value)
-                    exists = true;
-            }
+                for (Station stationToAdd : stationsToAdd) {
+                    if (station.equals(stationToAdd))
+                        added = true;
+                }
 
-            if(value >= 0)
-            {
-                if(exists)
-                {
-                    boolean repeated = false;
-                    for(Integer id : stationIDs)
-                    {
-                        if(id == value)
-                            repeated = true;
-                    }
-
-                    if(!repeated)
-                    {
-                        stationIDs.add(value);
-                        System.out.println("Added successfully!");
-                    }else
-                    {
-                        System.out.println("Selected ID is already in list!");
-                    }
-                }else
-                {
-                    System.out.println("Selected ID does not exist!");
+                if (!added) {
+                    System.out.println((counter + 1) + ". " + station.getName() + " - " + station.getStationType() + " (" + station.getPositionX() + "," + station.getPositionY() + ")");
+                    counter++;
+                    availableStations.add(station);
                 }
             }
 
+            if(!availableStations.isEmpty())
+            {
+                System.out.print("\nEnter the number of the station you wish to add (enter a negative number or zero to exit): ");
+                value = sc.nextInt() - 1;
+
+                if(value >= availableStations.size())
+                {
+                    System.out.println("Number isn't valid, try again!");
+                }else
+                {
+                    stationsToAdd.add(availableStations.get(value));
+                    System.out.println("Station added to the route!");
+                }
+            }else
+            {
+                System.out.println("No available stations to add, assigning route!");
+                value = -1;
+            }
         }while(value >= 0);
 
-        System.out.println("\nRoute assigned successfully!");
-
-        Locomotive locomotive = locomotiveRepository.getAvailableLocomotives(scenarioID).get(trainID);
-
-        List<Station> newStations = new ArrayList<>();
-
-        for(Station station : stations)
-        {
-            if(stationIDs.contains(station.getStationID()))
-                newStations.add(station);
-        }
-
         AssignRouteController routeController = new AssignRouteController();
-        routeController.AssignRoute(locomotive, newStations);
+        routeController.AssignRoute(train, stationsToAdd);
+
+        System.out.println("\nRoute assigned successfully!");
     }
 }

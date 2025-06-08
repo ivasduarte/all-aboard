@@ -231,7 +231,7 @@ public class SimulatorController implements Runnable, Serializable {
 
             int earnings = 0;
             if (train.getRoute() != null && !train.getRoute().isEmpty()) {
-                double dist = calculateRouteDistance(train.getRoute());
+                double dist = train.calculateRouteDistance();
                 double bMulti = calculateStationBuildingMultiplier(train.getRoute().get(train.getRoute().size() - 1));
                 earnings = simulateTrainTrip(train, costMultiplier);
             } else {
@@ -247,39 +247,15 @@ public class SimulatorController implements Runnable, Serializable {
         return net;
     }
 
-    private double calculateArrivalTime(Locomotive loco, List<Station> route, boolean isDoubleTrack, Train train) {
-        double baseSpeed = loco.getMaxSpeed();
-        if (!isDoubleTrack) {
-            baseSpeed *= 0.8;
-        }
-
-        int degradation = Math.min(30, train.getNumberOfCarriages() * 5);
-        double effectiveSpeed = baseSpeed * (1 - degradation / 100.0);
-
-        double distance = calculateRouteDistance(route);
-        return distance / effectiveSpeed;
-    }
-
     private int simulateTrainTrip(Train train, double costMultiplier) {
         if (train.getRoute() == null || train.getRoute().isEmpty()) return 0;
 
         List<Station> route = train.getRoute();
 
-        double distance = calculateRouteDistance(route);
+        double distance = train.calculateRouteDistance();
         double buildingMultiplier = calculateStationBuildingMultiplier(route.get(route.size() - 1));
 
         return (int) (distance * ROUTE_EARNINGS_PER_STATION * buildingMultiplier * costMultiplier);
-    }
-
-
-    private double calculateRouteDistance(List<Station> route) {
-        double dist = 0;
-        for (int i = 0; i < route.size() - 1; i++) {
-            int dx = route.get(i).getPositionX() - route.get(i + 1).getPositionX();
-            int dy = route.get(i).getPositionY() - route.get(i + 1).getPositionY();
-            dist += Math.sqrt(dx * dx + dy * dy);
-        }
-        return dist * map.getCellSizeKm();
     }
 
     private double calculateStationBuildingMultiplier(Station station) {
@@ -322,7 +298,7 @@ public class SimulatorController implements Runnable, Serializable {
 
             Train train = Repositories.getInstance().getTrainRepository().gettrainByLocomotive(l);
             if (train.getRoute() != null) {
-                double dist = calculateRouteDistance(train.getRoute());
+                double dist = train.calculateRouteDistance();
                 int fuelCost = l.getFuelCost();
 
                 fuel += (int) (dist * fuelCost) / 500;

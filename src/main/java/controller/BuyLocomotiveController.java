@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import repositories.LocomotiveRepository;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
+import repositories.TrainRepository;
 
 import java.io.IOException;
 import java.net.URL;
@@ -108,6 +109,11 @@ public class BuyLocomotiveController {
         if (scenario.getBudget().getBudget() >= locomotive.getPrice()) {
             scenario.subtractBudget(locomotive.getPrice());
             locomotiveRepository.save(locomotive);
+
+            Train train = new Train(locomotive, scenario.getCurrentYear());
+            TrainRepository trainRepository = Repositories.getInstance().getTrainRepository();
+            trainRepository.saveTrain(train);
+            scenario.addNewTrain(train);
             return "Locomotive " + locomotiveModel + " bought successfully.";
         } else {
             return "ERROR: Player doesn't have enough budget.";

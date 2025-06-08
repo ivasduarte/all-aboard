@@ -2,6 +2,8 @@ package domain;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a scenario with a specific name, associated restrictions, and map details.
@@ -17,6 +19,7 @@ public class Scenario implements Serializable {
     private int finalYear;
     private double modificationRateFor;
 
+    private List<Train> trains;
     /**
      * Creates a new Scenario instance with the specified name, restrictions, and map.
      * The constructor initializes the scenario's attributes and performs a validation
@@ -34,8 +37,10 @@ public class Scenario implements Serializable {
         this.map = map;
         this.budget = budget;
 
+        trains = new ArrayList<>();
         this.currentYear = restrictions.getStartDate().getYear();
         this.finalYear = restrictions.getEndDate().getYear();
+
         validateName();
     }
 
@@ -71,11 +76,18 @@ public class Scenario implements Serializable {
 
 
     /**
-     * Retrives the current year of the scenario, changed by the simulation.
+     * Retrieves the current year of the scenario, changed by the simulation.
      *
      * @return The current year of the scenario.
      */
     public int getCurrentYear() { return currentYear;}
+
+    /**
+     * Retrieves the current trains of the scenario.
+     *
+     * @return the current trains of the scenario.
+     */
+    public List<Train> getTrains() {return trains;}
 
     /**
      * Change the current year of the scenario.
@@ -153,6 +165,11 @@ public class Scenario implements Serializable {
     public int addBudget(int amount) {
         budget.setBudget(budget.getBudget() + amount);
         return budget.getBudget();
+    }
+
+    public void addNewTrain(Train train)
+    {
+        trains.add(train);
     }
 
     @Override
