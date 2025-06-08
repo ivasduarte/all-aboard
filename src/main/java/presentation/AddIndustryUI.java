@@ -94,7 +94,7 @@ public class AddIndustryUI implements Runnable {
             industryTypeAnswer = sc.nextInt() - 1;
 
             if (industryTypeAnswer < 0 || industryTypeAnswer >= Industry.IndustryInfo.values().length) {
-                System.out.println("Invalid option!");
+                System.out.println("Invalid option!\n");
             }
         } while (industryTypeAnswer < 0 || industryTypeAnswer >= Industry.IndustryInfo.values().length);
         industryType = Industry.IndustryInfo.values()[industryTypeAnswer];

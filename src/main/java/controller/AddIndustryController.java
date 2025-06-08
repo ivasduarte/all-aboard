@@ -27,7 +27,7 @@ public class AddIndustryController {
 
         map.addNewIndustry(industry);
 
-        return "\n"+ industryType.getName() + " addedd successfully at (" + positionX + ", " + positionY + ").\nIndustry Type: " + industryType.getType().getName();
+        return "\n"+ industryType.getName() + " added successfully at (" + positionX + ", " + positionY + ").\nIndustry Type: " + industryType.getType().getName();
     }
 
     /**
