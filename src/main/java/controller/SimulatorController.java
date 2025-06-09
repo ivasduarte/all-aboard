@@ -394,7 +394,7 @@ public class SimulatorController implements Runnable, Serializable {
     }
 
     private void processFinancialResults() {
-        int maintenance = 0, fuel = 0;
+        int maintenance = 0, fuel = 0, deliveries = 0;
 
         for (Locomotive l : locoRep.getPlayerLocomotives()) {
             maintenance += l.getMaintenanceCost();
@@ -408,7 +408,11 @@ public class SimulatorController implements Runnable, Serializable {
             }
         }
 
-        financialController.addFinancialResults(0, maintenance, fuel, 0);
+        for (Station s : stRep.getStations()) {
+            deliveries += s.getLastYearDeliveries();
+        }
+
+        financialController.addFinancialResults(0, maintenance, fuel, deliveries);
     }
 
     private Station findClosestStation(Industry i) {
