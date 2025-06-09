@@ -27,6 +27,12 @@ public class AddIndustryUI implements Runnable {
     private Industry.IndustryInfo industryType;
     private int cargoAmount;
 
+    /**
+     * Constructor of AddIndustryUI. Creates an instance for a specified map.
+     *
+     * @param map The map instance where the industry will be added.
+     *            The map ID is retrieved automatically from the MapRepository.
+     */
     public AddIndustryUI(Map map) {
         MapRepository mapRepo = Repositories.getInstance().getMapRepository();
         this.map = map;

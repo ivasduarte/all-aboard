@@ -8,11 +8,13 @@ import domain.PointOfRoute;
 import java.util.List;
 
 /**
- * Provides functionality to assign routes, configure cargo modes, and display route information for trains.
+ * Provides functionality to assign routes, configure cargo modes, execute routes, and display route information for trains.
  */
 public class AssignRouteController {
+
     /**
-     * Assigns a specified route to a train and prints the details of the assigned route.
+     * Assigns a specified route to a train and prints the details of the assigned route,
+     * including cargo availability and demand at each station.
      *
      * @param train    the train to which the route will be assigned
      * @param stations the list of stations that define the route for the train
@@ -23,14 +25,17 @@ public class AssignRouteController {
                 "' received route with " + stations.size() + " stations:");
 
         for (int i = 0; i < stations.size(); i++) {
-            System.out.println("\n  " + (i + 1) + ". " + stations.get(i).getName() +
-                    " (" + stations.get(i).getPositionX() + "," + stations.get(i).getPositionY() + ")");
+            Station station = stations.get(i);
+            System.out.println("\n  " + (i + 1) + ". " + station.getName() +
+                    " (" + station.getPositionX() + "," + station.getPositionY() + ")" +
+                    " - Cargo: " + station.getCargo() +
+                    " - Demand: " + station.getDemand());
         }
     }
 
     /**
      * Sets the cargo mode for a specific point in the train's route and provides
-     * a visual indication of the configuration and behavior based on the mode.
+     * a visual sign of the configuration and behavior based on the mode.
      * If the specified point index corresponds to a valid station in the train's route,
      * additional details about the cargo mode configuration at the station are displayed.
      *
@@ -58,33 +63,5 @@ public class AssignRouteController {
                     break;
             }
         }
-    }
-
-    /**
-     * Displays detailed information about the train's route, including each station
-     * in the route, the cargo mode at each point, the cargo associated with each station,
-     * and the total distance of the route. If no route is assigned, a message is displayed
-     * indicating that the train does not have an assigned route.
-     *
-     * @param train the train whose route information is to be displayed
-     */
-    public void displayRouteInfo(Train train) {
-        if (train.getRoute() == null || train.getRoute().isEmpty()) {
-            System.out.println("\n[ROUTE INFO] Train '" + train.getLocomotive().getLocomotiveModel() +
-                    "' doesn't have an assigned route.");
-            return;
-        }
-
-        System.out.println("\n[ROUTE INFO] Train '" + train.getLocomotive().getLocomotiveModel() + "':");
-        List<PointOfRoute> route = train.getRoute();
-
-        for (int i = 0; i < route.size(); i++) {
-            PointOfRoute point = route.get(i);
-            System.out.println("  " + (i + 1) + ". " + point.getStation().getName() +
-                    " (Mode: " + point.getCargoMode() + ", Cargo: " + point.getStation().getCargo() + ")");
-        }
-
-        double totalDistance = train.calculateRouteDistance();
-        System.out.println("  ROUTE'S TOTAL DISTANCE: " + (int) totalDistance + " km.");
     }
 }

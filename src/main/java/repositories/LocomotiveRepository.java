@@ -95,6 +95,13 @@ public class LocomotiveRepository implements Serializable {
         throw new IllegalArgumentException("Locomotive with model " + locomotiveModel + " doesn't exist.");
     }
 
+    /**
+     * This method returns whether or not the a specific locomotive is available to the player.
+     *
+     * @param locomotiveModel the specific locomotive model
+     *
+     * @return True if the locomotive is available. If not it returns False.
+     */
     public boolean isAvailableToPlayer(Locomotive locomotiveModel) {
         for (Locomotive locomotive : availableLocomotives) {
             if (locomotive.getLocomotiveModel() != null) {
@@ -104,6 +111,11 @@ public class LocomotiveRepository implements Serializable {
         return false;
     }
 
+    /**
+     * This method verifies what locomotives become available for the player.
+     *
+     * @param locomotiveModel the model of a locomotive
+     */
     public void unlockForPlayer(Locomotive locomotiveModel) {
         for (Locomotive locomotive : locomotives) {
             if (locomotive.getLocomotiveModel() != null) {
