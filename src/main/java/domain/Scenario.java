@@ -104,11 +104,11 @@ public class Scenario implements Serializable {
      * @return true if the name satisfies all constraints; false otherwise.
      */
     public boolean validateName(){
-        if(name == null || name.isEmpty()){
+        if(name == null || name.isEmpty()) {
             return false;
-        } else if(name.length() > 15){
+        } else if(name.length() > 15) {
             return false;
-        } else if(!name.matches("[A-Za-z0-9_]+")){
+        } else if(!name.matches("[A-Za-z0-9_]+")) {
             return false;
         }
         return true;
@@ -174,7 +174,7 @@ public class Scenario implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return name + " - " + map.getName();
     }
 
     /**
