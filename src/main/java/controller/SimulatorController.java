@@ -21,6 +21,7 @@ public class SimulatorController implements Runnable, Serializable {
     private final double WAR_CARGO_MULTIPLIER = 1.5;
     private final double WAR_COST_MULTIPLIER = 1.65;
     private final int ROUTE_EARNINGS_PER_STATION = 50;
+    private final int TRACK_MAINTENANCE_COST_PER_100KM = 5;
 
     private final ShowFinancialResultsController financialController = new ShowFinancialResultsController();
     private volatile boolean running = false;
@@ -394,7 +395,7 @@ public class SimulatorController implements Runnable, Serializable {
     }
 
     private void processFinancialResults() {
-        int maintenance = 0, fuel = 0, deliveries = 0;
+        int maintenance = 0, fuel = 0, deliveries = 0, track = 0;
 
         for (Locomotive l : locoRep.getPlayerLocomotives()) {
             maintenance += l.getMaintenanceCost();
@@ -404,7 +405,8 @@ public class SimulatorController implements Runnable, Serializable {
                 double dist = train.calculateRouteDistance();
                 int fuelCost = l.getFuelCost();
 
-                fuel += (int) (dist * fuelCost) / 500;
+                fuel += (int) (dist * fuelCost) / 100;
+                track += (int) (dist * TRACK_MAINTENANCE_COST_PER_100KM) / 100;
             }
         }
 
@@ -412,7 +414,7 @@ public class SimulatorController implements Runnable, Serializable {
             deliveries += s.getLastYearDeliveries();
         }
 
-        financialController.addFinancialResults(0, maintenance, fuel, deliveries);
+        financialController.addFinancialResults(track, maintenance, fuel, deliveries);
     }
 
     private Station findClosestStation(Industry i) {
