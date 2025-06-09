@@ -37,6 +37,14 @@ public class ShowFinancialResultsController {
 
     private FinancialResults selectedYear;
 
+    /**
+     * Sets the current map and scenario for the Yearly Financial Results Menu.
+     * This method initializes the controller based on the provided map and scenario by updating the current scenario
+     * and associated map and invoking the initialization process for menu buttons and UI elements.
+     *
+     * @param currentMap The map to be set as the current one.
+     * @param scenario The scenario to be set as the current one.
+     */
     public void setData(Map currentMap, Scenario scenario) {
         this.currentMap = currentMap;
         this.scenario = scenario;
@@ -110,11 +118,17 @@ public class ShowFinancialResultsController {
         return true;
     }
 
+    /**
+     * This method initializes the JavaFX related to the Financial Results menu.
+     */
     @FXML
     public void initialize() {
         resetLabels();
     }
 
+    /**
+     * This method is responsible to update the available year on the ComboBox, as well as the current player budget.
+     */
     private void initializeFinancialResultsData() {
         if (scenario != null && checkFinancialResultsExistence()) {
             financialResultsComboBox.getItems().clear();
@@ -125,6 +139,10 @@ public class ShowFinancialResultsController {
         showBudget();
     }
 
+    /**
+     * This method is responsible to correctly present the year in the ComboBox.
+     * Otherwise, the entire object string would be shown.
+     */
     private void setupComboBoxCellFactory() {
         financialResultsComboBox.setCellFactory(listView -> new javafx.scene.control.ListCell<FinancialResults>() {
             @Override
@@ -157,6 +175,9 @@ public class ShowFinancialResultsController {
         });
     }
 
+    /**
+     * This method resets all the labels to default.
+     */
     private void resetLabels() {
         trackLabel.setText("Track Maintenance Cost: ");
         maintenanceLabel.setText("Train Maintenance Cost: ");
@@ -164,6 +185,11 @@ public class ShowFinancialResultsController {
         cargoLabel.setText("Cargo Deliveries: ");
     }
 
+    /**
+     * This method is responsible to show an alert box to the player.
+     *
+     * @param msg The message that will be shown (can be a success alert or an error alert).
+     */
     public void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -171,6 +197,9 @@ public class ShowFinancialResultsController {
         alert.showAndWait();
     }
 
+    /**
+     * This method is responsible to update the budget label, based on the current budget of the player.
+     */
     public void showBudget() {
         if (scenario != null) {
             budget.setText("Current Budget: " + scenario.getBudget() + "€");
@@ -179,6 +208,9 @@ public class ShowFinancialResultsController {
         }
     }
 
+    /**
+     * This method updates all the labels based on the year selected.
+     */
     @FXML
     public void updateFinancialResultsYears() {
         selectedYear = financialResultsComboBox.getValue();
@@ -194,11 +226,17 @@ public class ShowFinancialResultsController {
         cargoLabel.setText("Cargo Deliveries: " + selectedYear.getCargoDeliveries());
     }
 
+    /**
+     * This method is responsible by making the "BACK" button operational.
+     */
     @FXML
     public void handleButton() {
         navigateToPlayerMenu();
     }
 
+    /**
+     * This method is used so the player can return to the player menu.
+     */
     private void navigateToPlayerMenu() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/playerMenu.fxml");
