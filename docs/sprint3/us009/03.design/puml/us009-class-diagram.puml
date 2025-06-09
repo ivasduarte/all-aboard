@@ -87,7 +87,7 @@ class ScenarioRepository {
 
 class BuyLocomotiveController {
     -locomotiveRepository: LocomotiveRepository
-    +buyLocomotive(locomotiveModel: String, mapName: String): String
+    +buyLocomotive(locomotiveModelDTO: String, scenarioDTO: ScenarioDTO): String
     +getLocomotiveRepository(): LocomotiveRepository
 }
 
@@ -105,7 +105,43 @@ class BuyLocomotiveUI {
 }
 
 class CreateScenarioController {
-    +getScenarioList(): List<Scenario>
+    +getScenarioList(): List<ScenarioDTO>
+}
+
+class ScenarioMapper {
+    +toDTO(scenario: Scenario): ScenarioDTO
+    +getScenarioDTOList(scenarioList: List<Scenario>): List<ScenarioDTO>
+}
+
+class ScenarioDTO {
+    -name: String
+    -mapName: String
+    -budget: int
+    +ScenarioDTO(name: String, mapName: String, budget: int)
+    +getName(): String
+    +getMapName(): String
+    +getBudget(): int
+}
+
+class LocomotiveMapper {
+    +toDTO(locomotive: Locomotive): LocomotiveDTO
+    +getLocomotiveDTOList(locomotiveList: List<Locomotive>): List<LocomotiveDTO>
+}
+
+class LocomotiveDTO {
+    -locomotiveModel: String
+    -fuelType: String
+    -speed: int
+    -startYear: int
+    -endYear: int
+    -price: int
+    +LocomotiveDTO(locomotiveModel, fuelType, startYear, endYear, price, speed)
+    +getLocomotiveModel(): String
+    +getFuelType(): String
+    +getPrice(): int
+    +getStartYear(): int
+    +getEndYear(): int
+    +getSpeed(): int
 }
 
 Repositories -> Repositories : instance
@@ -117,6 +153,11 @@ BuyLocomotiveController ..> LocomotiveRepository : uses
 BuyLocomotiveController ..> ScenarioRepository : uses
 BuyLocomotiveController ..> Locomotive : selects
 BuyLocomotiveController ..> Scenario : updates budget
+BuyLocomotiveController ..> LocomotiveMapper : uses
+BuyLocomotiveController ..> ScenarioMapper : uses
+
+CreateScenarioController ..> ScenarioMapper : uses
+CreateScenarioController ..> ScenarioDTO : returns
 
 Locomotive "*" -- "*" Station : has route
 
@@ -127,5 +168,10 @@ Scenario "1" -- "1" Restrictions : has
 Scenario "1" -- "1" Budget : has
 Scenario "1" -- "1" Map : has
 ScenarioRepository "1" -- "*" Scenario : manages
+
+ScenarioMapper ..> Scenario : converts
+ScenarioMapper ..> ScenarioDTO : creates
+LocomotiveMapper ..> Locomotive : converts
+LocomotiveMapper ..> LocomotiveDTO : creates
 
 @enduml

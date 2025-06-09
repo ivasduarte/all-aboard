@@ -39,6 +39,8 @@ public class UpgradeAStationController {
     private ComboBox<BuildingType> buildingComboBox;
     @FXML
     private Label labelTest;
+    @FXML
+    private Label labelBudget;
 
     /**
      * Constructs a new instance of {@code UpgradeAStationController},
@@ -104,22 +106,6 @@ public class UpgradeAStationController {
     }
 
     /**
-     * Retrieves a scenario based on a map name. Used to obtain scenario details tied to that map.
-     *
-     * @param mapName The name of the map.
-     * @return The corresponding {@code Scenario}, or {@code null} if not found.
-     */
-    public Scenario getScenarioByMapName(String mapName) {
-        ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
-        for (Scenario scenario : scenarioRepository.getScenarioList()) {
-            if (scenario.getMap().getName().equalsIgnoreCase(mapName)) {
-                return scenario;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Automatically removes obsolete buildings from a station based on the current year.
      * Specifically, removes the "Telegraph" building if the year is >= 1920,
      * and replaces it with "Telephone" if applicable.
@@ -146,6 +132,10 @@ public class UpgradeAStationController {
     public void setData(Scenario scenario) {
         this.currentScenario = scenario;
         this.currentMap = scenario.getMap();
+
+        if (labelBudget != null && currentScenario.getBudget() != null) {
+            labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
+        }
     }
 
     public List<BuildingType> getFilteredAvailableBuildingTypes(Station station, int currentYear) {
@@ -219,8 +209,10 @@ public class UpgradeAStationController {
 
     @FXML
     public void initialize() {
+
         List<Station> station = stationRepository.getStations();
         stationComboBox.getItems().setAll(station);
+
     }
 
     @FXML
@@ -241,6 +233,8 @@ public class UpgradeAStationController {
 
     @FXML
     public void onUpgrade() {
+
+        Budget budget = currentScenario.getBudget();
         Station station = stationComboBox.getValue();
         BuildingType selectedType = buildingComboBox.getValue();
 
@@ -249,20 +243,25 @@ public class UpgradeAStationController {
             return;
         }
 
-        boolean alreadyExists = false;
+        boolean success = DeductBudget(station, selectedType, currentScenario);
 
-        for (Building b : station.getBuildings()) {
-            if (b.getBuildingType().equalsIgnoreCase(selectedType.getName())) {
-                alreadyExists = true;
-            }
-        }
+        if (success) {
 
-        if (alreadyExists) {
-            labelTest.setText("This building is already bought, please try again.");
-        } else {
             station.addBuilding(new Building(selectedType));
-            labelTest.setText("Building successfully bought.");
+
+            labelTest.setText("Building  successfully bought.");
+
+            setBuildingComboBox(null);
+
+            buildingComboBox.setValue(null);
+
+        } else {
+
+            labelTest.setText("Not enough budget to buy this building.");
+
         }
+
+        labelBudget.setText("Budget: " + budget.getBudget() +"€");
     }
 
 

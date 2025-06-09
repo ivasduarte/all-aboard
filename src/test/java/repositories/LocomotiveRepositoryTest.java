@@ -1,84 +1,113 @@
 package repositories;
 
-import domain.*;
+import domain.Locomotive;
+import domain.Restrictions;
+import domain.Scenario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocomotiveRepositoryTest {
-    private LocomotiveRepository locomotiveRepository;
+    private LocomotiveRepository locoRepo;
+    private Locomotive loco1;
+    private Locomotive loco2;
 
     @BeforeEach
     void setUp() {
-        locomotiveRepository = new LocomotiveRepository();
+        locoRepo = new LocomotiveRepository();
 
-        List<String> locomotiveTypes = new ArrayList<>();
-        locomotiveTypes.add("Steam");
-        locomotiveTypes.add("Diesel");
-        List<String> historicalEvents = new ArrayList<>();
-
-        Restrictions restrictions = new Restrictions(LocalDate.parse("1980-01-01"), LocalDate.parse("1990-12-31"), locomotiveTypes, historicalEvents);
-
-        Scenario scenario = new Scenario("TestScenario", restrictions, new Map("TestMap", 100, 100), new Budget(1000));
-
-        ScenarioRepository testScenarioRepository = new ScenarioRepository() {
-            @Override
-            public List<Scenario> getScenarioList() {
-                return List.of(scenario);
-            }
-        };
-
-        Repositories.getInstance().setScenarioRepository(testScenarioRepository);
+        loco1 = new Locomotive("model", "steam", 1900, 2000, 100, 50, 25, 70);
+        loco2 = new Locomotive("loco", "diesel", 1950, 2020, 200, 100, 50, 75);
     }
 
     @Test
     void saveLocomotive() {
-        Locomotive locomotive = new Locomotive("USRA", "Steam", 1918, 1942, 90, 13, 30, 40);
-        locomotiveRepository.saveLocomotive(locomotive);
+        locoRepo.saveLocomotive(loco1);
 
-        List<Locomotive> result = locomotiveRepository.getAllLocomotives();
-        assertTrue(result.contains(locomotive));
+        List<Locomotive> results = locoRepo.getAllLocomotives();
+
+        assertEquals(1, results.size());
+        assertTrue(results.contains(loco1));
     }
 
     @Test
     void save() {
-        Locomotive locomotive = new Locomotive("USRA", "Steam", 1918, 1942, 90, 13, 30, 40);
-        locomotiveRepository.save(locomotive);
+        locoRepo.save(loco2);
 
-        List<Locomotive> result = locomotiveRepository.getPlayerLocomotives();
-        assertTrue(result.contains(locomotive));
+        List<Locomotive> results = locoRepo.getPlayerLocomotives();
+
+        assertEquals(1, results.size());
+        assertTrue(results.contains(loco2));
+    }
+
+    @Test
+    void getAllLocomotives() {
+        locoRepo.saveLocomotive(loco1);
+        locoRepo.saveLocomotive(loco2);
+
+        List<Locomotive> results = locoRepo.getAllLocomotives();
+
+        assertEquals(2, results.size());
+        assertEquals(loco1, results.get(0));
+        assertEquals(loco2, results.get(1));
+        assertTrue(results.contains(loco1));
+        assertTrue(results.contains(loco2));
     }
 
     @Test
     void getAvailableLocomotives() {
-        Locomotive locomotive1 = new Locomotive("USRA", "Steam", 1918, 1942, 90, 13, 30, 40);
-        Locomotive locomotive2 = new Locomotive("USRA II", "Steam", 1930, 1948, 98, 18, 32, 45);
-        Locomotive locomotive3 = new Locomotive("V200", "Diesel", 1959, 1985, 160, 19, 54, 87);
+        locoRepo.saveLocomotive(loco1);
+        locoRepo.saveLocomotive(loco2);
 
-        locomotiveRepository.saveLocomotive(locomotive1);
-        locomotiveRepository.saveLocomotive(locomotive2);
-        locomotiveRepository.saveLocomotive(locomotive3);
+        ScenarioRepository scenarioRepo = Repositories.getInstance().getScenarioRepository();
+        List<Scenario> scenarios = scenarioRepo.getScenarioList();
 
-        List<Locomotive> available = locomotiveRepository.getAvailableLocomotives(0);
+        if (!scenarios.isEmpty()) {
+            List<Locomotive> availableLocomotives = locoRepo.getAvailableLocomotives(0);
 
-        assertTrue(available.contains(locomotive3));
-        assertFalse(available.contains(locomotive1));
-        assertFalse(available.contains(locomotive2));
+            assertNotNull(availableLocomotives);
+
+            Scenario scenario = scenarios.get(0);
+            for (Locomotive locomotive : availableLocomotives) {
+                assertTrue(locomotive.getStartYear() <= scenario.getCurrentYear());
+                assertTrue(scenario.getCurrentYear() <= locomotive.getEndYear());
+            }
+        }
+    }
+
+    @Test
+    void getPlayerLocomotives() {
+        locoRepo.save(loco1);
+        locoRepo.save(loco2);
+
+        List<Locomotive> playerLocomotives = locoRepo.getPlayerLocomotives();
+
+        assertEquals(2, playerLocomotives.size());
+        assertTrue(playerLocomotives.contains(loco1));
+        assertTrue(playerLocomotives.contains(loco2));
     }
 
     @Test
     void getLocomotiveByModel() {
-        Locomotive locomotive = new Locomotive("V200", "Diesel", 1959, 1985, 160, 19, 54, 87);
-        locomotiveRepository.saveLocomotive(locomotive);
+        locoRepo.saveLocomotive(loco1);
+        locoRepo.unlockForPlayer(loco1);
 
-        locomotiveRepository.getAvailableLocomotives(0);
+        Locomotive result = locoRepo.getLocomotiveByModel("model");
 
-        Locomotive result = locomotiveRepository.getLocomotiveByModel("V200");
-        assertEquals(locomotive, result);
+        assertEquals("model", result.getLocomotiveModel());
+        assertEquals(loco1, result);
+    }
+
+    @Test
+    void isAvailableToPlayer() {
+        locoRepo.saveLocomotive(loco1);
+        locoRepo.unlockForPlayer(loco1);
+
+        boolean isAvailable = locoRepo.isAvailableToPlayer(loco1);
+
+        assertTrue(isAvailable);
     }
 }

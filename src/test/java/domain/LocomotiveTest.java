@@ -37,4 +37,19 @@ class LocomotiveTest {
     void getEndYear() {
         assertEquals(1942, testLocomotive.getEndYear());
     }
+
+    @Test
+    void getFuelCost() {
+        assertEquals(30, testLocomotive.getFuelCost());
+    }
+
+    @Test
+    void getMaintenanceCost() {
+        assertEquals(13, testLocomotive.getMaintenanceCost());
+    }
+
+    @Test
+    void getMaxSpeed() {
+        assertEquals(40, testLocomotive.getMaxSpeed());
+    }
 }

@@ -4,49 +4,74 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="473.0" prefWidth="509.0" style="-fx-background-color: #7A9D96;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ListStationsController">
-   <Button layoutX="14.0" layoutY="14.0" onAction="#handleBackToMenu" prefHeight="1.0" prefWidth="53.0" text="Back">
-      <font>
-         <Font size="10.0" />
-      </font></Button>
-   <Text fill="WHITE" layoutX="125.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATION LIST">
-      <font>
-         <Font name="Arial Rounded MT Bold" size="37.0" />
-      </font>
-   </Text>
-   <Text fill="WHITE" layoutX="59.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a station:">
-      <font>
-         <Font name="Arial Rounded MT Bold" size="14.0" />
-      </font></Text>
-   <ComboBox fx:id="selectBox" layoutX="59.0" layoutY="158.0" onAction="#showStationDetails" prefHeight="26.0" prefWidth="398.0" />
-   <Label fx:id="nameLabel" layoutX="59.0" layoutY="228.0" text="Station Name: " textFill="WHITE">
-      <font>
-         <Font name="Arial Nova Cond" size="16.0" />
-      </font></Label>
-   <Label fx:id="idLabel" layoutX="59.0" layoutY="261.0" text="Station ID: " textFill="WHITE">
-      <font>
-         <Font name="Arial Nova Cond" size="16.0" />
-      </font></Label>
-   <Label fx:id="typeLabel" layoutX="58.0" layoutY="292.0" text="Station Type: " textFill="WHITE">
-      <font>
-         <Font name="Arial Nova Cond" size="16.0" />
-      </font>
-   </Label>
-   <Label fx:id="positionLabel" layoutX="58.0" layoutY="323.0" text="Position: " textFill="WHITE">
-      <font>
-         <Font name="Arial Nova Cond" size="16.0" />
-      </font>
-   </Label>
-   <Label fx:id="cargoLabel" layoutX="58.0" layoutY="355.0" text="Cargo: " textFill="WHITE">
-      <font>
-         <Font name="Arial Nova Cond" size="16.0" />
-      </font>
-   </Label>
-   <Label fx:id="buildingLabel" layoutX="58.0" layoutY="387.0" text="Existing Buildings: " textFill="WHITE">
-      <font>
-         <Font name="Arial Nova Cond" size="16.0" />
-      </font>
-   </Label>
+<AnchorPane prefHeight="600.0" prefWidth="509.0" style="-fx-background-color: #7A9D96;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ListStationsController">
    <children>
+      <Button layoutX="14.0" layoutY="14.0" onAction="#handleBackToMenu" prefHeight="20.0" prefWidth="53.0" text="Back">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Button>
+
+      <Text fill="WHITE" layoutX="125.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STATION LIST">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="37.0" />
+         </font>
+      </Text>
+
+      <Text fill="WHITE" layoutX="59.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a station:">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="14.0" />
+         </font>
+      </Text>
+
+      <ComboBox fx:id="selectBox" layoutX="59.0" layoutY="158.0" onAction="#showStationDetails" prefHeight="26.0" prefWidth="398.0" />
+
+      <Label fx:id="nameLabel" layoutX="59.0" layoutY="228.0" text="Station Name: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Cond" size="16.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="idLabel" layoutX="59.0" layoutY="261.0" text="Station ID: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Cond" size="16.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="typeLabel" layoutX="58.0" layoutY="292.0" text="Station Type: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Cond" size="16.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="positionLabel" layoutX="58.0" layoutY="323.0" text="Position: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Cond" size="16.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="cargoLabel" layoutX="58.0" layoutY="355.0" text="Cargo: " textFill="WHITE">
+         <font>
+            <Font name="Arial Nova Cond" size="16.0" />
+         </font>
+      </Label>
+
+      <ScrollPane layoutX="58.0" layoutY="387.0" prefWidth="398.0" prefHeight="150.0"
+                  fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                  style="-fx-background-color: #6B8E86; -fx-background-insets: 0; -fx-padding: 5;"
+                  focusTraversable="false">
+         <content>
+            <Label fx:id="buildingLabel" text="Existing Buildings: "
+                   wrapText="true"
+                   style="-fx-background-color: transparent; -fx-text-fill: black;"
+                   focusTraversable="false">
+               <font>
+                  <Font name="Arial Nova Cond" size="16.0" />
+               </font>
+            </Label>
+         </content>
+      </ScrollPane>
+
+
    </children>
 </AnchorPane>
