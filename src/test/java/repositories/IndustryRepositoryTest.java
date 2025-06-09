@@ -95,7 +95,7 @@ class IndustryRepositoryTest {
             Map firstMap = maps.get(0);
 
             List<Industry> result = indRep.getIndustriesByMap(firstMap);
-            
+
             for (Industry industry : result) {
                 assertEquals(0, industry.getMapID());
             }
