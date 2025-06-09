@@ -28,8 +28,15 @@ public class AssignRouteController {
             Station station = stations.get(i);
             System.out.println("\n  " + (i + 1) + ". " + station.getName() +
                     " (" + station.getPositionX() + "," + station.getPositionY() + ")" +
-                    " - Cargo: " + station.getCargo() +
                     " - Demand: " + station.getDemand());
+            System.out.println("- Cargo: ");
+            for(Station.StationCargo stationCargo : station.getStationCargo())
+            {
+                if(stationCargo.getAmount() > 0)
+                {
+                    System.out.println("-- " + stationCargo.getType().getName() + ": " + stationCargo.getAmount());
+                }
+            }
         }
     }
 

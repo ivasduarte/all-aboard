@@ -147,7 +147,6 @@ public class Bootstrap implements Runnable {
         }
     }
 
-
     /**
      * This method is responsible to add every locomotive available on the simulator to the repository, everytime the simulation starts.
      */

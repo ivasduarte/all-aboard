@@ -4,6 +4,7 @@ import domain.*;
 import repositories.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -135,11 +136,11 @@ public class SimulatorController implements Runnable, Serializable {
         double cargoMultiplier = calculateCargoMultiplier(events);
         double costMultiplier = calculateCostMultiplier(events);
 
-        List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
-        List<Train> trains = Repositories.getInstance().getTrainRepository().getAlltrains();
+        List<Station> stations = map.getStations();
+        List<Train> trains = scenario.getTrains();
 
         try {
-            runSimulationLoop(industries, trains, cargoMultiplier, costMultiplier, events);
+            runSimulationLoop(stations, trains, cargoMultiplier, costMultiplier, events);
         } catch (InterruptedException e) {
             System.out.println("Simulation was interrupted.");
         }
@@ -156,7 +157,7 @@ public class SimulatorController implements Runnable, Serializable {
         return events.contains("war") ? WAR_COST_MULTIPLIER : 1.0;
     }
 
-    private void runSimulationLoop(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
+    private void runSimulationLoop(List<Station> stations, List<Train> trains, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
         int year = scenario.getCurrentYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
         double currentCargoMultiplier = cargoMultiplier;
@@ -169,7 +170,7 @@ public class SimulatorController implements Runnable, Serializable {
             Thread.sleep(SIMULATION_SLEEP_TIME);
 
             if (!paused && !stopped) {
-                int totalEarnings = processYearSimulation(industries, trains, currentCargoMultiplier, costMultiplier);
+                int totalEarnings = processYearSimulation(stations, trains, currentCargoMultiplier, costMultiplier);
                 scenario.addBudget(totalEarnings);
                 displayStats(year, totalEarnings, scenario);
                 processFinancialResults();
@@ -190,8 +191,8 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
-    private int processYearSimulation(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier) {
-        int industryEarnings = processIndustries(industries, cargoMultiplier);
+    private int processYearSimulation(List<Station> stations, List<Train> trains, double cargoMultiplier, double costMultiplier) {
+        int industryEarnings = processStations(stations, cargoMultiplier, costMultiplier);
         int houseBlockEarnings = processHouseBlockCargo();
         int trainEarnings = processTrains(trains, costMultiplier);
 
@@ -205,26 +206,34 @@ public class SimulatorController implements Runnable, Serializable {
         return totalEarnings;
     }
 
-    private int processIndustries(List<Industry> industries, double cargoMultiplier) {
+    private int processStations(List<Station> stations, double cargoMultiplier, double costMultiplier) {
         int total = 0;
-        for (Industry industry : industries) {
-            double modRate = 1.0;
-            System.out.println("\nMODE RATE: " + modRate);
-            System.out.println("Cargo multiplier: " + cargoMultiplier);
 
-            int cargo = (int) (industry.getCargoAmount() * cargoMultiplier * modRate);
-            Station closestStation = findClosestStation(industry);
-            if (closestStation != null) {
-                closestStation.addCargo(cargo);
-                System.out.println("\nAdded " + cargo + " cargo to station " + closestStation.getName() + " from industry at (" + industry.getPositionX() + "," + industry.getPositionY() + ").");
-                System.out.println("Station '" + closestStation.getName() + " now has a total of " + closestStation.getCargo() + " cargo.");
-            } else {
-                System.out.println("\n[WARNING] No station found for industry at (" + industry.getPositionX() + "," + industry.getPositionY() + ").");
+        System.out.println("Cargo multiplier: " + cargoMultiplier);
+
+        for(Station station : stations)
+        {
+            List<Industry> industries = station.getIndustriesInRange();
+            for(Industry industry : industries)
+            {
+                List<Station.StationCargo> stationCargos = station.getStationCargo();
+                for(Station.StationCargo stationCargo : stationCargos)
+                {
+                    for(Cargo.Type industrySupply : industry.getIndustryType().getSupply())
+                    {
+                        if(industrySupply == stationCargo.getType())
+                        {
+                            int cargoToAdd = (int)(industry.getCargoAmount() * cargoMultiplier);
+                            stationCargo.addCargo(cargoToAdd);
+                            total += (int) (cargoToAdd * stationCargo.getType().getPrice() * costMultiplier);
+                            System.out.println("\nAdded " + industry.getCargoAmount() + " " + stationCargo.getType().getName() + " to station " + station.getName() + " from industry " + industry.getIndustryType().getName() + " at (" + industry.getPositionX() + "," + industry.getPositionY() + ").");
+                            System.out.println("Station '" + station.getName() + " now has a total of " + stationCargo.getAmount() + " " + stationCargo.getType().getName() + ".");
+                        }
+                    }
+                }
             }
-            displayIndustryStats(industry, cargo);
-            int industryEarnings = cargo * 5;
-            total += industryEarnings;
         }
+        
         return total;
     }
 
@@ -245,8 +254,14 @@ public class SimulatorController implements Runnable, Serializable {
                 for(int i = 0; i < cityStations.size(); i++) {
                     Station station = cityStations.get(i);
                     int stationCargo = cargoPerStation + (i < remainingCargo ? 1 : 0);
-                    station.addCargo(stationCargo);
-                    System.out.println("\n[HOUSE BLOCK] Station '" + station.getName() + "' now has a total of " + station.getCargo() + " cargo.");
+                    for(Station.StationCargo stationCargo1 : station.getStationCargo())
+                    {
+                        if(stationCargo1.getType() == Cargo.Type.MAIL || stationCargo1.getType() == Cargo.Type.PASSENGERS)
+                        {
+                            stationCargo1.addCargo(stationCargo);
+                            System.out.println("\n[HOUSE BLOCK] Station '" + station.getName() + "' now has a total of " + stationCargo1.getAmount() + " cargo.");
+                        }
+                    }
                 }
                 // add earnings from city operations
                 int cityEarnings = cargo * 3;
@@ -288,78 +303,101 @@ public class SimulatorController implements Runnable, Serializable {
         return net;
     }
 
-    private int simulateTrainTrip(Train train, double costMultiplier) {
+    private int simulateTrainTrip(Train train, double costMultiplier)
+    {
         if (train.getRoute() == null || train.getRoute().isEmpty()) return 0;
 
         List<PointOfRoute> route = train.getRoute();
         int totalEarnings = 0;
-        int currentCargoLoad = 0;
 
-        for (int i = 0; i < route.size() - 1; i++) {
-            PointOfRoute currentPoint = route.get(i);
-            PointOfRoute nextPoint = route.get(i + 1);
-            Station from = currentPoint.getStation();
-            Station to = nextPoint.getStation();
+        do {
+            int currentStop = train.getCurrentStop();
+            getCargoFromStation(train, route.get(currentStop).getStation());
+            totalEarnings += giveCargoToStation(train, route.get(currentStop).getStation(), costMultiplier);
 
-            int availableCargo = from.getCargo();
-            int maxTrainCapacity = train.getNumberOfCarriages();
-            int spaceAvailable = maxTrainCapacity - currentCargoLoad;
-
-            if (!train.isReadyToDepart(i, availableCargo)) {
-                System.out.println("\n\n[LOADING] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' waiting for cargo mode '" + currentPoint.getCargoMode() +
-                        "' at station '" + from.getName() + "'.\nAvailable cargo: " + availableCargo +
-                        "\nCurrent cargo on the train: " + currentCargoLoad);
-                continue;
-            }
-
-            int cargoToLoad = Math.min(availableCargo, spaceAvailable);
-            if (cargoToLoad > 0) {
-                from.removeCargo(cargoToLoad); // remove cargo from the station
-                currentCargoLoad += cargoToLoad; // add cargo to the train
-                System.out.println("\n\n[CARGO REMOVED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' removed " + cargoToLoad + " amount from station '" + from.getName() +
-                        "'.\nAvailable cargo at station: " + from.getCargo() +
-                        "\nTotal cargo on train: " + currentCargoLoad);
-            }
-
-            System.out.println("\n\n[TRAVEL] Train '" + train.getLocomotive().getLocomotiveModel() +
-                    "' left from '" + from.getName() + "' to '" + to.getName() +
-                    "' with " + currentCargoLoad + " amount of cargo.");
-
-            double distance = from.distanceTo(to);
-            double buildingMultiplier = calculateStationBuildingMultiplier(to);
-            int earnings = (int) (distance * ROUTE_EARNINGS_PER_STATION * buildingMultiplier * costMultiplier);
-
-            if (currentCargoLoad > 0) {
-                int cargoToDeliver = currentCargoLoad;
-                to.addDeliveredCargo(cargoToDeliver);
-                currentCargoLoad = 0;
-
-                System.out.println("\n\n[CARGO DELIVERED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' delivered " + cargoToDeliver + " amount of cargo to station '" + to.getName() +
-                        "'.\nTrain is currently empty.");
-
-                int deliveryBonus = cargoToDeliver * 10; // 10€ per unit delivered
-                earnings += deliveryBonus;
-
-                System.out.println("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
-                        "(Distance: " + (int)distance + ", Deliver bonus: " + deliveryBonus + "€)");
-            } else {
-                System.out.println("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
-                        "(Distance: " + (int)distance + ", No cargo to deliver.)");
-            }
-
-            totalEarnings += earnings;
-
-            System.out.println("\n\n[ARRIVAL] Train '" + train.getLocomotive().getLocomotiveModel() +
-                    "' arrived at '" + to.getName() + "'.");
-        }
-
-        System.out.println("\n\n[TRAVEL SUM] Train '" + train.getLocomotive().getLocomotiveModel() +
-                "' completed its route.\nTotal revenue: " + totalEarnings + "€");
+            train.updateStop();
+        }while (train.isReadyToDepart(train.getCurrentStop(), train.getTotalCargo()) || train.getCurrentStop() == 0);
 
         return totalEarnings;
+    }
+
+    private void getCargoFromStation(Train train, Station station)
+    {
+        for(Station.StationCargo stationCargo : station.getStationCargo())
+        {
+            boolean exists = false;
+            for(Carriage carriage : train.getCarriages())
+            {
+                if(carriage.getCargoType() == stationCargo.getType())
+                {
+                    exists = true;
+                    int amountAdded = stationCargo.getAmount();
+
+                    if(carriage.getCurrentCargo() + stationCargo.getAmount() > carriage.getMAX_SLOT())
+                    {
+                        amountAdded = (carriage.getCurrentCargo() + stationCargo.getAmount()) - carriage.getMAX_SLOT();
+                    }
+
+                    carriage.addCargo(amountAdded);
+                    stationCargo.removeCargo(amountAdded);
+                }
+            }
+
+            if(!exists)
+            {
+                boolean added = false;
+                for(int i = 0; i < train.getCarriages().size(); i++)
+                {
+                    if(train.getCarriages().get(i).getCargoType() == Cargo.Type.NONE && !added)
+                    {
+                        train.getCarriages().set(i, new Carriage(new Cargo(stationCargo.getType()), stationCargo.getAmount()));
+                        added = true;
+                    }
+                }
+            }
+        }
+    }
+
+    private int giveCargoToStation(Train train, Station station, double costMultiplier)
+    {
+        int earnings = 0;
+        List<Industry> industries = station.getIndustriesInRange();
+        List<Carriage> carriages = train.getCarriages();
+
+        List<Cargo.Type> demandedCargo = new ArrayList<>();
+
+        for(Industry industry : industries)
+        {
+            for(Cargo.Type cargo : industry.getIndustryType().getDemand())
+            {
+                if(!demandedCargo.contains(cargo))
+                    demandedCargo.add(cargo);
+            }
+        }
+
+        for(Cargo.Type demand : demandedCargo)
+        {
+            for(Carriage carriage : carriages)
+            {
+                if(carriage.getCargoType().equals(demand))
+                {
+                    for(Station.StationCargo stationCargoType : station.getStationCargo())
+                    {
+                        if(stationCargoType.getType().equals(demand))
+                        {
+                            stationCargoType.addCargo(carriage.getCurrentCargo());
+                            int stopEarning = (int)(carriage.getCargoType().getPrice() * carriage.getCurrentCargo() * costMultiplier);
+                            earnings += stopEarning;
+                            carriage.removeCargo(carriage.getCurrentCargo());
+
+                            System.out.println("Train " + train.getLocomotive().getLocomotiveModel() + " has given " + demand.getName() + " to " + station.getName() + " and earned " + stopEarning + "€.");
+                        }
+                    }
+                }
+            }
+        }
+
+        return earnings;
     }
 
     private double calculateStationBuildingMultiplier(Station station) {

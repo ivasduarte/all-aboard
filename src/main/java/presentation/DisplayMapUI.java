@@ -70,8 +70,8 @@ public class DisplayMapUI implements Runnable {
             }
         }
         addCitiesToMap(grid, map);
-        addStationsToMap(grid, map, scenario, width, height);
         addIndustriesToMap(grid, map);
+        addStationsToMap(grid, map, scenario, width, height);
 
         for (int y = 1; y <= height; y++) {
             for (int x = 1; x <= width; x++) {
