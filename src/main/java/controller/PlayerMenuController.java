@@ -60,7 +60,7 @@ public class PlayerMenuController {
 
         addMenuButton("Build a Station", new AddStationUI(currentMap, currentScenario));
         addMenuButton("Upgrade a Station", () -> handleUpgradeAStation());
-        addMenuButton("Upgrade Type of Station", new ChangeStationTypeUI(currentMap, currentScenario));
+        addMenuButton("Upgrade Type of Station", () -> handleUpgradeAStationType());
         addMenuButton("List All Stations", () -> handleListAllStations());
         addMenuButton("Buy a Locomotive", () -> handleBuyLocomotive());
         addMenuButton("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario));
@@ -261,6 +261,34 @@ public class PlayerMenuController {
         } catch (IOException e) {
             e.printStackTrace();
             messageLabel.setText("Error returning to login: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleUpgradeAStationType(){
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/UpgradeAStationType.fxml");
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: FXML URL not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+            ChangeStationTypeController controller = loader.getController();
+            controller.setData(currentScenario);
+
+            Stage stage = new Stage();
+            stage.setTitle("Upgrade a Station Type");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) menuBox.getScene().getWindow();
+            currentStage.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            messageLabel.setText("Error: " + e.getMessage());
         }
     }
 }
