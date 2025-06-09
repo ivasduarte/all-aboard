@@ -28,14 +28,14 @@ public class SaveScenarioUI implements Runnable {
             return;
         }
 
-        System.out.println("Available scenarios for map: " + selectedMap.getName());
+        System.out.println("\nAvailable scenarios for map: " + selectedMap.getName());
         for (int i = 0; i < scenarios.size(); i++) {
             System.out.printf("%d - %s%n", i + 1, scenarios.get(i).getScenarioName());
         }
 
         System.out.println("0 - Cancel");
 
-        System.out.print("Select a scenario number to save: ");
+        System.out.print("\nSelect a scenario number to save: ");
         try {
             int option = Integer.parseInt(ler.nextLine());
 

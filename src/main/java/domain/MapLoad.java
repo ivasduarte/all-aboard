@@ -19,14 +19,14 @@ public class MapLoad implements Runnable, Serializable {
             return;
         }
 
-        System.out.println("Available map files:");
+        System.out.println("\nAvailable map files:");
         for (int i = 0; i < mapFiles.length; i++) {
             System.out.printf("%d - %s%n", i + 1, mapFiles[i].getName());
         }
 
         System.out.println("0 - Cancel");
 
-        System.out.print("Select a file number to load: ");
+        System.out.print("\nSelect a file number to load: ");
 
         int option = Integer.parseInt(sc.nextLine());
 

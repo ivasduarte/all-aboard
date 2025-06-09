@@ -89,16 +89,6 @@ public class AssignRouteUI implements Runnable {
         AssignRouteController routeController = new AssignRouteController();
         routeController.assignRoute(train, stationsToAdd);
 
-        System.out.print("\nEnter the amount of carriages for the train (max of " + Train.getMaxCarriages() + "): ");
-        int carriageAmount = sc.nextInt();
-
-        if(carriageAmount > 0 && carriageAmount <= Train.getMaxCarriages())
-            train.setCarriages(carriageAmount);
-        else
-            train.setCarriages(Train.getMaxCarriages());
-
-        System.out.println("Train now has " + train.getNumberOfCarriages() + " carriages.");
-
         for (int i = 0; i < train.getRoute().size(); i++) {
             System.out.println("\nConfigure cargo mode for station: " + train.getRoute().get(i).getStation().getName());
             System.out.println("1. FULL - Train departs only when fully loaded");
@@ -115,13 +105,12 @@ public class AssignRouteUI implements Runnable {
                 case 2:
                     mode = CargoMode.HALF;
                     break;
+                case 3:
                 default:
                     mode = CargoMode.AVAILABLE;
                     break;
             }
             routeController.setCargoMode(train, i, mode);
-
-
         }
         System.out.println("\nRoute assigned successfully!");
     }

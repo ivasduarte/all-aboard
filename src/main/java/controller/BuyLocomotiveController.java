@@ -185,7 +185,7 @@ public class BuyLocomotiveController {
     }
 
     /**
-     * This method is responsible to change the labels that describe a locomotive, when a new one is selected.
+     * This method is responsible to change the labels that describe a locomotive when a new one is selected.
      */
     @FXML
     private void updateLocomotiveInfo() {
