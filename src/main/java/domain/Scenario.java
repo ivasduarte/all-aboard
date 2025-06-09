@@ -18,6 +18,7 @@ public class Scenario implements Serializable {
     private int currentYear;
     private int finalYear;
     private double modificationRateFor;
+    private double productionRate;
 
     private List<Train> trains;
     /**
@@ -36,6 +37,7 @@ public class Scenario implements Serializable {
         this.restrictions = restrictions;
         this.map = map;
         this.budget = budget;
+        this.productionRate = productionRate;
 
         trains = new ArrayList<>();
         this.currentYear = restrictions.getStartDate().getYear();
@@ -81,6 +83,15 @@ public class Scenario implements Serializable {
      * @return The current year of the scenario.
      */
     public int getCurrentYear() { return currentYear;}
+
+    /**
+     * Retrieves the production rate.
+     *
+     * @return The scenario's production rate
+     */
+    public double getProductionRate() {
+        return productionRate;
+    }
 
     /**
      * Retrieves the current trains of the scenario.
