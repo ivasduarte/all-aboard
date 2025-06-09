@@ -45,6 +45,9 @@ public class Industry implements Serializable {
         this.cargoAmount = cargoAmount;
     }
 
+    /**
+     * This is used to enumerate all the possible types of industries that exist in the simulator.
+     */
     public enum IndustryInfo {
         COAL_MINE("Coal Mine", new Cargo.Type[]{Cargo.Type.COAL}, null, IndustryType.PRIMARY),
         HOUSING("Housing", new Cargo.Type[]{Cargo.Type.PASSENGERS, Cargo.Type.MAIL}, null, IndustryType.PRIMARY),

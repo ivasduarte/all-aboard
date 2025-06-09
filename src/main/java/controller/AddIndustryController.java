@@ -15,6 +15,8 @@ public class AddIndustryController {
      * @param positionX    position X the industry will be placed
      * @param positionY    position Y the industry will be placed
      * @param industryType type of industry
+     * @param cargoAmount amount of cargo the industry generates in a year
+     *
      * @return Will show a success message if it is possible to create the industry. Otherwise, it will show a message related to the error that occurred.
      */
     public String addIndustry(int mapID, int positionX, int positionY, Industry.IndustryInfo industryType, int cargoAmount) {
