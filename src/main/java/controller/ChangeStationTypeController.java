@@ -19,29 +19,20 @@ import java.util.List;
 
 public class ChangeStationTypeController {
 
-
-
-
     @FXML
     private Label labelPriceDiff;
-
     @FXML
     private Button backButton;
-
     @FXML
     private ComboBox<Station> stationComboBox;
-
     @FXML
     private Label labelTest;
-
     @FXML
     private ComboBox<Station.StationType> stationTypeComboBox;
-
     @FXML
     private Label labelBudget;
 
     private Scenario currentScenario;
-
     private Map currentMap;
 
     public void setData(Scenario scenario) {
@@ -52,7 +43,6 @@ public class ChangeStationTypeController {
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
         }
     }
-
 
     /**
      * Change the type of the station into a higher one

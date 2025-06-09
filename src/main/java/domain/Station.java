@@ -80,7 +80,7 @@ public class Station implements Serializable {
      */
     public enum StationType {
         DEPOT("Depot", 3, 50000),
-        STATION("Station", 4, 10000),
+        STATION("Station", 4, 100000),
         TERMINAL("Terminal", 5, 200000);
 
         private final String displayName;
