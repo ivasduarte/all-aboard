@@ -31,17 +31,6 @@ public class LoginController {
     private Label messageLabel;
 
     private final AuthenticationController authController = new AuthenticationController();
-    private Runnable onLoginSuccess;
-
-    /**
-     * Sets a callback to be executed when a login operation is successful.
-     *
-     * @param callback The {@link Runnable} callback to be executed upon a successful login.
-     *                 Must not be null.
-     */
-    public void setOnLoginSuccess(Runnable callback) {
-        this.onLoginSuccess = callback;
-    }
 
     /**
      * Handles the login button click event by validating the input credentials and attempting to authenticate

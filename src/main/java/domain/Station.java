@@ -50,14 +50,6 @@ public class Station implements Serializable {
             this.shortening = shortening;
         }
 
-        public String getDisplayName() {
-            return displayName;
-        }
-
-        public String getShortening() {
-            return shortening;
-        }
-
         /**
          * Converts a string to an equivalent Orientation enumeration value.
          * Compares both enum constant names and display names (case-insensitive).
@@ -95,27 +87,48 @@ public class Station implements Serializable {
         private final int size;
         private final int price;
 
-
+        /**
+         * Constructs a StationType with the specified properties.
+         *
+         * @param displayName the display name of the station type
+         * @param size the size of the station type
+         * @param price the price associated with the station type
+         */
         StationType(String displayName, int size, int price) {
             this.displayName = displayName;
             this.size = size;
             this.price = price;
         }
 
+        /**
+         * Retrieves the display name of the station type.
+         *
+         * @return the display name of the station type
+         */
         public String getDisplayName() {
             return displayName;
         }
 
+        /**
+         * Retrieves the size associated with the station type.
+         *
+         * @return the size of the station type
+         */
         public int getSize() {
             return size;
         }
 
+        /**
+         * Retrieves the price associated with the station type.
+         *
+         * @return the price of the station type
+         */
         public int getPrice() {
             return price;
         }
 
         /**
-         * Parses a string to find a matching StationType based on display name.
+         * Parses a string to find a matching StationType based on the display name.
          *
          * @param type the string representation of the station type
          * @return the corresponding StationType
@@ -130,11 +143,15 @@ public class Station implements Serializable {
             throw new IllegalArgumentException("Invalid station type: " + type);
         }
 
+        /**
+         * Returns the string representation of the StationType.
+         *
+         * @return the display name of the station type
+         */
         @Override
         public String toString() {
             return displayName;
         }
-
     }
 
     /**
@@ -164,7 +181,7 @@ public class Station implements Serializable {
      *
      * @param buildingToAdd the building to add
      * @return true if successfully added, false otherwise
-     * @throws IllegalArgumentException if building is null
+     * @throws IllegalArgumentException if the building is null
      */
     public boolean addBuilding(Building buildingToAdd) {
         if (buildingToAdd == null) {
@@ -188,7 +205,7 @@ public class Station implements Serializable {
     }
 
     /**
-     * Checks if station has available building spots.
+     * Checks if the station has available building spots.
      *
      * @return true if more buildings can be added, false otherwise
      */
@@ -196,6 +213,14 @@ public class Station implements Serializable {
         return buildings.size() < MAX_SLOTS;
     }
 
+    /**
+     * Retrieves a list of buildings associated with the station.
+     * The returned list is a copy of the internal list of buildings to ensure
+     * encapsulation, preventing external modifications to the station's state.
+     *
+     * @return a new {@code List} containing all {@code Building} objects
+     *         associated with the station.
+     */
     public List<Building> getBuildings() {
         return new ArrayList<>(buildings);
     }
@@ -219,16 +244,18 @@ public class Station implements Serializable {
     }
 
     /**
-     * Adiciona carga à estação, respeitando o limite máximo de 24.
+     * Adds cargo to the station while ensuring the maximum cargo limit is not exceeded.
+     * If the addition exceeds the maximum limit, cargo is capped at the limit,
+     * and a warning message is displayed.
      *
-     * @param amount quantidade a adicionar (deve ser positiva)
+     * @param amount the amount of cargo to add; must be a positive integer
      */
     public void addCargo(int amount) {
         if (amount > 0) {
             int novoTotal = this.cargo + amount;
             if (novoTotal > 24) {
                 this.cargo = 24;
-                System.out.println("[AVISO] Limite de 24 cargas por estação atingido em: " + this.name);
+                System.out.println("[WARNING] Max cargo reached at: " + this.name);
             } else {
                 this.cargo = novoTotal;
             }
@@ -251,7 +278,7 @@ public class Station implements Serializable {
      *
      * @param map  station's map
      * @param size size for each side of the station
-     * @return true if position is valid, false otherwise
+     * @return true if the position is valid, false otherwise
      */
     public boolean validatePosition(Map map, int size) {
         if (map == null) {
@@ -268,9 +295,9 @@ public class Station implements Serializable {
     }
 
     /**
-     * Checks if station would overbuild existing structures.
+     * Checks if a station overbuilds existing structures.
      *
-     * @return false if overbuilding occurs, true if position is clear
+     * @return false if overbuilding occurs, true if the position is clear
      */
     public boolean checkOverbuilding() {
         Repositories repos = Repositories.getInstance();
@@ -391,15 +418,6 @@ public class Station implements Serializable {
     }
 
     /**
-     * Retrieves the size of the station based on its type.
-     *
-     * @return the size of the station as an integer
-     */
-    public int getStationSize() {
-        return stationType.getSize();
-    }
-
-    /**
      * Retrieves the price of the station based on its type.
      *
      * @return the price of the station as an integer
@@ -415,24 +433,6 @@ public class Station implements Serializable {
      */
     public int getStationTypeID() {
         return stationType.ordinal();
-    }
-
-    /**
-     * Retrieves the string representation of the station's type.
-     *
-     * @return the display name of the station type as a string.
-     */
-    public String getStationTypeString() {
-        return stationType.getDisplayName();
-    }
-
-    /**
-     * Retrieves the string representation of the station's orientation.
-     *
-     * @return the display name of the station's orientation as a string.
-     */
-    public String getOrientationString() {
-        return orientation.getDisplayName();
     }
 
     /**
@@ -482,21 +482,10 @@ public class Station implements Serializable {
     /**
      * Sets the map ID for the station.
      *
-     * @param mapID the unique identifier for the map to which the station is associated
+     * @param mapID the unique identifier for the map with which the station is associated
      */
     public void setMapID(int mapID) {
         this.mapID = mapID;
-    }
-
-    /**
-     * Sets the position of the station by assigning X and Y coordinate values.
-     *
-     * @param positionX the X-coordinate of the station
-     * @param positionY the Y-coordinate of the station
-     */
-    public void setPosition(int positionX, int positionY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
     }
 
     /**
@@ -544,37 +533,11 @@ public class Station implements Serializable {
         this.orientation = Orientation.fromString(orientation);
     }
 
-
     /**
      * Increases the total count of existing stations.
      */
     public static void increaseTotalStations() {
         totalStations++;
-    }
-
-    /**
-     * Retrieves the total number of stations created.
-     *
-     * @return the total number of stations as an integer.
-     */
-    public static int getTotalStations() {
-        return totalStations;
-    }
-
-    /**
-     * Verify if the given station type exists.
-     *
-     * @param type the type to be checked
-     * @return the id the of the type, returns -1 if it doesn't exist
-     */
-    public static int checkStationType(int type) {
-        int id = -1;
-        for (int i = 0; i < StationType.values().length; i++) {
-            if (Arrays.stream(Station.StationType.values()).anyMatch(type1 -> type1.ordinal() == type - 1)) {
-                id = i;
-            }
-        }
-        return id;
     }
 
     /**
@@ -594,34 +557,51 @@ public class Station implements Serializable {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    /**
+     * Retrieves the number of deliveries completed by the station in the last year.
+     *
+     * @return the total deliveries made in the previous year as an integer
+     */
     public int getLastYearDeliveries() {
         return lastYearDeliveries;
     }
 
-    public void setLastYearDeliveries(int lastYearDeliveries) {
-        this.lastYearDeliveries = lastYearDeliveries;
-    }
-
+    /**
+     * Retrieves the current demand value associated with the station.
+     *
+     * @return the demand value as an integer
+     */
     public int getDemand() {
         return demand;
     }
 
+    /**
+     * Sets the demand value for the station.
+     *
+     * @param demand the new demand value to be assigned to the station
+     */
     public void setDemand(int demand) {
         this.demand = demand;
     }
 
+    /**
+     * Returns a string representation of the station object, including its name,
+     * station type, and position coordinates.
+     *
+     * @return a string containing the station's name, station type display name,
+     *         and its coordinates in the format "name | stationType | (positionX, positionY)".
+     */
     @Override
     public String toString() {
         return name + " | " + stationType.displayName + " | (" + positionX + "," + positionY + ")";
     }
 
     /**
-     * Add delivered cargo to station's delivery count
+     * Add delivered cargo to the station's delivery count
      *
      * @param amount Amount of cargo delivered
      */
     public void addDeliveredCargo(int amount) {
         this.lastYearDeliveries += amount;
-        // You might also want to track total deliveries or update demand
     }
 }
