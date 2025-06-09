@@ -1,7 +1,6 @@
 package presentation;
 
 import controller.CreateCityController;
-import controller.DisplayMapController;
 import domain.City;
 import domain.HouseBlock;
 import controller.CreateCityController.NameMapError;
