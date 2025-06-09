@@ -46,6 +46,14 @@ public class BuyLocomotiveController {
         this.scenario = scenario;
     }
 
+    /**
+     * Sets the current map and scenario for the Buy Locomotive Menu.
+     * This method initializes the controller based on the provided map and scenario by updating the current scenario
+     * and associated map and invoking the initialization process for menu buttons and UI elements.
+     *
+     * @param currentMap The map to be set as the current one.
+     * @param scenario The scenario to be set as the current one.
+     */
     public void setData(Map currentMap, Scenario scenario) {
         this.currentMap = currentMap;
         this.scenario = scenario;
@@ -53,10 +61,16 @@ public class BuyLocomotiveController {
         initializeLocomotives();
     }
 
+    /**
+     * This method initializes the JavaFX screen related to the process of buying locomotives.
+     */
     @FXML
     public void initialize() {
     }
 
+    /**
+     * This method updates the locomotives presented on the ComboBox.
+     */
     private void initializeLocomotives() {
         if (scenario == null) {
             showAlert("No scenario data available!");
@@ -147,6 +161,11 @@ public class BuyLocomotiveController {
         return false;
     }
 
+    /**
+     * This method is responsible to show an alert box to the player.
+     *
+     * @param msg The message that will be shown (can be a success alert or an error alert).
+     */
     private void showAlert(String msg) {
         if (locomotiveComboBox != null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -158,10 +177,16 @@ public class BuyLocomotiveController {
         }
     }
 
+    /**
+     * This method is responsible to updating the player budget display.
+     */
     private void viewBudget() {
         budgetLabel.setText("CURRENT BUDGET: " + scenario.getBudget() + " €");
     }
 
+    /**
+     * This method is responsible to change the labels that describe a locomotive, when a new one is selected.
+     */
     @FXML
     private void updateLocomotiveInfo() {
         selectedLocomotive = locomotiveComboBox.getValue();
@@ -176,6 +201,9 @@ public class BuyLocomotiveController {
         priceLabel.setText("Price: " + selectedLocomotive.getPrice() + "€");
     }
 
+    /**
+     * This method is responsible for making the "BUY" button functional, as well as processing the purchase.
+     */
     @FXML
     public void handleBuy() {
         if (selectedLocomotive == null) {
@@ -198,11 +226,17 @@ public class BuyLocomotiveController {
         navigateToPlayerMenu();
     }
 
+    /**
+     * This method is responsible for making the "BACK" button functional.
+     */
     @FXML
     public void handleBackButton() {
         navigateToPlayerMenu();
     }
 
+    /**
+     * This method is used so the player can return to the player menu.
+     */
     private void navigateToPlayerMenu() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/playerMenu.fxml");
