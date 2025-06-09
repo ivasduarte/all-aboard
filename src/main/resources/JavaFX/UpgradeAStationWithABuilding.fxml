@@ -26,6 +26,7 @@
          <Label text="Select Building:" textFill="white" />
          <ComboBox fx:id="buildingComboBox" prefHeight="0.0" prefWidth="444.0" />
          <Label fx:id="labelTest" textFill="white" />
+         <Label fx:id="labelBudget" text="Budget: $" textFill="white" />
       </VBox>
 
       <Button layoutX="223.0" layoutY="334.0" onAction="#onUpgrade" text="Upgrade" />
