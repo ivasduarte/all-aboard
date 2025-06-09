@@ -3,7 +3,6 @@ package controller;
 import domain.*;
 import repositories.MapRepository;
 import repositories.Repositories;
-import repositories.ScenarioRepository;
 import repositories.StationRepository;
 
 import java.util.List;
@@ -56,6 +55,7 @@ public class AddStationController {
 
         String stationName = generateStationName(map.getName(), positionX, positionY, type.getDisplayName());
         Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation, stationName);
+        newStation.setOwnerPlayer(UserSession.getInstance().getUser().getEmail());
 
         if (!newStation.validatePosition(map, size)) {
             return "Invalid position";

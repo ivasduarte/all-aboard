@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Train implements Serializable {
     private final Locomotive locomotive;
-    private List<Station> route;
+    private List<PointOfRoute> route;
     private final int departureYear;
     private double arrivalTime;
     private List<Carriage> carriages;
@@ -30,9 +30,8 @@ public class Train implements Serializable {
         }
 
         double distance = 0;
-        for(int i = 0; i < route.size() - 1; i++)
-        {
-            distance += route.get(i).distanceTo(route.get(i+1));
+        for(int i = 0; i < route.size() - 1; i++) {
+            distance += route.get(i).getStation().distanceTo(route.get(i+1).getStation());
         }
 
         return distance / effectiveSpeed;
@@ -46,7 +45,17 @@ public class Train implements Serializable {
         return arrivalTime;
     }
 
-    public List<Station> getRoute() { return route; }
+    public List<PointOfRoute> getRoute() {
+        return route;
+    }
+
+    public void setRoute(List<Station> stations) {
+        this.route = new ArrayList<>();
+        for (Station station : stations) {
+            this.route.add(new PointOfRoute(station));
+        }
+        this.arrivalTime = calculateArrivalTime();
+    }
 
     public Locomotive getLocomotive() {
         return locomotive;
@@ -56,14 +65,11 @@ public class Train implements Serializable {
         return carriages.size();
     }
 
-    public double calculateRouteDistance()
-    {
+    public double calculateRouteDistance() {
         double distance = 0;
-        for(int i = 0; i < route.size() - 1; i++)
-        {
-            distance += route.get(i).distanceTo(route.get(i+1));
+        for(int i = 0; i < route.size() - 1; i++) {
+            distance += route.get(i).getStation().distanceTo(route.get(i+1).getStation());
         }
-
         return distance;
     }
 
@@ -71,8 +77,8 @@ public class Train implements Serializable {
         if (route == null || route.size() < 2) return true;
 
         for (int i = 0; i < route.size() - 1; i++) {
-            Station from = route.get(i);
-            Station to = route.get(i + 1);
+            Station from = route.get(i).getStation();
+            Station to = route.get(i + 1).getStation();
             if (!isDoubleTrackBetween(from, to)) {
                 return false;
             }
@@ -86,5 +92,18 @@ public class Train implements Serializable {
         double distance = Math.sqrt(dx * dx + dy * dy);
 
         return distance < 15;
+    }
+
+    public void setCargoMode(int pointIndex, CargoMode mode) {
+        if (pointIndex >= 0 && pointIndex < route.size()) {
+            route.get(pointIndex).setCargoMode(mode);
+        }
+    }
+
+    public boolean isReadyToDepart(int pointIndex, int currentLoad) {
+        if (pointIndex >= 0 && pointIndex < route.size()) {
+            return route.get(pointIndex).isReadyToDepart(currentLoad, carriages.size());
+        }
+        return false;
     }
 }

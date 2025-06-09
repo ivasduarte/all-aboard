@@ -219,13 +219,19 @@ public class Station implements Serializable {
     }
 
     /**
-     * Adds cargo to the station.
+     * Adiciona carga à estação, respeitando o limite máximo de 24.
      *
-     * @param amount amount to add (must be positive)
+     * @param amount quantidade a adicionar (deve ser positiva)
      */
     public void addCargo(int amount) {
         if (amount > 0) {
-            this.cargo += amount;
+            int novoTotal = this.cargo + amount;
+            if (novoTotal > 24) {
+                this.cargo = 24;
+                System.out.println("[AVISO] Limite de 24 cargas por estação atingido em: " + this.name);
+            } else {
+                this.cargo = novoTotal;
+            }
         }
     }
 
@@ -605,8 +611,17 @@ public class Station implements Serializable {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name + " | " + stationType.displayName + " | (" + positionX + "," + positionY + ")";
+    }
+
+    /**
+     * Add delivered cargo to station's delivery count
+     *
+     * @param amount Amount of cargo delivered
+     */
+    public void addDeliveredCargo(int amount) {
+        this.lastYearDeliveries += amount;
+        // You might also want to track total deliveries or update demand
     }
 }

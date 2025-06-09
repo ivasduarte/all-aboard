@@ -1,22 +1,12 @@
 package presentation;
 
 import controller.AddStationController;
-import controller.DisplayMapController;
-import controller.SimulatorController;
-import domain.Budget;
 import domain.Map;
 import domain.Station;
 import domain.Scenario;
-import domain.UserSession;
-import repositories.MapRepository;
-import repositories.Repositories;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class AddStationUI implements Runnable {
-
     private Map map;
     private Scenario scenario;
 
