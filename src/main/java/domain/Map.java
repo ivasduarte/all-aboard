@@ -160,12 +160,60 @@ public class Map implements Serializable {
         industries.add(industry);
     }
 
+    /**
+     * Removes a scenario from the map's list of scenarios.
+     *
+     * @param scenario The scenario to be removed
+     * @return true if the scenario was successfully removed, false otherwise
+     */
     public boolean removeScenario(Scenario scenario) {
         return scenarios.remove(scenario);
     }
 
+    /**
+     * Checks if a specific scenario exists in the map's list of scenarios.
+     *
+     * @param scenario The scenario to check for
+     * @return true if the scenario exists in the map, false otherwise
+     */
     public boolean hasScenario(Scenario scenario) {
         return scenarios.contains(scenario);
+    }
+
+    /**
+     * Retrieves the cell size of the map in kilometers.
+     *
+     * @return The size of each cell in kilometers
+     */
+    public int getCellSizeKm() {
+        return cellSizeKm;
+    }
+
+    /**
+     * Calculates the total width of the map in kilometers.
+     *
+     * @return The total width of the map in kilometers (width * cellSizeKm)
+     */
+    public double getTotalWidthKm() {
+        return width * cellSizeKm;
+    }
+
+    /**
+     * Calculates the total height of the map in kilometers.
+     *
+     * @return The total height of the map in kilometers (height * cellSizeKm)
+     */
+    public double getTotalHeightKm() {
+        return height * cellSizeKm;
+    }
+
+    /**
+     * Calculates the total area of the map in square kilometers.
+     *
+     * @return The total area of the map in square kilometers (width * height * cellSizeKm²)
+     */
+    public double getAreaKm() {
+        return getTotalWidthKm() * getTotalHeightKm();
     }
 
     /**
@@ -221,23 +269,6 @@ public class Map implements Serializable {
             throw new IllegalArgumentException("Cell size must be positive.");
         }
     }
-
-    public int getCellSizeKm() {
-        return cellSizeKm;
-    }
-
-    public double getTotalWidthKm() {
-        return width * cellSizeKm;
-    }
-
-    public double getTotalHeightKm() {
-        return height * cellSizeKm;
-    }
-
-    public double getAreaKm() {
-        return getTotalWidthKm() * getTotalHeightKm();
-    }
-
 
     /**
      * Returns a string representation of the Map object.
