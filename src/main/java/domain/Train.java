@@ -121,7 +121,7 @@ public class Train implements Serializable {
     public void setCarriages(int carriageAmount)
     {
         carriages = new ArrayList<>();
-        for(int i = 0; i < carriageAmount; i++)
+        for(int i = 0; i < carriageAmount && i < MAX_CARRIAGES; i++)
             carriages.add(new Carriage(new Cargo(Cargo.Type.NONE), 0));
     }
 

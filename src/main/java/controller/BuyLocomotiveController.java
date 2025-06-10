@@ -125,7 +125,7 @@ public class BuyLocomotiveController {
             locomotiveRepository.save(locomotive);
 
             Train train = new Train(locomotive, scenario.getCurrentYear());
-            train.setNumberOfCarriages(15);
+            train.setCarriages(Train.getMaxCarriages());
             TrainRepository trainRepository = Repositories.getInstance().getTrainRepository();
             trainRepository.saveTrain(train);
             scenario.addNewTrain(train);
