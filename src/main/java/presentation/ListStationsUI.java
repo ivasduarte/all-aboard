@@ -80,7 +80,11 @@ public class ListStationsUI implements Runnable {
             }
         }
 
-        System.out.println("\nCargo stored: " + selectedStation.getCargo());
+        System.out.println("\nCargo stored: ");
+        for(Station.StationCargo stationCargo : selectedStation.getStationCargo())
+        {
+            System.out.println("- " + stationCargo.getType().getName() + ": " + stationCargo.getAmount());
+        }
     }
 
     /**
