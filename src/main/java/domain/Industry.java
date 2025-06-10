@@ -3,16 +3,30 @@ package domain;
 import java.io.Serializable;
 
 public class Industry implements Serializable {
-
+    /**
+     * The map ID.
+     */
     private int mapID;
-    private int positionX;
-    private int positionY;
-    private IndustryInfo industryType;
-    private int cargoAmount;
 
-    private int storedIron = 0;
-    private int storedCoal = 0;
-    private final int area;
+    /**
+     * The position X that the industry will take on the map.
+     */
+    private int positionX;
+
+    /**
+     * The position Y that the industry will take on the map.
+     */
+    private int positionY;
+
+    /**
+     * The type of industry.
+     */
+    private IndustryInfo industryType;
+
+    /**
+     * The amount of cargo generated, per year.
+     */
+    private int cargoAmount;
 
     /**
      * This method is the constructor of the industry.
@@ -29,7 +43,6 @@ public class Industry implements Serializable {
         this.positionY = positionY;
         this.industryType = industryType;
         this.cargoAmount = cargoAmount;
-        this.area = 15;
     }
 
     /**
@@ -134,61 +147,5 @@ public class Industry implements Serializable {
      */
     public int getCargoAmount() {
         return cargoAmount;
-    }
-
-    /**
-     * Retrieves the area of the industry.
-     *
-     * @return the area of the industry as an integer
-     */
-    public int getArea() {
-        return area;
-    }
-
-    public void consumeIron(int amount) {
-        if (amount > 0 && this.storedIron >= amount) {
-            this.storedIron -= amount;
-        }
-    }
-
-    public int getStoredIron() {
-        return storedIron;
-    }
-
-    public void addStoredIron(int amount) {
-        if (amount > 0) {
-            this.storedIron += amount;
-        }
-    }
-
-    public void consumeCoal(int amount) {
-        if (amount > 0 && this.storedCoal >= amount) {
-            this.storedCoal -= amount;
-        }
-    }
-
-    public int getStoredCoal() {
-        return storedCoal;
-    }
-
-    public void addStoredCoal(int amount) {
-        if (amount > 0) {
-            this.storedCoal += amount;
-        }
-    }
-
-    public int getGeneratedIron() {
-        if (this.getIndustryType().toString().equals("IRON_MINE")) {
-            return 10;
-        }
-        return 0;
-    }
-
-    public int getGeneratedCoal() {
-        // This value could be based on industry efficiency, size, etc.
-        if (this.getIndustryType().toString().equals("COAL_MINE")) {
-            return 8;
-        }
-        return 0;
     }
 }

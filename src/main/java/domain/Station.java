@@ -4,14 +4,17 @@ import repositories.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Represents a station in the railway system with buildings, cargo management,
  * and position validation capabilities.
  */
-public class Station implements Serializable {
+public class Station implements Serializable
+{
     private static final int MAX_SLOTS = 7;
+    private static final int MAX_CARGO = 24;
     private static int totalStations = 0;
 
     private int stationID;
@@ -23,24 +26,14 @@ public class Station implements Serializable {
     private int positionY;
     private String name;
 
-    private int ironCargo = 0;
-    private int coalCargo = 0;
-    private int steelCargo = 0;
-
-    private boolean hasIronStorage = false;
-    private boolean hasCoalStorage = false;
-    private boolean hasSteelStorage = false;
-
-    public int currentCargo;
-    public int maxCargo;
-
     private StationType stationType;
     private Orientation orientation;
     private List<Building> buildings;
-    private int cargo;
 
     private int lastYearDeliveries;
     private int demand;
+
+    private List<StationCargo> cargos;
 
     /**
      * Enum representing different types of orientation with their properties.
@@ -57,6 +50,14 @@ public class Station implements Serializable {
         Orientation(String displayName, String shortening) {
             this.displayName = displayName;
             this.shortening = shortening;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String getShortening() {
+            return shortening;
         }
 
         /**
@@ -81,7 +82,6 @@ public class Station implements Serializable {
         public String toString() {
             return displayName;
         }
-
     }
 
     /**
@@ -89,55 +89,33 @@ public class Station implements Serializable {
      */
     public enum StationType {
         DEPOT("Depot", 3, 50000),
-        STATION("Station", 4, 100000),
+        STATION("Station", 4, 10000),
         TERMINAL("Terminal", 5, 200000);
 
         private final String displayName;
         private final int size;
         private final int price;
 
-        /**
-         * Constructs a StationType with the specified properties.
-         *
-         * @param displayName the display name of the station type
-         * @param size the size of the station type
-         * @param price the price associated with the station type
-         */
         StationType(String displayName, int size, int price) {
             this.displayName = displayName;
             this.size = size;
             this.price = price;
         }
 
-        /**
-         * Retrieves the display name of the station type.
-         *
-         * @return the display name of the station type
-         */
         public String getDisplayName() {
             return displayName;
         }
 
-        /**
-         * Retrieves the size associated with the station type.
-         *
-         * @return the size of the station type
-         */
         public int getSize() {
             return size;
         }
 
-        /**
-         * Retrieves the price associated with the station type.
-         *
-         * @return the price of the station type
-         */
         public int getPrice() {
             return price;
         }
 
         /**
-         * Parses a string to find a matching StationType based on the display name.
+         * Parses a string to find a matching StationType based on display name.
          *
          * @param type the string representation of the station type
          * @return the corresponding StationType
@@ -152,14 +130,42 @@ public class Station implements Serializable {
             throw new IllegalArgumentException("Invalid station type: " + type);
         }
 
-        /**
-         * Returns the string representation of the StationType.
-         *
-         * @return the display name of the station type
-         */
         @Override
         public String toString() {
             return displayName;
+        }
+    }
+
+    public class StationCargo
+    {
+        private Cargo.Type type;
+        private int amount;
+
+        StationCargo(Cargo.Type type, int amount)
+        {
+            this.type = type;
+            this.amount = amount;
+        }
+
+        public Cargo.Type getType() {return type;}
+        public int getAmount() {return amount;}
+
+        public void addCargo(int amount) {
+            int totalCargo = getTotalCargo();
+            int amountToAdd = amount;
+
+            if(totalCargo + amount > MAX_CARGO)
+            {
+                amountToAdd = MAX_CARGO - totalCargo;
+            }
+
+            this.amount += amountToAdd;
+        }
+
+        public void removeCargo(int amount) {
+            if (amount > 0) {
+                this.amount = Math.max(0, this.amount - amount);
+            }
         }
     }
 
@@ -182,8 +188,13 @@ public class Station implements Serializable {
         this.name = name;
         this.stationID = totalStations;
         this.buildings = new ArrayList<>();
-        this.cargo = 0;
-        this.maxCargo = 1000;
+
+        this.cargos = new ArrayList<>();
+        for(Cargo.Type cargo : Cargo.Type.values())
+        {
+            if(cargo != Cargo.Type.NONE)
+                cargos.add(new StationCargo(cargo, 0));
+        }
     }
 
     /**
@@ -191,7 +202,7 @@ public class Station implements Serializable {
      *
      * @param buildingToAdd the building to add
      * @return true if successfully added, false otherwise
-     * @throws IllegalArgumentException if the building is null
+     * @throws IllegalArgumentException if building is null
      */
     public boolean addBuilding(Building buildingToAdd) {
         if (buildingToAdd == null) {
@@ -215,7 +226,7 @@ public class Station implements Serializable {
     }
 
     /**
-     * Checks if the station has available building spots.
+     * Checks if station has available building spots.
      *
      * @return true if more buildings can be added, false otherwise
      */
@@ -223,34 +234,8 @@ public class Station implements Serializable {
         return buildings.size() < MAX_SLOTS;
     }
 
-    /**
-     * Retrieves a list of buildings associated with the station.
-     * The returned list is a copy of the internal list of buildings to ensure
-     * encapsulation, preventing external modifications to the station's state.
-     *
-     * @return a new {@code List} containing all {@code Building} objects
-     *         associated with the station.
-     */
     public List<Building> getBuildings() {
         return new ArrayList<>(buildings);
-    }
-
-    /**
-     * Retrieves the amount of cargo associated with the station.
-     *
-     * @return the cargo amount as an integer.
-     */
-    public int getCargo() {
-        return cargo;
-    }
-
-    /**
-     * Retrieves max cargo.
-     *
-     * @return the max cargo
-     */
-    public int getMaxCargo() {
-        return maxCargo;
     }
 
     /**
@@ -262,27 +247,12 @@ public class Station implements Serializable {
         return name;
     }
 
-    public void addCargo(int amount) {
-        cargo = Math.min(cargo + amount, maxCargo * 5);
-    }
-
-    /**
-     * Removes cargo from the station, cannot go below 0.
-     *
-     * @param amount amount to remove (must be positive)
-     */
-    public void removeCargo(int amount) {
-        if (amount > 0) {
-            this.cargo = Math.max(0, this.cargo - amount);
-        }
-    }
-
     /**
      * Validates the station's position on the map.
      *
      * @param map  station's map
      * @param size size for each side of the station
-     * @return true if the position is valid, false otherwise
+     * @return true if position is valid, false otherwise
      */
     public boolean validatePosition(Map map, int size) {
         if (map == null) {
@@ -299,9 +269,9 @@ public class Station implements Serializable {
     }
 
     /**
-     * Checks if a station overbuilds existing structures.
+     * Checks if station would overbuild existing structures.
      *
-     * @return false if overbuilding occurs, true if the position is clear
+     * @return false if overbuilding occurs, true if position is clear
      */
     public boolean checkOverbuilding() {
         Repositories repos = Repositories.getInstance();
@@ -422,6 +392,15 @@ public class Station implements Serializable {
     }
 
     /**
+     * Retrieves the size of the station based on its type.
+     *
+     * @return the size of the station as an integer
+     */
+    public int getStationSize() {
+        return stationType.getSize();
+    }
+
+    /**
      * Retrieves the price of the station based on its type.
      *
      * @return the price of the station as an integer
@@ -438,6 +417,26 @@ public class Station implements Serializable {
     public int getStationTypeID() {
         return stationType.ordinal();
     }
+
+    /**
+     * Retrieves the string representation of the station's type.
+     *
+     * @return the display name of the station type as a string.
+     */
+    public String getStationTypeString() {
+        return stationType.getDisplayName();
+    }
+
+    /**
+     * Retrieves the string representation of the station's orientation.
+     *
+     * @return the display name of the station's orientation as a string.
+     */
+    public String getOrientationString() {
+        return orientation.getDisplayName();
+    }
+
+    public List<StationCargo> getStationCargo() { return cargos; }
 
     /**
      * Retrieves the map associated with the current station.
@@ -486,10 +485,21 @@ public class Station implements Serializable {
     /**
      * Sets the map ID for the station.
      *
-     * @param mapID the unique identifier for the map with which the station is associated
+     * @param mapID the unique identifier for the map to which the station is associated
      */
     public void setMapID(int mapID) {
         this.mapID = mapID;
+    }
+
+    /**
+     * Sets the position of the station by assigning X and Y coordinate values.
+     *
+     * @param positionX the X-coordinate of the station
+     * @param positionY the Y-coordinate of the station
+     */
+    public void setPosition(int positionX, int positionY) {
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
     /**
@@ -537,11 +547,37 @@ public class Station implements Serializable {
         this.orientation = Orientation.fromString(orientation);
     }
 
+
     /**
      * Increases the total count of existing stations.
      */
     public static void increaseTotalStations() {
         totalStations++;
+    }
+
+    /**
+     * Retrieves the total number of stations created.
+     *
+     * @return the total number of stations as an integer.
+     */
+    public static int getTotalStations() {
+        return totalStations;
+    }
+
+    /**
+     * Verify if the given station type exists.
+     *
+     * @param type the type to be checked
+     * @return the id the of the type, returns -1 if it doesn't exist
+     */
+    public static int checkStationType(int type) {
+        int id = -1;
+        for (int i = 0; i < StationType.values().length; i++) {
+            if (Arrays.stream(Station.StationType.values()).anyMatch(type1 -> type1.ordinal() == type - 1)) {
+                id = i;
+            }
+        }
+        return id;
     }
 
     /**
@@ -561,105 +597,107 @@ public class Station implements Serializable {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    /**
-     * Retrieves the number of deliveries completed by the station in the last year.
-     *
-     * @return the total deliveries made in the previous year as an integer
-     */
     public int getLastYearDeliveries() {
         return lastYearDeliveries;
     }
 
-    /**
-     * Retrieves the current demand value associated with the station.
-     *
-     * @return the demand value as an integer
-     */
+    public void setLastYearDeliveries(int lastYearDeliveries) {
+        this.lastYearDeliveries = lastYearDeliveries;
+    }
+
     public int getDemand() {
         return demand;
     }
 
-    /**
-     * Sets the demand value for the station.
-     *
-     * @param demand the new demand value to be assigned to the station
-     */
     public void setDemand(int demand) {
         this.demand = demand;
     }
 
-    /**
-     * Returns a string representation of the station object, including its name,
-     * station type, and position coordinates.
-     *
-     * @return a string containing the station's name, station type display name,
-     *         and its coordinates in the format "name | stationType | (positionX, positionY)".
-     */
     @Override
     public String toString() {
         return name + " | " + stationType.displayName + " | (" + positionX + "," + positionY + ")";
     }
 
     /**
-     * Add delivered cargo to the station's delivery count
+     * Add delivered cargo to station's delivery count
      *
      * @param amount Amount of cargo delivered
      */
     public void addDeliveredCargo(int amount) {
         this.lastYearDeliveries += amount;
+        // You might also want to track total deliveries or update demand
     }
 
-    public boolean hasIronStorage() {
-        return hasIronStorage;
-    }
+    public List<Industry> getIndustriesInRange()
+    {
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Industry> industries = mapRepository.getMap(mapName).get().getIndustries();
 
-    public void setIronStorage(boolean hasIronStorage) {
-        this.hasIronStorage = hasIronStorage;
-    }
+        List<Industry> industriesInRange = new ArrayList<>();
 
-    public void addIronCargo(int amount) {
-        if(hasIronStorage && amount > 0) {
-            this.ironCargo += amount;
+        int size = stationType.getSize() / 2;
+
+        if(stationType.getSize() % 2 != 0)
+        {
+            for(int i = positionX - size; i < positionX + size; i++)
+            {
+                for(int j = positionY - size; j < positionY + size; j++)
+                {
+                    for(Industry industry : industries)
+                    {
+                        if(industry.getPositionX() == i && industry.getPositionY() == j)
+                            industriesInRange.add(industry);
+                    }
+                }
+            }
+        }else
+        {
+            int left, right, up, down;
+            if(orientation.getShortening().contains("N"))
+            {
+                up = 1;
+                down = 0;
+            }else
+            {
+                up = 0;
+                down = 1;
+            }
+
+            if(orientation.getShortening().contains("E"))
+            {
+                left = 0;
+                right = 1;
+            }else
+            {
+                left = 1;
+                right = 0;
+            }
+
+            for(int i = positionX - size + left; i < positionX + size - right; i++)
+            {
+                for(int j = positionY - size + up; j < positionY + size - down; j++)
+                {
+                    for(Industry industry : industries)
+                    {
+                        if(industry.getPositionX() == i && industry.getPositionY() == j)
+                            industriesInRange.add(industry);
+                    }
+                }
+            }
         }
+
+        return industriesInRange;
     }
 
-    public int getIronCargo() {
-        return ironCargo;
-    }
+    public int getTotalCargo()
+    {
+        int totalCargo = 0;
 
-    public boolean hasCoalStorage() {
-        return hasCoalStorage;
-    }
-
-    public void setCoalStorage(boolean hasCoalStorage) {
-        this.hasCoalStorage = hasCoalStorage;
-    }
-
-    public void addCoalCargo(int amount) {
-        if (hasCoalStorage && amount > 0) {
-            this.coalCargo += amount;
+        for(StationCargo cargo : cargos)
+        {
+            totalCargo += cargo.getAmount();
         }
-    }
 
-    public int getCoalCargo() {
-        return coalCargo;
-    }
-
-    public boolean hasSteelStorage() {
-        return hasSteelStorage;
-    }
-
-    public void setSteelStorage(boolean hasSteelStorage) {
-        this.hasSteelStorage = hasSteelStorage;
-    }
-
-    public void addSteelCargo(int amount) {
-        if (hasSteelStorage && amount > 0) {
-            this.steelCargo += amount;
-        }
-    }
-
-    public int getSteelCargo() {
-        return steelCargo;
+        return totalCargo;
     }
 }
