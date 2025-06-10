@@ -183,7 +183,7 @@ public class Station implements Serializable {
         this.stationID = totalStations;
         this.buildings = new ArrayList<>();
         this.cargo = 0;
-        this.maxCargo = 100;
+        this.maxCargo = 1000;
     }
 
     /**
