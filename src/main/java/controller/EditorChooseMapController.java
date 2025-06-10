@@ -61,7 +61,7 @@ public class EditorChooseMapController {
     public List<MenuItem> createEditorMenuOptions(Map selectedMap) {
         List<MenuItem> options = new ArrayList<>();
 
-        // Note: These UI classes would need to be refactored to work with controllers
+        // Note: These UI classes would need to be refactored to work with controllers,
         // or we could create controller methods for each action
         options.add(new MenuItem("Create a Scenario", new CreateScenarioUI(selectedMap)));
         options.add(new MenuItem("Add a City", new AddCityUI(selectedMap)));

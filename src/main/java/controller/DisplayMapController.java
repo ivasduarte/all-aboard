@@ -82,12 +82,27 @@ public class DisplayMapController implements Serializable {
     }
 
     /**
-     * Retrieves a list of all cities managed by the {@code CityRepository}.
+     * Retrieves a specific map by its index in the list of available maps.
      *
-     * @return      An unmodifiable list of {@code City} objects representing the cities stored in the repository.
+     * @param mapIndex The index of the map to retrieve (0-based)
+     * @return The Map object if found, null otherwise
      */
-    public List<City> getCityList(){
-        return getCityRepository().getCities();
+    public Map getMapByIndex(int mapIndex) {
+        List<Map> maps = getMapList();
+        if (mapIndex >= 0 && mapIndex < maps.size()) {
+            return maps.get(mapIndex);
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves a list of all cities associated with a specific map.
+     *
+     * @param map The map for which to retrieve cities
+     * @return A list of City objects associated with the specified map
+     */
+    public List<City> getCityList(Map map) {
+        return getCityRepository().getCitiesByMap(map.getName());
     }
 
     /**

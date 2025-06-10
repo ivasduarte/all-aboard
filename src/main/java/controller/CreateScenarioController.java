@@ -1,8 +1,11 @@
 package controller;
 
 import domain.*;
+import dto.MapDTO;
+import dto.MapMapper;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
+import repositories.MapRepository;
 
 import java.util.List;
 
@@ -13,6 +16,7 @@ import java.util.List;
  */
 public class CreateScenarioController {
     private ScenarioRepository scenarioRepository;
+    private MapRepository mapRepository;
 
     /**
      * Creates a new scenario with the specified name, restrictions, and map.
@@ -62,6 +66,31 @@ public class CreateScenarioController {
             scenarioRepository = repo.getScenarioRepository();
         }
         return scenarioRepository;
+    }
+
+    /**
+     * Retrieves the {@code MapRepository} associated with this controller.
+     * If the repository has not been instantiated, it initializes it using the
+     * {@code Repositories} singleton, ensuring a single shared instance.
+     *
+     * @return The {@code MapRepository} instance used for managing maps.
+     */
+    private MapRepository getMapRepository() {
+        if(mapRepository == null) {
+            Repositories repo = Repositories.getInstance();
+            mapRepository = repo.getMapRepository();
+        }
+        return mapRepository;
+    }
+
+    /**
+     * Retrieves a list of all available maps as DTOs.
+     * This method converts the domain Map objects to MapDTO objects for presentation purposes.
+     *
+     * @return A list of MapDTO objects representing all available maps.
+     */
+    public List<MapDTO> getMapListDTO() {
+        return MapMapper.toDTO(getMapRepository().getMapList());
     }
 
     /**
