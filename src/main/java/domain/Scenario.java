@@ -136,39 +136,59 @@ public class Scenario implements Serializable {
         return map != null;
     }
 
+    /**
+     * Sets the map associated with this scenario.
+     *
+     * @param map The map to be associated with this scenario
+     */
     public void setMap(Map map) { this.map = map; }
 
     /**
-     * Validates the state of the current scenario.
-     * This method checks the validity of the scenario's name, its restrictions,
-     * and the associated map by invoking respective validation methods.
+     * Retrieves the budget associated with this scenario.
      *
-     * @return true if the scenario's name, restrictions, and map are all valid; false otherwise.
+     * @return The budget object containing the scenario's financial information
      */
-    public boolean isValid(){
-        return validateName() && validateRestrictions() && hasValidMap();
-    }
-
     public Budget getBudget() {
         return budget;
     }
 
+    /**
+     * Sets the budget for this scenario.
+     *
+     * @param budget The new budget to be associated with this scenario
+     */
     public void setBudget(Budget budget) {
         this.budget = budget;
     }
 
+    /**
+     * Subtracts a specified amount from the scenario's budget.
+     *
+     * @param amount The amount to subtract from the budget
+     * @return The remaining budget after subtraction
+     */
     public int subtractBudget(int amount) {
         budget.setBudget(budget.getBudget() - amount);
         return budget.getBudget();
     }
 
+    /**
+     * Adds a specified amount to the scenario's budget.
+     *
+     * @param amount The amount to add to the budget
+     * @return The new budget total after addition
+     */
     public int addBudget(int amount) {
         budget.setBudget(budget.getBudget() + amount);
         return budget.getBudget();
     }
 
-    public void addNewTrain(Train train)
-    {
+    /**
+     * Adds a new train to the scenario's collection of trains.
+     *
+     * @param train The train to be added to the scenario
+     */
+    public void addNewTrain(Train train) {
         trains.add(train);
     }
 
@@ -187,6 +207,13 @@ public class Scenario implements Serializable {
 
 
 
+    /**
+     * Retrieves the modification rate for this scenario.
+     * The modification rate represents the rate at which changes can be made
+     * to the scenario's elements.
+     *
+     * @return The modification rate as a double value
+     */
     public double getModificationRateFor() {
         return modificationRateFor;
     }
