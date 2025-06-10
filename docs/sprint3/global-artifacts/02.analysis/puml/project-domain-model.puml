@@ -8,15 +8,28 @@ skinparam shadowing false
 hide circle
 hide methods
 
+class Authentication {
+    - password
+    - userType
+}
+
+class Password {
+    - value
+    - isValid
+}
+
 class Editor {
     - name
-    - ID
     - password
 }
 
 class Player {
     - name
-    - ID
+    - password
+}
+
+class ProductOwner {
+    - name
     - password
 }
 
@@ -26,23 +39,59 @@ class Simulator {
 class Simulation {
 }
 
+class SimulationSave {
+    - fileName
+    - simulationData
+}
+
+class SimulationLoad {
+    - fileName
+    - simulationData
+}
+
+class MapSave {
+    - fileName
+    - mapData
+}
+
+class MapLoad {
+    - fileName
+    - mapData
+}
+
+class ScenarioSave {
+    - fileName
+    - scenarioData
+}
+
+class ScenarioLoad {
+    - fileName
+    - scenarioData
+}
+
 class Map {
     - name
-    - id
     - width
     - height
 }
 
 class City {
     - name
-    - position XY
-    - numberHouseBlocks
+    - mapName
+    - centerX
+    - centerY
+    - blocks
+}
+
+class HouseBlock {
+    - x
+    - y
 }
 
 class Industry {
     - name
-    - id
-    - position XY
+    - positionX
+    - positionY
 }
 
 class IndustryType {
@@ -56,6 +105,7 @@ class Scenario {
     - timeRestrictions
     - technologicalRestrictions
     - historicalRestrictions
+    - budget
 }
 
 class TimeRestriction {
@@ -74,25 +124,32 @@ class HistoricalRestriction {
 }
 
 class Station {
-    - name
-    - id
-    - type
-    - position XY
-    - center
+    - stationID
+    - stationType
+    - positionX
+    - positionY
+    - orientation
+    - buildings
 }
 
 class StationType {
     - name
-    - id
 }
 
 class Building {
-    - id
-    - type
+    - buildingType
+    - cost
+    - effect
+}
+
+class BuildingType {
+    - name
+    - cost
+    - effect
+    - availableYear
 }
 
 class Cargo {
-    - id
     - type
 }
 
@@ -106,37 +163,36 @@ class CargoType {
 }
 
 class Route {
-    - id
     - stationsList
 }
 
 class RailwayLine {
     - name
-    - id
     - length
     - type
 }
 
 class RailwayLineType {
     - name
-    - id
 }
 
 class Train {
     - name
-    - ID
     - purchaseDate
+    - locomotive
+    - carriages
 }
 
 class Locomotive {
-    - name
-    - serialNumber
-    - locomotiveType
-    - power
-    - acceleration
-    - topSpeed
+    - locomotiveModel
+    - fuelType
+    - speed
     - startYear
-    - acquisitionType
+    - endYear
+    - price
+    - fuelCost
+    - maintenanceCost
+    - route
 }
 
 class LocomotiveType {
@@ -147,9 +203,46 @@ class LocomotiveType {
 
 class Carriage {
     - name
-    - id
     - cargoType
 }
+
+class YearFinancialResults {
+    - expenses
+    - revenues
+}
+
+class Expenses {
+    - trackMaintenance
+    - trainMaintenance
+    - fuelCost
+}
+
+class Revenues {
+    - cargoDeliveries
+}
+
+class StationStatistics {
+    - averageProfit
+    - passengerArrivals
+    - cargoDistribution
+}
+
+class CargoAnalysis {
+    - cargoType
+    - revenueCorrelation
+    - linearRegression
+}
+
+class RouteAnalysis {
+    - shortestPath
+    - maintenanceRoute
+    - algorithmEfficiency
+}
+
+Authentication -- Password : validates >
+Authentication -- Editor : authenticates >
+Authentication -- Player : authenticates >
+Authentication -- ProductOwner : authenticates >
 
 Simulator -- Simulation : starts >
 
@@ -159,20 +252,27 @@ Map *-- "0..*" City : contains >
 Map *-- "0..*" Industry : contains >
 Scenario -- Map : is created for >
 
+City *-- "0..*" HouseBlock : contains >
+
 Station o-- "0..*" Building : has >
+Building "*" -- "1" BuildingType : has >
 
 RailwayLine -- "2" Station : connects >
 
 Player -- Station : builds >
 Player -- RailwayLine : builds >
 Player -- Train : buys >
+Player "1" -- "*" YearFinancialResults : gets >
+
+YearFinancialResults -- Expenses : has >
+YearFinancialResults -- Revenues : has >
 
 Simulation -- Player: creates >
 Simulation -- Editor: creates >
 
 Train *-- "1" Locomotive : has >
-Locomotive "*" -- "1" LocomotiveType : has
-Carriage "1" - "*" CargoType : has
+Locomotive "*" -- "1" LocomotiveType : has >
+Carriage "1" - "*" CargoType : has >
 Train *-- "0..*" Carriage : has >
 Train -- Route : assigned to >
 Route *-- "2..*" Station : includes >
@@ -180,14 +280,25 @@ Route *-- "2..*" Station : includes >
 City -- "0..*" Cargo : generates/consumes >
 Industry -- "0..*" Cargo : generates/processes >
 
-Cargo "*" - "1" CargoType : has
+Cargo "*" - "1" CargoType : has >
 
-Scenario "1" -- "1" TimeRestriction : has
-Scenario "1" -- "1" TechnologicalRestriction : has
-Scenario "1" -- "1" HistoricalRestriction : has
+Scenario "1" -- "1" TimeRestriction : has >
+Scenario "1" -- "1" TechnologicalRestriction : has >
+Scenario "1" -- "1" HistoricalRestriction : has >
 
-Industry "*" -- "1" IndustryType : has
-Station "*" - "1" StationType : has
-RailwayLine "*" - "1" RailwayLineType : has
+Industry "*" -- "1" IndustryType : has >
+Station "*" - "1" StationType : has >
+RailwayLine "*" - "1" RailwayLineType : has >
+
+Simulation -- SimulationSave : saves >
+Simulation -- SimulationLoad : loads >
+Map -- MapSave : saves >
+Map -- MapLoad : loads >
+Scenario -- ScenarioSave : saves >
+Scenario -- ScenarioLoad : loads >
+
+Station -- StationStatistics : analyzes >
+Station -- CargoAnalysis : analyzes >
+Route -- RouteAnalysis : analyzes >
 
 @enduml
