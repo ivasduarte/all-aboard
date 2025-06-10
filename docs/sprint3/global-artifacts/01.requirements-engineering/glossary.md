@@ -3,22 +3,27 @@
 **Terms, Expressions and Acronyms (TEA) must be organized alphabetically.**
 
 
-Here’s the table sorted alphabetically:
+Here's the table sorted alphabetically:
 
 | **_TEA_** (EN)                 | **_TEA_** (PT)                   | **_Description_** (EN)                                                                                                         |  
 |:-------------------------------|:---------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|  
 | **Application**                | **Aplicação**                    | A software program designed to perform specific tasks for the user.                                                            |  
 | **Budget**                     | **Orçamento**                    | Financial plans that outline expected revenues and expenditures over a specific period.                                        |  
+| **Building**                   | **Edifício**                     | A structure that can be constructed at a station to provide specific effects or capabilities.                                  |
+| **BuildingType**              | **Tipo de Edifício**            | A template that defines the properties of a building, including its cost, effects, and availability year.                     |
 | **Cargo**                      | **Carga**                        | Goods or materials transported by trains.                                                                                      |  
 | **Cargo Demand**               | **Demanda de carga**             | The amount of cargo a station needs to receive.                                                                                |  
 | **Cargo Supply**               | **Fornecimento de Carga**        | The amount of cargo a station can provide.                                                                                     |  
 | **Carriages**                  | **Carruagens**                   | The parts of a train that carry passengers or cargo.                                                                           |  
-| **City**                       | **Cidade**                       | A populated area that can be placed on the map.                                                                                |  
+| **City**                       | **Cidade**                       | A populated area that can be placed on the map, consisting of a center position and house blocks.                             |  
 | **Class**                      | **Classe**                       | A blueprint for creating objects, defining their properties.                                                                   |  
 | **Diesel**                     | **Diesel**                       | A type of locomotive powered by a diesel engine.                                                                               |  
 | **Economic Radius**            | **Raio Econômico**               | The area of influence of a station, where cities and industries supply and demand cargo.                                       |  
+| **Editor**                     | **Editor**                       | A user role with permissions to create and modify maps and scenarios.                                                         |
 | **Electric**                   | **Elétrica**                     | A type of locomotive powered by electricity, requiring electrified railway tracks.                                             |  
+| **Financial Results**          | **Resultados Financeiros**       | A record of financial performance including expenses and revenues for a specific period.                                      |
 | **Historical Restrictions**    | **Restrições Históricas**        | Historical events that make sense in the scenario and change the operating conditions of the simulator.                        |  
+| **House Block**               | **Bloco de Casa**               | A single block within a city's grid, identified by its x and y coordinates.                                                   |
 | **Industry**                   | **Indústria**                    | A static element that produces or transforms resources.                                                                        |  
 | **Java**                       | **Java**                         | A high-level, object-oriented programming language widely used for building applications and systems.                          |  
 | **JavaDOC**                    | **JavaDOC**                      | A tool for generating automatic documentation from comments in Java code.                                                      |  
@@ -33,6 +38,7 @@ Here’s the table sorted alphabetically:
 | **Product Owner**              | **Proprietário do Produto**      | The person responsible for defining priorities and ensuring the product meets user needs.                                      |  
 | **Railway**                    | **Ferrovia**                     | A system of tracks, stations, and trains used for transporting goods and passengers.                                           |  
 | **Route**                      | **Rota**                         | The path the train will take.                                                                                                  |  
+| **Scenario**                   | **Cenário**                      | A specific configuration of the simulation including time, technological, and historical restrictions.                         |
 | **Simulator**                  | **Simulador**                    | A software tool that replicates real-world processes or systems.                                                               |  
 | **Simulator Operation**        | **Operação do Simulador**        | The process of running the simulator, allowing the user to interact with the behavior of the system under different conditions |  
 | **Station**                    | **Estação**                      | A location where trains stop to load or unload cargo and passengers.                                                           |  
