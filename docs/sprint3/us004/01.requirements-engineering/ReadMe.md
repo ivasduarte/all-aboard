@@ -10,86 +10,138 @@ As an Editor, I want to create a scenario for a selected map.
 
 **From the specifications document:**
 
-> The Scenario Editor must allow the user to define the restrictions and
-conditions for using a given map, namely:
-• Time Restrictions - the period in which the simulation will take place;
-• Technological Restrictions - for example, which locomotives or industries are available in the scenario;
-• Historical Restrictions - historical events that make sense in the scenario and change the operating conditions of 
-the simulator. For instance, a war increases the steel demand, and a vaccination campaign or a schooling program
-encourages mail and/or passenger traffic. In this context, the goods that the Ports import and export are also defined.
-
+> The Scenario Editor must allow the user to define the restrictions and conditions for using a given map:
+> 
+> 1. Time Restrictions
+>    - Period in which the simulation will take place
+>    - Affects available technologies and historical events
+> 
+> 2. Technological Restrictions
+>    - Available locomotives (steam, diesel, electric)
+>    - Available industries and their capabilities
+>    - Infrastructure limitations
+> 
+> 3. Historical Restrictions
+>    - Historical events affecting simulation conditions
+>    - Examples:
+>      * Wars (increased steel demand)
+>      * Vaccination campaigns (increased mail traffic)
+>      * Schooling programs (increased passenger traffic)
+>    - Port import/export configurations
 
 **From the client clarifications:**
- 
+
+> No additional clarifications provided.
 
 ### 1.3. Acceptance Criteria
 
-> **AC1**: Definition of the behaviour of ports, which cargoes they import/export and/or transform;
-> **AC2**: Definition of the available locomotion types (steam, diesel, and/or electric).
-> **AC3**: (Re)Definition of the factors that alter the generation (frequency)
-of generating industries
+> **AC1:** Definition of port behavior, including cargo import/export/transformation rules.
+> **AC2:** Definition of available locomotion types (steam, diesel, and/or electric).
+> **AC3:** Definition of factors affecting resource generation in industries.
 > **AC4:** The system must allow the Editor to create a scenario for a selected map.
-> **AC5:** A scenario can't be created without an existing map.
-> **AC6:** The scenario must require are restrictions (time, historical, technological).
-> **AC7:** Each restriction type must include valid inputs (i.e. Time Restrictions must include valid dates, within an 
-acceptable range).
+> **AC5:** A scenario cannot be created without an existing map.
+> **AC6:** The scenario must require all restriction types (time, historical, technological).
+> **AC7:** Each restriction type must include valid inputs (e.g., Time Restrictions must include valid dates within an acceptable range).
 > **AC8:** Each scenario must have a unique name (avoid duplicates), and prevent special characters and empty values in the name.
 > **AC9:** Each scenario must be linked to exactly one map.
 > **AC10:** Upon successful creation, the system must display a confirmation message.
 > **AC11:** If creation fails, the system must provide a descriptive error message indicating the cause.
 > **AC12:** Only users with "Editor" privileges can create, modify, and manage scenarios.
 
-
 ### 1.4. Found out Dependencies
 
-* There is a dependency with US001 - "Create map" - since a scenario is created for a selected map,
-there must be at least one existing map before a scenario can be created. This dependency ensures 
-that scenarios are correctly linked to a valid map and prevents orphaned scenarios without a map context.
+* US001 - "Create map": A map must exist before creating a scenario.
 
 ### 1.5 Input and Output Data
 
 **Input Data:**
 
-**Select Data:**
-- Map
+*ScenarioDTO:*
+```java
+public class ScenarioDTO {
+    private String mapId;           // ID of the selected map
+    private String name;            // Scenario name
+    private TimeRestrictions timeRestrictions;
+    private TechRestrictions techRestrictions;
+    private HistoricalRestrictions historicalRestrictions;
+}
 
-**Type Data:**
-- Time restrictions
-- Technological restrictions
-- Historical restrictions
+public class TimeRestrictions {
+    private LocalDate startDate;    // Simulation start date
+    private LocalDate endDate;      // Simulation end date
+}
+
+public class TechRestrictions {
+    private Set<LocomotiveType> availableLocomotives;
+    private Set<IndustryType> availableIndustries;
+    private Set<InfrastructureType> availableInfrastructure;
+}
+
+public class HistoricalRestrictions {
+    private Set<HistoricalEvent> events;
+    private Map<PortId, PortConfig> portConfigurations;
+}
+
+public enum LocomotiveType {
+    STEAM, DIESEL, ELECTRIC
+}
+
+public enum InfrastructureType {
+    RAIL, ROAD, BRIDGE, TUNNEL
+}
+
+public class HistoricalEvent {
+    private String name;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Map<ResourceType, Double> resourceModifiers;
+}
+
+public class PortConfig {
+    private Set<ResourceType> importResources;
+    private Set<ResourceType> exportResources;
+    private Set<ResourceType> transformResources;
+}
+```
 
 **Output Data:**
 
-- Message of success indicating that the city has been added
-- Error message, in case of failed scenario creation, indicating failure cause.
+*Success Response:*
+```java
+public class ScenarioCreationResponseDTO {
+    private boolean success;
+    private String message;
+    private ScenarioDTO scenario;   // Created scenario data
+}
+```
 
+*Error Response:*
+```java
+public class ErrorResponseDTO {
+    private boolean success;
+    private String errorCode;
+    private String message;
+}
+```
 
 ### 1.6. Output Data Messages Assumptions
 
 > **Acceptance Message:**
 > Scenario created successfully.
 > 
-> **Possible Error Case:**
+> **Possible Error Cases:**
 >
 > - *Map not selected:*
->
-> ERROR. Must select a map for scenario.
->
+>   ERROR: Must select a map for scenario.
 >
 > - *Invalid restrictions:*
-> 
-> ERROR: Time, historical, or technological restrictions are invalid. Please enter again.
->
+>   ERROR: Time, historical, or technological restrictions are invalid. Please enter again.
 >
 > - *Duplicate name:*
-> 
-> ERROR: Scenario Name already exists.
-> 
-> - *Invalid name:*
+>   ERROR: Scenario name already exists.
 >
-> ERROR: Invalid name. Must be under 15 characters, have, at least, one upper case character, and can´t be null.
-
-
+> - *Invalid name:*
+>   ERROR: Invalid name. Must be under 15 characters, have at least one upper case character, and cannot be null.
 
 ### 1.7. System Sequence Diagram (SSD)
 
@@ -102,12 +154,19 @@ that scenarios are correctly linked to a valid map and prevents orphaned scenari
 **Invalid Restrictions:**
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-restrictions.svg)
 
-**Dupliate Name:**
+**Duplicate Name:**
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-name.svg)
-
 
 **Invalid name:**
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-name.svg)
+
+### 1.8 Other Relevant Remarks
+
+* The system should validate that historical events are compatible with the time period.
+* Technological restrictions should be validated against the time period.
+* Port configurations should be validated against available industries and resources.
+* The system should maintain a list of valid scenario names to ensure uniqueness.
+* Scenario creation should consider future expansion possibilities.
 
 
 
