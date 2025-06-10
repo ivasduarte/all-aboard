@@ -7,15 +7,15 @@ autonumber
 actor "Editor" as Editor
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
-participant ":DisplayMapController" as mapCTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
+participant ":DisplayMapController" as mapCTRL
 participant "mapRepository\n:MapRepository" as mapRep
 participant ":MapMapper" as mapper
 participant ":MapDTO" as dto
-participant "scenarioRepository\n:ScenarioRepository" as Repo
-participant ":Scenario" as Scenario
 participant ":Restrictions" as Restrictions
+participant ":Scenario" as Scenario
+participant "scenarioRepository\n:ScenarioRepository" as Repo
 participant ":Budget" as Budget
 participant ":Map" as Map
 
@@ -23,22 +23,32 @@ activate Editor
 Editor -> UI : requests to create a scenario
 activate UI
 
-UI -> CTRL : create()
+UI -> CTRL** : create()
+activate CTRL
 
-UI -> mapCTRL : getMapList()
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : instance
+deactivate reps
+
+CTRL -> PLAT : getMapRepository()
+activate PLAT
+PLAT --> CTRL : mapRepository
+deactivate PLAT
+
+CTRL -> PLAT : getScenarioRepository()
+activate PLAT
+PLAT --> CTRL : scenarioRepository
+deactivate PLAT
+
+UI -> CTRL : getMapList()
+
+CTRL -> mapCTRL : getMapList()
 autonumber 3.1
 activate mapCTRL
-mapCTRL -> reps : getInstance()
-activate reps
-reps --> mapCTRL : instance
-deactivate reps
-mapCTRL -> PLAT : getMapRepository()
-activate PLAT
-PLAT --> mapCTRL : mapRep
-deactivate PLAT
 mapCTRL -> mapRep : getMapList()
 activate mapRep
-mapRep --> mapCTRL : list of maps
+mapRep --> mapCTRL : mapList
 deactivate mapRep
 
 mapCTRL -> mapper : getMapListDTO(mapList)
@@ -53,19 +63,18 @@ deactivate mapper
 
 mapCTRL --> CTRL : mapDTOList
 deactivate mapCTRL
-activate CTRL
 CTRL --> UI : mapDTOList
+deactivate CTRL
 
 autonumber 4
 UI -> Editor : requests to select map from list
 deactivate UI
-Editor --> UI : selects map from list
+Editor -> UI : selects map from list
 activate UI
 
 UI -> Editor : request scenario data
-deactivate CTRL
 deactivate UI
-Editor --> UI : provides scenario data\n(name, dates, loco types, events)
+Editor -> UI : provides scenario data\n(name, dates, loco types, events)
 activate UI
 
 UI -> CTRL : restrictions
@@ -84,33 +93,27 @@ Restrictions --> CTRL : validation result
 deactivate Restrictions
 
 CTRL --> UI : validation result
+deactivate CTRL
 
 alt restrictions not valid
     UI -> Editor : showError("Invalid restrictions provided")
     Editor --> UI : provides new restrictions
 end
 
-UI -> CTRL : createScenario(scenarioName, restrictions, map)
+UI -> CTRL : createScenario(scenarioName, restrictions)
 activate CTRL
 
-autonumber 20.1
-CTRL -> reps : getInstance()
-activate reps
-reps --> CTRL : repositories
-deactivate reps
-
-CTRL -> PLAT : getScenarioRepository()
-activate PLAT
-PLAT --> CTRL : scenarioRepository
-deactivate PLAT
-
+CTRL -> mapRep : getMap(mapDTO)
+activate mapRep
+mapRep --> CTRL : map
+deactivate mapRep
 
 CTRL -> Budget : new Budget()
 activate Budget
 Budget --> CTRL : defaultBudget
 deactivate Budget
 
-CTRL -> Scenario : new Scenario(scenarioName, restrictions, map, defaultBudget)
+CTRL -> Scenario : create(scenarioName, restrictions, map, defaultBudget)
 activate Scenario
 Scenario -> Scenario : validateName()
 alt name not valid
@@ -120,7 +123,11 @@ alt name not valid
     deactivate CTRL
     UI -> Editor : showError(result)
     Editor --> UI : provides new name
-else
+
+else name is valid
+
+    activate Scenario
+    activate CTRL
     Scenario --> CTRL : scenario
     deactivate Scenario
 
