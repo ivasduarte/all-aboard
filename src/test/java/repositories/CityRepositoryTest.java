@@ -12,50 +12,118 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CityRepositoryTest {
     private CityRepository repo;
+    private City city1;
+    private City city2;
 
     @BeforeEach
     void setUp() {
         repo = new CityRepository();
-        repo.save(new City("A","Map1",1,1));
-        repo.save(new City("B","Map1",2,2));
+        city1 = new City("CidadeA", "Mapa1", 1, 1);
+        city2 = new City("CidadeB", "Mapa1", 2, 2);
+        repo.save(city1);
+        repo.save(city2);
     }
 
     @Test
-    void add_IncreasesSize() {
-        repo.save(new City("C","Map1",3,3));
+    void testSaveSingleCity() {
+        City city3 = new City("CidadeC", "Mapa1", 3, 3);
+        repo.save(city3);
         assertEquals(3, repo.getCities().size());
+        assertTrue(repo.getCities().contains(city3));
     }
 
     @Test
-    void getCities_Unmodifiable() {
+    void testSaveNullCityThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.save((City) null));
+    }
+
+    @Test
+    void testSaveListOfCities() {
+        List<City> newCities = List.of(
+            new City("CidadeC", "Mapa1", 3, 3),
+            new City("CidadeD", "Mapa1", 4, 4)
+        );
+        repo.save(newCities);
+        assertEquals(4, repo.getCities().size());
+        assertTrue(repo.getCities().containsAll(newCities));
+    }
+
+    @Test
+    void testSaveNullListThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.save((List<City>) null));
+    }
+
+    @Test
+    void testGetCitiesReturnsUnmodifiableList() {
         List<City> cities = repo.getCities();
-        assertThrows(UnsupportedOperationException.class, () -> cities.add(null));
+        assertThrows(UnsupportedOperationException.class, () -> cities.add(new City("CidadeC", "Mapa1", 3, 3)));
     }
 
     @Test
-    void isNameUnique_WorksCorrectly() {
-        assertTrue(repo.isNameUnique("C","Map1"));
-        assertFalse(repo.isNameUnique("A","Map1"));
+    void testGetCitiesByMap() {
+        List<City> citiesInMap1 = repo.getCitiesByMap("Mapa1");
+        assertEquals(2, citiesInMap1.size());
+        assertTrue(citiesInMap1.contains(city1));
+        assertTrue(citiesInMap1.contains(city2));
+
+        List<City> citiesInMap2 = repo.getCitiesByMap("Mapa2");
+        assertTrue(citiesInMap2.isEmpty());
     }
 
     @Test
-    void existsAtPosition_WorksCorrectly() {
-        assertTrue(repo.existsAtPosition("Map1",1,1));
-        assertFalse(repo.existsAtPosition("Map1",9,9));
+    void testGetCitiesByMapCaseInsensitive() {
+        List<City> citiesInMap1 = repo.getCitiesByMap("mapa1");
+        assertEquals(2, citiesInMap1.size());
+        assertTrue(citiesInMap1.contains(city1));
+        assertTrue(citiesInMap1.contains(city2));
     }
 
     @Test
-    void isBlockPositionUnique_WorksCorrectly() {
-        City city = new City("X","Map1",5,5);
-        HouseBlock hb = new HouseBlock(7,7);
-        city.addBlockManual(hb);
-        repo.save(city);
-        assertFalse(repo.isBlockPositionUnique("Map1", new HouseBlock(7,7)));
+    void testIsNameUnique() {
+        assertTrue(repo.isNameUnique("CidadeC", "Mapa1"));
+        assertFalse(repo.isNameUnique("CidadeA", "Mapa1"));
+        assertTrue(repo.isNameUnique("CidadeA", "Mapa2"));
     }
 
     @Test
-    void validateBlock_AlwaysOK() {
-        assertEquals(CreateCityController.BlockError.OK,
-                repo.validateBlock("Map1", new HouseBlock(0,0)));
+    void testIsNameUniqueCaseInsensitive() {
+        assertFalse(repo.isNameUnique("cidadea", "Mapa1"));
+        assertFalse(repo.isNameUnique("CIDADEA", "Mapa1"));
+    }
+
+    @Test
+    void testExistsAtPosition() {
+        assertTrue(repo.existsAtPosition("Mapa1", 1, 1));
+        assertTrue(repo.existsAtPosition("Mapa1", 2, 2));
+        assertFalse(repo.existsAtPosition("Mapa1", 3, 3));
+        assertFalse(repo.existsAtPosition("Mapa2", 1, 1));
+    }
+
+    @Test
+    void testIsBlockPositionUnique() {
+        HouseBlock block1 = new HouseBlock(1, 1);
+        HouseBlock block2 = new HouseBlock(3, 3);
+        
+        city1.addBlockManual(block1);
+        
+        assertFalse(repo.isBlockPositionUnique("Mapa1", block1));
+        assertTrue(repo.isBlockPositionUnique("Mapa1", block2));
+        assertTrue(repo.isBlockPositionUnique("Mapa2", block1));
+    }
+
+    @Test
+    void testValidateBlock() {
+        HouseBlock block = new HouseBlock(1, 1);
+        assertEquals(CreateCityController.BlockError.OK, repo.validateBlock("Mapa1", block));
+    }
+
+    @Test
+    void testValidateBlockWithNullBlockThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.validateBlock("Mapa1", null));
+    }
+
+    @Test
+    void testValidateBlockWithNullMapNameThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.validateBlock(null, new HouseBlock(1, 1)));
     }
 }
