@@ -21,7 +21,6 @@ public class SimulatorController implements Runnable, Serializable {
     private final double PANDEMIC_RECOVERY_RATE = 0.1;
     private final double WAR_CARGO_MULTIPLIER = 1.5;
     private final double WAR_COST_MULTIPLIER = 1.65;
-    private final int ROUTE_EARNINGS_PER_STATION = 50;
     private final int TRACK_MAINTENANCE_COST_PER_100KM = 5;
 
     private final ShowFinancialResultsController financialController = new ShowFinancialResultsController();
@@ -443,7 +442,7 @@ public class SimulatorController implements Runnable, Serializable {
                 double dist = train.calculateRouteDistance();
                 int fuelCost = l.getFuelCost();
 
-                fuel += (int) (dist * fuelCost) / 100;
+                fuel += (int) (dist * fuelCost) / 1000;
                 track += (int) (dist * TRACK_MAINTENANCE_COST_PER_100KM) / 100;
             }
         }

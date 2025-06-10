@@ -10,13 +10,13 @@ public class Cargo implements Serializable {
     }
 
     public enum Type {
-        AUTO("Auto", 28000),
-        COAL("Coal", 28000),
-        IRON("Iron", 28000),
-        MAIL("Mail", 65000),
-        PASSENGERS("Passengers", 56000),
-        STEEL("Steel", 35000),
-        MFG_GOODS("Manufacturing goods", 42000),
+        AUTO("Auto", 28),
+        COAL("Coal", 28),
+        IRON("Iron", 28),
+        MAIL("Mail", 65),
+        PASSENGERS("Passengers", 56),
+        STEEL("Steel", 60),
+        MFG_GOODS("Manufacturing goods", 42),
         NONE("None", 0);
 
         private final String name;
