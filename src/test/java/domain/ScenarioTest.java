@@ -58,6 +58,11 @@ public class ScenarioTest {
     }
 
     @Test
+    void testSetBudgetWithNull_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> validScenario.setBudget(null));
+    }
+
+    @Test
     void testSubtractBudget(){
         int remainingBudget = validScenario.subtractBudget(2000);
         assertEquals(8000, remainingBudget);
@@ -65,10 +70,33 @@ public class ScenarioTest {
     }
 
     @Test
+    void testSubtractBudgetWithNegativeAmount_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> validScenario.subtractBudget(-1000));
+    }
+
+    @Test
+    void testSubtractBudgetWithAmountGreaterThanBudget_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> validScenario.subtractBudget(15000));
+    }
+
+    @Test
     void testAddBudget(){
         int newBudget = validScenario.addBudget(5000);
         assertEquals(15000, newBudget);
         assertEquals(15000, validScenario.getBudget().getBudget());
+    }
+
+    @Test
+    void testAddBudgetWithNegativeAmount_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> validScenario.addBudget(-1000));
+    }
+
+    @Test
+    void testAddBudgetWithZeroAmount_DoesNotChangeBudget() {
+        int originalBudget = validScenario.getBudget().getBudget();
+        int newBudget = validScenario.addBudget(0);
+        assertEquals(originalBudget, newBudget);
+        assertEquals(originalBudget, validScenario.getBudget().getBudget());
     }
 
     @Test
@@ -91,6 +119,18 @@ public class ScenarioTest {
     @Test
     void testValidateNameWithNonAlphanumeric() {
         Scenario scenario = new Scenario("Test-Scenario!", validRestrictions, testMap, testBudget);
+        assertFalse(scenario.validateName());
+    }
+
+    @Test
+    void testValidateNameWithEmptyString() {
+        Scenario scenario = new Scenario("", validRestrictions, testMap, testBudget);
+        assertFalse(scenario.validateName());
+    }
+
+    @Test
+    void testValidateNameWithOnlySpaces() {
+        Scenario scenario = new Scenario("   ", validRestrictions, testMap, testBudget);
         assertFalse(scenario.validateName());
     }
 
@@ -134,8 +174,20 @@ public class ScenarioTest {
     }
 
     @Test
+    void testIsValidWithNullBudget() {
+        Scenario scenario = new Scenario("TestScenario", validRestrictions, testMap, null);
+        assertFalse(scenario.isValid());
+    }
+
+    @Test
     void testToString() {
         String expectedString = "TestScenario (" + validRestrictions + ", belongs to map 'TestMap')";
         assertEquals(expectedString, validScenario.toString());
+    }
+
+    @Test
+    void testConstructorWithNullBudget_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            new Scenario("TestScenario", validRestrictions, testMap, null));
     }
 }

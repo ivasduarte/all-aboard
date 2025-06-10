@@ -4,6 +4,7 @@ import domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,11 +53,17 @@ public class ScenarioRepositoryTest {
         List<String> historicalEvents = Collections.singletonList("none");
         Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents);
         Budget budget = new Budget(15000);
-        Scenario newScenario = new Scenario( "TestScenario3", restrictions, testMap, budget);
+        Scenario newScenario = new Scenario("TestScenario3", restrictions, testMap, budget);
 
         repo.add(newScenario);
 
         assertEquals(3, repo.getScenarioList().size());
+        assertTrue(repo.getScenarioList().contains(newScenario));
+    }
+
+    @Test
+    void testAddNullScenarioThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.add(null));
     }
 
     @Test
@@ -72,9 +79,7 @@ public class ScenarioRepositoryTest {
         int initialSize = repo.getScenarioList().size();
         repo.add(duplicateScenario);
 
-        // CORREÇÃO: Parece que a implementação está permitindo duplicatas,
-        // então o teste deve esperar 3 cenários em vez de 2
-        assertEquals(3, repo.getScenarioList().size());
+        assertEquals(initialSize, repo.getScenarioList().size());
     }
 
     @Test
@@ -82,6 +87,11 @@ public class ScenarioRepositoryTest {
         assertTrue(repo.existsByName("TestScenario1"));
         assertTrue(repo.existsByName("testscenario1")); // Should be case insensitive
         assertFalse(repo.existsByName("NonExistentScenario"));
+    }
+
+    @Test
+    void testExistsByNameWithNullThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.existsByName(null));
     }
 
     @Test
@@ -95,6 +105,18 @@ public class ScenarioRepositoryTest {
     }
 
     @Test
+    void testGetScenarioListByMap() {
+        List<Scenario> scenarios = repo.getScenarioListByMap(testMap);
+        assertEquals(2, scenarios.size());
+        assertTrue(scenarios.contains(testScenario1));
+        assertTrue(scenarios.contains(testScenario2));
+
+        Map otherMap = new Map("OtherMap", 100, 100);
+        List<Scenario> otherScenarios = repo.getScenarioListByMap(otherMap);
+        assertTrue(otherScenarios.isEmpty());
+    }
+
+    @Test
     void testGetScenarios() {
         Optional<Scenario> foundScenario = repo.getScenarios("TestScenario1");
         assertTrue(foundScenario.isPresent());
@@ -105,11 +127,71 @@ public class ScenarioRepositoryTest {
     }
 
     @Test
+    void testGetScenariosWithNullThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.getScenarios(null));
+    }
+
+    @Test
     void testGetScenariosWithExactNameMatch() {
         Optional<Scenario> foundScenario = repo.getScenarios("TestScenario1");
         assertTrue(foundScenario.isPresent());
 
         Optional<Scenario> notFoundScenario = repo.getScenarios("testscenario1");
         assertFalse(notFoundScenario.isPresent());
+    }
+
+    @Test
+    void testGetScenarioByName() {
+        Scenario foundScenario = repo.getScenarioByName("TestScenario1");
+        assertNotNull(foundScenario);
+        assertEquals("TestScenario1", foundScenario.getScenarioName());
+
+        Scenario notFoundScenario = repo.getScenarioByName("NonExistentScenario");
+        assertNull(notFoundScenario);
+    }
+
+    @Test
+    void testGetScenarioByNameCaseInsensitive() {
+        Scenario foundScenario = repo.getScenarioByName("testscenario1");
+        assertNotNull(foundScenario);
+        assertEquals("TestScenario1", foundScenario.getScenarioName());
+    }
+
+    @Test
+    void testSaveScenarioToFile() {
+        String fileName = "test_scenario.ser";
+        try {
+            repo.saveScenarioToFile(testScenario1);
+            File file = new File("scenarios/TestScenario1.ser");
+            assertTrue(file.exists());
+            file.delete();
+        } catch (Exception e) {
+            fail("Should not throw exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testSaveScenarioToFileWithNullScenarioThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repo.saveScenarioToFile(null));
+    }
+
+    @Test
+    void testLoadScenarioFromFile() {
+        String fileName = "test_scenario.ser";
+        try {
+            repo.saveScenarioToFile(testScenario1);
+            Scenario loadedScenario = repo.loadScenarioFromFile("scenarios/TestScenario1.ser", testMap);
+            assertNotNull(loadedScenario);
+            assertEquals(testScenario1.getScenarioName(), loadedScenario.getScenarioName());
+            new File("scenarios/TestScenario1.ser").delete();
+        } catch (Exception e) {
+            fail("Should not throw exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testLoadScenarioFromFileWithInvalidFileThrowsException() {
+        assertThrows(RuntimeException.class, () -> 
+            repo.loadScenarioFromFile("nonexistent.ser", testMap));
     }
 }
