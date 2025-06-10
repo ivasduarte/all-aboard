@@ -34,9 +34,16 @@ class MapRepositoryTest {
     }
 
     @Test
+    void testAddNullMapThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repository.add(null));
+    }
+
+    @Test
     void testExistsByNameTrue() {
         repository.add(map1);
         assertTrue(repository.existsByName("mapone"));
+        assertTrue(repository.existsByName("MAPONE"));
+        assertTrue(repository.existsByName("MapOne"));
     }
 
     @Test
@@ -45,11 +52,26 @@ class MapRepositoryTest {
     }
 
     @Test
+    void testExistsByNameWithNullThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repository.existsByName(null));
+    }
+
+    @Test
     void testGetMapList() {
         repository.add(map1);
         var mapList = repository.getMapList();
         assertEquals(1, mapList.size());
         assertThrows(UnsupportedOperationException.class, () -> mapList.add(map2));
+    }
+
+    @Test
+    void testGetMapListWithMultipleMaps() {
+        repository.add(map1);
+        repository.add(map2);
+        var mapList = repository.getMapList();
+        assertEquals(2, mapList.size());
+        assertTrue(mapList.contains(map1));
+        assertTrue(mapList.contains(map2));
     }
 
     @Test
@@ -64,5 +86,18 @@ class MapRepositoryTest {
     void testGetMapNotExists() {
         Optional<Map> result = repository.getMap("NonExistent");
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testGetMapWithNullThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> repository.getMap(null));
+    }
+
+    @Test
+    void testGetMapCaseInsensitive() {
+        repository.add(map1);
+        Optional<Map> result = repository.getMap("mapone");
+        assertTrue(result.isPresent());
+        assertEquals(map1, result.get());
     }
 }
