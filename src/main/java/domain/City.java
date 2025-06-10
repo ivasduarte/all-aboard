@@ -68,9 +68,12 @@ public class City implements Serializable {
     public List<HouseBlock> getBlocks() { return Collections.unmodifiableList(blocks); }
 
     /**
-     * Adds a house block manually to the city's list of blocks.
+     * Adds a house block manually to the city's collection of blocks.
+     * This method allows for direct addition of a house block without any validation.
+     * Use with caution as it bypasses any automatic validation that might be present
+     * in other block addition methods.
      *
-     * @param b     The {@code HouseBlock} to be added to the city's collection of house blocks
+     * @param b The HouseBlock to be added to the city's collection
      */
     public void addBlockManual(HouseBlock b) { blocks.add(b); }
 
