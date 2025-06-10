@@ -76,7 +76,7 @@ public class AssignRouteUI implements Runnable {
 
                 if (value >= availableStations.size()) {
                     System.out.println("Number isn't valid, try again!");
-                } else {
+                } else if (value < availableStations.size() || value <= 0) {
                     stationsToAdd.add(availableStations.get(value));
                     System.out.println("Station added to the route!");
                 }

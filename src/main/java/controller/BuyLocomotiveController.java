@@ -125,7 +125,7 @@ public class BuyLocomotiveController {
             locomotiveRepository.save(locomotive);
 
             Train train = new Train(locomotive, scenario.getCurrentYear());
-            train.setCarriages(Train.getMaxCarriages());
+            train.setNumberOfCarriages(10);
             TrainRepository trainRepository = Repositories.getInstance().getTrainRepository();
             trainRepository.saveTrain(train);
             scenario.addNewTrain(train);
@@ -185,7 +185,7 @@ public class BuyLocomotiveController {
     }
 
     /**
-     * This method is responsible to change the labels that describe a locomotive when a new one is selected.
+     * This method is responsible to change the labels that describe a locomotive, when a new one is selected.
      */
     @FXML
     private void updateLocomotiveInfo() {

@@ -44,8 +44,7 @@ public class IndustryRepository implements Serializable {
      * @param map The desired map.
      * @return Industry list of the desired map.
      */
-    public List<Industry> getIndustriesByMap(Map map)
-    {
+    public List<Industry> getIndustriesByMap(Map map) {
         List<Industry> filteredIndustries = new ArrayList<>();
 
         MapRepository mapRepository = Repositories.getInstance().getMapRepository();
@@ -53,18 +52,17 @@ public class IndustryRepository implements Serializable {
 
         int mapID = -1;
 
-        for(int i = 0; i < maps.size(); i++)
-        {
-            if(maps.get(i).equals(map))
-            {
+        for (int i = 0; i < maps.size(); i++) {
+            if (maps.get(i).getName().equalsIgnoreCase(map.getName())) {
                 mapID = i;
+                break;
             }
         }
 
-        for(Industry industry : industries)
-        {
-            if(industry.getMapID() == mapID)
+        for (Industry industry : industries) {
+            if (industry.getMapID() == mapID) {
                 filteredIndustries.add(industry);
+            }
         }
 
         return filteredIndustries;

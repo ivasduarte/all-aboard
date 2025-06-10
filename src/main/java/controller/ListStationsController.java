@@ -91,7 +91,7 @@ public class ListStationsController {
         Station.StationType type = currentStation.getStationType();
         int x = currentStation.getPositionX();
         int y = currentStation.getPositionY();
-        List<Station.StationCargo> cargo = currentStation.getStationCargo();
+        int cargo = currentStation.getCargo();
         List<Building> buildings = currentStation.getBuildings();
 
 
@@ -99,16 +99,7 @@ public class ListStationsController {
         idLabel.setText("ID: " + id);
         typeLabel.setText("Type: " + type);
         positionLabel.setText("Position: (" + x + ", " + y + ")");
-
-        if (cargo.isEmpty() || currentStation.getTotalCargo() == 0) {
-            cargoLabel.setText("Cargo: none");
-        } else {
-            StringBuilder cargoText = new StringBuilder("Buildings:\n");
-            for (Station.StationCargo stationCargo : cargo) {
-                cargoText.append("  - ").append(stationCargo.getType().name()).append(": ").append(stationCargo.getAmount()).append("\n");
-            }
-            buildingLabel.setText(cargoText.toString());
-        }
+        cargoLabel.setText("Cargo: " + cargo);
 
         if (buildings.isEmpty()) {
             buildingLabel.setText("Buildings: none");

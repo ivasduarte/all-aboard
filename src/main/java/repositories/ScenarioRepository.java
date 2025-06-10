@@ -131,6 +131,9 @@ public class ScenarioRepository implements Serializable {
             if (mapFromFile.getName().equalsIgnoreCase(selectedMap.getName())) {
                 if (!selectedMap.hasScenario(scenario)) {
                     selectedMap.addNewScenario(scenario);
+                    if (!scenarios.contains(scenario)) {
+                        scenarios.add(scenario);
+                    }
                     System.out.printf("\nSuccessfully loaded \"%s\" into map \"%s\".%n",
                             scenario.getScenarioName(), selectedMap.getName());
                 } else {

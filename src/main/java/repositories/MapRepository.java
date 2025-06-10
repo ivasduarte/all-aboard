@@ -83,7 +83,7 @@ public class MapRepository implements Serializable {
      *              or an empty {@code Optional} if no match is found.
      */
     public Optional<Map> getMap(String name) {
-        return maps.stream().filter(m -> m.getName().equals(name)).findFirst();
+        return maps.stream().filter(m -> m.getName().equalsIgnoreCase(name)).findFirst();
     }
 
 }

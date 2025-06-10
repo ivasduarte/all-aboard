@@ -1,6 +1,7 @@
 package repositories;
 
 import domain.Station;
+import domain.Map;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,7 +50,8 @@ public class StationRepository implements Serializable {
     public List<Station> getAvailableStationsByMapName(String mapName) {
         List<Station> result = new ArrayList<>();
         for (Station station : stations) {
-            if (station.getMap().getName().equalsIgnoreCase(mapName)) {
+            Map stationMap = station.getMap();
+            if (stationMap != null && stationMap.getName().equalsIgnoreCase(mapName)) {
                 result.add(station);
             }
         }

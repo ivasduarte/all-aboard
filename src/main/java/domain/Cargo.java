@@ -15,9 +15,8 @@ public class Cargo implements Serializable {
         IRON("Iron", 28),
         MAIL("Mail", 65),
         PASSENGERS("Passengers", 56),
-        STEEL("Steel", 60),
-        MFG_GOODS("Manufacturing goods", 42),
-        NONE("None", 0);
+        STEEL("Steel", 35),
+        MFG_GOODS("Manufacturing goods", 42);
 
         private final String name;
         private final int price;
@@ -26,22 +25,9 @@ public class Cargo implements Serializable {
             this.name = name;
             this.price = price;
         }
-
-        public String getName() {
-            return name;
-        }
-        public int getPrice() {return price;}
     }
 
     public Type getType() {
         return type;
-    }
-
-    public String getName() {
-        return type.name;
-    }
-
-    public int getPrice() {
-        return type.price;
     }
 }
