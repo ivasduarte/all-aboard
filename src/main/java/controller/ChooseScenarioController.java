@@ -6,9 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
 import javafx.stage.Stage;
-
+import presentation.LoadScenarioUI;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 
@@ -34,6 +33,19 @@ public class ChooseScenarioController {
 
     @FXML
     public void initialize() {
+        updateScenarioList();
+
+        // Adiciona um listener para a propriedade scenarioLoaded
+        LoadScenarioUI.scenarioLoaded.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                updateScenarioList();
+                // Reseta a propriedade para false
+                LoadScenarioUI.scenarioLoaded.set(false);
+            }
+        });
+    }
+
+    private void updateScenarioList() {
         ScenarioRepository scenarioRepo = Repositories.getInstance().getScenarioRepository();
         List<Scenario> scenarios = scenarioRepo.getScenarioList();
 
@@ -42,6 +54,7 @@ public class ChooseScenarioController {
             return;
         }
 
+        scenarioComboBox.getItems().clear();
         scenarioComboBox.getItems().addAll(scenarios);
         scenarioComboBox.setOnAction(e -> updateScenarioInfo());
     }
@@ -65,6 +78,14 @@ public class ChooseScenarioController {
         alert.setTitle("Error");
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+
+    /**
+     * Atualiza a lista de cenários disponíveis no ComboBox.
+     * Este método pode ser chamado de outras classes quando um novo cenário é carregado.
+     */
+    public void refreshScenarioList() {
+        updateScenarioList();
     }
 
     @FXML
