@@ -2,10 +2,12 @@ package presentation;
 
 import controller.AssignRouteController;
 import domain.*;
+import repositories.Repositories;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AssignRouteUI implements Runnable {
     private Map map;
@@ -31,7 +33,9 @@ public class AssignRouteUI implements Runnable {
             return;
         }
 
-        List<Station> stations = map.getStations();
+        List<Station> stations = Repositories.getInstance().getStationRepository().getStations().stream().
+                filter(s -> s.getOwnerPlayer().equals(UserSession.getInstance().getUser().getEmail())).
+                filter(s -> s.getMapName().equals(map.getName())).collect(Collectors.toList());
 
         if (stations.size() < 2) {
             System.out.println("There's not enough stations to create a route!");
