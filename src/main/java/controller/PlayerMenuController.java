@@ -58,7 +58,7 @@ public class PlayerMenuController {
     private void initialize() {
         menuBox.getChildren().clear();
 
-        addMenuButton("Build a Station", new AddStationUI(currentMap, currentScenario));
+        addMenuButton("Build a Station", () -> handleAddStation());
         addMenuButton("Upgrade a Station", () -> handleUpgradeAStation());
         addMenuButton("Upgrade Type of Station", () -> handleUpgradeAStationType());
         addMenuButton("List All Stations", () -> handleListAllStations());
@@ -84,6 +84,32 @@ public class PlayerMenuController {
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setOnAction(e -> action.run());
         menuBox.getChildren().add(btn);
+    }
+
+    @FXML
+    private void handleAddStation(){
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/AddStation.fxml");
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: FXML URL not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+            AddStationController controller = loader.getController();
+            controller.setData(currentMap, currentScenario);
+
+            Stage stage = new Stage();
+            stage.setTitle("Upgrade a Station");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) menuBox.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
