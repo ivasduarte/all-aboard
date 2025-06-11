@@ -11,55 +11,86 @@ participant "BuildRailwayLineUI" as UI
 
 activate Editor
 
-Editor -> UI : start the simulation
+Editor -> UI : requests to build a railway line
 activate UI
 
-create ":BuildRailwayLineController" as CTRL
-UI --> CTRL : create
+create ":BuildRailwayLineController" as railCTRL
+UI --> railCTRL : create()
 
-UI --> Editor : shows a list of the available maps
-Editor -> UI : selects a map
-UI --> Editor : shows a list of the available scenarios
-Editor -> UI : selects a scenario
-UI --> Editor : shows a list of the cities
-Editor -> UI : selects a city
-UI --> Editor : shows a list of the actions the player can do
-Editor -> UI : selects to add a railway line
+create ":AddStationController" as cityCTRL
+UI --> cityCTRL : create()
 
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
 participant "railwayLineRepository\n:RailwayLineRepository" as railwayLineRepository
+participant "stationRepository\n:StationRepository" as cityRepo
+participant "StationMapper" as cityMapper
+participant "StationDTO" as cityDTO
 
-UI --> Editor : shows a list of the available stations
-Editor -> UI : selects stations
+UI -> cityCTRL : getStationsList()
+activate cityCTRL
+
+cityCTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+RepositorySingleton --> cityCTRL : repositories
+deactivate RepositorySingleton
+
+cityCTRL -> PLAT : getStationRepository()
+activate PLAT
+PLAT --> cityCTRL : stationRepository
+deactivate PLAT
+
+cityCTRL -> cityRepo : getStationsList()
+activate cityRepo
+cityRepo --> cityCTRL : stationsList
+deactivate cityRepo
+
+cityCTRL -> cityMapper : getStationsDTOList(stationsList)
+activate cityMapper
+
+loop for each city in cityList
+    cityMapper --> cityDTO : StationDTO = toDTO(station)
+    activate cityDTO
+    deactivate cityDTO
+end loop
+
+cityMapper --> cityCTRL : stationDTOList
+deactivate cityMapper
+
+cityCTRL --> UI : stationDTOList
+deactivate cityCTRL
+
+UI --> Editor : displays list of available stations
+Editor -> UI : selects two stations
+
 UI --> Editor : requests the type of railway line
 Editor -> UI : inserts the type of railway line
 
-UI --> CTRL : buildRailwayLine(first station, second station, type of railway line)
-activate CTRL
+UI --> railCTRL : buildRailwayLine(first station, second station, type of railway line)
+activate railCTRL
 
-CTRL -> RepositorySingleton : getInstance()
+railCTRL -> RepositorySingleton : getInstance()
 activate RepositorySingleton
-RepositorySingleton --> CTRL : repositories
+RepositorySingleton --> railCTRL : repositories
 deactivate RepositorySingleton
 
-CTRL -> PLAT : getRailwayLineRepository()
+railCTRL -> PLAT : getRailwayLineRepository()
 activate PLAT
-PLAT --> CTRL : railwayLineRepository
+PLAT --> railCTRL : railwayLineRepository
 deactivate PLAT
 
-CTRL -> railwayLineRepository : buildRailwayLine(first station, second station, type of railway line)
+railCTRL -> railwayLineRepository : buildRailwayLine(first station, second station, type of railway line)
 activate railwayLineRepository
 
 create "railwayLine\n:RailwayLine" as RailwayLine
 railwayLineRepository -> RailwayLine : create()
 railwayLineRepository -> railwayLineRepository : verifyIfExistsAndSave(first station, second station, type of railway line)
 
-railwayLineRepository --> CTRL : railwayLineData
+railwayLineRepository --> railCTRL : railwayLineData
 deactivate railwayLineRepository
 
-CTRL --> UI : railwayLineData
-deactivate CTRL
+railCTRL --> UI : railwayLineData
+deactivate railCTRL
 
 UI --> Editor : displays operation success and railwayLineData
 deactivate UI
