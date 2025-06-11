@@ -1,6 +1,7 @@
 package controller;
 
 import domain.*;
+import dto.LocomotiveDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,12 +12,10 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import repositories.LocomotiveRepository;
 import repositories.Repositories;
-import repositories.ScenarioRepository;
 import repositories.TrainRepository;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BuyLocomotiveController {
@@ -146,6 +145,10 @@ public class BuyLocomotiveController {
             locomotiveRepository = repositories.getLocomotiveRepository();
         }
         return locomotiveRepository;
+    }
+
+    public List<LocomotiveDTO> getLocomotiveDTOList(List<Locomotive> availableLocos) {
+       return getLocomotiveDTOList(availableLocos);
     }
 
     public boolean isModelValid(String locomotiveModel, List<Locomotive> availableLocomotives) {
