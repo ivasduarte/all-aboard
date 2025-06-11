@@ -3,7 +3,7 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-autonumber 11
+autonumber 15
 
 participant ":AddIndustryController" as CTRL
 participant "Repositories" as REPS

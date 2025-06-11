@@ -3,7 +3,7 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-autonumber 20
+autonumber 22
 
 actor Editor
 participant ":AddIndustryUI" as UI
@@ -18,8 +18,8 @@ CTRL -> repo : save(industry)
 activate repo
 
 group Add Industry Success
-    repo -> repo : validateIndustry()
-    repo -> CTRL : industryData
+
+    repo -> CTRL : industry
     deactivate repo
 
     CTRL -> UI : industryData
@@ -27,6 +27,7 @@ group Add Industry Success
 
     UI -> Editor : "Industry [(positionX), (positionY)] saved successfully."
     deactivate UI
+
 end
 
 @enduml

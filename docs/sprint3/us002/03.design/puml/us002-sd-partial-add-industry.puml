@@ -3,24 +3,23 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-autonumber 16
+autonumber 20
 
 participant ":addIndustryController" as CTRL
 participant ":Industry" as IND
 participant "industryRepository\n:IndustryRepository" as REPO
 
-CTRL -> IND : addIndustry(mapId, scenarioId, positionX, positionY, industryType)
+CTRL -> IND : addIndustry(mapID, positionX, positionY, industryType, cargoAmount)
 activate IND
 
 group Add Industry
-    IND -> IND : validatePosition()
-    IND -> IND : checkOverbuilding()
 
     IND --> CTRL : Industry Object
     deactivate IND
 
     CTRL -> REPO : save(map)
     activate REPO
+
 end
 
 @enduml
