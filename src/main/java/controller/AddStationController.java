@@ -188,6 +188,9 @@ public class AddStationController {
         Station.StationType stationType = stationTypeCmb.getValue();
         Station.Orientation stationOrientation = orientationCmb.getValue();
 
+        if(stationOrientation == null)
+            stationOrientation = Station.Orientation.values()[0];
+
         String stationName = generateStationName(map.getName(), positionX, positionY, stationType.getDisplayName());
         Station newStation = new Station(map.getName(), mapID, positionX, positionY, stationType, stationOrientation, stationName);
         newStation.setOwnerPlayer(UserSession.getInstance().getUser().getEmail());

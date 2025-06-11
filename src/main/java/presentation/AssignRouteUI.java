@@ -74,9 +74,9 @@ public class AssignRouteUI implements Runnable {
                 System.out.print("\nEnter the number of the station you wish to add (enter a negative number or zero to exit): ");
                 value = sc.nextInt() - 1;
 
-                if (value >= availableStations.size()) {
+                if (value >= availableStations.size() || value < 0) {
                     System.out.println("Number isn't valid, try again!");
-                } else if (value < availableStations.size() || value <= 0) {
+                } else{
                     stationsToAdd.add(availableStations.get(value));
                     System.out.println("Station added to the route!");
                 }
