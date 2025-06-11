@@ -5,82 +5,84 @@ skinparam shadowing false
 
 autonumber
 
-actor "Editor" as Editor
-participant ":AddIndustryUI" as UI
+actor Editor as player
+participant "AddIndustryUI" as UI
 
-activate Editor
+activate player
 
-Editor -> UI : asks to add an industry
+player -> UI : requests to add an industry
 activate UI
 
-create ":AddIndustryController" as CTRL
-UI -> CTRL : create()
+create ":AddIndustryController" as indCtrl
+UI -> indCtrl : create()
+
+loop until valid position
+
+UI --> player : asks the industry position
+player -> UI : inserts the industry position
+UI -> UI : validate position
+
+alt position is invalid
+UI --> player : show error message
+else position is valid
+Note over UI : exit loop; continue with valid position
+end
+
+end loop
+
+loop until valid selection
+
+UI --> player : shows a list of the types of industry
+player -> UI : selects a type of industry
+UI -> UI : validate selection
+
+alt selection is invalid
+UI --> player : show error message
+else selection is valid
+Note over UI : exit loop; continue with valid selection of industry type
+end
+
+end loop
+
+loop until input is valid
+
+UI --> player : asks the cargo the industry will generate in a year
+player -> UI : inserts the amount of cargo to be generated
+UI -> UI : verifies if inserted input is valid
+
+alt input is invalid
+UI --> player : shows error message
+else input is valid
+Note over UI : exit loop; continue with valid input (positive, integer number)
+end
+
+end loop
+
+UI -> indCtrl : addIndustry(positionX, positionY, industryType, cargoAmount)
+activate indCtrl
 
 participant ":Repositories" as REPS
 participant "repositories\n:Repositories" as reps
-participant ":Industry" as IND
-participant "industryRepository\n:IndustryRepository" as repo
 
-UI --> Editor : shows a list of the available maps
-deactivate UI
+indCtrl -> REPS : getInstance()
+activate REPS
 
-Editor -> UI : selects a map
-activate UI
-
-UI --> Editor : shows a list of the available scenarios
-deactivate UI
-
-Editor -> UI : selects a scenario
-activate UI
-
-UI --> Editor : asks the industry position
-deactivate UI
-
-Editor -> UI : introduces the position
-activate UI
-
-UI --> Editor : asks to introduce the industry type
-deactivate UI
-
-Editor -> UI : introduces the industry type
-activate UI
-
-UI -> CTRL : submitData(mapId, scenarioId, positionX, positionY, industryType)
-activate CTRL
-
-CTRL -> REPS : getInstance()
-activate  REPS
-
-REPS --> CTRL : repositories
+REPS --> indCtrl : repositories
 deactivate REPS
 
-CTRL -> reps : getIndustryRepository()
+indCtrl -> reps : getIndustryRepository()
 activate reps
 
-reps --> CTRL : industryRepository
+reps --> indCtrl : industryRepository
 deactivate reps
 
-CTRL -> IND : addIndustry(mapId, scenarioId, positionX, positionY, industryType)
-activate IND
+create "industryRepository\n:IndustryRepository" as indRepo
+indCtrl -> indRepo : save(industry)
 
-IND -> IND : validatePosition()
-IND -> IND : checkOverbuilding()
+indCtrl --> UI : success message and industry data
+deactivate indCtrl
 
-IND --> CTRL : Industry Object
-deactivate IND
-
-CTRL -> repo : save(industry)
-activate repo
-
-repo -> repo : validateIndustry()
-
-repo --> CTRL : industryData
-deactivate repo
-
-CTRL --> UI : industryData
-deactivate CTRL
-
-UI --> Editor : "Industry [(positionX), (positionY)] saved successfully."
+UI --> player : success message and industry data
 deactivate UI
 
 @enduml
