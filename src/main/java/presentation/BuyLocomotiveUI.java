@@ -4,6 +4,7 @@ import controller.BuyLocomotiveController;
 import domain.Locomotive;
 import domain.Map;
 import domain.Scenario;
+import dto.LocomotiveDTO;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
 
@@ -37,7 +38,7 @@ public class BuyLocomotiveUI implements Runnable {
         List<Scenario> scenarios = scenarioRepository.getScenarioList();
         int scenarioID = scenarios.indexOf(this.scenario);
 
-        List<Locomotive> availableLocomotives = getLocomotiveController().getLocomotiveRepository().getAvailableLocomotives(scenarioID);
+        List<LocomotiveDTO> availableLocomotives = getLocomotiveController().getLocomotiveDTOList();
 
         if (availableLocomotives.isEmpty()) {
             System.out.println("There's no available locomotives to purchase at this moment.");
@@ -48,7 +49,7 @@ public class BuyLocomotiveUI implements Runnable {
             System.out.println("Available locomotives:");
 
             for (int i = 0; i < availableLocomotives.size(); i++) {
-                System.out.println((i+1) + ". " + availableLocomotives.get(i).getLocomotiveModel() + " | " + availableLocomotives.get(i).getLocomotiveFuelType() + " | " + availableLocomotives.get(i).getPrice() + "€ | Top Speed: " + availableLocomotives.get(i).getMaxSpeed());
+                System.out.println((i+1) + ". " + availableLocomotives.get(i).getModel() + " | " + availableLocomotives.get(i).getFuelType() + " | " + availableLocomotives.get(i).getPrice() + "€ | Top Speed: " + availableLocomotives.get(i).getSpeed());
             }
             System.out.println("Introduce the locomotive model you want to buy: ");
 

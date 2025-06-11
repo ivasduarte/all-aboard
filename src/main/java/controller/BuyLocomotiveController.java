@@ -2,6 +2,7 @@ package controller;
 
 import domain.*;
 import dto.LocomotiveDTO;
+import dto.LocomotiveMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -147,10 +148,27 @@ public class BuyLocomotiveController {
         return locomotiveRepository;
     }
 
-    public List<LocomotiveDTO> getLocomotiveDTOList(List<Locomotive> availableLocos) {
-       return getLocomotiveDTOList(availableLocos);
+    /**
+     * This method will transform all the Locomotive objects to LocomotiveDTOs.
+     *
+     * @return LocomotiveDTOList
+     */
+    public List<LocomotiveDTO> getLocomotiveDTOList() {
+        List<Scenario> scenarios = Repositories.getInstance().getScenarioRepository().getScenarioList();
+        int scenarioId = scenarios.indexOf(scenario);
+
+        List<Locomotive> locomotives = locomotiveRepository.getAvailableLocomotives(scenarioId);
+        return LocomotiveMapper.toDTO(locomotives);
     }
 
+    /**
+     * This method verifies if a specific locomotive model exists in the list of available locomotives.
+     *
+     * @param locomotiveModel the locomotive model
+     * @param availableLocomotives list of available locomotives
+     *
+     * @return TRUE if the entered model exists in the list. FALSE if the model isn't present in the list.
+     */
     public boolean isModelValid(String locomotiveModel, List<Locomotive> availableLocomotives) {
         if (availableLocomotives == null || availableLocomotives.isEmpty()) {
             return false;
