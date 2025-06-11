@@ -58,11 +58,13 @@ end
 
 end loop
 
-UI -> indCtrl : addIndustry(positionX, positionY, industryType, cargoAmount)
+UI -> indCtrl : submitData(mapID, positionX, positionY, industryType, cargoAmount)
 activate indCtrl
 
 participant ":Repositories" as REPS
 participant "repositories\n:Repositories" as reps
+participant ":Industry" as ind
+participant "industryRepository\n:IndustryRepository" as indRepo
 
 indCtrl -> REPS : getInstance()
 activate REPS
@@ -76,11 +78,20 @@ activate reps
 reps --> indCtrl : industryRepository
 deactivate reps
 
-create "industryRepository\n:IndustryRepository" as indRepo
-indCtrl -> indRepo : save(industry)
+indCtrl -> ind : addIndustry(mapID, positionX, positionY, industryType, cargoAmount)
+activate ind
 
-indCtrl --> UI : success message and industry data
-deactivate indCtrl
+ind--> indCtrl : Industry Object
+deactivate ind
+
+indCtrl -> indRepo : save(industry)
+activate indRepo
+
+indRepo --> indCtrl : industry
+deactivate indRepo
+
+indCtrl --> UI : industry data
+deactivate UI
 
 UI --> player : success message and industry data
 deactivate UI
