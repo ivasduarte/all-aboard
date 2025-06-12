@@ -43,11 +43,17 @@ public class Train implements Serializable {
         return route;
     }
 
-    public void setRoute(List<Station> stations) {
+    public void setRoute(List<PointOfRoute> pointOfRoutes) {
+        this.route = new ArrayList<>(pointOfRoutes);
+        this.arrivalTime = calculateArrivalTime();
+    }
+
+    public void setRouteWithStations(List<Station> stations) {
         this.route = new ArrayList<>();
-        for (Station station : stations) {
+
+        for(Station station : stations)
             this.route.add(new PointOfRoute(station));
-        }
+
         this.arrivalTime = calculateArrivalTime();
     }
 
@@ -248,5 +254,11 @@ public class Train implements Serializable {
             System.out.println("[DELIVERY] Unloaded " + toUnload + " cargo units at station " + station.getName());
         }
         return toUnload;
+    }
+
+    @Override
+    public String toString()
+    {
+        return locomotive.getLocomotiveModel() + " | " + locomotive.getLocomotiveFuelType();
     }
 }

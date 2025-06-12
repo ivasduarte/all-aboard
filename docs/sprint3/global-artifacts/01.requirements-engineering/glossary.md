@@ -10,7 +10,7 @@ Here's the table sorted alphabetically:
 | **Application**                | **Aplicação**                    | A software program designed to perform specific tasks for the user.                                                            |  
 | **Budget**                     | **Orçamento**                    | Financial plans that outline expected revenues and expenditures over a specific period.                                        |  
 | **Building**                   | **Edifício**                     | A structure that can be constructed at a station to provide specific effects or capabilities.                                  |
-| **BuildingType**              | **Tipo de Edifício**            | A template that defines the properties of a building, including its cost, effects, and availability year.                     |
+| **BuildingType**               | **Tipo de Edifício**            | A template that defines the properties of a building, including its cost, effects, and availability year.                     |
 | **Cargo**                      | **Carga**                        | Goods or materials transported by trains.                                                                                      |  
 | **Cargo Demand**               | **Demanda de carga**             | The amount of cargo a station needs to receive.                                                                                |  
 | **Cargo Supply**               | **Fornecimento de Carga**        | The amount of cargo a station can provide.                                                                                     |  
@@ -23,7 +23,7 @@ Here's the table sorted alphabetically:
 | **Electric**                   | **Elétrica**                     | A type of locomotive powered by electricity, requiring electrified railway tracks.                                             |  
 | **Financial Results**          | **Resultados Financeiros**       | A record of financial performance including expenses and revenues for a specific period.                                      |
 | **Historical Restrictions**    | **Restrições Históricas**        | Historical events that make sense in the scenario and change the operating conditions of the simulator.                        |  
-| **House Block**               | **Bloco de Casa**               | A single block within a city's grid, identified by its x and y coordinates.                                                   |
+| **House Block**                | **Bloco de Casa**               | A single block within a city's grid, identified by its x and y coordinates.                                                   |
 | **Industry**                   | **Indústria**                    | A static element that produces or transforms resources.                                                                        |  
 | **Java**                       | **Java**                         | A high-level, object-oriented programming language widely used for building applications and systems.                          |  
 | **JavaDOC**                    | **JavaDOC**                      | A tool for generating automatic documentation from comments in Java code.                                                      |  
@@ -50,3 +50,22 @@ Here's the table sorted alphabetically:
 | **Train Simulator**            | **Simulador de Comboios**        | A specific type of simulator focused on the operation and management of trains.                                                |  
 | **Transforming Industries**    | **Indústrias de transformação**  | Industries that process raw materials into finished products.                                                                  |  
 | **Unit Test**                  | **Teste unitário**               | A test that verifies the functionality of a unit of code.                                                                      |  
+| **Authentication**             | **Autenticação**                 | The process of verifying the identity of a user and their access rights to the system.                                         |
+| **Cargo Analysis**             | **Análise de Carga**             | Analysis of cargo types, revenue correlation, and linear regression for business optimization.                                 |
+| **CargoType**                  | **Tipo de Carga**               | Specific categories of cargo including passengers, mail, coal, iron ore, steel, and cars.                                      |
+| **Expenses**                   | **Despesas**                     | Costs incurred in running the railway system, including track maintenance, train maintenance, and fuel costs.                   |
+| **IndustryType**               | **Tipo de Indústria**           | A template that defines the properties and characteristics of an industry.                                                     |
+| **LocomotiveModel**            | **Modelo de Locomotiva**        | Specific model of a locomotive with defined characteristics like fuel type, speed, and operational years.                      |
+| **LocomotiveType**             | **Tipo de Locomotiva**          | Categories of locomotives including steam, diesel, and electric types.                                                         |
+| **MapSave**                    | **Salvamento de Mapa**          | The process of saving map data to a file for later use.                                                                        |
+| **MapLoad**                    | **Carregamento de Mapa**        | The process of loading map data from a saved file.                                                                             |
+| **Password**                   | **Senha**                       | A security credential used for user authentication.                                                                            |
+| **Revenues**                   | **Receitas**                    | Income generated from cargo deliveries and other railway operations.                                                           |
+| **RouteAnalysis**              | **Análise de Rota**             | Analysis of routes including shortest path calculations and maintenance route optimization.                                    |
+| **ScenarioSave**               | **Salvamento de Cenário**       | The process of saving scenario data to a file for later use.                                                                   |
+| **ScenarioLoad**               | **Carregamento de Cenário**     | The process of loading scenario data from a saved file.                                                                        |
+| **SimulationSave**             | **Salvamento de Simulação**     | The process of saving simulation data to a file for later use.                                                                 |
+| **SimulationLoad**             | **Carregamento de Simulação**   | The process of loading simulation data from a saved file.                                                                      |
+| **StationStatistics**          | **Estatísticas da Estação**     | Data about station performance including average profit, passenger arrivals, and cargo distribution.                           |
+| **StationType**                | **Tipo de Estação**             | Categories of stations with different characteristics and capabilities.                                                        |
+| **YearFinancialResults**       | **Resultados Financeiros Anuais**| Annual financial performance including expenses and revenues.                                                                 |

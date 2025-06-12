@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -63,7 +64,7 @@ public class PlayerMenuController {
         addMenuButton("Upgrade Type of Station", () -> handleUpgradeAStationType());
         addMenuButton("List All Stations", () -> handleListAllStations());
         addMenuButton("Buy a Locomotive", () -> handleBuyLocomotive());
-        addMenuButton("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario));
+        addMenuButton("Assign a Train to a Route", () -> handleAssignRoute());
         addMenuButton("Check Financial Results", () -> handleShowFinancialResults());
         addMenuButton("Play Simulation", new SimulationUI(currentMap, currentScenario));
     }
@@ -101,14 +102,15 @@ public class PlayerMenuController {
             controller.setData(currentMap, currentScenario);
 
             Stage stage = new Stage();
-            stage.setTitle("Upgrade a Station");
+            stage.setTitle("Add a Station");
             stage.setScene(new Scene(root));
             stage.show();
 
             Stage currentStage = (Stage) menuBox.getScene().getWindow();
             currentStage.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            messageLabel.setText("Error: " + e.getMessage());
         }
     }
 
@@ -316,6 +318,45 @@ public class PlayerMenuController {
         catch (Exception e) {
             e.printStackTrace();
             messageLabel.setText("Error: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleAssignRoute(){
+        try {
+            URL fxmlURL = getClass().getResource("/JavaFX/AssignRoute.fxml");
+            if (fxmlURL == null) {
+                messageLabel.setText("Error: FXML URL not found.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlURL);
+            Parent root = loader.load();
+            AssignRouteController controller = loader.getController();
+
+            controller.setData(currentMap, currentScenario);
+
+            if(controller.checkValidation())
+            {
+                Stage stage = new Stage();
+                stage.setTitle("Assign Route");
+                stage.setScene(new Scene(root));
+                stage.show();
+
+                Stage currentStage = (Stage) menuBox.getScene().getWindow();
+                currentStage.close();
+            }else
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("It's necessary to have at least 2 stations and 1 train on this map and scenario to assign a route!");
+                alert.showAndWait();
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            messageLabel.setText("Error: " + e.getClass().getSimpleName() + " --- " + e.getMessage());
         }
     }
 }

@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber 19
+
+participant ":BuildRailwayLineController" as CTRL
+participant "Repositories" as REPS
+participant "repositories\n:Repositories" as reps
+
+-> CTRL : buildRailwayLine(first station, second station, type of railway line)
+activate CTRL
+
+group Get Railway Line Repository
+
+CTRL -> REPS : getInstance()
+activate REPS
+
+REPS --> CTRL : repositories
+deactivate REPS
+
+CTRL -> reps : getRailwayLineRepository()
+activate reps
+
+reps --> CTRL : railwayLineRepository
+deactivate reps
+
+end
+
+@enduml

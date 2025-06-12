@@ -1,0 +1,56 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as edit
+
+participant ":BuildRailwayLineUI" as ui
+participant ":BuildRailwayLineController" as ctrl
+participant ":RailwayLine" as line
+
+activate edit
+edit -> ui : requests to add industry
+
+activate ui
+
+ui -> ctrl** : create()
+
+ui --> edit : requests two stations to the player
+
+edit -> ui : inserts the railway line data
+
+ref over ui
+    Validate station names
+end
+
+ref over ui
+    Validate railway line type
+end
+
+ui -> ctrl : buildRailwayLine(first station, second station, type of railway line)
+activate ctrl
+
+ref over ctrl
+    Get Railway Line Repository
+end
+
+ctrl -> line : buildRailwayLine(first station, second station, type of railway line)
+activate line
+
+line --> ctrl : railway line
+deactivate line
+
+ref over ctrl
+    Add Railway Line
+end
+
+ctrl --> ui : result
+deactivate ctrl
+
+ui --> edit : showSuccess(result)
+deactivate ui
+
+@enduml

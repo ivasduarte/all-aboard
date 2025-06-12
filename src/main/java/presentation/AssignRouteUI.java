@@ -2,10 +2,12 @@ package presentation;
 
 import controller.AssignRouteController;
 import domain.*;
+import repositories.Repositories;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AssignRouteUI implements Runnable {
     private Map map;
@@ -31,7 +33,9 @@ public class AssignRouteUI implements Runnable {
             return;
         }
 
-        List<Station> stations = map.getStations();
+        List<Station> stations = Repositories.getInstance().getStationRepository().getStations().stream().
+                filter(s -> s.getOwnerPlayer().equals(UserSession.getInstance().getUser().getEmail())).
+                filter(s -> s.getMapName().equals(map.getName())).collect(Collectors.toList());
 
         if (stations.size() < 2) {
             System.out.println("There's not enough stations to create a route!");
@@ -74,9 +78,9 @@ public class AssignRouteUI implements Runnable {
                 System.out.print("\nEnter the number of the station you wish to add (enter a negative number or zero to exit): ");
                 value = sc.nextInt() - 1;
 
-                if (value >= availableStations.size()) {
+                if (value >= availableStations.size() || value < 0) {
                     System.out.println("Number isn't valid, try again!");
-                } else if (value < availableStations.size() || value <= 0) {
+                } else{
                     stationsToAdd.add(availableStations.get(value));
                     System.out.println("Station added to the route!");
                 }
@@ -87,7 +91,7 @@ public class AssignRouteUI implements Runnable {
         } while (value >= 0);
 
         AssignRouteController routeController = new AssignRouteController();
-        routeController.assignRoute(train, stationsToAdd);
+        routeController.assignRouteWithStations(train, stationsToAdd);
 
         for (int i = 0; i < train.getRoute().size(); i++) {
             System.out.println("\nConfigure cargo mode for station: " + train.getRoute().get(i).getStation().getName());

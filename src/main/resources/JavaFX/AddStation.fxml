@@ -18,12 +18,18 @@
          </font>
       </Text>
       <ComboBox fx:id="stationTypeCmb" layoutX="48.0" layoutY="281.0" onAction="#handleTypeChange" prefHeight="25.0" prefWidth="179.0" promptText="Station Type" />
-      <Label fx:id="selectTypeLbl" layoutX="48.0" layoutY="254.0" text="Select Station Type:" textFill="white" />
+      <Label fx:id="selectTypeLbl" layoutX="48.0" layoutY="254.0" text="Select Station Type:" textFill="white">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
       <Label fx:id="mapLbl" layoutX="48.0" layoutY="135.0" text="Map:" textFill="white" />
       <Label fx:id="scenarioLbl" layoutX="48.0" layoutY="163.0" text="Scenario:" textFill="white" />
       <Label fx:id="budgetLbl" layoutX="48.0" layoutY="195.0" text="Budget:" textFill="white" />
       <ComboBox fx:id="orientationCmb" layoutX="284.0" layoutY="282.0" prefHeight="25.0" prefWidth="179.0" promptText="Station Orientation" />
-      <Label fx:id="orientationLbl" layoutX="284.0" layoutY="255.0" text="Select Station Orientation:" textFill="white" />
+      <Label fx:id="orientationLbl" layoutX="284.0" layoutY="255.0" text="Select Station Orientation:" textFill="white">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
       <Slider fx:id="XPosSli" layoutX="48.0" layoutY="361.0" prefHeight="14.0" prefWidth="179.0" />
       <Label fx:id="positionXLbl" layoutX="48.0" layoutY="337.0" text="X position" textFill="white" />
       <TextField fx:id="XPosTxt" layoutX="173.0" layoutY="333.0" onAction="#handleXPosTxt" prefHeight="25.0" prefWidth="54.0" promptText="X" />

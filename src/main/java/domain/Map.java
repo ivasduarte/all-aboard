@@ -91,7 +91,7 @@ public class Map implements Serializable {
      * @return All the stations of the map.
      */
     public List<Station> getStations() {
-        return List.copyOf(stations);
+        return stations;
     }
 
     /**

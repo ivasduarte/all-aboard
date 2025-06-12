@@ -144,7 +144,6 @@ public class AddStationController {
         }
     }
 
-
     @FXML
     public void handleAddStation()
     {
@@ -155,7 +154,7 @@ public class AddStationController {
         {
             errorAlert.setTitle("Map not valid");
             errorAlert.setContentText("The selected map isn't valid, select a valid map!");
-            errorAlert.show();
+            errorAlert.showAndWait();
             return;
         }
 
@@ -163,7 +162,7 @@ public class AddStationController {
         {
             errorAlert.setTitle("Station type not valid");
             errorAlert.setContentText("Station type isn't valid, select a valid type before continuing!");
-            errorAlert.show();
+            errorAlert.showAndWait();
             return;
         }
 
@@ -171,7 +170,7 @@ public class AddStationController {
         {
             errorAlert.setTitle("Orientation not valid");
             errorAlert.setContentText("Orientation isn't valid, select a valid orientation before continuing!");
-            errorAlert.show();
+            errorAlert.showAndWait();
             return;
         }
 
@@ -179,7 +178,7 @@ public class AddStationController {
         {
             errorAlert.setTitle("Insufficient funds");
             errorAlert.setContentText("Your budget is too low to afford the desired station!");
-            errorAlert.show();
+            errorAlert.showAndWait();
             return;
         }
 
@@ -188,21 +187,24 @@ public class AddStationController {
         Station.StationType stationType = stationTypeCmb.getValue();
         Station.Orientation stationOrientation = orientationCmb.getValue();
 
+        if(stationOrientation == null)
+            stationOrientation = Station.Orientation.values()[0];
+
         String stationName = generateStationName(map.getName(), positionX, positionY, stationType.getDisplayName());
         Station newStation = new Station(map.getName(), mapID, positionX, positionY, stationType, stationOrientation, stationName);
         newStation.setOwnerPlayer(UserSession.getInstance().getUser().getEmail());
 
         if (!newStation.validatePosition(map, stationType.getSize() / 2)) {
             errorAlert.setTitle("Position not valid");
-            errorAlert.setContentText("The station's position isn't valid, enter a valid position!");
-            errorAlert.show();
+            errorAlert.setContentText("The station's range is out of bounds, enter a different position!");
+            errorAlert.showAndWait();
             return;
         }
 
         if (!newStation.checkOverbuilding()) {
             errorAlert.setTitle("Station overbuilding");
             errorAlert.setContentText("The select position is already occupied by another station/industry or city!");
-            errorAlert.show();
+            errorAlert.showAndWait();
             return;
         }
 

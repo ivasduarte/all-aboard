@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber 24
+
+participant ":BuildRailwayLineController" as railCTRL
+participant ":RailwayLine" as line
+participant "railwayLineRepository\n:RailwayLineRepository" as repo
+
+activate railCTRL
+
+railCTRL -> line : buildRailwayLine(first station, second station, type of railway line)
+activate line
+
+group Build Railway Line
+
+line --> railCTRL : Object RailwayLine
+deactivate line
+
+railCTRL -> repo : save(railwayLine)
+activate repo
+
+end
+
+@enduml

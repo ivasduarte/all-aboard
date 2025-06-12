@@ -21,7 +21,7 @@ public class SimulatorController implements Runnable, Serializable {
     private final double WAR_CARGO_MULTIPLIER = 1.5;
     private final double WAR_COST_MULTIPLIER = 1.65;
     private final int ROUTE_EARNINGS_PER_STATION = 50;
-    private final int TRACK_MAINTENANCE_COST_PER_100KM = 5;
+    private final int TRACK_MAINTENANCE_COST_PER_100KM = 25;
 
     private final ShowFinancialResultsController financialController = new ShowFinancialResultsController();
     private volatile boolean running = false;
