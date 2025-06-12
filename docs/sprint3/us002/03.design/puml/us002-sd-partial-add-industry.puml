@@ -9,6 +9,8 @@ participant ":addIndustryController" as CTRL
 participant ":Industry" as IND
 participant "industryRepository\n:IndustryRepository" as REPO
 
+activate CTRL
+
 CTRL -> IND : addIndustry(mapID, positionX, positionY, industryType, cargoAmount)
 activate IND
 
