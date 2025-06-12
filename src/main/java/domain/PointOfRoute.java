@@ -1,5 +1,7 @@
 package domain;
 
+import javafx.fxml.FXML;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,12 @@ public class PointOfRoute implements Serializable {
         this.station = station;
         this.cargoesToPickup = new ArrayList<>();
         this.cargoMode = CargoMode.AVAILABLE; // Default mode
+    }
+
+    public PointOfRoute(Station station, CargoMode cargoMode) {
+        this.station = station;
+        this.cargoesToPickup = new ArrayList<>();
+        this.cargoMode = cargoMode;
     }
 
     public Station getStation() {
@@ -49,5 +57,11 @@ public class PointOfRoute implements Serializable {
             default:
                 return true;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return station.getName() + " | " + cargoMode;
     }
 }

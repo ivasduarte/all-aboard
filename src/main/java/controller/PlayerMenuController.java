@@ -335,17 +335,27 @@ public class PlayerMenuController {
 
             controller.setData(currentMap, currentScenario);
 
-            Stage stage = new Stage();
-            stage.setTitle("Assign Route");
-            stage.setScene(new Scene(root));
-            stage.show();
+            if(controller.checkValidation())
+            {
+                Stage stage = new Stage();
+                stage.setTitle("Assign Route");
+                stage.setScene(new Scene(root));
+                stage.show();
 
-            Stage currentStage = (Stage) menuBox.getScene().getWindow();
-            currentStage.close();
+                Stage currentStage = (Stage) menuBox.getScene().getWindow();
+                currentStage.close();
+            }else
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("It's necessary to have at least 2 stations and 1 train on this map and scenario to assign a route!");
+                alert.showAndWait();
+            }
+
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            messageLabel.setText("Error: " + e.getMessage());
+            messageLabel.setText("Error: " + e.getClass().getSimpleName() + " --- " + e.getMessage());
         }
     }
 }

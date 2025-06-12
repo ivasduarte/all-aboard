@@ -91,7 +91,7 @@ public class AssignRouteUI implements Runnable {
         } while (value >= 0);
 
         AssignRouteController routeController = new AssignRouteController();
-        routeController.assignRoute(train, stationsToAdd);
+        routeController.assignRouteWithStations(train, stationsToAdd);
 
         for (int i = 0; i < train.getRoute().size(); i++) {
             System.out.println("\nConfigure cargo mode for station: " + train.getRoute().get(i).getStation().getName());
