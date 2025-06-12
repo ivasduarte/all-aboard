@@ -16,6 +16,7 @@ import repositories.Repositories;
 import repositories.StationRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +41,6 @@ public class ListStationsController {
     private final StationRepository StationRepo;
     private Scenario currentScenario;
     private Map currentMap;
-    private Station currentStation;
 
     /**
      * Sets the current scenario and updates the associated map.
@@ -68,14 +68,28 @@ public class ListStationsController {
      */
     @FXML
     public void initialize() {
+
+        selectBox.setOnAction(e -> showStationDetails());
+
+    }
+
+    public void loadStations(){
+
         List<Station> stations = StationRepo.getStations();
-        if (stations == null || stations.isEmpty()) {
+        List<Station> selectedStations = new ArrayList<>();
+        for(Station station : stations) {
+            if(station.getScenarioName().equalsIgnoreCase(currentScenario.getScenarioName())){
+                selectedStations.add(station);
+            }
+        }
+        if (selectedStations.isEmpty()) {
             showAlert("No stations available.");
             return;
         }
 
-        selectBox.getItems().addAll(stations);
+        selectBox.getItems().addAll(selectedStations);
         selectBox.setOnAction(e -> showStationDetails());
+
     }
 
     /**
@@ -83,7 +97,7 @@ public class ListStationsController {
      */
     @FXML
     private void showStationDetails() {
-        currentStation = (Station) selectBox.getValue();
+        Station currentStation = (Station) selectBox.getValue();
         if (currentStation == null) return;
 
         String name = currentStation.getName();

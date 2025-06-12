@@ -241,6 +241,7 @@ public class PlayerMenuController {
             Parent root = loader.load();
             ListStationsController controller = loader.getController();
             controller.setData(currentScenario);
+            controller.loadStations();
 
             Stage stage = new Stage();
             stage.setTitle("List All Stations");
