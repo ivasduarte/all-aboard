@@ -23,6 +23,7 @@ UI --> cityCTRL : create()
 participant ":Repositories" as RepositorySingleton
 participant "repositories\n:Repositories" as PLAT
 participant "railwayLineRepository\n:RailwayLineRepository" as railwayLineRepository
+participant ":RailwayLine" as RailwayLine
 participant "stationRepository\n:StationRepository" as cityRepo
 participant "StationMapper" as cityMapper
 participant "StationDTO" as cityDTO
@@ -79,20 +80,22 @@ activate PLAT
 PLAT --> railCTRL : railwayLineRepository
 deactivate PLAT
 
-railCTRL -> railwayLineRepository : buildRailwayLine(first station, second station, type of railway line)
+railCTRL -> RailwayLine : buildRailwayLine(first station, second station, type of railway line)
+activate RailwayLine
+
+RailwayLine --> railCTRL : Object RailwayLine
+deactivate RailwayLine
+
+railCTRL -> railwayLineRepository : save(railwayLine)
 activate railwayLineRepository
 
-create "railwayLine\n:RailwayLine" as RailwayLine
-railwayLineRepository -> RailwayLine : create()
-railwayLineRepository -> railwayLineRepository : verifyIfExistsAndSave(first station, second station, type of railway line)
-
-railwayLineRepository --> railCTRL : railwayLineData
+railwayLineRepository --> railCTRL : railwayLine data
 deactivate railwayLineRepository
 
-railCTRL --> UI : railwayLineData
+railCTRL --> UI : railwayLine data
 deactivate railCTRL
 
-UI --> Editor : displays operation success and railwayLineData
+UI --> Editor : shows success message with railway line data
 deactivate UI
 
 @enduml
