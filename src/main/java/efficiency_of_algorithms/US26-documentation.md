@@ -1,4 +1,4 @@
-# US26 - Efficiency of the Algorithms Developed in US13 and US14
+  # US26 - Efficiency of the Algorithms Developed in US13 and US14
 
 ## 1. Introduction
 
@@ -102,7 +102,6 @@ This function reads the list of edges and constructs the adjacency list represen
 | Add stationB to graph[stationA]                          | nOp     |       
 | Add stationA to graph[stationB]                          | nOp     |       
 | Return Graph                                             | 1R      |       
-| Big-O                                                    | O(n)    |  
 
 
 
@@ -116,8 +115,31 @@ This function determines if the destination station is reachable from the start 
     Return dfs(graph, start, end, visited)
 
     Function dfs(graph, current, end, visited):
-        If current = end:
-    Return True
+    If current = end:
+        Return True
+    Add current to visited
+    For each neighbor in graph[current]:
+        If neighbor not in visited:
+            If dfs(graph, neighbor, end, visited) = True:
+                Return True
+    Return False
+
+| Pseudocode                                      | Type | 
+|-------------------------------------------------|------|
+| visited <- empty set                            | 1A   |       
+| Return dfs(graph, start, end, visited)          | 1R   | 
+
+| Pseudocode                                   | Type    | 
+|----------------------------------------------|---------|
+| If current = end                             | nC      |       
+| Return true                                  | 1R      |
+| Add current to visited                       | nOp     |       
+| For each neighbor in graph[current]          | nA + nC |
+| If neighbor not in visited                   | nC      |       
+| If dfs(graph, neighbor, end, visited) = True | nC      |
+| Return true                                  | 1R      |
+| Return false                                 | 1R      |
+
 
 ## 3. Efficiency Analysis of US14
 
@@ -165,11 +187,22 @@ This function performs a depth-first search (DFS) starting from a vertex with ne
         visited ← empty set
         start ← any vertex in graph with neighbors
         DFS(start, graph, visited)
-
     For each vertex in graph:
         If vertex has neighbors and vertex not in visited:
             Return False
     Return True
+
+| Pseudocode                                         | Type |
+|----------------------------------------------------|------|
+| visited <- empty set                               | 1A   |       
+| start <- any vertex in graph with neighbors        | 1A   |       
+| DFS                                                | nOP  |       
+| For each vertex in graph:                          | nA   |       
+| If vertex has neighbors and vertex not in visited: | nC   |      
+| Return False                                       | 1R   |       
+| Return True                                        | 1R   |       
+
+
 
 #### b) Odd-degree Vertices Count ('countOddDegreeVertices')
 
@@ -181,6 +214,15 @@ This function iterates through all vertices in the graph and counts how many hav
             If degree(vertex) mod 2 ≠ 0:
                 odd ← odd + 1
     Return odd
+
+| Pseudocode                  | Type |
+|-----------------------------|------|
+| odd <- 0                    | 1A   |        
+| For each vertex in graph:   | nA   |       
+| If degree(vertex) mod 2 ≠ 0 | nC   |      
+| odd <- odd + 1              | nOP  |       
+| Return odd                  | 1R   |       
+
 
 #### c) Eulerian Path Verification ('hasEulerianPath')
 
@@ -196,6 +238,19 @@ This function combines the two previous ones. It first checks if the graph is co
         Return "Eulerian path possible"
     Else:
         Return "No Eulerian path – more than 2 vertices with odd degree"
+
+| Pseudocode                                                        | Type |
+|-------------------------------------------------------------------|------|
+| If not isConnected(graph):                                        | 1C   |        
+| Return "No Eulerian path - graph is disconnected"                 | 1R   |       
+| odd <- countOddDegreeVertices(graph)                              | 1A   |      
+| If odd == 0                                                       | 1C   |       
+| Return "Eulerian circuit possible"                                | 1R   |
+| Else if odd == 2:                                                 | 1C   |        
+| Return "Eulerian path possible"                                   | 1R   |       
+| Else:                                                             | -    |      
+| Return "No Eulerian path - more than 2 vertices with odd degree"  | 1R   |       
+
 
 
 ## 4. Summary Table
