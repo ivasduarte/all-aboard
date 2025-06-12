@@ -47,10 +47,16 @@ public class Main {
         }
         sc.close();
 
-        Map<String, List<String>> graph = new HashMap<>();
+        Set<String> allStations = new HashSet<>();
         for (String[] edge : edges) {
-            graph.putIfAbsent(edge[0], new ArrayList<>());
-            graph.putIfAbsent(edge[1], new ArrayList<>());
+            allStations.add(edge[0]);
+            allStations.add(edge[1]);
+        }
+        Map<String, List<String>> graph = new HashMap<>();
+        for (String station : allStations) {
+            graph.put(station, new ArrayList<>());
+        }
+        for (String[] edge : edges) {
             graph.get(edge[0]).add(edge[1]);
             graph.get(edge[1]).add(edge[0]);
         }
@@ -71,20 +77,20 @@ public class Main {
                 .allMatch(e -> visited.contains(e.getKey()));
 
         if (!connected) {
-            System.out.println("The network is disconnected. No maintenance route is possible.");
-            return;
+            System.out.println("No maintenance route is possible due to disconnection.");
+        } else {
+            if (odd.size() == 0 || odd.size() == 2) {
+                System.out.println("A maintenance route is possible.");
+                if (!odd.isEmpty()) {
+                    System.out.println("Start at: " + odd.get(0));
+                } else {
+                    System.out.println("Start at: " + start);
+                }
+            } else {
+                System.out.println("No Eulerian path possible (vertices with odd degree: " + odd.size() + ").");
+            }
         }
 
-        if (odd.size() == 0 || odd.size() == 2) {
-            System.out.println("A maintenance route is possible.");
-            if (!odd.isEmpty()) {
-                System.out.println("Start at: " + odd.get(0));
-            } else {
-                System.out.println("Start at: " + start);
-            }
-        } else {
-            System.out.println("No Eulerian path possible (vertices with odd degree: " + odd.size() + ").");
-        }
 
         File dotFile = new File("railway.dot");
         try (PrintWriter pw = new PrintWriter(dotFile)) {
@@ -92,6 +98,11 @@ public class Main {
             for (String[] edge : edges) {
                 String color = edge[2].equals("1") ? "yellow" : "red";
                 pw.println("  \"" + edge[0] + "\" -- \"" + edge[1] + "\" [color=" + color + "];");
+            }
+            for(String station: graph.keySet()) {
+                if(graph.get(station).isEmpty()) {
+                    pw.println("  \"" + station + "\";");
+                }
             }
             pw.println("}");
         }

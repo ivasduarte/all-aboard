@@ -69,7 +69,7 @@ public class AuthenticationController{
      * @return True if the password is valid, false otherwise.
      */
     public static boolean isValidPassword(String password) {
-        if (password == null || (password.length() != 7) ||!password.matches("[a-zA-Z0-9]+")) {
+        if (password == null || (password.length() < 7) ||!password.matches("[a-zA-Z0-9]+")) {
             return false;
         }
 
