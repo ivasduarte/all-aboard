@@ -19,6 +19,8 @@ activate ui
 ui -> ctrl** : create()
 ui --> edit : requests industry attributes \n(position, type, generated cargo)
 
+edit -> ui : provides industry data
+
 ref over ui
         Validate Position
     end
@@ -26,8 +28,6 @@ ref over ui
     ref over ui
         Check Overbuilding
     end
-
-edit -> ui : provides industry data
 
 ui -> ctrl : submitData(mapID, positionX, positionY, industryType, cargoAmount)
 activate ctrl
