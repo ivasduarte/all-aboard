@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -16,6 +17,7 @@ import domain.Station;
 import domain.Scenario;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class UpgradeAStationController {
     private Label labelTest;
     @FXML
     private Label labelBudget;
+
 
     /**
      * Constructs a new instance of {@code UpgradeAStationController},
@@ -237,6 +240,8 @@ public class UpgradeAStationController {
         Budget budget = currentScenario.getBudget();
         Station station = stationComboBox.getValue();
         BuildingType selectedType = buildingComboBox.getValue();
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+
 
         if (station == null || selectedType == null) {
             labelTest.setText("Please select both a station and a building.");
@@ -249,19 +254,24 @@ public class UpgradeAStationController {
 
             station.addBuilding(new Building(selectedType));
 
-            labelTest.setText("Building  successfully bought.");
-
             setBuildingComboBox(null);
 
             buildingComboBox.setValue(null);
 
+            successAlert.setTitle("Success");
+            successAlert.setContentText("Building successfully bought.");
+            successAlert.showAndWait();
+
+
         } else {
 
-            labelTest.setText("Not enough budget to buy this building.");
+            successAlert.setTitle("Unsuccessful operation");
+            successAlert.setContentText("Not enough budget to buy this building.");
+            successAlert.showAndWait();
 
         }
 
-        labelBudget.setText("Budget: " + budget.getBudget() +"€");
+        handleBackToMenu();
     }
 
 
@@ -286,4 +296,5 @@ public class UpgradeAStationController {
             e.printStackTrace();
         }
     }
+
 }
