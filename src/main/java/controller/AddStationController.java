@@ -71,14 +71,14 @@ public class AddStationController {
 
         stationPriceLbl.setVisible(false);
 
-        XPosSli.setMin(0);
-        XPosSli.setMax(map.getWidth()-1);
-        XPosSli.setValue(0);
+        XPosSli.setMin(1);
+        XPosSli.setMax(map.getWidth());
+        XPosSli.setValue(1);
         XPosTxt.setText(String.valueOf(XPosSli.getValue()));
 
-        YPosSli.setMin(0);
-        YPosSli.setMax(map.getHeight()-1);
-        YPosSli.setValue(0);
+        YPosSli.setMin(1);
+        YPosSli.setMax(map.getHeight());
+        YPosSli.setValue(1);
         YPosTxt.setText(String.valueOf(YPosSli.getValue()));
     }
 
@@ -182,8 +182,8 @@ public class AddStationController {
             return;
         }
 
-        int positionX = (int)XPosSli.getValue();
-        int positionY = (int)YPosSli.getValue();
+        int positionX = (int)XPosSli.getValue() - 1;
+        int positionY = (int)YPosSli.getValue() - 1;
         Station.StationType stationType = stationTypeCmb.getValue();
         Station.Orientation stationOrientation = orientationCmb.getValue();
 
@@ -215,7 +215,7 @@ public class AddStationController {
 
         Alert infoAlert = new Alert(Alert.AlertType.CONFIRMATION);
         infoAlert.setTitle("Station added");
-        infoAlert.setContentText("Station has been added successfully under the name " + newStation.getName() + " at (" + newStation.getPositionX() + "," + newStation.getPositionY() + ")");
+        infoAlert.setContentText("Station has been added successfully under the name " + newStation.getName() + " at (" + (newStation.getPositionX()+1) + "," + (newStation.getPositionY()+1) + ")");
         infoAlert.showAndWait();
         handleBackToMenu();
     }
