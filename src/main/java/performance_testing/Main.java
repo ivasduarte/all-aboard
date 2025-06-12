@@ -68,6 +68,9 @@ public class Main {
         exportToCSV(resultsUS13, "us13_results.csv", true);
         exportToCSV(resultsUS14, "us14_results.csv", false);
 
+        exportToCSVUS30(resultsUS13, "us13_results_us30.csv");
+        exportToCSVUS30(resultsUS14, "us14_results_us30.csv");
+
         generateGnuplotScripts();
 
         System.out.println("\nData exported to CSV files and gnuplot scripts generated!");
@@ -101,6 +104,19 @@ public class Main {
                             result.edgeCount,
                             result.avgTime / 1_000_000.0);
                 }
+            }
+        }
+    }
+
+    private static void exportToCSVUS30(List<PerformanceResult> results, String filename) throws IOException {
+        results.sort(Comparator.comparingInt(r -> r.edgeCount));
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            writer.println("Edges,AvgTimeMs");
+
+            for (PerformanceResult result : results) {
+                writer.printf(Locale.US, "%d,%.3f%n", result.edgeCount, result.avgTime / 1_000_000.0
+                );
             }
         }
     }
