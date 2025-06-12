@@ -78,7 +78,7 @@ public class ListStationsController {
         List<Station> stations = StationRepo.getStations();
         List<Station> selectedStations = new ArrayList<>();
         for(Station station : stations) {
-            if(station.getScenarioName().equalsIgnoreCase(currentScenario.getScenarioName())){
+            if(station.getMapName().equalsIgnoreCase(currentScenario.getMap().getName())){
                 selectedStations.add(station);
             }
         }
