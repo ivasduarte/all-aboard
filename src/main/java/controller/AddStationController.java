@@ -54,8 +54,7 @@ public class AddStationController {
     private Map map;
     private Scenario scenario;
 
-    public void setData(Map map, Scenario scenario)
-    {
+    public void setData(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
 
@@ -83,8 +82,7 @@ public class AddStationController {
     }
 
     @FXML
-    public void initialize()
-    {
+    public void initialize() {
         XPosSli.valueProperty().addListener((observable, oldValue, newValue) -> {
             XPosTxt.setText(Double.toString(newValue.intValue()));
         });
@@ -95,12 +93,11 @@ public class AddStationController {
     }
 
     @FXML
-    public void handleXPosTxt()
-    {
-        try{
+    public void handleXPosTxt() {
+        try {
             int value = Integer.parseInt(XPosTxt.getText());
 
-            if(value > XPosSli.getMax())
+            if (value > XPosSli.getMax())
                 XPosSli.setValue(XPosSli.getMax());
             else if (value < XPosSli.getMin())
                 XPosSli.setValue(XPosSli.getMin());
@@ -113,12 +110,11 @@ public class AddStationController {
     }
 
     @FXML
-    public void handleYPosTxt()
-    {
-        try{
+    public void handleYPosTxt() {
+        try {
             int value = Integer.parseInt(YPosTxt.getText());
 
-            if(value > YPosSli.getMax())
+            if (value > YPosSli.getMax())
                 YPosSli.setValue(YPosSli.getMax());
             else if (value < YPosSli.getMin())
                 YPosSli.setValue(YPosSli.getMin());
@@ -131,13 +127,11 @@ public class AddStationController {
     }
 
     @FXML
-    public void handleTypeChange()
-    {
+    public void handleTypeChange() {
         Station.StationType stationType = stationTypeCmb.getValue();
         stationPriceLbl.setVisible(stationType != null);
 
-        if(stationType != null)
-        {
+        if (stationType != null) {
             stationPriceLbl.setText("Station price: " + stationType.getPrice() + "€");
             orientationCmb.setVisible(stationType.getSize() % 2 == 0);
             orientationLbl.setVisible(stationType.getSize() % 2 == 0);
@@ -145,49 +139,56 @@ public class AddStationController {
     }
 
     @FXML
-    public void handleAddStation()
-    {
-        int mapID = Repositories.getInstance().getMapRepository().getMapList().indexOf(map);
+    public void handleAddStation() {
+        int mapID = -1;
+
+        MapRepository mapRepository = Repositories.getInstance().getMapRepository();
+        List<Map> maps = mapRepository.getMapList();
+
+        for (int i = 0; i < maps.size(); i++) {
+            if (maps.get(i).equals(map))
+                mapID = i;
+        }
+
+        System.out.println(map);
+
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
-        if(mapID == -1)
-        {
+        if (mapID == -1) {
+            System.out.println(mapID);
             errorAlert.setTitle("Map not valid");
             errorAlert.setContentText("The selected map isn't valid, select a valid map!");
             errorAlert.showAndWait();
             return;
         }
 
-        if(stationTypeCmb.getValue() == null)
-        {
+        if (stationTypeCmb.getValue() == null) {
             errorAlert.setTitle("Station type not valid");
             errorAlert.setContentText("Station type isn't valid, select a valid type before continuing!");
             errorAlert.showAndWait();
             return;
         }
 
-        if(stationTypeCmb.getValue().getSize() % 2 == 0 && orientationCmb.getValue() == null)
-        {
+        if (stationTypeCmb.getValue().getSize() % 2 == 0 && orientationCmb.getValue() == null) {
             errorAlert.setTitle("Orientation not valid");
             errorAlert.setContentText("Orientation isn't valid, select a valid orientation before continuing!");
             errorAlert.showAndWait();
             return;
         }
 
-        if(stationTypeCmb.getValue().getPrice() > scenario.getBudget().getBudget())
-        {
+        if (stationTypeCmb.getValue().getPrice() > scenario.getBudget().getBudget()) {
             errorAlert.setTitle("Insufficient funds");
             errorAlert.setContentText("Your budget is too low to afford the desired station!");
             errorAlert.showAndWait();
             return;
         }
 
-        int positionX = (int)XPosSli.getValue() - 1;
-        int positionY = (int)YPosSli.getValue() - 1;
+        int positionX = (int) XPosSli.getValue() - 1;
+        int positionY = (int) YPosSli.getValue() - 1;
         Station.StationType stationType = stationTypeCmb.getValue();
         Station.Orientation stationOrientation = orientationCmb.getValue();
 
-        if(stationOrientation == null)
+        if (stationOrientation == null)
             stationOrientation = Station.Orientation.values()[0];
 
         String stationName = generateStationName(map.getName(), positionX, positionY, stationType.getDisplayName());
@@ -215,7 +216,7 @@ public class AddStationController {
 
         Alert infoAlert = new Alert(Alert.AlertType.CONFIRMATION);
         infoAlert.setTitle("Station added");
-        infoAlert.setContentText("Station has been added successfully under the name " + newStation.getName() + " at (" + (newStation.getPositionX()+1) + "," + (newStation.getPositionY()+1) + ")");
+        infoAlert.setContentText("Station has been added successfully under the name " + newStation.getName() + " at (" + (newStation.getPositionX() + 1) + "," + (newStation.getPositionY() + 1) + ")");
         infoAlert.showAndWait();
         handleBackToMenu();
     }
@@ -265,7 +266,7 @@ public class AddStationController {
 
         StationRepository stationRepository = Repositories.getInstance().getStationRepository();
 
-        if (stationType < 0 || stationType > Station.StationType.values().length-1) {
+        if (stationType < 0 || stationType > Station.StationType.values().length - 1) {
             return "Invalid station type";
         }
 
@@ -277,7 +278,7 @@ public class AddStationController {
         } catch (IllegalArgumentException e) {
             return "Invalid orientation";
         }
-        
+
         int size = Station.StationType.values().length / 2;
 
         int budget = scenario.getBudget().getBudget();
@@ -305,24 +306,20 @@ public class AddStationController {
         return "Station added successfully under the name " + stationName;
     }
 
-    public String generateStationName(String mapName, int posX, int posY, String type)
-    {
+    public String generateStationName(String mapName, int posX, int posY, String type) {
         List<City> cities = Repositories.getInstance().getCityRepository().getCitiesByMap(mapName);
         String stationName = type;
 
-        if(!cities.isEmpty())
-        {
-            double smallestDistance = Math.sqrt(Math.pow(cities.get(0).getCenterX()-posX, 2) + Math.pow(cities.get(0).getCenterY()-posY, 2));
+        if (!cities.isEmpty()) {
+            double smallestDistance = Math.sqrt(Math.pow(cities.get(0).getCenterX() - posX, 2) + Math.pow(cities.get(0).getCenterY() - posY, 2));
             City closestCity = cities.get(0);
 
-            for(City city : cities)
-            {
+            for (City city : cities) {
                 int cityX = city.getCenterX();
                 int cityY = city.getCenterX();
-                double distance = Math.sqrt(Math.pow(cityX-posX, 2) + Math.pow(cityY-posY, 2));
+                double distance = Math.sqrt(Math.pow(cityX - posX, 2) + Math.pow(cityY - posY, 2));
 
-                if(distance < smallestDistance)
-                {
+                if (distance < smallestDistance) {
                     closestCity = city;
                     smallestDistance = distance;
                 }

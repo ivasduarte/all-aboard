@@ -127,9 +127,7 @@ public class ListStationsController {
 
 
     public boolean hasStations() {
-
         return hasStations;
-
     }
 
     /**
