@@ -4,6 +4,7 @@ import repositories.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -173,6 +174,24 @@ public class Station implements Serializable {
      * @param orientation station orientation
      */
     public Station(String mapName, int mapID, int positionX, int positionY, StationType stationType, Orientation orientation, String name, String scenarioName) {
+        if (mapName == null || mapName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Map name cannot be null or empty");
+        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Station name cannot be null or empty");
+        }
+        if (scenarioName == null || scenarioName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Scenario name cannot be null or empty");
+        }
+        if (positionX < 0 || positionY < 0) {
+            throw new IllegalArgumentException("Position coordinates cannot be negative");
+        }
+        if (stationType == null) {
+            throw new IllegalArgumentException("Station type cannot be null");
+        }
+        if (orientation == null) {
+            throw new IllegalArgumentException("Orientation cannot be null");
+        }
         this.mapName = mapName;
         this.mapID = mapID;
         this.positionX = positionX;
@@ -233,7 +252,7 @@ public class Station implements Serializable {
      *         associated with the station.
      */
     public List<Building> getBuildings() {
-        return new ArrayList<>(buildings);
+        return Collections.unmodifiableList(buildings);
     }
 
     /**
@@ -264,7 +283,13 @@ public class Station implements Serializable {
     }
 
     public void addCargo(int amount) {
-        cargo = Math.min(cargo + amount, maxCargo * 5);
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+        if (cargo + amount > maxCargo) {
+            throw new IllegalArgumentException("Cargo exceeds maxCargo");
+        }
+        cargo += amount;
     }
 
     /**
@@ -581,6 +606,9 @@ public class Station implements Serializable {
      * @param demand the new demand value to be assigned to the station
      */
     public void setDemand(int demand) {
+        if (demand < 0) {
+            throw new IllegalArgumentException("Demand cannot be negative");
+        }
         this.demand = demand;
     }
 
@@ -593,7 +621,7 @@ public class Station implements Serializable {
      */
     @Override
     public String toString() {
-        return name + " | " + stationType.displayName + " | (" + positionX + "," + positionY + ")";
+        return name + " (" + stationType.name() + ") at (" + positionX + "," + positionY + ")";
     }
 
     /**
