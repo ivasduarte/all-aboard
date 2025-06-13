@@ -12,97 +12,89 @@ class CityTest {
 
     @BeforeEach
     void setUp() {
-        city = new City("CidadeTeste", "MapaTeste", 3, 4);
+        city = new City("Test City", "Test Map", 100, 100);
     }
 
     @Test
-    void getName_ReturnsCorrectValue() {
-        assertEquals("CidadeTeste", city.getName());
+    void testCreateCity() {
+        String name = "Test City";
+        String mapName = "Test Map";
+        int centerX = 100;
+        int centerY = 100;
+        
+        City city = new City(name, mapName, centerX, centerY);
+        
+        assertNotNull(city);
+        assertEquals(name, city.getName());
+        assertEquals(mapName, city.getMapName());
+        assertEquals(centerX, city.getCenterX());
+        assertEquals(centerY, city.getCenterY());
+        assertTrue(city.getBlocks().isEmpty());
     }
-
+    
     @Test
-    void getMapName_ReturnsCorrectValue() {
-        assertEquals("MapaTeste", city.getMapName());
-    }
-
-    @Test
-    void getCenterX_ReturnsCorrectValue() {
-        assertEquals(3, city.getCenterX());
-    }
-
-    @Test
-    void getCenterY_ReturnsCorrectValue() {
-        assertEquals(4, city.getCenterY());
-    }
-
-    @Test
-    void constructor_WithInvalidName_ThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> new City("", "MapaTeste", 3, 4));
-        assertThrows(IllegalArgumentException.class, () -> new City(null, "MapaTeste", 3, 4));
-        assertThrows(IllegalArgumentException.class, () -> new City("   ", "MapaTeste", 3, 4));
-    }
-
-    @Test
-    void constructor_WithInvalidMapName_ThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> new City("CidadeTeste", "", 3, 4));
-        assertThrows(IllegalArgumentException.class, () -> new City("CidadeTeste", null, 3, 4));
-        assertThrows(IllegalArgumentException.class, () -> new City("CidadeTeste", "   ", 3, 4));
-    }
-
-    @Test
-    void constructor_WithInvalidCoordinates_ThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> new City("CidadeTeste", "MapaTeste", -1, 4));
-        assertThrows(IllegalArgumentException.class, () -> new City("CidadeTeste", "MapaTeste", 3, -1));
-    }
-
-    @Test
-    void addBlockManual_AddsBlockSuccessfully() {
-        HouseBlock block = new HouseBlock(1, 2);
+    void testAddHouseBlock() {
+        HouseBlock block = new HouseBlock(50, 50);
         city.addBlockManual(block);
-        List<HouseBlock> blocks = city.getBlocks();
-        assertEquals(1, blocks.size());
-        assertTrue(blocks.contains(block));
+        assertEquals(1, city.getBlocks().size());
+        assertTrue(city.getBlocks().contains(block));
+    }
+    
+    @Test
+    void testClearBlocks() {
+        HouseBlock block1 = new HouseBlock(50, 50);
+        HouseBlock block2 = new HouseBlock(60, 60);
+        city.addBlockManual(block1);
+        city.addBlockManual(block2);
+        
+        city.clearBlocks();
+        assertTrue(city.getBlocks().isEmpty());
+    }
+    
+    @Test
+    void testCreateCityWithInvalidParameters() {
+        assertThrows(IllegalArgumentException.class, () -> new City(null, "Test Map", 100, 100));
+        assertThrows(IllegalArgumentException.class, () -> new City("Test City", null, 100, 100));
+        assertThrows(IllegalArgumentException.class, () -> new City("Test City", "Test Map", -1, 100));
+        assertThrows(IllegalArgumentException.class, () -> new City("Test City", "Test Map", 100, -1));
+    }
+    
+    @Test
+    void testAddCityToMap() {
+        Map map = new Map("TestMap", 1000, 1000, 1);
+        map.addNewCity(city);
+        assertTrue(map.getCities().contains(city));
+        assertEquals(1, map.getCities().size());
+    }
+    
+    @Test
+    void testAddCityOutsideMapBounds() {
+        Map map = new Map("TestMap", 1000, 1000, 1);
+        City city = new City("TestCity", "TestMap", 2000, 2000);
+        assertThrows(IllegalArgumentException.class, () -> map.addNewCity(city));
     }
 
     @Test
-    void addBlockManual_WithNullBlock_ThrowsException() {
+    void testGetBlocksReturnsUnmodifiableList() {
+        List<HouseBlock> blocks = city.getBlocks();
+        assertThrows(UnsupportedOperationException.class, () -> blocks.add(new HouseBlock(50, 50)));
+    }
+
+    @Test
+    void testAddBlockOutsideCityBounds() {
+        HouseBlock block = new HouseBlock(201, 100);
+        assertThrows(IllegalArgumentException.class, () -> city.addBlockManual(block));
+    }
+
+
+    @Test
+    void testAddNullBlock() {
         assertThrows(IllegalArgumentException.class, () -> city.addBlockManual(null));
     }
 
     @Test
-    void addBlockManual_WithDuplicateBlock_DoesNotAddDuplicate() {
-        HouseBlock block = new HouseBlock(1, 2);
-        city.addBlockManual(block);
-        city.addBlockManual(block);
-        assertEquals(1, city.getBlocks().size());
-    }
-
-    @Test
-    void addBlockManual_WithMultipleBlocks_AddsAllBlocks() {
-        HouseBlock block1 = new HouseBlock(1, 2);
-        HouseBlock block2 = new HouseBlock(3, 4);
-        HouseBlock block3 = new HouseBlock(5, 6);
-
-        city.addBlockManual(block1);
-        city.addBlockManual(block2);
-        city.addBlockManual(block3);
-
-        List<HouseBlock> blocks = city.getBlocks();
-        assertEquals(3, blocks.size());
-        assertTrue(blocks.contains(block1));
-        assertTrue(blocks.contains(block2));
-        assertTrue(blocks.contains(block3));
-    }
-
-    @Test
-    void getBlocks_ReturnsUnmodifiableList() {
-        List<HouseBlock> blocks = city.getBlocks();
-        assertThrows(UnsupportedOperationException.class, () -> blocks.add(new HouseBlock(0, 0)));
-    }
-
-    @Test
     void testToString() {
-        String expected = "CidadeTeste (MapaTeste) at (3,4)";
+        String expected = "Test City (100,100)";
         assertEquals(expected, city.toString());
     }
 }

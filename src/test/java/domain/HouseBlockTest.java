@@ -2,42 +2,68 @@ package domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class HouseBlockTest {
-    HouseBlock hb;
-    HouseBlock hb2;
+    private HouseBlock block;
+
     @BeforeEach
     void setUp() {
-        hb = new HouseBlock(3, 4);
+        block = new HouseBlock(3, 4);
     }
 
     @Test
-    void getX_ReturnsCorrectValue() {
-        assertEquals(3, hb.getX());
+    void testGetX() {
+        assertEquals(3, block.getX());
     }
 
     @Test
-    void getY_ReturnsCorrectValue() {
-        assertEquals(4, hb.getY());
+    void testGetY() {
+        assertEquals(4, block.getY());
     }
 
     @Test
-    void equals_SameCoordinates_ReturnsTrue() {
-        hb2 = new HouseBlock(3, 4);
-        assertEquals(hb, hb2);
+    void testEquals_SameCoordinates() {
+        HouseBlock otherBlock = new HouseBlock(3, 4);
+        assertEquals(block, otherBlock);
     }
 
     @Test
-    void equals_SameCoordinates_ReturnsFlase() {
-        hb2 = new HouseBlock(5, 6);
-        assertNotEquals(hb, hb2);
+    void testEquals_DifferentCoordinates() {
+        HouseBlock otherBlock = new HouseBlock(5, 6);
+        assertNotEquals(block, otherBlock);
     }
 
     @Test
-    void hashCode_EqualsObjects_SameHash(){
-        hb2 = new HouseBlock(3, 4);
-        assertEquals(hb.hashCode(), hb2.hashCode());
+    void testEquals_SameObject() {
+        assertEquals(block, block);
+    }
+
+    @Test
+    void testEquals_Null() {
+        assertNotEquals(null, block);
+    }
+
+    @Test
+    void testEquals_DifferentType() {
+        assertNotEquals(block, "not a block");
+    }
+
+    @Test
+    void testHashCode_EqualsObjects() {
+        HouseBlock otherBlock = new HouseBlock(3, 4);
+        assertEquals(block.hashCode(), otherBlock.hashCode());
+    }
+
+    @Test
+    void testHashCode_DifferentObjects() {
+        HouseBlock otherBlock = new HouseBlock(5, 6);
+        assertNotEquals(block.hashCode(), otherBlock.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        String expected = "HouseBlock at (3,4)";
+        assertEquals(expected, block.toString());
     }
 }
