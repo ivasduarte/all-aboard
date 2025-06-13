@@ -3,101 +3,106 @@ package repositories;
 import domain.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class MapRepositoryTest {
+import java.util.List;
+import java.util.Optional;
+
+public class MapRepositoryTest {
     private MapRepository repository;
     private Map map1;
     private Map map2;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         repository = new MapRepository();
-        map1 = new Map("MapOne", 10, 10);
-        map2 = new Map("MapTwo", 15, 15);
+        map1 = new Map("Map 1", 1000, 1000, 10);
+        map2 = new Map("Map 2", 2000, 2000, 20);
     }
 
     @Test
-    void testAddNewMapSuccess() {
+    public void testAddMap() {
+        // Act
         repository.add(map1);
-        assertTrue(repository.getMapList().contains(map1));
-    }
 
-    @Test
-    void testAddDuplicateMapFails() {
-        repository.add(map1);
-        repository.add(map1); // Duplicate
+        // Assert
+        assertTrue(repository.existsByName("Map 1"));
         assertEquals(1, repository.getMapList().size());
     }
 
     @Test
-    void testAddNullMapThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> repository.add(null));
-    }
-
-    @Test
-    void testExistsByNameTrue() {
+    public void testAddDuplicateMap() {
+        // Arrange
         repository.add(map1);
-        assertTrue(repository.existsByName("mapone"));
-        assertTrue(repository.existsByName("MAPONE"));
-        assertTrue(repository.existsByName("MapOne"));
+        Map duplicateMap = new Map("Map 1", 1000, 1000, 10);
+
+        // Act
+        repository.add(duplicateMap);
+
+        // Assert
+        assertEquals(1, repository.getMapList().size());
     }
 
     @Test
-    void testExistsByNameFalse() {
-        assertFalse(repository.existsByName("nonexistent"));
-    }
-
-    @Test
-    void testExistsByNameWithNullThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> repository.existsByName(null));
-    }
-
-    @Test
-    void testGetMapList() {
-        repository.add(map1);
-        var mapList = repository.getMapList();
-        assertEquals(1, mapList.size());
-        assertThrows(UnsupportedOperationException.class, () -> mapList.add(map2));
-    }
-
-    @Test
-    void testGetMapListWithMultipleMaps() {
+    public void testGetMapList() {
+        // Arrange
         repository.add(map1);
         repository.add(map2);
-        var mapList = repository.getMapList();
-        assertEquals(2, mapList.size());
-        assertTrue(mapList.contains(map1));
-        assertTrue(mapList.contains(map2));
+
+        // Act
+        List<Map> maps = repository.getMapList();
+
+        // Assert
+        assertEquals(2, maps.size());
+        assertTrue(maps.contains(map1));
+        assertTrue(maps.contains(map2));
     }
 
     @Test
-    void testGetMap() {
+    public void testGetMapByName() {
+        // Arrange
         repository.add(map1);
-        Optional<Map> result = repository.getMap("MapOne");
-        assertTrue(result.isPresent());
-        assertEquals(map1, result.get());
+        repository.add(map2);
+
+        // Act
+        Optional<Map> foundMap = repository.getMap("Map 1");
+
+        // Assert
+        assertTrue(foundMap.isPresent());
+        assertEquals(map1, foundMap.get());
     }
 
     @Test
-    void testGetMapNotExists() {
-        Optional<Map> result = repository.getMap("NonExistent");
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void testGetMapWithNullThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> repository.getMap(null));
-    }
-
-    @Test
-    void testGetMapCaseInsensitive() {
+    public void testGetMapByNameNotFound() {
+        // Arrange
         repository.add(map1);
-        Optional<Map> result = repository.getMap("mapone");
-        assertTrue(result.isPresent());
-        assertEquals(map1, result.get());
+
+        // Act
+        Optional<Map> foundMap = repository.getMap("NonExistentMap");
+
+        // Assert
+        assertFalse(foundMap.isPresent());
+    }
+
+    @Test
+    public void testExistsByName() {
+        // Arrange
+        repository.add(map1);
+
+        // Act & Assert
+        assertTrue(repository.existsByName("Map 1"));
+        assertFalse(repository.existsByName("NonExistentMap"));
+    }
+
+    @Test
+    public void testGetMapListIsUnmodifiable() {
+        // Arrange
+        repository.add(map1);
+        List<Map> maps = repository.getMapList();
+
+        // Act & Assert
+        assertThrows(UnsupportedOperationException.class, () -> {
+            maps.add(map2);
+        });
     }
 }

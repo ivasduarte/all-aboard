@@ -103,4 +103,33 @@ class MapTest {
         List<Scenario> scenarios = testMap.getScenarios();
         assertThrows(UnsupportedOperationException.class, () -> scenarios.add(null));
     }
+
+    @Test
+    public void testCreateMap() {
+        // Arrange
+        String name = "Test Map";
+        int width = 1000;
+        int height = 1000;
+        
+        // Act
+        Map map = new Map(name, width, height);
+        
+        // Assert
+        assertNotNull(map);
+        assertEquals(name, map.getName());
+        assertEquals(width, map.getWidth());
+        assertEquals(height, map.getHeight());
+    }
+    
+    @Test
+    public void testCreateMapWithInvalidDimensions() {
+        // Arrange & Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Map("Invalid Map", -1, 1000);
+        });
+        
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Map("Invalid Map", 1000, -1);
+        });
+    }
 }
