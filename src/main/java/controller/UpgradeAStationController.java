@@ -16,6 +16,7 @@ import repositories.StationRepository;
 import domain.Station;
 import domain.Scenario;
 
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class UpgradeAStationController {
     private final BuildingRepository buildingRepository;
     private Scenario currentScenario;
     private Map currentMap;
+    private boolean hasStations;
 
     @FXML
     private ComboBox<Station> stationComboBox;
@@ -139,6 +141,8 @@ public class UpgradeAStationController {
         if (labelBudget != null && currentScenario.getBudget() != null) {
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
         }
+
+        setStationComboBox();
     }
 
     public List<BuildingType> getFilteredAvailableBuildingTypes(Station station, int currentYear) {
@@ -211,10 +215,24 @@ public class UpgradeAStationController {
     }
 
     @FXML
-    public void initialize() {
+    public void setStationComboBox() {
+        List<Station> stationList = stationRepository.getStations();
+        List<Station> selectedStations = new ArrayList<>();
 
-        List<Station> station = stationRepository.getStations();
-        stationComboBox.getItems().setAll(station);
+        for (Station s : stationList) {
+            String mapName = s.getMapName();
+            String scenarioName = s.getScenarioName();
+
+            if (mapName.equalsIgnoreCase(currentMap.getName()) && scenarioName.equalsIgnoreCase(currentScenario.getScenarioName())) {
+
+                selectedStations.add(s);
+
+            }
+        }
+
+        hasStations = !selectedStations.isEmpty();
+
+        stationComboBox.getItems().setAll(selectedStations);
 
     }
 
@@ -239,6 +257,7 @@ public class UpgradeAStationController {
 
         Budget budget = currentScenario.getBudget();
         Station station = stationComboBox.getValue();
+
         BuildingType selectedType = buildingComboBox.getValue();
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
 
@@ -258,7 +277,7 @@ public class UpgradeAStationController {
 
             buildingComboBox.setValue(null);
 
-            successAlert.setTitle("Success");
+            successAlert.setTitle("Success!");
             successAlert.setContentText("Building successfully bought.");
             successAlert.showAndWait();
 
@@ -272,6 +291,12 @@ public class UpgradeAStationController {
         }
 
         handleBackToMenu();
+    }
+
+    public boolean hasStations(){
+
+        return hasStations;
+
     }
 
 
