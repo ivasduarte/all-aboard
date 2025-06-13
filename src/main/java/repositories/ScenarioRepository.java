@@ -43,6 +43,9 @@ public class ScenarioRepository implements Serializable {
      * @param scenario The scenario to be added to the repository. Must not be null and must pass validation.
      */
     public void add(Scenario scenario) {
+        if (scenario == null) {
+            throw new IllegalArgumentException("Scenario cannot be null");
+        }
         if (validateScenario(scenario)) {
             scenarios.add(scenario);
         }
@@ -57,7 +60,10 @@ public class ScenarioRepository implements Serializable {
      * @return true if the scenario does not already exist in the repository; false otherwise.
      */
     private boolean validateScenario(Scenario scenario) {
-        return !scenarios.contains(scenario);
+        if (scenario == null) {
+            throw new IllegalArgumentException("Scenario cannot be null");
+        }
+        return !existsByName(scenario.getScenarioName());
     }
 
     /**
@@ -69,8 +75,11 @@ public class ScenarioRepository implements Serializable {
      * @return true if a scenario with the specified name exists in the repository; false otherwise.
      */
     public boolean existsByName(String name) {
-        for (int i = 0; i < scenarios.size(); i++) {
-            if (scenarios.get(i).getScenarioName().equalsIgnoreCase(name)) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        for (Scenario scenario : scenarios) {
+            if (scenario.getScenarioName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -112,7 +121,12 @@ public class ScenarioRepository implements Serializable {
      * empty {@code Optional}.
      */
     public Optional<Scenario> getScenarios(String name) {
-        return scenarios.stream().filter(s -> s.getScenarioName().equals(name)).findFirst();
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        return scenarios.stream()
+            .filter(s -> s.getScenarioName().equalsIgnoreCase(name))
+            .findFirst();
     }
 
 
@@ -165,7 +179,7 @@ public class ScenarioRepository implements Serializable {
 
         String directory = "scenarios";
         new File(directory).mkdirs();
-        String fileName = directory + "/" + scenario.getScenarioName().replaceAll("\\s+", "_") + ".ser";
+        String fileName = directory + "/" + scenario.getScenarioName() + ".ser";
 
         File file = new File(fileName);
         if (file.exists()) {

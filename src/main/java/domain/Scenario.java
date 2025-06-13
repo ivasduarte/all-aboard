@@ -33,6 +33,9 @@ public class Scenario implements Serializable {
      * @param map          The map linked to the scenario. Cannot be null.
      */
     public Scenario(String name, Restrictions restrictions, Map map, Budget budget){
+        if (budget == null) {
+            throw new IllegalArgumentException("Budget cannot be null");
+        }
         this.name = name;
         this.restrictions = restrictions;
         this.map = map;
@@ -40,8 +43,10 @@ public class Scenario implements Serializable {
         this.productionRate = productionRate;
 
         trains = new ArrayList<>();
-        this.currentYear = restrictions.getStartDate().getYear();
-        this.finalYear = restrictions.getEndDate().getYear();
+        if (restrictions != null) {
+            this.currentYear = restrictions.getStartDate().getYear();
+            this.finalYear = restrictions.getEndDate().getYear();
+        }
 
         validateName();
     }
@@ -115,7 +120,7 @@ public class Scenario implements Serializable {
      * @return true if the name satisfies all constraints; false otherwise.
      */
     public boolean validateName(){
-        if(name == null || name.isEmpty()) {
+        if(name == null || name.trim().isEmpty()) {
             return false;
         } else if(name.length() > 15) {
             return false;
@@ -169,6 +174,9 @@ public class Scenario implements Serializable {
      * @param budget The new budget to be associated with this scenario
      */
     public void setBudget(Budget budget) {
+        if (budget == null) {
+            throw new IllegalArgumentException("Budget cannot be null");
+        }
         this.budget = budget;
     }
 
@@ -179,6 +187,12 @@ public class Scenario implements Serializable {
      * @return The remaining budget after subtraction
      */
     public int subtractBudget(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+        if (amount > budget.getBudget()) {
+            throw new IllegalArgumentException("Amount cannot be greater than current budget");
+        }
         budget.setBudget(budget.getBudget() - amount);
         return budget.getBudget();
     }
@@ -190,6 +204,9 @@ public class Scenario implements Serializable {
      * @return The new budget total after addition
      */
     public int addBudget(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
         budget.setBudget(budget.getBudget() + amount);
         return budget.getBudget();
     }
