@@ -122,6 +122,9 @@ public class Map implements Serializable {
         if (scenario == null) {
             throw new IllegalArgumentException("Scenario cannot be null.");
         }
+        if (scenarios.contains(scenario)) {
+            return;
+        }
         scenarios.add(scenario);
     }
 
@@ -145,6 +148,9 @@ public class Map implements Serializable {
     public void addNewCity(City city) {
         if (city == null) {
             throw new IllegalArgumentException("city cannot be null.");
+        }
+        if (city.getCenterX() < 0 || city.getCenterX() >= width || city.getCenterY() < 0 || city.getCenterY() >= height) {
+            throw new IllegalArgumentException("City is outside map bounds.");
         }
         cities.add(city);
     }
@@ -229,12 +235,10 @@ public class Map implements Serializable {
     private boolean validateName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Map name cannot be empty.");
-        }   else if(name.length() > 15){
-            System.out.println("ERROR: Map name is too long. Max length is 15 characters.");
-            return false;
+        } else if(name.length() > 15){
+            throw new IllegalArgumentException("Map name is too long. Max length is 15 characters.");
         } else if(!name.matches("[A-Za-z0-9_]+")){
-            System.out.println("ERROR: Map name contains invalid characters.");
-            return false;
+            throw new IllegalArgumentException("Map name contains invalid characters.");
         }
         return true;
     }
@@ -266,7 +270,7 @@ public class Map implements Serializable {
      * @throws IllegalArgumentException if the cellSizeKm is less than or equal to 0.
      */
     public void validateCellSize(int cellSizeKm){
-        if(cellSizeKm < 0){
+        if(cellSizeKm <= 0){
             throw new IllegalArgumentException("Cell size must be positive.");
         }
     }
@@ -280,7 +284,7 @@ public class Map implements Serializable {
      */
     @Override
     public String toString() {
-        return "Map '" + name + "' (" + width + "x" + height + "), Cell size: " + cellSizeKm + " km, Area: " + getAreaKm() + " km²";
+        return name + " (" + width + "x" + height + ")";
     }
 
     @Override
