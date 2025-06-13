@@ -41,6 +41,7 @@ public class ListStationsController {
     private final StationRepository StationRepo;
     private Scenario currentScenario;
     private Map currentMap;
+    private boolean hasStations;
 
     /**
      * Sets the current scenario and updates the associated map.
@@ -82,10 +83,8 @@ public class ListStationsController {
                 selectedStations.add(station);
             }
         }
-        if (selectedStations.isEmpty()) {
-            showAlert("No stations available.");
-            return;
-        }
+
+        hasStations = !selectedStations.isEmpty();
 
         selectBox.getItems().addAll(selectedStations);
         selectBox.setOnAction(e -> showStationDetails());
@@ -136,6 +135,12 @@ public class ListStationsController {
         alert.setTitle("Error");
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+
+    public boolean hasStations() {
+
+        return hasStations;
+
     }
 
     /**
