@@ -26,6 +26,15 @@ public class City implements Serializable {
      * @param centerY       Y-coordinate of the city's center position on the map.
      */
     public City(String name, String mapName, int centerX, int centerY) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("City name cannot be null or empty");
+        }
+        if (mapName == null || mapName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Map name cannot be null or empty");
+        }
+        if (centerX < 0 || centerY < 0) {
+            throw new IllegalArgumentException("City coordinates cannot be negative");
+        }
         this.name = name;
         this.mapName = mapName;
         this.centerX = centerX;
@@ -75,7 +84,15 @@ public class City implements Serializable {
      *
      * @param b The HouseBlock to be added to the city's collection
      */
-    public void addBlockManual(HouseBlock b) { blocks.add(b); }
+    public void addBlockManual(HouseBlock b) {
+        if (b == null) {
+            throw new IllegalArgumentException("Block cannot be null");
+        }
+        if (Math.abs(b.getX() - centerX) > 100 || Math.abs(b.getY() - centerY) > 100) {
+            throw new IllegalArgumentException("Block is outside city bounds");
+        }
+        blocks.add(b);
+    }
 
     /**
      * Clears all house blocks from the city's collection of blocks.
@@ -84,4 +101,9 @@ public class City implements Serializable {
      * house blocks associated with the city.
      */
     public void clearBlocks() { blocks.clear(); }
+
+    @Override
+    public String toString() {
+        return name + " (" + centerX + "," + centerY + ")";
+    }
 }
