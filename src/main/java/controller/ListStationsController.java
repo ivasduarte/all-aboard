@@ -79,7 +79,7 @@ public class ListStationsController {
         List<Station> stations = StationRepo.getStations();
         List<Station> selectedStations = new ArrayList<>();
         for(Station station : stations) {
-            if(station.getMapName().equalsIgnoreCase(currentScenario.getMap().getName())){
+            if(station.getMapName().equalsIgnoreCase(currentScenario.getMap().getName()) && station.getScenarioName().equalsIgnoreCase(currentScenario.getScenarioName())) {
                 selectedStations.add(station);
             }
         }
@@ -125,17 +125,6 @@ public class ListStationsController {
         }
     }
 
-    /**
-     * Displays an error alert dialog with the specified message.
-     *
-     * @param msg The message to be displayed in the alert dialog. Cannot be null or empty.
-     */
-    private void showAlert(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
 
     public boolean hasStations() {
 

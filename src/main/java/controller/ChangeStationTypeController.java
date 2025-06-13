@@ -125,7 +125,7 @@ public class ChangeStationTypeController {
 
         if(station == null || stationTypeSelected == null){
 
-            labelTest.setText("Please select both a station and a building.");
+            labelTest.setText("Please select both a station and the new type.");
 
             return;
 
@@ -161,7 +161,7 @@ public class ChangeStationTypeController {
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
 
          } else {
-             labelTest.setText("Not enough budget to upgrade this station.");
+             labelTest.setText("Not enough budget to upgrade this station type.");
          }
 
         handleBackToMenu();
