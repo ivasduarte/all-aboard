@@ -66,6 +66,9 @@ public class BuyLocomotiveController {
      */
     @FXML
     public void initialize() {
+        if (scenario != null) {
+            initializeLocomotives();
+        }
     }
 
     /**
