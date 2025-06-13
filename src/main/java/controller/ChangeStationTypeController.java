@@ -15,6 +15,7 @@ import repositories.Repositories;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeStationTypeController {
@@ -34,14 +35,19 @@ public class ChangeStationTypeController {
 
     private Scenario currentScenario;
     private Map currentMap;
+    private boolean hasStations;
 
     public void setData(Scenario scenario) {
         this.currentScenario = scenario;
         this.currentMap = scenario.getMap();
 
         if (labelBudget != null && currentScenario.getBudget() != null) {
+
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
+
         }
+
+        setStationComboBox();
     }
 
     /**
@@ -59,27 +65,47 @@ public class ChangeStationTypeController {
 
     }
 
+    public boolean hasStations() {
+
+        return hasStations;
+
+    }
+
 
     @FXML
     public void setStationComboBox() {
 
         List<Station> stations = Repositories.getInstance().getStationRepository().getStations();
 
-        for (Station station : stations) {
+        List<Station> selectedStations = new ArrayList<>();
 
-            if(station.getStationType() != Station.StationType.TERMINAL){
+        for (Station s : stations) {
 
-                stationComboBox.getItems().add(station);
+            String mapName = s.getMapName();
 
+            String scenarioName = s.getScenarioName();
+
+            if (mapName.equalsIgnoreCase(currentMap.getName()) && scenarioName.equalsIgnoreCase(currentScenario.getScenarioName())) {
+
+
+                if(s.getStationType() != Station.StationType.TERMINAL){
+
+
+                    selectedStations.add(s);
+
+                }
             }
         }
 
+        hasStations = !selectedStations.isEmpty();
+
+        stationComboBox.getItems().setAll(selectedStations);
+
     }
 
-    @FXML
-    public void initialize() {
 
-        setStationComboBox();
+    @FXML
+    public void changeStationType(){
 
         Station station = stationComboBox.getValue();
 
@@ -94,12 +120,6 @@ public class ChangeStationTypeController {
                 }
             }
         }
-    }
-
-    @FXML
-    public void changeStationType(){
-
-        Station station = stationComboBox.getValue();
 
         Station.StationType stationTypeSelected = stationTypeComboBox.getValue();
 
@@ -143,6 +163,9 @@ public class ChangeStationTypeController {
          } else {
              labelTest.setText("Not enough budget to upgrade this station.");
          }
+
+        handleBackToMenu();
+
         }
 
 
