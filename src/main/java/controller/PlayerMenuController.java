@@ -20,7 +20,7 @@ import java.net.URL;
  * The PlayerMenuController class handles the user interface and actions for the player's main menu in the game.
  * It allows the player to perform various actions such as building and upgrading stations, buying locomotives,
  * assigning routes, checking financial results, and managing simulations through different menus and interfaces.
- *
+ * <p>
  * The class leverages JavaFX to dynamically manage the UI components and handle the navigation between windows.
  * Each menu item triggers specific actions or opens corresponding user interfaces to perform player actions.
  */
@@ -51,7 +51,7 @@ public class PlayerMenuController {
      * Initializes the player menu by clearing existing menu items and setting up new menu buttons.
      * Each menu button corresponds to a specific functionality in the application, such as building or upgrading stations,
      * viewing financial results, assigning trains, and running simulations.
-     *
+     * <p>
      * The method dynamically creates buttons using the {@code addMenuButton} method, associating each button
      * with a label and an action, which could be a runnable implementation or a method reference.
      * The actions linked to the buttons involve user interaction or navigation to different application screens.
@@ -88,7 +88,7 @@ public class PlayerMenuController {
     }
 
     @FXML
-    private void handleAddStation(){
+    private void handleAddStation() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/AddStation.fxml");
             if (fxmlURL == null) {
@@ -149,7 +149,7 @@ public class PlayerMenuController {
 
     /**
      * Handles the action to display the "Financial Results" screen.
-     *
+     * <p>
      * This method loads the "Financial Results" interface from the corresponding FXML file
      * and initializes it with the current map and scenario data. Once loaded, it opens the
      * interface in a new window and closes the current menu window. If the FXML file cannot
@@ -187,14 +187,14 @@ public class PlayerMenuController {
 
     /**
      * Handles the action of upgrading a station by opening the "Upgrade a Station" screen.
-     *
+     * <p>
      * This method loads the "Upgrade a Station" user interface from the corresponding FXML file
      * and initializes it with the current scenario data. It then displays the screen in a new
      * window while closing the current menu window. If any errors occur during the loading or
      * initialization process, appropriate error messages are displayed on the `messageLabel`.
      */
     @FXML
-    private void handleUpgradeAStation(){
+    private void handleUpgradeAStation() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/UpgradeAStationWithABuilding.fxml");
             if (fxmlURL == null) {
@@ -207,18 +207,12 @@ public class PlayerMenuController {
             UpgradeAStationController controller = loader.getController();
             controller.setData(currentScenario);
 
-            if(!controller.hasStations()){
-
+            if (!controller.hasStations()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-
                 alert.setTitle("Error: No Stations Found");
-
                 alert.setHeaderText(null);
-
                 alert.setContentText("No stations found to this scenario/map.");
-
                 alert.showAndWait();
-
                 return;
             }
 
@@ -229,8 +223,7 @@ public class PlayerMenuController {
 
             Stage currentStage = (Stage) menuBox.getScene().getWindow();
             currentStage.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             messageLabel.setText("Error: " + e.getMessage());
         }
@@ -238,7 +231,7 @@ public class PlayerMenuController {
 
     /**
      * Handles the navigation to the "List All Stations" screen.
-     *
+     * <p>
      * This method loads the corresponding FXML file for the "List All Stations" interface and initializes
      * the screen with the current scenario data by setting it in the associated controller. Once the screen
      * is loaded, it displays the interface in a new window, closing the current one. If any errors occur
@@ -246,7 +239,7 @@ public class PlayerMenuController {
      * in the `messageLabel`.
      */
     @FXML
-    private void handleListAllStations(){
+    private void handleListAllStations() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/ListAllStations.fxml");
             if (fxmlURL == null) {
@@ -260,18 +253,12 @@ public class PlayerMenuController {
             controller.setData(currentScenario);
             controller.loadStations();
 
-            if(!controller.hasStations()){
-
+            if (!controller.hasStations()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-
                 alert.setTitle("Error: No Stations Found");
-
                 alert.setHeaderText(null);
-
                 alert.setContentText("No stations found to this scenario/map.");
-
                 alert.showAndWait();
-
                 return;
             }
 
@@ -282,8 +269,7 @@ public class PlayerMenuController {
 
             Stage currentStage = (Stage) menuBox.getScene().getWindow();
             currentStage.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             messageLabel.setText("Error: " + e.getMessage());
         }
@@ -291,7 +277,7 @@ public class PlayerMenuController {
 
     /**
      * Handles the action of signing off from the current session and returning to the login screen.
-     *
+     * <p>
      * This method attempts to load the login interface from the "login.fxml" file and display
      * it in a new window. If the login FXML file is not found or cannot be loaded, an appropriate
      * error message is displayed on the `messageLabel`. The method also closes the current menu window
@@ -324,7 +310,7 @@ public class PlayerMenuController {
     }
 
     @FXML
-    private void handleUpgradeAStationType(){
+    private void handleUpgradeAStationType() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/UpgradeAStationType.fxml");
             if (fxmlURL == null) {
@@ -337,18 +323,12 @@ public class PlayerMenuController {
             ChangeStationTypeController controller = loader.getController();
             controller.setData(currentScenario);
 
-            if(!controller.hasStations()){
-
+            if (!controller.hasStations()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-
                 alert.setTitle("Error: No Stations Found");
-
                 alert.setHeaderText(null);
-
                 alert.setContentText("No stations found to this scenario/map.");
-
                 alert.showAndWait();
-
                 return;
             }
 
@@ -359,15 +339,14 @@ public class PlayerMenuController {
 
             Stage currentStage = (Stage) menuBox.getScene().getWindow();
             currentStage.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             messageLabel.setText("Error: " + e.getMessage());
         }
     }
 
     @FXML
-    private void handleAssignRoute(){
+    private void handleAssignRoute() {
         try {
             URL fxmlURL = getClass().getResource("/JavaFX/AssignRoute.fxml");
             if (fxmlURL == null) {
@@ -381,8 +360,7 @@ public class PlayerMenuController {
 
             controller.setData(currentMap, currentScenario);
 
-            if(controller.checkValidation())
-            {
+            if (controller.checkValidation()) {
                 Stage stage = new Stage();
                 stage.setTitle("Assign Route");
                 stage.setScene(new Scene(root));
@@ -390,8 +368,7 @@ public class PlayerMenuController {
 
                 Stage currentStage = (Stage) menuBox.getScene().getWindow();
                 currentStage.close();
-            }else
-            {
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setContentText("It's necessary to have at least 2 stations and 1 train on this map and scenario to assign a route!");

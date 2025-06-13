@@ -11,14 +11,11 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import repositories.BuildingRepository;
 import repositories.Repositories;
-import repositories.ScenarioRepository;
 import repositories.StationRepository;
 import domain.Station;
 import domain.Scenario;
 
-
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +42,6 @@ public class UpgradeAStationController {
     private Label labelTest;
     @FXML
     private Label labelBudget;
-
 
     /**
      * Constructs a new instance of {@code UpgradeAStationController},
@@ -141,7 +137,6 @@ public class UpgradeAStationController {
         if (labelBudget != null && currentScenario.getBudget() != null) {
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
         }
-
         setStationComboBox();
     }
 
@@ -224,16 +219,11 @@ public class UpgradeAStationController {
             String scenarioName = s.getScenarioName();
 
             if (mapName.equalsIgnoreCase(currentMap.getName()) && scenarioName.equalsIgnoreCase(currentScenario.getScenarioName())) {
-
                 selectedStations.add(s);
-
             }
         }
-
         hasStations = !selectedStations.isEmpty();
-
         stationComboBox.getItems().setAll(selectedStations);
-
     }
 
     @FXML
@@ -270,35 +260,24 @@ public class UpgradeAStationController {
         boolean success = DeductBudget(station, selectedType, currentScenario);
 
         if (success) {
-
             station.addBuilding(new Building(selectedType));
-
             setBuildingComboBox(null);
-
             buildingComboBox.setValue(null);
 
             successAlert.setTitle("Success!");
             successAlert.setContentText("Building successfully bought.");
             successAlert.showAndWait();
-
-
         } else {
-
             successAlert.setTitle("Unsuccessful operation");
             successAlert.setContentText("Not enough budget to buy this building.");
             successAlert.showAndWait();
-
         }
-
         handleBackToMenu();
     }
 
     public boolean hasStations(){
-
         return hasStations;
-
     }
-
 
     @FXML
     private void handleBackToMenu() {
@@ -321,5 +300,4 @@ public class UpgradeAStationController {
             e.printStackTrace();
         }
     }
-
 }
