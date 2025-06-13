@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,13 +23,13 @@ public class ScenarioRepositoryTest {
     @BeforeEach
     void setUp() {
         repo = new ScenarioRepository();
-        testMap = new Map("TestMap", 100, 100);
+        testMap = new Map("TestMap", 100, 100, 1);
 
         LocalDate startDate1 = LocalDate.of(1870, 1, 1);
         LocalDate endDate1 = LocalDate.of(1880, 12, 31);
         List<String> locomotiveTypes1 = Collections.singletonList("steam");
         List<String> historicalEvents1 = Collections.singletonList("none");
-        Restrictions restrictions1 = new Restrictions(startDate1, endDate1, locomotiveTypes1, historicalEvents1);
+        Restrictions restrictions1 = new Restrictions(startDate1, endDate1, locomotiveTypes1, historicalEvents1, new ArrayList<>());
         Budget budget1 = new Budget(10000);
         testScenario1 = new Scenario("TestScenario1", restrictions1, testMap, budget1);
 
@@ -37,7 +38,7 @@ public class ScenarioRepositoryTest {
         LocalDate endDate2 = LocalDate.of(1980, 12, 31);
         List<String> locomotiveTypes2 = Arrays.asList("steam", "diesel", "electric");
         List<String> historicalEvents2 = Collections.singletonList("school program");
-        Restrictions restrictions2 = new Restrictions(startDate2, endDate2, locomotiveTypes2, historicalEvents2);
+        Restrictions restrictions2 = new Restrictions(startDate2, endDate2, locomotiveTypes2, historicalEvents2, new ArrayList<>());
         Budget budget2 = new Budget(20000);
         testScenario2 = new Scenario("TestScenario2", restrictions2, testMap, budget2);
 
@@ -51,7 +52,7 @@ public class ScenarioRepositoryTest {
         LocalDate endDate = LocalDate.of(1867, 12, 31);
         List<String> locomotiveTypes = Collections.singletonList("steam");
         List<String> historicalEvents = Collections.singletonList("none");
-        Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents);
+        Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents, new ArrayList<>());
         Budget budget = new Budget(15000);
         Scenario newScenario = new Scenario("TestScenario3", restrictions, testMap, budget);
 
@@ -72,7 +73,7 @@ public class ScenarioRepositoryTest {
         LocalDate endDate = LocalDate.of(1880, 12, 31);
         List<String> locomotiveTypes = Collections.singletonList("steam");
         List<String> historicalEvents = Collections.singletonList("none");
-        Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents);
+        Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents, new ArrayList<>());
         Budget budget = new Budget(10000);
         Scenario duplicateScenario = new Scenario("TestScenario1", restrictions, testMap, budget);
 
@@ -111,7 +112,7 @@ public class ScenarioRepositoryTest {
         assertTrue(scenarios.contains(testScenario1));
         assertTrue(scenarios.contains(testScenario2));
 
-        Map otherMap = new Map("OtherMap", 100, 100);
+        Map otherMap = new Map("OtherMap", 100, 100, 1);
         List<Scenario> otherScenarios = repo.getScenarioListByMap(otherMap);
         assertTrue(otherScenarios.isEmpty());
     }
@@ -136,8 +137,9 @@ public class ScenarioRepositoryTest {
         Optional<Scenario> foundScenario = repo.getScenarios("TestScenario1");
         assertTrue(foundScenario.isPresent());
 
-        Optional<Scenario> notFoundScenario = repo.getScenarios("testscenario1");
-        assertFalse(notFoundScenario.isPresent());
+        Optional<Scenario> caseInsensitiveScenario = repo.getScenarios("testscenario1");
+        assertTrue(caseInsensitiveScenario.isPresent());
+        assertEquals("TestScenario1", caseInsensitiveScenario.get().getScenarioName());
     }
 
     @Test
@@ -159,7 +161,6 @@ public class ScenarioRepositoryTest {
 
     @Test
     void testSaveScenarioToFile() {
-        String fileName = "test_scenario.ser";
         try {
             repo.saveScenarioToFile(testScenario1);
             File file = new File("scenarios/TestScenario1.ser");
@@ -173,6 +174,26 @@ public class ScenarioRepositoryTest {
     @Test
     void testSaveScenarioToFileWithNullScenarioThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> repo.saveScenarioToFile(null));
+    }
+
+    @Test
+    void testSaveScenarioToFileWithNonExistentDirectory() {
+        // Delete scenarios directory if it exists
+        File scenariosDir = new File("scenarios");
+        if (scenariosDir.exists()) {
+            scenariosDir.delete();
+        }
+
+        // Should create directory and save file
+        try {
+            repo.saveScenarioToFile(testScenario1);
+            File file = new File("scenarios/TestScenario1.ser");
+            assertTrue(file.exists());
+            file.delete();
+            scenariosDir.delete();
+        } catch (Exception e) {
+            fail("Should not throw exception: " + e.getMessage());
+        }
     }
 
     @Test
@@ -193,5 +214,46 @@ public class ScenarioRepositoryTest {
     void testLoadScenarioFromFileWithInvalidFileThrowsException() {
         assertThrows(RuntimeException.class, () -> 
             repo.loadScenarioFromFile("nonexistent.ser", testMap));
+    }
+
+    @Test
+    void testScenarioWithPortBehaviors() {
+        List<PortBehavior> portBehaviors = Arrays.asList(PortBehavior.PORT_ALPHA, PortBehavior.PORT_BRAVO);
+        LocalDate startDate = LocalDate.of(1870, 1, 1);
+        LocalDate endDate = LocalDate.of(1880, 12, 31);
+        List<String> locomotiveTypes = Arrays.asList("steam", "diesel");
+        List<String> historicalEvents = Collections.singletonList("none");
+        Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents, portBehaviors);
+        Budget budget = new Budget(15000);
+        Scenario scenarioWithPorts = new Scenario("Test_Scenario_With_Ports", restrictions, testMap, budget);
+
+        repo.add(scenarioWithPorts);
+
+        Optional<Scenario> retrievedScenario = repo.getScenarios("Test_Scenario_With_Ports");
+        assertTrue(retrievedScenario.isPresent());
+        List<PortBehavior> retrievedPorts = retrievedScenario.get().getRestrictions().getPorts();
+        assertEquals(2, retrievedPorts.size());
+        assertTrue(retrievedPorts.contains(PortBehavior.PORT_ALPHA));
+        assertTrue(retrievedPorts.contains(PortBehavior.PORT_BRAVO));
+    }
+
+    @Test
+    void testScenarioWithEmptyPortBehaviors() {
+        List<PortBehavior> emptyPorts = new ArrayList<>();
+        LocalDate startDate = LocalDate.of(1870, 1, 1);
+        LocalDate endDate = LocalDate.of(1880, 12, 31);
+        List<String> locomotiveTypes = Arrays.asList("steam", "diesel");
+        List<String> historicalEvents = Collections.singletonList("none");
+        Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents, emptyPorts);
+        Budget budget = new Budget(15000);
+        Scenario scenarioWithEmptyPorts = new Scenario("TestScenarioEmptyPorts", restrictions, testMap, budget);
+
+        repo.add(scenarioWithEmptyPorts);
+
+        Optional<Scenario> retrievedScenario = repo.getScenarios("TestScenarioEmptyPorts");
+        assertTrue(retrievedScenario.isPresent());
+        List<PortBehavior> retrievedPorts = retrievedScenario.get().getRestrictions().getPorts();
+        assertNotNull(retrievedPorts);
+        assertTrue(retrievedPorts.isEmpty());
     }
 }
