@@ -85,7 +85,7 @@ public class Main {
                     String[] parts = result.testName.split("-");
                     String trainType = parts.length > 1 ? parts[1] : "Unknown";
                     writer.printf(
-                            Locale.US, "%s,%s,%d,%d,%.3f%n",
+                            Locale.US, "%s,%s,%d,%d,%f%n",
                             result.testName,
                             trainType,
                             result.vertexCount,
@@ -98,7 +98,7 @@ public class Main {
                     String[] parts = result.testName.split("-");
                     String maintenanceType = parts.length > 1 ? parts[1].replace("_", " ") : "Unknown";
                     writer.printf(
-                            Locale.US, "%s,%s,%d,%.3f%n",
+                            Locale.US, "%s,%s,%d,%f%n",
                             result.testName,
                             maintenanceType,
                             result.edgeCount,
@@ -112,10 +112,10 @@ public class Main {
         results.sort(Comparator.comparingInt(r -> r.edgeCount));
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            writer.println("Edges,AvgTimeMs");
+            writer.println("size;time");
 
             for (PerformanceResult result : results) {
-                writer.printf(Locale.US, "%d,%.3f%n", result.edgeCount, result.avgTime / 1_000_000.0
+                writer.printf(Locale.GERMAN, "%d;%f%n", result.edgeCount, result.avgTime / 1_000_000.0
                 );
             }
         }
