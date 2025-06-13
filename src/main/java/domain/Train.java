@@ -65,6 +65,10 @@ public class Train implements Serializable {
         return carriages.size();
     }
 
+    public List<Carriage> getCarriages() {
+        return carriages;
+    }
+
     /**
      * Sets the number of carriages for this train.
      * If the new number is greater than the current number, adds empty carriages.
@@ -135,7 +139,7 @@ public class Train implements Serializable {
 
     public boolean isReadyToDepart(int pointIndex, int currentLoad) {
         if (pointIndex >= 0 && pointIndex < route.size()) {
-            return route.get(pointIndex).isReadyToDepart(currentLoad, carriages.size());
+            return route.get(pointIndex).isReadyToDepart(currentLoad, (carriages.size() * carriages.get(0).getMaxCargo()));
         }
         return false;
     }

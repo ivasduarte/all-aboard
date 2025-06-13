@@ -54,6 +54,7 @@ public class PointOfRoute implements Serializable {
             case HALF:
                 return currentLoad >= maxLoad / 2;
             case AVAILABLE:
+                return currentLoad > 0;
             default:
                 return true;
         }

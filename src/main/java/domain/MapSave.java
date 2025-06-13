@@ -6,8 +6,7 @@ public class MapSave implements Runnable, Serializable {
 
     private final Map map;
 
-    public MapSave(Map map)
-    {
+    public MapSave(Map map) {
         this.map = map;
     }
 
@@ -35,8 +34,7 @@ public class MapSave implements Runnable, Serializable {
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         try {
             save(map);
         } catch (IOException e) {

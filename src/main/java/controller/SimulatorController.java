@@ -482,25 +482,38 @@ public class SimulatorController implements Runnable, Serializable {
             }
 
             int availableCargo = from.getCargo();
-            int maxTrainCapacity = train.getNumberOfCarriages() * 5;
+            int maxTrainCapacity = train.getNumberOfCarriages() * train.getCarriages().get(0).getMaxCargo();
             int spaceAvailable = maxTrainCapacity - currentCargoLoad;
 
-            if (!train.isReadyToDepart(i, availableCargo)) {
+            if (!train.isReadyToDepart(i, currentCargoLoad)) {
                 System.out.println("\n\n[LOADING] Train '" + train.getLocomotive().getLocomotiveModel() +
                         "' waiting for cargo mode '" + currentPoint.getCargoMode() +
                         "' at station '" + from.getName() + "'.\nAvailable cargo: " + availableCargo +
                         "\nCurrent cargo on the train: " + currentCargoLoad);
-                continue;
             }
 
-            int cargoToLoad = Math.min(availableCargo, spaceAvailable);
-            if (cargoToLoad > 0) {
-                from.removeCargo(cargoToLoad); // remove cargo from the station
-                currentCargoLoad += cargoToLoad; // add cargo to the train
-                System.out.println("\n\n[CARGO REMOVED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' removed " + cargoToLoad + " amount from station '" + from.getName() +
-                        "'.\nAvailable cargo at station: " + from.getCargo() +
-                        "\nTotal cargo on train: " + currentCargoLoad);
+            while (!train.isReadyToDepart(i, currentCargoLoad)) {
+                int targetCargo = 0;
+                switch (currentPoint.getCargoMode()) {
+                    case FULL:
+                        targetCargo = maxTrainCapacity;
+                        break;
+                    case HALF:
+                        targetCargo = maxTrainCapacity / 2;
+                        break;
+                }
+                int cargoToLoad = Math.min(availableCargo, Math.abs(targetCargo - currentCargoLoad));
+                if (currentPoint.getCargoMode() == CargoMode.AVAILABLE) {
+                    cargoToLoad = Math.min(availableCargo, spaceAvailable);
+                }
+                if (cargoToLoad > 0) {
+                    from.removeCargo(cargoToLoad); // remove cargo from the station
+                    currentCargoLoad += cargoToLoad; // add cargo to the train
+                    System.out.println("\n\n[CARGO REMOVED] Train '" + train.getLocomotive().getLocomotiveModel() +
+                            "' removed " + cargoToLoad + " amount from station '" + from.getName() +
+                            "'.\nAvailable cargo at station: " + from.getCargo() +
+                            "\nTotal cargo on train: " + currentCargoLoad);
+                }
             }
 
             System.out.println("\n\n[TRAVEL] Train '" + train.getLocomotive().getLocomotiveModel() +
