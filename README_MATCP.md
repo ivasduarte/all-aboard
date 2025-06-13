@@ -1,6 +1,6 @@
 # 1. US30 and US31 .ipynb file path
 
-// add path file (waiting for specification reply)
+- File path: "MATCP_US30-31/US30_US31.ipynb"
 
 # 2. md files
 ## 2.1. US30 md file link
