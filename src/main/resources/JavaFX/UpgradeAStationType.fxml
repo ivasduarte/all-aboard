@@ -28,6 +28,13 @@
          <Label fx:id="labelTest" textFill="white" />
          <ComboBox fx:id="stationTypeComboBox" prefHeight="26.0" prefWidth="405.0" />
 
+         <Label fx:id="labelOrientation" text="Select Orientation:"
+                textFill="white" visible="false"/>
+         <ComboBox fx:id="orientationComboBox"
+                   prefHeight="26.0" prefWidth="405.0"
+                   visible="false"/>
+
+
          <Label text="Select Building:" textFill="white" />
          <Label fx:id="labelPriceDiff" textFill="white" />
          <Label fx:id="labelBudget" textFill="white" />

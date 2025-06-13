@@ -12,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import repositories.Repositories;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class ChangeStationTypeController {
     private ComboBox<Station.StationType> stationTypeComboBox;
     @FXML
     private Label labelBudget;
+    @FXML
+    private Label labelOrientation;
+    @FXML
+    private ComboBox<Station.Orientation> orientationComboBox;
 
     private Scenario currentScenario;
     private Map currentMap;
@@ -43,6 +48,8 @@ public class ChangeStationTypeController {
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
         }
         setStationComboBox();
+        orientationComboBox.setVisible(false);
+        labelOrientation.setVisible(false);
     }
 
     /**
@@ -83,6 +90,7 @@ public class ChangeStationTypeController {
     @FXML
     public void changeStationType() {
         Station station = stationComboBox.getValue();
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
 
         if (station != null) {
             for (int i = 0; i < Station.StationType.values().length; i++) {
@@ -115,11 +123,25 @@ public class ChangeStationTypeController {
             stationTypeComboBox.getItems().clear();
             labelPriceDiff.setText("");
             labelBudget.setText("Budget: " + currentScenario.getBudget().getBudget() + "€");
+
+            successAlert.setTitle("Success!");
+            successAlert.setContentText("Station type successfully updated.");
+            successAlert.showAndWait();
         } else {
-            labelTest.setText("Not enough budget to upgrade this station type.");
+            successAlert.setTitle("Unsuccessful operation");
+            successAlert.setContentText("Not enough budget to upgrade this station type.");
+            successAlert.showAndWait();
         }
         handleBackToMenu();
     }
+
+    @FXML
+    private void setOrientationComboBox(){
+
+        orientationComboBox.getItems().setAll(Station.Orientation.values());
+
+    }
+
 
     @FXML
     private void handleBackToMenu() {
@@ -153,7 +175,6 @@ public class ChangeStationTypeController {
         labelPriceDiff.setText("");
         Station station = stationComboBox.getValue();
         if (station != null) {
-            int currentTypeID = station.getStationTypeID();
             int currentPrice = station.getStationPrice();
 
             for (int i = 0; i < Station.StationType.values().length; i++) {
@@ -165,6 +186,16 @@ public class ChangeStationTypeController {
                 Station.StationType selectedType = stationTypeComboBox.getValue();
                 if (selectedType != null) {
                     Station.StationType originalType = station.getStationType();
+                    if(selectedType.getSize() % 2 == 0){
+                        orientationComboBox.setVisible(true);
+                        labelOrientation.setVisible(true);
+                        setOrientationComboBox();
+                        Station.Orientation ori = orientationComboBox.getValue();
+                        station.setOrientation(ori);
+                    }else{
+                        orientationComboBox.setVisible(false);
+                        labelOrientation.setVisible(false);
+                    }
                     station.setStationType(selectedType);
                     int newPrice = station.getStationPrice();
                     station.setStationType(originalType);
