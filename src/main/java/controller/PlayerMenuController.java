@@ -207,6 +207,21 @@ public class PlayerMenuController {
             UpgradeAStationController controller = loader.getController();
             controller.setData(currentScenario);
 
+            if(!controller.hasStations()){
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setTitle("Error: No Stations Found");
+
+                alert.setHeaderText(null);
+
+                alert.setContentText("No stations found to this scenario/map.");
+
+                alert.showAndWait();
+
+                return;
+            }
+
             Stage stage = new Stage();
             stage.setTitle("Upgrade a Station");
             stage.setScene(new Scene(root));
@@ -244,6 +259,21 @@ public class PlayerMenuController {
             ListStationsController controller = loader.getController();
             controller.setData(currentScenario);
             controller.loadStations();
+
+            if(!controller.hasStations()){
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setTitle("Error: No Stations Found");
+
+                alert.setHeaderText(null);
+
+                alert.setContentText("No stations found to this scenario/map.");
+
+                alert.showAndWait();
+
+                return;
+            }
 
             Stage stage = new Stage();
             stage.setTitle("List All Stations");
@@ -306,6 +336,21 @@ public class PlayerMenuController {
             Parent root = loader.load();
             ChangeStationTypeController controller = loader.getController();
             controller.setData(currentScenario);
+
+            if(!controller.hasStations()){
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setTitle("Error: No Stations Found");
+
+                alert.setHeaderText(null);
+
+                alert.setContentText("No stations found to this scenario/map.");
+
+                alert.showAndWait();
+
+                return;
+            }
 
             Stage stage = new Stage();
             stage.setTitle("Upgrade a Station Type");
