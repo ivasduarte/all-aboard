@@ -220,11 +220,6 @@ public class Scenario implements Serializable {
         trains.add(train);
     }
 
-    @Override
-    public String toString() {
-        return name + " - " + map.getName();
-    }
-
     /**
      * Returns a string representation of the Scenario object.
      * The representation includes the scenario name, its restrictions,
@@ -232,8 +227,10 @@ public class Scenario implements Serializable {
      *
      * @return A string describing the scenario, formatted as "name (restrictions, belongs to map 'mapName')".
      */
-
-
+    @Override
+    public String toString() {
+        return name + " - " + map.getName();
+    }
 
     /**
      * Retrieves the modification rate for this scenario.
@@ -246,9 +243,18 @@ public class Scenario implements Serializable {
         return modificationRateFor;
     }
 
+    /**
+     * Sets the modification rate for this scenario.
+     * The modification rate represents the rate at which changes can be made
+     * to the scenario's elements.
+     *
+     * @param modificationRateFor The new modification rate to be set
+     * @throws IllegalArgumentException if the modification rate is negative
+     */
     public void setModificationRateFor(double modificationRateFor) {
+        if (modificationRateFor < 0) {
+            throw new IllegalArgumentException("Modification rate cannot be negative");
+        }
         this.modificationRateFor = modificationRateFor;
     }
-
-
 }
