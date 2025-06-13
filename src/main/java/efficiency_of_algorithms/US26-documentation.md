@@ -4,7 +4,8 @@
 
 This document addresses User Story 26 (US26), which requires an analysis of the efficiency of the algorithms implemented in **US13** and **US14** of the project.
 
-Only algorithms developed using **primitive operations**, without relying on Java’s built-in graph-related libraries, are considered in this analysis. This includes procedures such as graph construction, depth-first search (DFS), and the analysis of node degrees to determine the possibility of an Eulerian path.
+Only algorithms developed using **primitive operations**, without relying on Java’s built-in graph-related libraries, are considered in this analysis.
+This includes procedures such as graph construction, depth-first search (DFS), and checking vertex degrees to assess the possibility of an Eulerian path.
 
 > **AC01**: The analysis report of the worst-case time complexity of the algorithms should be documented/detailed in the repository documentation(using markdown format). All the algorithms should be presented in pseudocode, where the complexity analysis should be made.
 
@@ -34,6 +35,14 @@ E' = { (u, v) ∈ E | line(u, v) is electrified }
 Resulting in a subgraph: 
 
 G' = (V, E')
+
+This filtering is implemented during graph construction, using a helper function `canTrainUseLineType(trainType, lineType)`, which returns `true` if the given train type can use the railway line type.
+
+- For **steam ("1")** and **diesel ("2")** trains, all lines are valid.
+- For **electric ("3")** trains, only lines marked as electrified (`lineType = "1"`) are included.
+
+Each line is checked exactly once during construction, so this filtering contributes `O(1)` time per edge, for a total of `O(E)` in the worst case.
+
 
 #### 2.3 Path Detection with DFS
 
@@ -89,19 +98,22 @@ This function reads the list of edges and constructs the adjacency list represen
     Add stationA to graph[stationB]
     Return Graph
 
-| Pseudocode                                               | Type    |
-|----------------------------------------------------------|---------|
-| graph <- empty map                                       | 1A      |       
-| For each(stationA, stationB, isElectrified) in edgeList: | nA + nC |       
-| if trainType = 'Electric' and isElectrified = 0          | nC      |       
-| Skip this edge                                           | -       |       
-| If stationA not in graph:                                | nC      |      
-| graph[stationA] <- empty list                            | nA      |       
-| If stationB not in graph:                                | nC      |       
-| graph[stationB] <- empty list                            | nA      |       
-| Add stationB to graph[stationA]                          | nOp     |       
-| Add stationA to graph[stationB]                          | nOp     |       
-| Return Graph                                             | 1R      |       
+| Pseudocode                                               | Type            |
+|----------------------------------------------------------|-----------------|
+| graph <- empty map                                       | 1A              |       
+| For each(stationA, stationB, isElectrified) in edgeList: | A(n+1) + C(n+1) |       
+| if trainType = 'Electric' and isElectrified = 0          | nC              |       
+| Skip this edge                                           | -               |       
+| If stationA not in graph:                                | nC              |      
+| graph[stationA] <- empty list                            | nA              |       
+| If stationB not in graph:                                | nC              |       
+| graph[stationB] <- empty list                            | nA              |       
+| Add stationB to graph[stationA]                          | nOp + nI        |       
+| Add stationA to graph[stationB]                          | nOp + nI        |       
+| Return Graph                                             | 1R              | 
+|                                                          |                 |  
+|                                                          |                 |  
+| Total                                                    | 11n + 4         |  
 
 
 
@@ -128,17 +140,46 @@ This function determines if the destination station is reachable from the start 
 |-------------------------------------------------|------|
 | visited <- empty set                            | 1A   |       
 | Return dfs(graph, start, end, visited)          | 1R   | 
+|                                                 |      |  
+|                                                 |      |  
+| Total                                           | 2    |   
 
-| Pseudocode                                   | Type    | 
-|----------------------------------------------|---------|
-| If current = end                             | nC      |       
-| Return true                                  | 1R      |
-| Add current to visited                       | nOp     |       
-| For each neighbor in graph[current]          | nA + nC |
-| If neighbor not in visited                   | nC      |       
-| If dfs(graph, neighbor, end, visited) = True | nC      |
-| Return true                                  | 1R      |
-| Return false                                 | 1R      |
+| Pseudocode                            | Type            | 
+|---------------------------------------|-----------------|
+| If current = end                      | nC              |       
+| Return true                           | 1R              |
+| Add current to visited                | nOp + nI        |       
+| For each neighbor in graph[current]   | A(n+1) + C(n+1) |
+| If neighbor not in visited            | nC              |       
+| If dfs(graph, neighbor, end, visited) | nC              |
+| Return true                           | 1R              |
+| Return false                          | 1R              |
+|                                       |                 |  
+|                                       |                 |  
+| Total                                 | 7n + 5          | 
+
+
+#### c) Train Type Validation 
+
+    Function canTrainUseLineType(trainType, lineType):
+    If trainType = "1" OR trainType = "2":
+      Return true
+    If trainType = "3":
+      Return lineType equals "1"
+    Return false
+
+| Pseudocode                             | Type    | 
+|----------------------------------------|---------|
+| If trainType = "1" OR trainType = "2": | nC      |       
+| Return true                            | 1R      |
+| If trainType = "3":                    | nC      |       
+| Return lineType equals "1"             | 1C + 1R |
+| Return false                           | 1R      |
+|                                        |         |  
+|                                        |         |  
+| Total                                  | 2n + 4  | 
+
+
 
 
 ## 3. Efficiency Analysis of US14
@@ -184,23 +225,27 @@ Then, the worst-case time complexity is:
 This function performs a depth-first search (DFS) starting from a vertex with neighbors, and verifies if all reachable vertices are part of the same connected component. Only non-isolated vertices are considered.
 
     Function isConnected(graph):
-        visited ← empty set
-        start ← any vertex in graph with neighbors
-        DFS(start, graph, visited)
+    visited ← empty set
+    start ← any vertex in graph with neighbors
+    DFS(start, graph, visited)
     For each vertex in graph:
         If vertex has neighbors and vertex not in visited:
             Return False
     Return True
 
-| Pseudocode                                         | Type |
-|----------------------------------------------------|------|
-| visited <- empty set                               | 1A   |       
-| start <- any vertex in graph with neighbors        | 1A   |       
-| DFS                                                | nOP  |       
-| For each vertex in graph:                          | nA   |       
-| If vertex has neighbors and vertex not in visited: | nC   |      
-| Return False                                       | 1R   |       
-| Return True                                        | 1R   |       
+| Pseudocode                                         | Type            |
+|----------------------------------------------------|-----------------|
+| visited <- empty set                               | 1A              |       
+| start <- any vertex in graph with neighbors        | 1A + 1C         |       
+| DFS                                                | nOP             |       
+| For each vertex in graph:                          | A(n+1) + C(n+1) |       
+| If vertex has neighbors and vertex not in visited: | 2nC             |      
+| Return False                                       | 1R              |       
+| Return True                                        | 1R              |    
+|                                                    |                 |  
+|                                                    |                 |  
+| Total                                              | 3n + 7          | 
+
 
 
 
@@ -215,13 +260,16 @@ This function iterates through all vertices in the graph and counts how many hav
                 odd ← odd + 1
     Return odd
 
-| Pseudocode                  | Type |
-|-----------------------------|------|
-| odd <- 0                    | 1A   |        
-| For each vertex in graph:   | nA   |       
-| If degree(vertex) mod 2 ≠ 0 | nC   |      
-| odd <- odd + 1              | nOP  |       
-| Return odd                  | 1R   |       
+| Pseudocode                   | Type     |
+|------------------------------|----------|
+| odd <- 0                     | 1A       |        
+| For each vertex in graph:    | nA       |       
+| If degree(vertex) mod 2 ≠ 0  | nC + nOP |    
+| odd <- odd + 1               | nOP      |       
+| Return odd                   | 1R       | 
+|                              |          |  
+|                              |          |  
+| Total                        | 4n + 2   | 
 
 
 #### c) Eulerian Path Verification ('hasEulerianPath')
@@ -229,8 +277,8 @@ This function iterates through all vertices in the graph and counts how many hav
 This function combines the two previous ones. It first checks if the graph is connected. If it is, it analyzes the number of odd-degree vertices to determine whether an Eulerian circuit or path exists.
 
     Function hasEulerianPath(graph):
-        If not isConnected(graph):
-        Return "No Eulerian path – graph is disconnected"
+    If not isConnected(graph):
+    Return "No Eulerian path – graph is disconnected"
     odd ← countOddDegreeVertices(graph)
     If odd == 0:
         Return "Eulerian circuit possible"
@@ -239,17 +287,21 @@ This function combines the two previous ones. It first checks if the graph is co
     Else:
         Return "No Eulerian path – more than 2 vertices with odd degree"
 
-| Pseudocode                                                        | Type |
-|-------------------------------------------------------------------|------|
-| If not isConnected(graph):                                        | 1C   |        
-| Return "No Eulerian path - graph is disconnected"                 | 1R   |       
-| odd <- countOddDegreeVertices(graph)                              | 1A   |      
-| If odd == 0                                                       | 1C   |       
-| Return "Eulerian circuit possible"                                | 1R   |
-| Else if odd == 2:                                                 | 1C   |        
-| Return "Eulerian path possible"                                   | 1R   |       
-| Else:                                                             | -    |      
-| Return "No Eulerian path - more than 2 vertices with odd degree"  | 1R   |       
+| Pseudocode                                                       | Type     |
+|------------------------------------------------------------------|----------|
+| If not isConnected(graph):                                       | 1C + 1OP |        
+| Return "No Eulerian path - graph is disconnected"                | 1R       |       
+| odd <- countOddDegreeVertices(graph)                             | 1A       |      
+| If odd == 0                                                      | 1C       |       
+| Return "Eulerian circuit possible"                               | 1R       |
+| Else if odd == 2:                                                | 1C       |        
+| Return "Eulerian path possible"                                  | 1R       |       
+| Else:                                                            | -        |      
+| Return "No Eulerian path - more than 2 vertices with odd degree" | 1R       | 
+|                                                                  |          |  
+|                                                                  |          |  
+| Total                                                            | 9        | 
+
 
 
 
