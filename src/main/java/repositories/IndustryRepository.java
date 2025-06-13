@@ -35,7 +35,7 @@ public class IndustryRepository implements Serializable {
      * @return industry list
      */
     public List<Industry> getIndustryList() {
-        return industries;
+        return List.copyOf(industries);
     }
 
     /**

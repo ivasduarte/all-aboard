@@ -12,6 +12,19 @@ public class Simulator implements Serializable {
     private int currentYear;
 
     public Simulator(User user, Map selectedMap, Scenario selectedScenario, Budget budget, int currentYear) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        if (selectedMap == null) {
+            throw new IllegalArgumentException("Map cannot be null");
+        }
+        if (selectedScenario == null) {
+            throw new IllegalArgumentException("Scenario cannot be null");
+        }
+        if (currentYear < selectedScenario.getRestrictions().getStartDate().getYear() || 
+            currentYear > selectedScenario.getRestrictions().getEndDate().getYear()) {
+            throw new IllegalArgumentException("Current year must be between start and end dates");
+        }
         this.user = user;
         this.selectedMap = selectedMap;
         this.selectedScenario = selectedScenario;
@@ -44,18 +57,16 @@ public class Simulator implements Serializable {
     }
 
     public void setCurrentYear(int currentYear) {
+        if (currentYear < selectedScenario.getRestrictions().getStartDate().getYear() || 
+            currentYear > selectedScenario.getRestrictions().getEndDate().getYear()) {
+            throw new IllegalArgumentException("Current year must be between start and end dates");
+        }
         this.currentYear = currentYear;
     }
 
     @Override
     public String toString() {
-        return "Simulator{" +
-                "user=" + user +
-                ", selectedMap=" + selectedMap +
-                ", selectedScenario=" + selectedScenario +
-                ", budget=" + budget +
-                ", currentYear=" + currentYear +
-                '}';
+        return "Simulator for " + user.getName() + " (Current Year: " + currentYear + ")";
     }
 
     @Override

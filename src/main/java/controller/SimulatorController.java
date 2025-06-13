@@ -136,7 +136,7 @@ public class SimulatorController implements Runnable, Serializable {
         double costMultiplier = calculateCostMultiplier(events);
 
         List<Industry> industries = Repositories.getInstance().getIndustryRepository().getIndustriesByMap(map);
-        List<Train> trains = Repositories.getInstance().getTrainRepository().getAlltrains();
+        List<Train> trains = Repositories.getInstance().getTrainRepository().getAllTrains();
 
         try {
             runSimulationLoop(industries, trains, cargoMultiplier, costMultiplier, events);
