@@ -6,6 +6,7 @@ import controller.DisplayMapController;
 import domain.*;
 import repositories.MapRepository;
 import repositories.Repositories;
+import repositories.ScenarioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class AddIndustryUI implements Runnable {
             if (positionY < 0 || positionY > map.getHeight()) {
                 System.out.println("Invalid Y coordinate!");
             }
-        } while (positionY < 0 || positionY > map.getWidth());
+        } while (positionY < 0 || positionY > map.getHeight());
 
         System.out.println();
 
