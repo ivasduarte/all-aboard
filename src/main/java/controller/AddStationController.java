@@ -191,7 +191,7 @@ public class AddStationController {
             stationOrientation = Station.Orientation.values()[0];
 
         String stationName = generateStationName(map.getName(), positionX, positionY, stationType.getDisplayName());
-        Station newStation = new Station(map.getName(), mapID, positionX, positionY, stationType, stationOrientation, stationName);
+        Station newStation = new Station(map.getName(), mapID, positionX, positionY, stationType, stationOrientation, stationName, scenario.getScenarioName());
         newStation.setOwnerPlayer(UserSession.getInstance().getUser().getEmail());
 
         if (!newStation.validatePosition(map, stationType.getSize() / 2)) {
@@ -287,7 +287,7 @@ public class AddStationController {
         }
 
         String stationName = generateStationName(map.getName(), positionX, positionY, type.getDisplayName());
-        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation, stationName);
+        Station newStation = new Station(map.getName(), mapID, positionX, positionY, type, orientation, stationName, scenario.getScenarioName());
         newStation.setOwnerPlayer(UserSession.getInstance().getUser().getEmail());
 
         if (!newStation.validatePosition(map, size)) {

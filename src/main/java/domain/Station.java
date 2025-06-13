@@ -172,7 +172,7 @@ public class Station implements Serializable {
      * @param stationType station type
      * @param orientation station orientation
      */
-    public Station(String mapName, int mapID, int positionX, int positionY, StationType stationType, Orientation orientation, String name) {
+    public Station(String mapName, int mapID, int positionX, int positionY, StationType stationType, Orientation orientation, String name, String scenarioName) {
         this.mapName = mapName;
         this.mapID = mapID;
         this.positionX = positionX;
@@ -184,6 +184,7 @@ public class Station implements Serializable {
         this.buildings = new ArrayList<>();
         this.cargo = 0;
         this.maxCargo = 1000;
+        this.scenarioName = scenarioName;
     }
 
     /**
