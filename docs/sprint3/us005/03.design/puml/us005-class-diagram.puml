@@ -9,27 +9,7 @@ interface Runnable {
     + run(): void
 }
 
-class Player {
-    - String name
-    - String ID
-    - String password
-    + getPlayerName()
-    + getPlayerID()
-    + getPlayerPassword()
-}
-
-class UserSession {
-}
-
-class ApplicationSession {
-    + static getInstance()
-    + getCurrentSession()
-}
-
-
 class Station {
-    - int totalStations
-
     - int stationID
     - String ownerPlayer
     - String mapName
@@ -37,7 +17,6 @@ class Station {
     - int mapID
     - int positionX
     - int positionY
-
     - StationType stationType
     - Orientation orientation
     - List<Building> buildings
@@ -49,20 +28,15 @@ class Station {
     + int getStationID()
     + StationType getStationType()
     + Orientation getStationOrientation()
-    + List<Building> getBuildings()
-    + int getCargo()
     + String getOwnerPlayer()
     + String getMapName()
     + String getScenarioName()
     + int getStationSize()
     + int getStationPrice()
-    + int getStationTypeID()
     + String getStationTypeString()
     + String getOrientationString()
     + Map getMap()
-    + int getTotalStations()
 
-    + void setOwnerPlayer(String ownerPlayer)
     + void setMapName(String mapName)
     + void setScenarioName(String scenarioName)
     + void setMapID(int mapID)
@@ -72,20 +46,13 @@ class Station {
     + void setOrientation(Orientation orientation)
     + void setOrientation(String orientation)
 
-    + boolean addBuilding(Building buildingToAdd)
-    + boolean isAvailable()
-    + void addCargo(int amount)
-    + void removeCargo(int amount)
     + boolean validatePosition(Map map, int size)
     + boolean checkOverbuilding()
-
-    + void increaseTotalStations()
-    + int checkStationType(String type)
 }
 
 enum Orientation {
-    - String displayName;
-    - String shortening;
+    - String displayName
+    - String shortening
 
     + Orientation(String displayName, String shortening)
     + getDisplayName()
@@ -95,11 +62,11 @@ enum Orientation {
 }
 
 enum StationType {
-    - String displayName;
-    - int size;
+    - String displayName
+    - int size
     - int price
 
-    + Orientation(String displayName, String shortening)
+    + StationType(String displayName, int size, int price)
     + getDisplayName()
     + getSize()
     + getPrice()
@@ -113,18 +80,33 @@ class AddStationUI implements Runnable {
 
     + AddStationUI(Map map, Scenario scenario)
     + getInput()
-
     + run()
 }
 
 class AddStationController {
-    + String AddStation(Map map, Scenario scenario, int positionX, int positionY, String stationType, String rotation)
-}
+    - Map map
+    - Scenario scenario
+    - Button backBtn
+    - Button addBtn
+    - ComboBox<StationType> stationTypeCmb
+    - ComboBox<Orientation> orientationCmb
+    - Label mapLbl
+    - Label scenarioLbl
+    - Label budgetLbl
+    - Label orientationLbl
+    - Label stationPriceLbl
+    - Slider XPosSli
+    - Slider YPosSli
+    - TextField XPosTxt
+    - TextField YPosTxt
 
-class Repositories {
-    - Repositories()
-    + getInstance() : repositories
-    + getStationRepository()
+    + void setData(Map map, Scenario scenario)
+    + void initialize()
+    + void handleXPosTxt()
+    + void handleAddStation()
+    + void handleBackToMenu()
+    + String AddStation(Map map, Scenario scenario, int positionX, int positionY, int stationType, String rotation)
+    + String generateStationName(String mapName, int posX, int posY, String type)
 }
 
 class StationRepository {
@@ -132,29 +114,15 @@ class StationRepository {
 
     + void save(Station station)
     + List<Station> getStations()
-    + void displayAllStations()
     + List<Station> getAvailableStationsByMapName(String mapName)
-    + void copyFrom(StationRepository st2)
 }
 
-Repositories -> Repositories : instance
-ApplicationSession -> ApplicationSession : instance
 
-AddStationUI .> AddStationController
-
-AddStationController .> Repositories : repositories
-
-Repositories -> "1" StationRepository
-AddStationController ..> Station
-AddStationController ..> StationRepository
-
-ApplicationSession --> "1" UserSession : userSession
-
-AddStationController ..> ApplicationSession
-AddStationController ..> UserSession
-
-StationRepository "1" --> "*" Station : stations
-
-Station --> Player : createdBy
+AddStationUI ..> AddStationController : uses
+AddStationController ..> Station : creates
+AddStationController ..> StationRepository : uses
+StationRepository o-- "1..*" Station : manages
+Station --> StationType : has
+Station --> Orientation : has
 
 @enduml

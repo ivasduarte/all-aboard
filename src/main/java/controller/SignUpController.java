@@ -8,6 +8,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import ui.authorization.AuthenticationController;
 
+/**
+ * Controller class responsible for managing the user registration process.
+ * Handles user input validation and interaction with the authentication system
+ * to create new user accounts.
+ */
 public class SignUpController {
     @FXML
     private TextField nameField;
@@ -24,10 +29,20 @@ public class SignUpController {
 
     private AuthenticationController ctrl;
 
+    /**
+     * Sets the authentication controller instance to be used for user registration.
+     *
+     * @param ctrl The authentication controller instance that will handle user creation.
+     */
     public void setController(AuthenticationController ctrl) {
         this.ctrl = ctrl;
     }
 
+    /**
+     * Handles the sign up button click event.
+     * Validates user input and attempts to create a new user account.
+     * Displays appropriate success or error messages based on the result.
+     */
     @FXML
     private void handleSignUpButton() {
         String name = nameField.getText();
@@ -53,6 +68,10 @@ public class SignUpController {
         }
     }
 
+    /**
+     * Handles the back button click event.
+     * Closes the current registration window and returns to the previous screen.
+     */
     @FXML
     private void handleBackButton() {
         Stage stage = (Stage) backButton.getScene().getWindow();

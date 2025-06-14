@@ -10,6 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * User interface for managing the simulation.
+ * Implements Runnable and Serializable to support concurrent execution and object persistence.
+ */
 public class SimulationUI implements Runnable, Serializable {
 
     private final SimulatorController controller;
@@ -18,12 +22,23 @@ public class SimulationUI implements Runnable, Serializable {
 
     private static final String DEFAULT_SIMULATION_FILE = "simulations.sim";
 
+    /**
+     * Creates a new SimulationUI instance with the specified map and scenario.
+     *
+     * @param map The map to simulate
+     * @param scenario The scenario to simulate
+     */
     public SimulationUI(Map map, Scenario scenario) {
         this.selectedMap = map;
         this.selectedScenario = scenario;
         this.controller = new SimulatorController(map, scenario);
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Manages the simulation lifecycle including starting, pausing, resuming, and stopping.
+     * Provides a menu interface for controlling the simulation.
+     */
     @Override
     public void run() {
         System.out.println("\n----------------- SIMULATION START -----------------");
@@ -84,11 +99,20 @@ public class SimulationUI implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Saves the current simulation state to a file.
+     * Uses a separate thread to perform the save operation.
+     */
     private void saveSimulation() {
         SimulationSave saver = new SimulationSave(DEFAULT_SIMULATION_FILE, Repositories.getInstance().getSimRep(), Repositories.getInstance().getStationRepository(), Repositories.getInstance().getBuildingRepository());
         new Thread(saver).start();
     }
 
+    /**
+     * Attempts to load a previous simulation state from a file.
+     *
+     * @return true if the simulation was successfully loaded, false otherwise
+     */
     private boolean loadSimulation() {
         System.out.println("Attempting to load previous simulation...");
         boolean success = new SimulationLoad(DEFAULT_SIMULATION_FILE).load(Repositories.getInstance().getSimRep(), Repositories.getInstance().getStationRepository(), Repositories.getInstance().getBuildingRepository());

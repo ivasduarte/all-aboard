@@ -7,22 +7,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repository class responsible for managing and persisting Industry objects.
+ * This class provides methods to save and retrieve industries from the system,
+ * as well as filter industries by map.
+ */
 public class IndustryRepository implements Serializable {
     private List<Industry> industries = new ArrayList<>();
 
     /**
-     * This method will be responsible to add the industry to the industry list.
+     * Saves a single industry to the repository.
      *
-     * @param industry industry that is being created
+     * @param industry The industry to be saved
      */
     public void save(Industry industry) {
         industries.add(industry);
     }
 
     /**
-     * This method will be responsible to add a list of industries to the industry list.
+     * Saves a list of industries to the repository.
      *
-     * @param industries industries that are being created
+     * @param industries The list of industries to be saved
      */
     public void save(List<Industry> industries) {
         for(Industry industry : industries)
@@ -30,19 +35,20 @@ public class IndustryRepository implements Serializable {
     }
 
     /**
-     * This method allows other classes to get the list with all the industries.
+     * Retrieves a copy of the list containing all industries in the repository.
      *
-     * @return industry list
+     * @return An unmodifiable list containing all industries
      */
     public List<Industry> getIndustryList() {
         return List.copyOf(industries);
     }
 
     /**
-     * This method allows other classes to get the list with all the industries from a specific map.
+     * Retrieves a list of industries that belong to a specific map.
+     * The method filters industries based on the map's ID.
      *
-     * @param map The desired map.
-     * @return Industry list of the desired map.
+     * @param map The map to filter industries by
+     * @return A list of industries belonging to the specified map
      */
     public List<Industry> getIndustriesByMap(Map map) {
         List<Industry> filteredIndustries = new ArrayList<>();

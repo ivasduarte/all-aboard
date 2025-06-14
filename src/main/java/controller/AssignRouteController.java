@@ -16,7 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Provides functionality to assign routes, configure cargo modes, execute routes, and display route information for trains.
+ * Controller class responsible for managing route assignments for trains.
+ * Handles the creation and management of routes between stations.
  */
 public class AssignRouteController {
 
@@ -43,6 +44,11 @@ public class AssignRouteController {
     private Map map;
     private Scenario scenario;
 
+    /**
+     * Sets the initial data for the route assignment process.
+     * @param map The map containing the stations
+     * @param scenario The current scenario being played
+     */
     public void setData(Map map, Scenario scenario)
     {
         this.map = map;
@@ -61,6 +67,10 @@ public class AssignRouteController {
         }
     }
 
+    /**
+     * Handles the addition of a new point to the route.
+     * Validates the station and cargo mode selections before adding.
+     */
     public void handleAddPointOfRoute()
     {
         if(stationCmb.getValue() == null)
@@ -92,6 +102,10 @@ public class AssignRouteController {
         }
     }
 
+    /**
+     * Handles the route assignment process.
+     * Validates the train selection and assigns the route if all conditions are met.
+     */
     public void handleAssignRoute()
     {
         if(trainCmb.getValue() == null)
@@ -109,6 +123,12 @@ public class AssignRouteController {
         handleBackToMenu();
     }
 
+    /**
+     * Displays an alert dialog with the specified type, title and message.
+     * @param alertType The type of alert to display
+     * @param title The title of the alert
+     * @param text The message to display
+     */
     public void setAlert(Alert.AlertType alertType, String title, String text)
     {
         Alert alert = new Alert(alertType);

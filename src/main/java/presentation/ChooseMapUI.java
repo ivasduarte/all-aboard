@@ -8,13 +8,26 @@ import ui.utils.Utils;
 
 import java.util.List;
 
+/**
+ * User interface for choosing a map in the editor.
+ * Implements Runnable to support concurrent execution.
+ */
 public class ChooseMapUI implements Runnable {
     private EditorChooseMapController controller;
 
+    /**
+     * Creates a new ChooseMapUI instance.
+     * Initializes the controller for map selection.
+     */
     public ChooseMapUI() {
         this.controller = new EditorChooseMapController();
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Handles the map selection process and displays the editor menu.
+     * Continues to show the menu until the user chooses to exit.
+     */
     @Override
     public void run() {
         Map selectedMap = getInput();
@@ -34,6 +47,13 @@ public class ChooseMapUI implements Runnable {
         } while (option != -1);
     }
 
+    /**
+     * Handles user input for map selection.
+     * Displays available maps and collects user choice.
+     * Validates the selection and returns the chosen map.
+     *
+     * @return The selected map, or null if no valid selection was made
+     */
     public Map getInput() {
         List<MapDTO> mapDTOs = controller.getAllMaps();
 

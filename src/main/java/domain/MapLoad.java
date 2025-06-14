@@ -7,7 +7,19 @@ import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class responsible for loading map data from saved files.
+ * Implements Runnable and Serializable interfaces to support concurrent execution and object serialization.
+ */
 public class MapLoad implements Runnable, Serializable {
+    /**
+     * Loads a map from a saved file.
+     * Displays available map files and allows user selection.
+     * Loads the selected map and updates all necessary repositories.
+     *
+     * @throws IOException if there are issues with file operations
+     * @throws ClassNotFoundException if the loaded object class is not found
+     */
     public void load() throws IOException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
 
@@ -69,6 +81,10 @@ public class MapLoad implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Executes the load operation and handles any exceptions that may occur.
+     */
     @Override
     public void run()
     {

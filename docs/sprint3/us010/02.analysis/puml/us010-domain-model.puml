@@ -2,15 +2,10 @@
 skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
-
-'left to right direction
-
 skinparam classAttributeIconSize 0
 
 hide circle
 hide methods
-
-'title Domain Model
 
 class RailwayLine{
     - id
@@ -21,7 +16,9 @@ class RailwayLine{
 class Train{
     - name
     - ID
-    - date of purchase
+    - dateOfPurchase
+    - isAvailable
+    - currentLocation
 }
 
 class Station {
@@ -41,12 +38,24 @@ class Player {
 
 class Route{
     - id
-    - ListOfStations
+    - stations
+    - cargoList
+}
+
+class Cargo{
+    - type
+    - quantity
+    - sourceStation
+    - destinationStation
 }
 
 Player "1" - "1" Train : selects
 Player "1" -- "1" Station : selects
-
 Player "1" -- "1" RailwayLine : assigns
+
 Train "1" - "1" Route : has
+Route "*" -- "1" Station : contains
+Route "*" -- "*" Cargo : transports
+Station "*" -- "*" RailwayLine : connected by
+
 @enduml

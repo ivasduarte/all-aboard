@@ -96,6 +96,12 @@ public class ScenarioRepository implements Serializable {
         return List.copyOf(scenarios);
     }
 
+    /**
+     * Retrieves an unmodifiable list of scenarios associated with a specific map.
+     *
+     * @param map The map to filter scenarios by
+     * @return An unmodifiable list of scenarios associated with the specified map
+     */
     public List<Scenario> getScenarioListByMap(Map map) {
         List<Scenario> filteredScenarios = new ArrayList<>();
 
@@ -126,7 +132,15 @@ public class ScenarioRepository implements Serializable {
             .findFirst();
     }
 
-
+    /**
+     * Loads a scenario from a file and associates it with the selected map.
+     * Validates the scenario's map matches the selected map before loading.
+     *
+     * @param fileName The path to the file containing the scenario
+     * @param selectedMap The map to associate the loaded scenario with
+     * @return The loaded scenario
+     * @throws RuntimeException if there are issues reading the file or if the file contains invalid data
+     */
     public Scenario loadScenarioFromFile(String fileName, Map selectedMap) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             Object obj = in.readObject();
@@ -160,6 +174,13 @@ public class ScenarioRepository implements Serializable {
         }
     }
 
+    /**
+     * Saves a scenario to a file.
+     * Validates the scenario before saving and handles file overwrite confirmation.
+     *
+     * @param scenario The scenario to save
+     * @throws IllegalArgumentException if the scenario is null or invalid
+     */
     public void saveScenarioToFile(Scenario scenario) {
         if (scenario == null) {
             throw new IllegalArgumentException("Scenario is null.");
@@ -196,6 +217,12 @@ public class ScenarioRepository implements Serializable {
         }
     }
 
+    /**
+     * Retrieves a scenario from the repository by its name.
+     *
+     * @param name The name of the scenario to retrieve
+     * @return The scenario with the specified name, or null if not found
+     */
     public Scenario getScenarioByName(String name) {
         for (Scenario scenario : scenarios) {
             if (scenario.getScenarioName().equalsIgnoreCase(name)) {

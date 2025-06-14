@@ -1,5 +1,5 @@
 @startuml
-skinparam packageeStyle rectangle
+skinparam packageStyle rectangle
 skinparam shadowing false
 skinparam linetype polyline
 
@@ -19,36 +19,80 @@ class Player {
 }
 
 class UserSession {
+    - Player currentPlayer
+    + getCurrentPlayer(): Player
 }
 
-class Locomotive{
-    - String locomotiveModel;
-    - String fuelType;
-    - int speed;
-    - int startYear;
-    - int endYear;
-    - int price;
-    - int fuelCost;
-    - int maintenanceCost;
-    - List<Station> route;
+class Train {
+    - Locomotive locomotive
+    - List<PointOfRoute> route
+    - int departureYear
+    - double arrivalTime
+    - List<Carriage> carriages
+    - boolean isDoubleTrack
+    - int currentCargo
 
-    + String getLocomotiveModel()
-    + String getLocomotiveFuelType()
-    + int getPrice()
-    + int getStartYear()
-    + int getEndYear()
-    + int getFuelCost()
-    + int getMaintenanceCost()
-    + List<Station> getRoute()
-    + void setRoute(List<Station> route)
+    + getRoute(): List<PointOfRoute>
+    + setRoute(List<PointOfRoute> pointOfRoutes): void
+    + setRouteWithStations(List<Station> stations): void
+    + getLocomotive(): Locomotive
+    + getNumberOfCarriages(): int
+    + getCarriages(): List<Carriage>
+    + setNumberOfCarriages(int numberOfCarriages): void
+    + setCargoMode(int pointIndex, CargoMode mode): void
+    + isReadyToDepart(int pointIndex, int currentLoad): boolean
 }
 
+class Station {
+    - String id
+    - String name
+    - String type
+    - int positionX
+    - int positionY
+    - String mapName
+    - String ownerPlayer
+    - Map<CargoType, Integer> cargoSupply
+    - Map<CargoType, Integer> cargoDemand
 
-class ApplicationSession {
-    + static getInstance()
-    + getCurrentSession()
+    + getId(): String
+    + getName(): String
+    + getPositionX(): int
+    + getPositionY(): int
+    + getMapName(): String
+    + getOwnerPlayer(): String
+    + distanceTo(Station other): double
 }
 
+class PointOfRoute {
+    - Station station
+    - CargoMode cargoMode
+
+    + getStation(): Station
+    + getCargoMode(): CargoMode
+    + setCargoMode(CargoMode mode): void
+    + isReadyToDepart(int currentLoad, int maxCapacity): boolean
+}
+
+enum CargoMode {
+    FULL
+    HALF
+    AVAILABLE
+}
+
+class AssignRouteController {
+    - Map map
+    - Scenario scenario
+    - TrainRepository trainRepository
+    - StationRepository stationRepository
+
+    + setData(Map map, Scenario scenario): void
+    + handleAddPointOfRoute(): void
+    + handleAssignRoute(): void
+    + assignRoute(Train train, List<PointOfRoute> pointOfRoutes): void
+    + assignRouteWithStations(Train train, List<Station> stations): void
+    + setCargoMode(Train train, int pointIndex, CargoMode mode): void
+    + checkValidation(): boolean
+}
 
 class AssignRouteUI implements Runnable {
     - Map map
@@ -59,44 +103,97 @@ class AssignRouteUI implements Runnable {
     + void run()
 }
 
-class AssignRouteController {
-    + AssignRoute(Locomotive locomotive, List<Station> route)
+class ApplicationSession {
+    + static getInstance(): ApplicationSession
+    + getCurrentSession(): UserSession
 }
 
 class Repositories {
+    - static Repositories instance
+    - TrainRepository trainRepository
+    - StationRepository stationRepository
+
     - Repositories()
-    + getInstance() : repositories
-    + getLocomotiveRepository()
+    + static getInstance(): Repositories
+    + getTrainRepository(): TrainRepository
+    + getStationRepository(): StationRepository
 }
 
-class LocomotiveRepository {
-    - List<Locomotive> locomotives
-    - List<Locomotive> availableLocomotives
-    - List<Locomotive> playerLocomotives
+class TrainRepository {
+    - List<Train> trains
+    - List<Train> availableTrains
 
-    + void saveLocomotive(Locomotive locomotive)
-    + void save(Locomotive locomotive)
-    + List<Locomotive> getAllLocomotives()
-    + List<Locomotive> getAvailableLocomotives(int scenarioId)
-    + List<Locomotive> getPlayerLocomotives()
-    + Locomotive getLocomotiveByModel()
+    + saveTrain(Train train): void
+    + getAvailableTrains(): List<Train>
+    + getTrainById(String id): Train
 }
 
-Player -> AssignRouteUI : calls
-Repositories -> Repositories : instance
-ApplicationSession -> ApplicationSession : instance
+class StationRepository {
+    - List<Station> stations
 
-AssignRouteUI .> AssignRouteController
+    + getAllStations(): List<Station>
+    + getStationById(String id): Station
+}
 
-AssignRouteController .> Repositories : repositories
+class Map {
+    - String name
+    - List<Station> stations
+    + getName(): String
+    + getStations(): List<Station>
+}
 
-Repositories --> "1" LocomotiveRepository
-AssignRouteController ..> Locomotive
+class Scenario {
+    - List<Train> trains
+    + getTrains(): List<Train>
+}
 
-ApplicationSession --> "1" UserSession : userSession
+class Locomotive {
+    - String locomotiveModel
+    - String locomotiveFuelType
+    - int maxSpeed
+    + getLocomotiveModel(): String
+    + getLocomotiveFuelType(): String
+    + getMaxSpeed(): int
+}
 
-AssignRouteController ..> ApplicationSession
-AssignRouteController ..> UserSession
+class Carriage {
+    - Cargo cargo
+    - int maxCargo
+    - int currentCargo
+    + getMaxCargo(): int
+    + getCurrentCargo(): int
+}
 
+' composition
+Train "1" *-- "1" Locomotive : has
+Train "1" *-- "*" PointOfRoute : contains
+Train "1" *-- "*" Carriage : has
+PointOfRoute "1" *-- "1" Station : references
+PointOfRoute "1" *-- "1" CargoMode : has
+Carriage "1" *-- "1" Cargo : has
+
+' agregation
+Repositories "1" o-- "1" TrainRepository : contains
+Repositories "1" o-- "1" StationRepository : contains
+ApplicationSession "1" o-- "1" UserSession : contains
+UserSession "1" o-- "1" Player : contains
+Map "1" o-- "*" Station : contains
+Scenario "1" o-- "*" Train : contains
+
+' dependencies
+AssignRouteUI ..> AssignRouteController : uses
+AssignRouteController ..> Repositories : uses
+AssignRouteController ..> Train : uses
+AssignRouteController ..> Station : uses
+AssignRouteController ..> PointOfRoute : uses
+AssignRouteController ..> CargoMode : uses
+AssignRouteController ..> Map : uses
+AssignRouteController ..> Scenario : uses
+AssignRouteUI ..> Map : uses
+AssignRouteUI ..> Scenario : uses
+AssignRouteUI ..> UserSession : uses
+
+TrainRepository "1" o-- "*" Train : manages
+StationRepository "1" o-- "*" Station : manages
 
 @enduml

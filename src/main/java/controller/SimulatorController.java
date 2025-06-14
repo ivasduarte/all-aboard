@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class responsible for managing the simulation of the railway system.
+ * Handles the execution, pausing, resuming, and stopping of simulations, as well as
+ * processing financial results and managing train operations.
+ */
 public class SimulatorController implements Runnable, Serializable {
     private final User currentUser = UserSession.getInstance().getUser();
     private final SimulatorRepository simRep = Repositories.getInstance().getSimRep();
@@ -32,21 +37,39 @@ public class SimulatorController implements Runnable, Serializable {
     private final Scenario scenario;
     private Simulator simulator;
 
+    /**
+     * Constructs a new SimulatorController with the specified map and scenario.
+     *
+     * @param map The map on which the simulation will run.
+     * @param scenario The scenario containing simulation parameters and constraints.
+     */
     public SimulatorController(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
     }
 
+    /**
+     * Pauses the current simulation.
+     * The simulation will stop at the next iteration until resumed.
+     */
     public void pauseSimulation() {
         paused = true;
         System.out.println("Simulation pause requested...");
     }
 
+    /**
+     * Resumes a paused simulation.
+     * The simulation will continue from where it was paused.
+     */
     public void resumeSimulation() {
         paused = false;
         System.out.println("Simulation resumed...");
     }
 
+    /**
+     * Stops the current simulation.
+     * The simulation will terminate at the next iteration.
+     */
     public void stopSimulation() {
         running = false;
         stopped = true;
@@ -54,18 +77,40 @@ public class SimulatorController implements Runnable, Serializable {
         System.out.println("Simulation stop requested...");
     }
 
+    /**
+     * Checks if the simulation is currently running.
+     *
+     * @return true if the simulation is running, false otherwise.
+     */
     public boolean isRunning() {
         return running;
     }
 
+    /**
+     * Checks if the simulation is currently paused.
+     *
+     * @return true if the simulation is paused, false otherwise.
+     */
     public boolean isPaused() {
         return paused;
     }
 
+    /**
+     * Checks if the simulation has been stopped.
+     *
+     * @return true if the simulation has been stopped, false otherwise.
+     */
     public boolean isStopped() {
         return stopped;
     }
 
+    /**
+     * Starts a new simulation or resumes an existing one.
+     * If a simulation already exists for the current map and scenario, it will be resumed.
+     * Otherwise, a new simulation will be created.
+     *
+     * @return The Simulator instance for the current simulation.
+     */
     public Simulator startOrResumeSimulation() {
         Optional<Simulator> optionalSim = findBy(map, scenario);
         if (optionalSim.isPresent()) {
@@ -114,6 +159,10 @@ public class SimulatorController implements Runnable, Serializable {
         System.out.println("\n");
     }
 
+    /**
+     * Starts the simulation process.
+     * This method initializes the simulation and begins processing game events.
+     */
     public void SimulateGame() {
         if (!canStartSimulation()) return;
         running = true;
@@ -121,6 +170,10 @@ public class SimulatorController implements Runnable, Serializable {
         initializeAndRunSimulation();
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * This method is called when the simulation is started in a separate thread.
+     */
     @Override
     public void run() {
         SimulateGame();
@@ -629,18 +682,40 @@ public class SimulatorController implements Runnable, Serializable {
         return closest;
     }
 
+    /**
+     * Gets the map associated with this simulation.
+     *
+     * @return The map being used in the simulation.
+     */
     public Map getMap() {
         return map;
     }
 
+    /**
+     * Gets the scenario associated with this simulation.
+     *
+     * @return The scenario being used in the simulation.
+     */
     public Scenario getScenario() {
         return scenario;
     }
 
+    /**
+     * Finds an existing simulation for the given map and scenario.
+     *
+     * @param map The map to search for.
+     * @param scenario The scenario to search for.
+     * @return An Optional containing the found Simulator, or empty if none exists.
+     */
     public Optional<Simulator> findBy(Map map, Scenario scenario) {
         return simRep.findBy(map, scenario, currentUser);
     }
 
+    /**
+     * Saves the current simulation state.
+     *
+     * @param simulator The simulator instance to save.
+     */
     public void saveSimulation(Simulator simulator) {
         simRep.add(simulator);
     }

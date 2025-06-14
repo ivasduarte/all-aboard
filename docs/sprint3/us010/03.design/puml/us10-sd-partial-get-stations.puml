@@ -1,0 +1,20 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":AssignRouteController" as CTRL
+participant "stationRepository\n:StationRepository" as stationRepo
+
+autonumber 16
+
+activate CTRL
+
+    group Get Stations
+        CTRL -> stationRepo : getStations()
+        activate stationRepo
+        stationRepo --> CTRL : stationList
+        deactivate stationRepo
+    end
+
+@enduml

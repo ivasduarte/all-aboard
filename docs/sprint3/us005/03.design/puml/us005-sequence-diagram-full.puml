@@ -1,60 +1,88 @@
 @startuml
-
 skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
 autonumber
+actor "Player" as Player
+participant ":AddStationUI" as UI
+participant ":AddStationController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "stationRepository\n:StationRepository" as stationRep
+participant ":Station" as Station
+participant ":Scenario" as Scenario
 
-actor "Player" as Editor
-participant "AddStationUI" as UI
-
-activate Editor
-
-Editor -> UI : request to add a station
+activate Player
+Player -> UI : requests to add a station
 activate UI
 
-UI --> Editor : request a station type
-Editor -> UI : enter the station type
-UI --> Editor : request the X position of the station
-Editor -> UI : enter the X position of the station
-UI --> Editor : request the Y position of the station
-Editor -> UI : enter the Y position of the station
-
-create "AddAStationController" as CTRL
-UI --> CTRL : create()
-
-participant "Repositories" as RepositorySingleton
-participant "repositories\n:Repositories" as PLAT
-
-UI --> CTRL : AddStation(map, scenario, positionX, positionY, stationType, stationRotation)
+UI -> CTRL** : create()
 activate CTRL
 
-CTRL -> RepositorySingleton : getInstance()
-activate RepositorySingleton
-RepositorySingleton --> CTRL : repositories
-deactivate RepositorySingleton
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : instance
+deactivate reps
 
 CTRL -> PLAT : getMapRepository()
 activate PLAT
-PLAT --> CTRL : mapRepository.getMapList()
+PLAT --> CTRL : mapRepository
 deactivate PLAT
-CTRL --> CTRL : verify data
-CTRL -> Station : new Station(map.getName(), mapID, positionX, positionY, type, orientation)
-Station --> CTRL : return the new station
-activate StationRepository
-CTRL --> StationRepository : save the new station
-CTRL --> Station : increase total stations
-CTRL --> Scenario : subtract budget
-create "StationRepository\n:StationRepository" as StationRepository
 
-StationRepository --> CTRL : validations
-deactivate StationRepository
+CTRL -> PLAT : getStationRepository()
+activate PLAT
+PLAT --> CTRL : stationRepository
+deactivate PLAT
 
-CTRL --> UI : validations
+UI -> Player : request station type
+deactivate UI
+Player -> UI : provides station type
+activate UI
+
+UI -> Player : request X position
+deactivate UI
+Player -> UI : provides X position
+activate UI
+
+UI -> Player : request Y position
+deactivate UI
+Player -> UI : provides Y position
+activate UI
+
+UI -> CTRL : AddStation(map, scenario, positionX, positionY, stationType, stationRotation)
+
+CTRL -> CTRL : verify map ID
+CTRL -> CTRL : verify station type
+CTRL -> CTRL : verify budget
+CTRL -> CTRL : generate station name
+
+CTRL -> Station : new Station(map.getName(), mapID, positionX, positionY, type, orientation, name, scenarioName)
+activate Station
+Station -> Station : validatePosition()
+Station -> Station : checkOverbuilding()
+Station --> CTRL : station
+deactivate Station
+
+CTRL -> stationRep : save(station)
+activate stationRep
+stationRep -> stationRep : validateStation(station)
+stationRep --> CTRL : station
+deactivate stationRep
+
+CTRL -> Station : increaseTotalStations()
+activate Station
+deactivate Station
+
+CTRL -> Scenario : subtractBudget(stationType.getPrice())
+activate Scenario
+deactivate Scenario
+
+CTRL --> UI : "Station added successfully"
 deactivate CTRL
 
-UI --> Editor : displays operation success or fail
+UI --> Player : showSuccess(result)
 deactivate UI
 
+deactivate Player
 @enduml
