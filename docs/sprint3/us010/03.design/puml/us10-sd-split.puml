@@ -1,0 +1,103 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Player" as Player
+participant ":AssignRouteUI" as UI
+participant ":AssignRouteController" as CTRL
+participant ":Train" as Train
+participant ":Station" as Station
+participant ":PointOfRoute" as PointOfRoute
+participant ":CargoMode" as CargoMode
+
+activate Player
+Player -> UI : requests to assign a route
+activate UI
+
+UI -> CTRL** : create()
+activate CTRL
+
+    ref over CTRL
+        Get Repositories
+    end
+
+autonumber 9
+UI -> CTRL : getAvailableTrains()
+
+    ref over CTRL
+        Get Trains
+    end
+
+autonumber 12
+CTRL --> UI : trainList
+deactivate CTRL
+
+UI --> Player : displays available trains
+deactivate UI
+Player -> UI : selects train
+activate UI
+
+UI -> CTRL : getAvailableStations()
+activate CTRL
+
+    ref over CTRL
+        Get Stations
+    end
+
+autonumber 18
+CTRL --> UI : stationList
+deactivate CTRL
+
+UI --> Player : displays available stations
+deactivate UI
+Player -> UI : selects stations
+activate UI
+
+UI -> CTRL : assignRouteWithStations(train, stations)
+activate CTRL
+
+CTRL -> Train : setRouteWithStations(stations)
+activate Train
+Train -> PointOfRoute : create(station)
+activate PointOfRoute
+PointOfRoute --> Train : pointOfRoute
+deactivate PointOfRoute
+Train --> CTRL : route set
+deactivate Train
+
+loop for each station in route
+    UI --> Player : displays cargo mode options\n(FULL, HALF, AVAILABLE)
+    deactivate UI
+    Player -> UI : selects cargo mode
+    activate UI
+    UI -> CTRL : setCargoMode(train, pointIndex, mode)
+    CTRL -> Train : setCargoMode(pointIndex, mode)
+    activate Train
+    Train -> PointOfRoute : setCargoMode(mode)
+    activate PointOfRoute
+    PointOfRoute -> CargoMode : mode
+    activate CargoMode
+    CargoMode --> PointOfRoute : mode set
+    deactivate CargoMode
+    PointOfRoute --> Train : mode set
+    deactivate PointOfRoute
+    Train --> CTRL : cargo mode set
+    deactivate Train
+    CTRL --> UI : cargo mode configured
+    deactivate UI
+end
+
+activate CTRL
+CTRL --> UI : "Route assigned successfully"
+deactivate CTRL
+activate UI
+
+UI --> Player : showSuccess(result)
+deactivate UI
+
+deactivate Player
+@enduml

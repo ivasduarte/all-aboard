@@ -6,32 +6,108 @@ skinparam shadowing false
 
 autonumber
 
-actor "Player" as Editor
-participant "AssignRouteUI" as UI
+actor "Player" as Player
+participant ":AssignRouteUI" as UI
+participant ":AssignRouteController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+participant "trainRepository\n:TrainRepository" as trainRepo
+participant "stationRepository\n:StationRepository" as stationRepo
+participant ":Train" as Train
+participant ":Station" as Station
+participant ":PointOfRoute" as PointOfRoute
+participant ":CargoMode" as CargoMode
 
-activate Editor
-
-Editor -> UI : request to assign a route
+activate Player
+Player -> UI : requests to assign a route
 activate UI
 
-UI --> Editor : shows a list of the available locomotives
-Editor -> UI : selects a locomotive
-UI --> Editor : shows a list of the available stations
-Editor -> UI : selects the desired stations
-
-
-create "AssignRouteController" as CTRL
-UI --> CTRL : create
-
-UI --> CTRL : AssignRoute(locomotive, route)
+UI -> CTRL** : create()
 activate CTRL
 
-CTRL -> CTRL : AssignRoute(locomotive, route)
+CTRL -> reps : getInstance()
+activate reps
+reps --> CTRL : instance
+deactivate reps
 
-CTRL --> UI : verifications
+CTRL -> PLAT : getTrainRepository()
+activate PLAT
+PLAT --> CTRL : trainRepository
+deactivate PLAT
+
+CTRL -> PLAT : getStationRepository()
+activate PLAT
+PLAT --> CTRL : stationRepository
+deactivate PLAT
+
+UI -> CTRL : getAvailableTrains()
+CTRL -> trainRepo : getAvailableTrains()
+activate trainRepo
+trainRepo --> CTRL : trainList
+deactivate trainRepo
+CTRL --> UI : trainList
 deactivate CTRL
 
-UI --> Editor : displays operation success or failure
+UI --> Player : displays available trains
+deactivate UI
+Player -> UI : selects train
+activate UI
+
+UI -> CTRL : getAvailableStations()
+activate CTRL
+CTRL -> stationRepo : getStations()
+activate stationRepo
+stationRepo --> CTRL : stationList
+deactivate stationRepo
+CTRL --> UI : stationList
+deactivate CTRL
+
+UI --> Player : displays available stations
+deactivate UI
+Player -> UI : selects stations
+activate UI
+
+UI -> CTRL : assignRouteWithStations(train, stations)
+activate CTRL
+
+CTRL -> Train : setRouteWithStations(stations)
+activate Train
+Train -> PointOfRoute : create(station)
+activate PointOfRoute
+PointOfRoute --> Train : pointOfRoute
+deactivate PointOfRoute
+Train --> CTRL : route set
+deactivate Train
+
+loop for each station in route
+    UI --> Player : displays cargo mode options\n(FULL, HALF, AVAILABLE)
+    deactivate UI
+    Player -> UI : selects cargo mode
+    activate UI
+    UI -> CTRL : setCargoMode(train, pointIndex, mode)
+    CTRL -> Train : setCargoMode(pointIndex, mode)
+    activate Train
+    Train -> PointOfRoute : setCargoMode(mode)
+    activate PointOfRoute
+    PointOfRoute -> CargoMode : mode
+    activate CargoMode
+    CargoMode --> PointOfRoute : mode set
+    deactivate CargoMode
+    PointOfRoute --> Train : mode set
+    deactivate PointOfRoute
+    Train --> CTRL : cargo mode set
+    deactivate Train
+    CTRL --> UI : cargo mode configured
+    deactivate UI
+end
+
+activate CTRL
+CTRL --> UI : "Route assigned successfully"
+deactivate CTRL
+activate UI
+
+UI --> Player : showSuccess(result)
 deactivate UI
 
+deactivate Player
 @enduml

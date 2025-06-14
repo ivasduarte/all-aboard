@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":AssignRouteController" as CTRL
+participant ":Repositories" as reps
+participant "repositories\n:Repositories" as PLAT
+
+autonumber 3
+
+activate CTRL
+
+    group Get Repositories
+        CTRL -> reps : getInstance()
+        activate reps
+        reps --> CTRL : instance
+        deactivate reps
+
+        CTRL -> PLAT : getTrainRepository()
+        activate PLAT
+        PLAT --> CTRL : trainRepository
+        deactivate PLAT
+
+        CTRL -> PLAT : getStationRepository()
+        activate PLAT
+        PLAT --> CTRL : stationRepository
+        deactivate PLAT
+    end
+    
+@enduml
