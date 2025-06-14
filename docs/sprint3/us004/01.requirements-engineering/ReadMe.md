@@ -31,7 +31,22 @@ As an Editor, I want to create a scenario for a selected map.
 
 **From the client clarifications:**
 
-> No additional clarifications provided.
+> **Question:** When we are inserting the dependencies for each US, do we have to refer to the indirect ones or only the direct ones?
+> **Answer:** Direct dependencies only.
+
+> **Question:** Regarding the generating factors, just to clarify, ports can either supply (exports), demand (imports) or both (transforms)?
+> **Answer:** Ports can export, import and/or transform.
+
+> **Question:** In acceptance criterion 3, it talks about "the factors that alter the generation (frequency) of 
+> generating industries," what exactly are these factors? Are we talking about the rate at which these industries produce resources? Or is it something else? 
+> Also, are we supposed to give the editor the freedom to edit the generation rate of each generating industry or is it one rate for all the generating industries?
+> *Answer:** The generation rates of the industries can be defined in a configuration file, it is not expected that there will be any US to edit them.
+Each entry must define the industry and the number of cargos generated per unit of time like year or month.
+(e.g., CoalMine, 4) A factor allows you to change this rate as a percentage. (e.g., CoalMine, 50%) meaning that the coal mine will now produce 6 cargos per unit of time.
+
+> **Question:** Are the rates of production and quantity produce from industries decided in the scenario's specifications?
+> **Answer:** The rates are predefined values but can be redefined in the scenario.
+
 
 ### 1.3. Acceptance Criteria
 
@@ -47,82 +62,35 @@ As an Editor, I want to create a scenario for a selected map.
 > **AC10:** Upon successful creation, the system must display a confirmation message.
 > **AC11:** If creation fails, the system must provide a descriptive error message indicating the cause.
 > **AC12:** Only users with "Editor" privileges can create, modify, and manage scenarios.
+> **AC13:** Each scenario must have an associated budget.
+> **AC14:** Each scenario must track its current year and final year.
+> **AC15:** Each scenario must have a modification rate and production rate.
 
 ### 1.4. Found out Dependencies
 
-* US001 - "Create map": A map must exist before creating a scenario.
+* US001—"Create map": A map must exist before creating a scenario.
 
 ### 1.5 Input and Output Data
 
 **Input Data:**
 
-*ScenarioDTO:*
-```java
-public class ScenarioDTO {
-    private String mapId;           // ID of the selected map
-    private String name;            // Scenario name
-    private TimeRestrictions timeRestrictions;
-    private TechRestrictions techRestrictions;
-    private HistoricalRestrictions historicalRestrictions;
-}
+*Typed data:*
 
-public class TimeRestrictions {
-    private LocalDate startDate;    // Simulation start date
-    private LocalDate endDate;      // Simulation end date
-}
+- Scenario name;
+- Scenario start and end date;
+- Scenario restrictions;
+- Scenario's port behaviors.
 
-public class TechRestrictions {
-    private Set<LocomotiveType> availableLocomotives;
-    private Set<IndustryType> availableIndustries;
-    private Set<InfrastructureType> availableInfrastructure;
-}
-
-public class HistoricalRestrictions {
-    private Set<HistoricalEvent> events;
-    private Map<PortId, PortConfig> portConfigurations;
-}
-
-public enum LocomotiveType {
-    STEAM, DIESEL, ELECTRIC
-}
-
-public enum InfrastructureType {
-    RAIL, ROAD, BRIDGE, TUNNEL
-}
-
-public class HistoricalEvent {
-    private String name;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private Map<ResourceType, Double> resourceModifiers;
-}
-
-public class PortConfig {
-    private Set<ResourceType> importResources;
-    private Set<ResourceType> exportResources;
-    private Set<ResourceType> transformResources;
-}
-```
+*Selected data:*
+- Map;
 
 **Output Data:**
 
 *Success Response:*
-```java
-public class ScenarioCreationResponseDTO {
-    private boolean success;
-    private String message;
-    private ScenarioDTO scenario;   // Created scenario data
-}
-```
+- Success message
 
 *Error Response:*
-```java
-public class ErrorResponseDTO {
-    private boolean success;
-    private String errorCode;
-    private String message;
-}
-```
+- Error message 
 
 ### 1.6. Output Data Messages Assumptions
 
@@ -135,29 +103,37 @@ public class ErrorResponseDTO {
 >   ERROR: Must select a map for scenario.
 >
 > - *Invalid restrictions:*
->   ERROR: Time, historical, or technological restrictions are invalid. Please enter again.
+>   ERROR: Restrictions are invalid. Please enter again.
 >
 > - *Duplicate name:*
 >   ERROR: Scenario name already exists.
 >
 > - *Invalid name:*
 >   ERROR: Invalid name. Must be under 15 characters, have at least one upper case character, and cannot be null.
+>
+> - *Invalid budget:*
+>   ERROR: Budget cannot be null or negative.
 
 ### 1.7. System Sequence Diagram (SSD)
 
 **Acceptance Sequence Diagram:**
+
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-acceptance.svg)
 
 **Map not selected:**
+
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-map.svg)
 
 **Invalid Restrictions:**
+
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-restrictions.svg)
 
 **Duplicate Name:**
+
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-name.svg)
 
 **Invalid name:**
+
 ![System Sequence Diagram](svg\us004-system-sequence-diagram-invalid-name.svg)
 
 ### 1.8 Other Relevant Remarks
@@ -167,6 +143,9 @@ public class ErrorResponseDTO {
 * Port configurations should be validated against available industries and resources.
 * The system should maintain a list of valid scenario names to ensure uniqueness.
 * Scenario creation should consider future expansion possibilities.
+* The budget system should allow for additions and subtractions during the simulation.
+* The modification rate and production rate should be configurable for each scenario.
+* The system should track the current year and final year of the simulation.
 
 
 

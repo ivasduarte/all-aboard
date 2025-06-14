@@ -13,10 +13,15 @@ class Editor {
 }
 
 class Scenario {
-  - name
-  - timeRestrictions
-  - technologicalRestrictions
-  - historicalRestrictions
+  - name: String
+  - restrictions: Restrictions
+  - map: Map
+  - budget: Budget
+  - currentYear: int
+  - finalYear: int
+  - modificationRateFor: double
+  - productionRate: double
+  - trains: List<Train>
 }
 
 class Map {
@@ -25,25 +30,30 @@ class Map {
   - height: int
 }
 
-class TimeRestriction {
+class Restrictions {
   - startDate
   - endDate
-}
-
-class TechnologicalRestriction {
   - locomotiveTypes
   - industriesAvailable
-}
-
-class HistoricalRestriction {
   - historicalEvents
   - goodsImportedExported
 }
 
-Scenario "1" -- "*" Map : is created for
-Scenario "1" -- "1" TimeRestriction : has
-Scenario "1" -- "1" TechnologicalRestriction : has
-Scenario "1" -- "1" HistoricalRestriction : has
+class Budget {
+  - budget: int
+}
+
+class Train {
+  - name
+  - type
+  - capacity
+}
+
+Scenario "1" -- "1" Map : is created for
+Scenario "1" -- "1" Restrictions : has
+Scenario "1" -- "1" Budget : has
+Scenario "1" -- "*" Train : contains
 Editor "1" -- "*" Scenario : can create
 
+@enduml
 @enduml
