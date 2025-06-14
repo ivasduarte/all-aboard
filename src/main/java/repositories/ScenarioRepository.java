@@ -60,10 +60,7 @@ public class ScenarioRepository implements Serializable {
      * @return true if the scenario does not already exist in the repository; false otherwise.
      */
     private boolean validateScenario(Scenario scenario) {
-        if (scenario == null) {
-            throw new IllegalArgumentException("Scenario cannot be null");
-        }
-        return !existsByName(scenario.getScenarioName());
+        return !scenarios.contains(scenario);
     }
 
     /**

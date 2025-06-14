@@ -150,8 +150,6 @@ public class AddStationController {
                 mapID = i;
         }
 
-        System.out.println(map);
-
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
         if (mapID == -1) {
