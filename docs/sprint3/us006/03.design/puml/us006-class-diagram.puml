@@ -101,28 +101,31 @@ class Map {
 }
 
 class Scenario {
-- budget: Budget
-- currentYear: int
-+ getCurrentYear()
-+ getBudget()
-+ setBudget(Budget budget)
+  - budget: Budget
+  - currentYear: int
+  + getCurrentYear()
+  + getBudget()
+  + setBudget(Budget budget)
 }
 
-Station --> Building
-Building --> BuildingType
 
-UpgradeAStationUI ..|> Runnable
+Station --> Building : contains
+Building --> BuildingType : defined by
 
-UpgradeAStationController ..> StationUpgradeService
-UpgradeAStationController ..> StationRepository
-UpgradeAStationController ..> BuildingRepository
-Station ..> StationType
+UpgradeAStationUI ..|> Runnable : implements
 
-Repositories ..> StationRepository
-Repositories ..> BuildingRepository
+UpgradeAStationController ..> StationUpgradeService : uses
+UpgradeAStationController ..> StationRepository : uses
+UpgradeAStationController ..> BuildingRepository : uses
 
-UpgradeAStationUI ..> UpgradeAStationController
-Station --> Map
-Map --> Scenario
+Station ..> StationType : has type
+
+Repositories ..> StationRepository : provides
+Repositories ..> BuildingRepository : provides
+
+UpgradeAStationUI ..> UpgradeAStationController : uses
+
+Station --> Map : located on
+Map --> Scenario : used in
 
 @enduml

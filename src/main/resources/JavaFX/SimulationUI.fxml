@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #7A9D96;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="10" left="10" right="10" top="10" />
+    </padding>
+    
+    <!-- Top Panel - Status -->
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <Label fx:id="statusLabel" style="-fx-font-weight: bold;" text="Status: STARTING" textFill="WHITE">
+         <font>
+            <Font name="Bell MT" size="23.0" />
+         </font></Label>
+    </HBox>
+    
+    <!-- Center Panel - Main Content -->
+    <VBox layoutX="60.0" layoutY="65.0" prefHeight="520.0" prefWidth="700.0" spacing="10" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="55.0">
+        <!-- Control Buttons -->
+        <HBox alignment="CENTER" prefHeight="36.0" prefWidth="680.0" spacing="10">
+            <Button fx:id="resumeButton" onAction="#handleResume" text="Resume Simulation" />
+            <Button fx:id="pauseButton" onAction="#handlePause" text="Pause Simulation" />
+            <Button fx:id="stopButton" onAction="#handleStop" text="Stop and Save" />
+        </HBox>
+
+        <!-- Log Area -->
+        <ScrollPane fitToWidth="true" prefHeight="487.0" prefWidth="680.0" style="-fx-background-color: #7A9D96; -fx-text-color: white;" VBox.vgrow="ALWAYS">
+            <TextArea fx:id="logArea" editable="false" prefHeight="322.0" prefRowCount="10" prefWidth="604.0" style="-fx-background-color: grey;" wrapText="true" />
+        </ScrollPane>
+
+        <!-- Simulation Info -->
+        <VBox prefHeight="109.0" prefWidth="680.0" spacing="10">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <Label fx:id="mapLabel" text="Map: ">
+            <font>
+               <Font name="Bell MT" size="15.0" />
+            </font></Label>
+            <Label fx:id="scenarioLabel" text="Scenario: ">
+            <font>
+               <Font name="Bell MT" size="15.0" />
+            </font></Label>
+            <Label fx:id="yearLabel" text="Current Year: ">
+            <font>
+               <Font name="Bell MT" size="15.0" />
+            </font></Label>
+            <Label fx:id="budgetLabel" text="Budget: ">
+            <font>
+               <Font name="Bell MT" size="15.0" />
+            </font></Label>
+        </VBox>
+    </VBox>
+    
+</AnchorPane>

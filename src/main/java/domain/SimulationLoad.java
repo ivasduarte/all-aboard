@@ -4,47 +4,65 @@ import repositories.Repositories;
 import repositories.SimulatorRepository;
 import repositories.StationRepository;
 import repositories.BuildingRepository;
+import presentation.SimulationUI;
 
 import java.io.*;
 
 /**
- * Class responsible for loading simulation data from saved files.
+ * Class responsible for loading simulation data from files.
  * Implements Runnable and Serializable interfaces to support concurrent execution and object persistence.
  */
 public class SimulationLoad implements Runnable, Serializable {
     private final String filePath;
+    private SimulationUI ui;
 
     /**
      * Creates a new SimulationLoad instance with the specified file path.
      *
-     * @param filePath The path to the simulation save file
+     * @param filePath The path from where the simulation will be loaded
      */
     public SimulationLoad(String filePath) {
         this.filePath = filePath;
     }
 
-    /**
-     * Implementation of the Runnable interface.
-     * Loads simulation data using the repositories from the Repositories singleton.
-     */
-    @Override
-    public void run() {
-        load(Repositories.getInstance().getSimRep(), Repositories.getInstance().getStationRepository(), Repositories.getInstance().getBuildingRepository());
+    public void setUI(SimulationUI ui) {
+        this.ui = ui;
     }
 
     /**
-     * Loads simulation data from a file into the specified repositories.
+     * Implementation of the Runnable interface.
+     * Executes the load operation and handles any exceptions that may occur.
+     */
+    @Override
+    public void run() {
+        try {
+            load(Repositories.getInstance().getSimRep(),
+                 Repositories.getInstance().getStationRepository(),
+                 Repositories.getInstance().getBuildingRepository());
+        } catch (Exception e) {
+            if (ui != null) {
+                ui.appendLog("Error loading simulation: " + e.getMessage());
+            } else {
+                System.err.println("Error loading simulation: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Loads the simulation data from the specified file path.
+     * Deserializes and reads the repositories from the file.
      *
-     * @param simRep The simulator repository to load data into
-     * @param stRep The station repository to load data into
-     * @param bdRep The building repository to load data into
-     * @return true if the load operation was successful, false otherwise
+     * @param simRep The simulator repository to load into
+     * @param stRep The station repository to load into
+     * @param bdRep The building repository to load into
+     * @return true if the load was successful, false otherwise
      */
     public boolean load(SimulatorRepository simRep, StationRepository stRep, BuildingRepository bdRep) {
         File file = new File(filePath);
-
         if (!file.exists()) {
-            System.out.println("Error: File '" + filePath + "' does not exist.");
+            if (ui != null) {
+                ui.appendLog("Error: File '" + filePath + "' does not exist.");
+            }
             return false;
         }
 
@@ -56,11 +74,15 @@ public class SimulationLoad implements Runnable, Serializable {
             simRep.copyFrom(loadedSimRep);
             stRep.copyFrom(loadedStRep);
             bdRep.copyFrom(loadedBdRep);
-
-            System.out.println("Simulation data loaded successfully from " + filePath);
+            
+            if (ui != null) {
+                ui.appendLog("Simulation data loaded successfully from " + filePath);
+            }
             return true;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error loading file: " + e.getMessage());
+            if (ui != null) {
+                ui.appendLog("Error loading file: " + e.getMessage());
+            }
             return false;
         }
     }
