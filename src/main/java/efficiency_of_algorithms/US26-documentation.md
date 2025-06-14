@@ -4,13 +4,13 @@
 
 This document addresses User Story 26 (US26), which requires an analysis of the efficiency of the algorithms implemented in **US13** and **US14** of the project.
 
-Only algorithms developed using **primitive operations**, without relying on Java’s built-in graph-related libraries, are considered in this analysis.
+Only algorithms developed using primitive operations, without relying on Java’s built-in graph-related libraries, are considered in this analysis.
 This includes procedures such as graph construction, depth-first search (DFS), and checking vertex degrees to assess the possibility of an Eulerian path.
+The worst-case time complexity of each algorithm refers to the maximum time it can take to execute, assuming the most demanding possible input. We use asymptotic notation — such as Θ (tight bound) — to describe how performance scales with input size, focusing on upper performance limits.
 
 > **AC01**: The analysis report of the worst-case time complexity of the algorithms should be documented/detailed in the repository documentation(using markdown format). All the algorithms should be presented in pseudocode, where the complexity analysis should be made.
 
 > **AC02**: As required by acceptance criterion AC02, all procedures related to **graphical visualization** (e.g., rendering with Graphviz) are **excluded from this analysis**, as they are handled by external libraries and not part of the algorithmic logic implemented by the developer.
-
 
 ## 2. Efficiency Analysis of US13
 
@@ -60,29 +60,26 @@ If `t` is visited during the DFS traversal, it means there is a path between `s`
 
 This approach guarantees a correct answer because DFS explores **all reachable nodes** from `s`, and only fails if `t` is truly unreachable under the current train constraints (e.g., only electrified lines for electric trains).
 
-#### 2.4 Worst-Case Time Complexity
 
-Let:
-- `V` be the number of stations (vertices)
-- `E` be the number of railway lines (edges)
-
-Then, the worst-case time complexity is:
-
-- **Graph construction**:  
-  Each edge is processed once to build adjacency lists  
-  → `O(E)`
-
-- **DFS traversal**:  
-  In the worst case, all vertices and edges are visited  
-  → `O(V + E)`
-
-#### 2.5 Pseudocode
+#### 2.4 Pseudocode
 
 Below are the key algorithms implemented the US13, described in pseudocode.
+
+
+> **Legend for the "Type" column:**
+> - `A`: Assignment
+> - `C`: Comparison
+> - `R`: Return
+> - `Op`: Operation (e.g., arithmetic or function call)
+> - `I`: Insertion into a structure (e.g., list, set)
+
+---
 
 #### a) Graph Construction (`buildGraph`)
 
 This function reads the list of edges and constructs the adjacency list representation of the graph, applying the electrification filter if the train type is Electric.
+
+n = |E|, the number of edges (railway lines) in the graph.
 
     Function buildGraph(edgeList, trainType):
     graph <- empty map
@@ -115,12 +112,15 @@ This function reads the list of edges and constructs the adjacency list represen
 |                                                          |                 |  
 | Total                                                    | 11n + 4         |  
 
+Time complexity: Θ(E)
+
 
 
 #### b) Path Search using dfs
 
 This function determines if the destination station is reachable from the start station by using a depth-first search (DFS) traversal over the graph.
 
+V = number of vertices, E = number of edges.
 
     Function isConnected(graph, start, end):
         visited ← empty set
@@ -158,8 +158,16 @@ This function determines if the destination station is reachable from the start 
 |                                       |                 |  
 | Total                                 | 7n + 5          | 
 
+Time complexity: Θ(V + E)
+
+The operations inside the DFS loop are proportional to V + E in the worst case.
+
+
 
 #### c) Train Type Validation 
+
+This function performs a constant-time validation to check whether a specific train type is allowed to travel on a given railway line. 
+
 
     Function canTrainUseLineType(trainType, lineType):
     If trainType = "1" OR trainType = "2":
@@ -170,18 +178,40 @@ This function determines if the destination station is reachable from the start 
 
 | Pseudocode                             | Type    | 
 |----------------------------------------|---------|
-| If trainType = "1" OR trainType = "2": | nC      |       
+| If trainType = "1" OR trainType = "2": | 1C      |       
 | Return true                            | 1R      |
-| If trainType = "3":                    | nC      |       
+| If trainType = "3":                    | 1C      |       
 | Return lineType equals "1"             | 1C + 1R |
 | Return false                           | 1R      |
 |                                        |         |  
 |                                        |         |  
-| Total                                  | 2n + 4  | 
+| Total                                  | 2n + 4  |
+
+Time complexity: Θ(1)
 
 
 
+#### 2.5 Worst-Case Time Complexity
 
+Let:
+- `V` be the number of stations (vertices)
+- `E` be the number of railway lines (edges)
+
+Then, the worst-case time complexity is:
+
+- **Graph construction**:  
+  Each edge is processed once to build adjacency lists  
+  → `Θ(E)`
+
+- **Path searching with dfs**:  
+  In the worst case, all vertices and edges are visited  
+  → `Θ(V + E)`
+
+- **Train Type Validations**:  
+  → `Θ(1)`
+
+  
+  
 ## 3. Efficiency Analysis of US14
 
 User Story 14 requires that, given a railway network (represented as a graph with stations and railway lines), the system should verify whether it is possible to find a maintenance route that traverses each railway line exactly once.
@@ -206,23 +236,17 @@ Depending on the user's selection, the algorithm may consider:
 - All the railway lines (Electrified ones and non-Electrified);
 - Only the electrified ones.
 
-#### 3.2 Worst-Case Time complexity
 
-The algorithm performs the next following steps:
+#### 3.2 Pseudocode
 
-1. Graph construction - `O(E)`: each edge is added to the adjacency list of both connected vertices;
-2. Connectivity using DFS - `O(V + E)`: verifies that all non-isolated vertices belong to a single connected component;
-3. Counting odd-degree vertices - `O(V)`: iterates through each vertex to compute its degree.
+Below are the key algorithms implemented the US14, described in pseudocode.
 
-Then, the worst-case time complexity is:
-
-`O(V + E)`
-
-#### 3.3 Pseudocode
 
 #### a) Connectivity check ('isConnected')
 
 This function performs a depth-first search (DFS) starting from a vertex with neighbors, and verifies if all reachable vertices are part of the same connected component. Only non-isolated vertices are considered.
+
+V = number of vertices, E = number of edges. This function iterates over all vertices and invokes DFS, which in the worst case visits all vertices and edges.
 
     Function isConnected(graph):
     visited ← empty set
@@ -247,11 +271,13 @@ This function performs a depth-first search (DFS) starting from a vertex with ne
 | Total                                              | 3n + 7          | 
 
 
+Time complexity: Θ(V + E)
 
 
 #### b) Odd-degree Vertices Count ('countOddDegreeVertices')
 
 This function iterates through all vertices in the graph and counts how many have an odd number of connections (degree). This is used to determine the feasibility of an Eulerian path or circuit.
+n = |V|, the number of vertices.
 
     Function countOddDegreeVertices(graph):
         odd ← 0
@@ -271,10 +297,14 @@ This function iterates through all vertices in the graph and counts how many hav
 |                              |          |  
 | Total                        | 4n + 2   | 
 
+Time complexity: Θ(V)
+
+
 
 #### c) Eulerian Path Verification ('hasEulerianPath')
 
 This function combines the two previous ones. It first checks if the graph is connected. If it is, it analyzes the number of odd-degree vertices to determine whether an Eulerian circuit or path exists.
+V = number of vertices and E = number of edges. Although this function contains only conditional statements and two function calls, its complexity depends on the complexity of the subroutines it invokes — namely, isConnected and countOddDegreeVertices.
 
     Function hasEulerianPath(graph):
     If not isConnected(graph):
@@ -302,17 +332,30 @@ This function combines the two previous ones. It first checks if the graph is co
 |                                                                  |          |  
 | Total                                                            | 9        | 
 
+Time complexity: Θ(V + E)
 
+
+#### 3.3 Worst-Case Time complexity
+
+The algorithm performs the next following steps:
+
+1. Graph construction - `Θ(E)`: each edge is added to the adjacency list of both connected vertices;
+2. Connectivity using DFS - `Θ(V + E)`: verifies that all non-isolated vertices belong to a single connected component;
+3. Counting odd-degree vertices - `Θ(V)`: iterates through each vertex to compute its degree.
+
+Then, the worst-case time complexity is:
+
+`Θ(V + E)`
 
 
 ## 4. Summary Table
 
 | Algorithm                        | Description                           | Time Complexity |
 |----------------------------------|---------------------------------------|-----------------|
-| Graph construction (US13 & US14) | Create adjacency list from edge list  | O(E)            |
-| DFS traversal (US13 & US14)      | Explore network to check connectivity | O(V + E)        |
-| Odd-degree count (US14)          | Count vertices with odd degrees       | O(V)            |
-| **Overall (US13 & US14)**        | -                                     | **O(V + E)**    |
+| Graph construction (US13 & US14) | Create adjacency list from edge list  | Θ(E)            |
+| DFS traversal (US13 & US14)      | Explore network to check connectivity | Θ(V + E)        |
+| Odd-degree count (US14)          | Count vertices with odd degrees       | Θ(V)            |
+| **Overall (US13 & US14)**        | -                                     | **Θ(V + E)**    |
 
 
 
