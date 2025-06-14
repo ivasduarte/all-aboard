@@ -84,7 +84,7 @@ public class CreateScenarioUI implements Runnable {
         // Get locomotive types
         List<String> locomotiveTypes = new ArrayList<>();
         System.out.println("\n\nLOCOMOTIVE RESTRICTIONS:");
-        System.out.println("Available locomotive types: steam, diesel, electric\n-> Note:  comma-seperated, or press 'Enter' to skip");
+        System.out.println("Available locomotive types: steam, diesel, electric\n-> Note:  comma-seperated");
         System.out.print("Enter wished locomotive types: ");
         String locoTypesInput = scanner.nextLine().trim();
         if (!locoTypesInput.isEmpty()) {
@@ -97,7 +97,7 @@ public class CreateScenarioUI implements Runnable {
         System.out.println("--> Note: E.g. 'none, pandemic, great war'.");
         System.out.println("--> Note: In a pandemic situation, cargo demand is lowered, however increases every year.");
         System.out.println("--> Note: In a great war situation, all costs are increased, however cargo demand is greatly increased.");
-        System.out.println("-> Note: must be comma-seperated. If wished, press 'Enter' to skip");
+        System.out.println("-> Note: must be comma-seperated.");
         System.out.print("\nEnter historical restrictions: ");
         String eventsInput = scanner.nextLine().trim();
         if (!eventsInput.isEmpty()) {
