@@ -51,6 +51,11 @@ Considering the map will need to accommodate multiple cities, industries and sta
 > space for meaningful simulation elements. Can we also suggest to the editor the default map size of 100x100 or
 > another one that you indicate to us?
 > **Answer:** Yes, you can define a minimum and suggest a default size.
+> 
+> **Question:** Good afternoon. In the new version of us1, an acceptance criteria of a scale which states the size of the 
+> cell map in kms has been added. My question is: should this scale be user specified or system retrieved? In the case 
+> of the latter, are there any guidelines in place to get that value? Where should it originate?
+> **Answer:** User specification.
 
 
 
@@ -73,36 +78,18 @@ Considering the map will need to accommodate multiple cities, industries and sta
 
 **Input Data:**
 
-*MapDTO:*
-```java
-public class MapDTO {
-    private String name;        // Map name (alphanumeric, max 15 chars)
-    private int width;         // Map width in cells (20-256)
-    private int height;        // Map height in cells (20-256)
-    private int cellSizeKm;    // Size of each cell in kilometers
-}
-```
+- Map name;
+- Map size;
+- Cell size in km.
 
 
 **Output Data:**
 
 *Success Response:*
-```java
-public class MapCreationResponseDTO {
-    private boolean success;
-    private String message;
-    private MapDTO map;        // Created map data
-}
-```
+- Success message.
 
 *Error Response:*
-```java
-public class ErrorResponseDTO {
-    private boolean success;
-    private String errorCode;
-    private String message;
-}
-```
+- Error message.
 
 
 ### 1.6. Output Data Messages Assumptions
