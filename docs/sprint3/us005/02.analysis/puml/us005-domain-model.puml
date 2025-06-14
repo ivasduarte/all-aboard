@@ -15,19 +15,44 @@ hide methods
 class Map {
     - id
     - name
-    - size
+    - width
+    - height
 }
 
 class Station {
-    - id
-    - type
-    - location
-    - centre
+    - stationID
+    - ownerPlayer
+    - mapName
+    - scenarioName
+    - mapID
+    - positionX
+    - positionY
+    - name
+    - ironCargo
+    - coalCargo
+    - steelCargo
+    - hasIronStorage
+    - hasCoalStorage
+    - hasSteelStorage
+    - currentCargo
+    - maxCargo
+    - lastYearDeliveries
+    - demand
 }
 
-class StationType{
-    - id
-    - name
+class StationType {
+    - displayName
+    - size
+    - price
+}
+
+class Orientation {
+    - displayName
+    - shortening
+}
+
+class Building {
+    - buildingType
 }
 
 class Player {
@@ -36,11 +61,10 @@ class Player {
     - password
 }
 
-
 Map "1" - "*" Station : has
-Player "1" -- "*" Station : creates
+Player "1" -- "*" Station : owns
 Station "1" -- "1" StationType : has
-
-
+Station "1" -- "1" Orientation : has
+Station "1" -- "*" Building : contains
 
 @enduml

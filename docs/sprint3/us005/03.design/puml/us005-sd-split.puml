@@ -1,0 +1,72 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+actor "Player" as Player
+participant ":AddStationUI" as UI
+participant ":AddStationController" as CTRL
+participant ":Station" as Station
+participant ":Scenario" as Scenario
+
+activate Player
+Player -> UI : requests to add a station
+activate UI
+
+UI -> CTRL** : create()
+activate CTRL
+
+    ref over CTRL
+        Get Repositories
+    end
+
+UI -> Player : request station type
+deactivate UI
+Player -> UI : provides station type
+activate UI
+
+UI -> Player : request X position
+deactivate UI
+Player -> UI : provides X position
+activate UI
+
+UI -> Player : request Y position
+deactivate UI
+Player -> UI : provides Y position
+activate UI
+
+UI -> CTRL : AddStation(map, scenario, positionX, positionY, stationType, stationRotation)
+
+CTRL -> CTRL : verify map ID
+CTRL -> CTRL : verify station type
+CTRL -> CTRL : verify budget
+CTRL -> CTRL : generate station name
+
+CTRL -> Station : new Station(map.getName(), mapID, positionX, positionY, type, orientation, name, scenarioName)
+activate Station
+Station -> Station : validatePosition()
+Station -> Station : checkOverbuilding()
+Station --> CTRL : station
+deactivate Station
+
+    ref over CTRL
+        Save Station
+    end
+
+CTRL -> Station : increaseTotalStations()
+activate Station
+deactivate Station
+
+CTRL -> Scenario : subtractBudget(stationType.getPrice())
+activate Scenario
+deactivate Scenario
+
+CTRL --> UI : "Station added successfully"
+deactivate CTRL
+
+UI --> Player : showSuccess(result)
+deactivate UI
+
+deactivate Player
+@enduml

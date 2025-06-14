@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":AddStationController" as CTRL
+participant "stationRepository\n:StationRepository" as stationRep
+
+autonumber 24
+
+activate CTRL
+
+    group Save Station
+        CTRL -> stationRep : save(station)
+        activate stationRep
+        stationRep -> stationRep : validateStation(station)
+        stationRep --> CTRL : station
+        deactivate stationRep
+    end
+
+@enduml
