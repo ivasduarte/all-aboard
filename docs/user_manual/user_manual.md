@@ -32,11 +32,16 @@
       1. [Login](#login)
       2. [Registration](#registration)
    2. [Editor Role](#editor-role)
-      1. [Create Map](#create-map)
-      2. [Display Map List](#display-map-list)
-      3. [Create Scenario](#create-scenario)
-      4. [Add City](#add-city)
-      5. [Add Industry](#add-industry)
+      1. [Choose Map](#choose-map)
+      2. [Create Map](#create-map)
+      3. [Display Map List](#display-map-list)
+      4. [Create Scenario](#create-scenario)
+      5. [Add City](#add-city)
+      6. [Add Industry](#add-industry)
+      7. [Load Map from File](#load-map-from-file)
+      8. [Save Map to File](#save-map-to-file)
+      9. [Save Scenario to File](#save-scenario-to-file)
+      10. [Load Scenario from File](#load-scenario-from-file)
    3. [Player Role](#player-role)
       1. [Build Station](#build-station)
       2. [Upgrade Station](#upgrade-station)
@@ -101,24 +106,24 @@ To run the Railway Network Simulation System, your computer must meet the follow
 
 ### Login
 
-When you start the application, you will see the main menu with options to login, create a user, or view the development team information.
+When you start the graphical application, you will see the main menu with options to login, create a user, or view the development team information.
 
 Step 1: Select "Login" from the main menu.
 
 Step 2: Enter your email and password according to the syntax notes.
 
-![Login](imagesUserManual/login.png)
+![Login](newImagesUserManual/login.jpg)
 Image 1: Login screen
 
 ### Registration
 
 If you don't have an account yet, you can create one by following these steps:
 
-Step 1: Select "Create User" from the main menu.
+Step 1: Select "Sign Up" from the main menu.
 
 Step 2: Enter your name, email, and password according to the syntax notes.
 
-![Registration](imagesUserManual/registration.png)
+![Registration](newImagesUserManual/playerRegister.jpg)
 Image 2: Registration screen
 
 #### Syntax Notes:
@@ -128,16 +133,31 @@ Image 2: Registration screen
 
 ## Editor Role
 
-After logging in as an Editor, you will have access to the Editor Menu with the following options:
+After logging in as an Editor, you will first need to choose a map to work with. This map will be used throughout your entire session.
 
-![Editor Menu](imagesUserManual/editorMenu.png)
-Image 3: Editor Menu
+![Editor Login](newImagesUserManual/editorLogin.jpg)
+Image 3: Editor Login screen
+
+### Choose Map
+
+When you log in as an Editor, you must first select a map to work with. You can either choose an existing map or create a new one.
+
+Step 1: Select a map from the list or create a new one.
+
+![Choose Map](newImagesUserManual/chooseMap.png)
+Image: Choose Map screen
+
+After selecting a map, you will have access to the Editor Menu for Maps with various options for that specific map:
+
+
+![Editor Menu for Maps](newImagesUserManual/editorMenuForMaps.png)
+Image: Editor Menu for Maps
 
 ### Create Map
 
 This feature allows you to create a new map with specific dimensions.
 
-Step 1: Select "Create Map" from the Editor Menu.
+Step 1: Select "Create Map" when prompted to choose a map.
 
 Step 2: Enter the name of the map.
 
@@ -145,7 +165,8 @@ Step 3: Enter the width of the map (positive integer up to 256).
 
 Step 4: Enter the height of the map (positive integer up to 256).
 
-![Create Map](imagesUserManual/createMap.png)
+Step 5: Enter the size of each cell block in kilometers. 
+![Create Map](newImagesUserManual/createMap.png)
 Image 4: Create Map screen
 
 ### Display Map List
@@ -156,63 +177,114 @@ Step 1: Select "Display Map List" from the Editor Menu.
 
 Step 2: The system will display a list of all available maps with their names and dimensions.
 
-![Display Map List](imagesUserManual/displayMapList.png)
+![Display Map List](newImagesUserManual/displayMapList.png)
 Image 5: Display Map List screen
 
 ### Create Scenario
 
-This feature allows you to create a scenario for a selected map, defining various restrictions.
+This feature allows you to create a scenario for the current map, defining various restrictions.
 
-Step 1: Select "Create a Scenario" from the Editor Menu.
+Step 1: Select "Create a Scenario" from the Editor Menu for Maps.
 
-Step 2: Select a map from the list of available maps.
+Step 2: Define the available locomotion types (steam, diesel, and/or electric).
 
-Step 3: Define the behavior of ports, including which cargoes they import/export and/or transform.
+Step 3: Define the factors that alter the generation frequency of generating industries.
 
-Step 4: Define the available locomotion types (steam, diesel, and/or electric).
-
-Step 5: Define the factors that alter the generation frequency of generating industries.
-
-![Create Scenario](imagesUserManual/createScenario.png)
+![Create Scenario](newImagesUserManual/createScenario.png)
 Image 6: Create Scenario screen
+
+Step 4: Define the behavior of ports, including which cargoes they import/export and/or transform.
+
+![Create Scenario Port](newImagesUserManual/createScenarioPort.png)
+Image: Port Behavior Configuration screen
 
 ### Add City
 
-This feature allows you to add a city to a selected map.
+This feature allows you to add a city to the current map.
 
-Step 1: Select "Add a City" from the Editor Menu.
+Step 1: Select "Add a City" from the Editor Menu for Maps.
 
-Step 2: Select a map from the list of available maps.
+Step 2: Enter the name of the city (cannot contain special characters or digits).
 
-Step 3: Enter the name of the city (cannot contain special characters or digits).
+Step 3: Enter the X and Y coordinates for the city's position on the map.
 
-Step 4: Enter the X and Y coordinates for the city's position on the map.
-
-Step 5: Enter the number of house blocks for the city, or select to generate them automatically.
-
-![Add City](imagesUserManual/addCity.png)
+![Add City](newImagesUserManual/addCity.png)
 Image 7: Add City screen
+
+Step 4: Enter the number of house blocks for the city, or select to generate them automatically.
+
+![Add City House Blocks](newImagesUserManual/addCityHouseBlocks.png)
+Image: Add City House Blocks screen
+
+Step 2: Add house blocks as needed on the map.
+
+![House Blocks Added](newImagesUserManual/houseBlocksAdded.png)
+Image: House Blocks Added screen
 
 ### Add Industry
 
-This feature allows you to add an industry to a selected map.
+This feature allows you to add an industry to the current map.
 
-Step 1: Select "Add an Industry" from the Editor Menu.
+Step 1: Select "Add an Industry" from the Editor Menu for Maps.
 
-Step 2: Select a map from the list of available maps.
+Step 2: Enter the X and Y coordinates for the industry's position on the map.
 
 Step 3: Select the type of industry from the available options.
 
-Step 4: Enter the X and Y coordinates for the industry's position on the map.
-
-![Add Industry](imagesUserManual/addIndustry.png)
+![Add Industry](newImagesUserManual/addIndustry.png)
 Image 8: Add Industry screen
+
+
+
+### Load Map from File
+
+This feature allows you to load a map from a file when choosing a map at login.
+
+Step 1: Select "Load Map from File" when prompted to choose a map.
+
+Step 2: Select one of the available map files to load.
+
+![Load Map from File](newImagesUserManual/chooseMapFromFile.png)
+Image: Load Map from File screen
+
+### Save Map to File
+
+This feature allows you to save the current map to a file.
+
+Step 1: Select "Save Map to File" from the Editor Menu for Maps.
+
+Step 2: The current map will be saved to a file.
+
+![Save Map to File](newImagesUserManual/saveMapToFile.png)
+Image: Save Map to File screen
+
+### Save Scenario to File
+
+This feature allows you to save the current scenario to a file.
+
+Step 1: Select "Save Scenario to File" from the Editor Menu for Maps.
+
+Step 2: The current scenario will be saved to a file.
+
+![Save Scenario to File](newImagesUserManual/saveScenarioToFile.png)
+Image: Save Scenario to File screen
+
+### Load Scenario from File
+
+This feature allows you to load a scenario from a file for the current map.
+
+Step 1: Select "Load Scenario from File" from the Editor Menu for Maps.
+
+Step 2: Select one of the available scenario files to load.
+
+![Load Scenario from File](newImagesUserManual/loadScenarioFromFile.png)
+Image: Load Scenario from File screen
 
 ## Player Role
 
 After logging in as a Player, you will have access to the Player Menu with the following options:
 
-![Player Menu](imagesUserManual/playerMenu.png)
+![Player Menu](newImagesUserManual/playerMenu.png)
 Image 9: Player Menu
 
 ### Build Station
@@ -229,7 +301,7 @@ Step 4: If building a Station, select the center position (NE, SE, NW, SW).
 
 Step 5: The system will propose a name for the station based on the closest city.
 
-![Build Station](imagesUserManual/buildStation.png)
+![Build Station](newImagesUserManual/buildStation.png)
 Image 10: Build Station screen
 
 ### Upgrade Station
@@ -242,7 +314,7 @@ Step 2: Select a station from the list of available stations.
 
 Step 3: Select a building to add to the station from the list of available buildings.
 
-![Upgrade Station](imagesUserManual/upgradeStation.png)
+![Upgrade Station](newImagesUserManual/upgradeStation.png)
 Image 11: Upgrade Station screen
 
 ### Check Station Details
@@ -255,7 +327,7 @@ Step 2: Select a station from the list of available stations.
 
 Step 3: The system will display the station's details, including its buildings and the demand/supply cargoes.
 
-![Check Station Details](imagesUserManual/checkStationDetails.png)
+![Check Station Details](newImagesUserManual/checkStationDetails.png)
 Image 12: Check Station Details screen
 
 ### Buy Locomotive
@@ -270,7 +342,7 @@ Step 3: The system will display the locomotive's details, including its model, f
 
 Step 4: Confirm the purchase.
 
-![Buy Locomotive](imagesUserManual/buyLocomotive.png)
+![Buy Locomotive](newImagesUserManual/buyLocomotive.png)
 Image 13: Buy Locomotive screen
 
 ### Assign Train to Route
@@ -287,7 +359,7 @@ Step 4: For each station, select the cargoes to be picked up.
 
 Step 5: Confirm the route assignment.
 
-![Assign Train to Route](imagesUserManual/assignTrainToRoute.png)
+![Assign Train to Route](newImagesUserManual/assignTrainToRoute.png)
 Image 14: Assign Train to Route screen
 
 ### Start Simulation 
@@ -304,7 +376,7 @@ Step 4: Click **"Start"** to initiate the simulation process.
 
 Step 5: Monitor the trains as they move along their routes, picking up and delivering cargoes at each station.
 
-![Start Simulation](imagesUserManual/startSimulation.png)
+![Start Simulation](newImagesUserManual/startSimulation.png)
 Image 15: Simulation in Progress screen
 
 During the simulation, you can view real-time status updates for each train, including current location, cargo load, and estimated time to arrival at the next station.
@@ -358,37 +430,47 @@ A: Yes, you can upgrade stations by adding buildings such as telegraph, café, c
 
 # Glossary
 
-| **Term**                       | **Description**                                                     |
-|--------------------------------|---------------------------------------------------------------------|
-| **Application**                | A software program designed to perform specific tasks for the user. |
-| **Budget**                     | Financial plans for expected revenues and expenditures over time.   |
-| **Cargo**                      | Goods or materials transported by trains.                           |
-| **Cargo Demand**               | The amount of cargo a station needs to receive.                     |
-| **Cargo Supply**               | The amount of cargo a station can provide.                          |
-| **Carriages**                  | Parts of a train that carry passengers or cargo.                    |
-| **City**                       | A populated area that can be placed on the map.                     |
-| **Diesel**                     | A locomotive powered by a diesel engine.                            |
-| **Economic Radius**            | The area around a station that supplies or demands cargo.           |
-| **Electric**                   | A locomotive powered by electricity, requiring electrified tracks.  |
-| **Historical Restrictions**    | Scenario events that change how the simulation operates.            |
-| **Industry**                   | A static element that produces or transforms resources.             |
-| **Locomotive**                 | The engine part of a train that moves the train.                    |
-| **Locomotive Types**           | Steam, diesel, and electric locomotives.                            |
-| **Map**                        | The playable area with cities, industries, and stations.            |
-| **Mixed Industries**           | Industries that combine different sectors.                          |
-| **Player**                     | The user interacting with the simulation.                           |
-| **Primary Sector Industries**  | Industries generating natural resources like mines and farms.       |
-| **Product Owner**              | The person responsible for defining features and priorities.        |
-| **Railway**                    | Tracks, stations, and trains used for transport.                    |
-| **Route**                      | The path a train follows.                                           |
-| **Simulator**                  | A software that replicates real-world systems.                      |
-| **Simulator Operation**        | Interacting with the simulator under various conditions.            |
-| **Station**                    | A place where trains stop to load or unload.                        |
-| **Steam**                      | A locomotive powered by steam.                                      |
-| **Technological Restrictions** | Restrictions based on available train technology.                   |
-| **Time Restrictions**          | Time periods that define the simulation era.                        |
-| **Track**                      | The metal rails trains run on.                                      |
-| **Train**                      | A combination of locomotives and carriages.                         |
-| **Train Simulator**            | A simulator focused on train operations.                            |
-| **Transforming Industries**    | Industries that turn raw materials into products.                   |
+| **_Term_** (EN)                | **_Term_** (PT)                           | **_Description_** (EN)                                                                                                        |  
+|:-------------------------------|:------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|  
+| **Application**                | **Aplicação**                             | A software program designed to perform specific tasks for the user.                                                            |  
+| **Budget**                     | **Orçamento**                             | Financial plans that outline expected revenues and expenditures over a specific period.                                        |  
+| **Building**                   | **Edifício**                              | A structure that can be constructed at a station to provide specific effects or capabilities.                                  |
+| **Cargo**                      | **Carga**                                 | Goods or materials transported by trains.                                                                                      |  
+| **Cargo Demand**               | **Demanda de carga**                      | The amount of cargo a station needs to receive.                                                                                |  
+| **Cargo Supply**               | **Fornecimento de Carga**                 | The amount of cargo a station can provide.                                                                                     |  
+| **Carriages**                  | **Carruagens**                            | The parts of a train that carry passengers or cargo.                                                                           |  
+| **City**                       | **Cidade**                                | A populated area that can be placed on the map, consisting of a center position and house blocks.                              |  
+| **Diesel**                     | **Diesel**                                | A type of locomotive powered by a diesel engine.                                                                               |  
+| **Economic Radius**            | **Raio Econômico**                        | The area of influence of a station, where cities and industries supply and demand cargo.                                       |  
+| **Editor**                     | **Editor**                                | A user role with permissions to create and modify maps and scenarios.                                                          |
+| **Electric**                   | **Elétrica**                              | A type of locomotive powered by electricity, requiring electrified railway tracks.                                             |  
+| **Financial Results**          | **Resultados Financeiros**                | A record of financial performance including expenses and revenues for a specific period.                                       |
+| **Historical Restrictions**    | **Restrições Históricas**                 | Historical events that change the operating conditions of the simulator.                                                       |  
+| **House Block**                | **Bloco de Casa**                         | A single block within a city's grid, identified by its x and y coordinates.                                                    |
+| **Industry**                   | **Indústria**                             | A static element that produces or transforms resources.                                                                        |  
+| **Locomotive**                 | **Locomotiva**                            | The engine part of a train that provides the power to move the train along the tracks.                                         |  
+| **Locomotive Types**           | **Tipos de locomotivas**                  | Different types of locomotives, such as steam, diesel, and electric.                                                           |  
+| **Map**                        | **Mapa**                                  | The playable area where cities, industries, and stations are placed.                                                           |  
+| **Mixed Industries**           | **Indústrias Mistas**                     | Industries that combine characteristics of different sectors.                                                                  |  
+| **Player**                     | **Jogador**                               | The user interacting with the simulation.                                                                                      |  
+| **Primary Sector Industries**  | **Indústrias do setor primário**          | Industries that generate natural resources, such as mines and farms.                                                           |  
+| **Railway**                    | **Ferrovia**                              | A system of tracks, stations, and trains used for transporting goods and passengers.                                           |  
+| **Route**                      | **Rota**                                  | The path the train will take.                                                                                                  |  
+| **Scenario**                   | **Cenário**                               | A specific configuration of the simulation including time, technological, and historical restrictions.                         |
+| **Simulator**                  | **Simulador**                             | A software tool that replicates real-world processes or systems.                                                               |  
+| **Station**                    | **Estação**                               | A location where trains stop to load or unload cargo and passengers.                                                           |  
+| **Steam**                      | **Vapor**                                 | A type of locomotive powered by steam, typically using coal or wood as fuel.                                                   |  
+| **Technological Restrictions** | **Restrições Tecnológicas**               | Types of locomotives available in the scenario.                                                                                |  
+| **Time Restrictions**          | **Restrições Temporais**                  | The period in which the simulation will take place.                                                                            |  
+| **Track**                      | **Trilho**                                | The metal rails on which trains run.                                                                                           |  
+| **Train**                      | **Comboio**                               | A vehicle composed of locomotives and carriages, used to transport cargo or passengers.                                        |  
+| **Transforming Industries**    | **Indústrias de transformação**           | Industries that process raw materials into finished products.                                                                  |  
+| **Authentication**             | **Autenticação**                          | The process of verifying the identity of a user and their access rights to the system.                                         |
+| **CargoType**                  | **Tipo de Carga**                         | Specific categories of cargo including passengers, mail, coal, iron ore, steel, and cars.                                      |
+| **Expenses**                   | **Despesas**                              | Costs incurred in running the railway system, including track maintenance, train maintenance, and fuel costs.                  |
+| **Password**                   | **Senha**                                 | A security credential used for user authentication.                                                                            |
+| **Revenues**                   | **Receitas**                              | Income generated from cargo deliveries and other railway operations.                                                           |
+| **Depot**                      | **Depósito**                              | A type of station specialized in storing and maintaining trains.                                                               |
+| **RegularStation**             | **Estação Regular**                       | A standard type of station that handles both passenger and cargo operations.                                                   |
+| **Terminal**                   | **Terminal**                              | A type of station that serves as an endpoint for train routes.                                                                 |
 
