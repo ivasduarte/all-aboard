@@ -7,46 +7,72 @@ skinparam shadowing false
 autonumber
 
 actor "Player" as Player
-participant "ListStationsUI" as UI
-participant "ListStationsController" as CTRL
-participant "Repositories" as Repos
-participant "StationRepository" as StationRepo
-participant "Station" as Station
+participant ":ListStationsUI" as UI
+participant ":ListStationsController" as CTRL
+participant ":Repositories" as Repos
+participant ":StationRepository" as StationRepo
+participant ":Scenario" as Scenario
+participant ":Map" as Map
+participant ":Station" as Station
 
 activate Player
 
 Player -> UI : start the simulation
 activate UI
 
-UI --> Player : shows a list of the available maps
-Player -> UI : selects a map
-UI --> Player : shows a list of the available scenarios
-Player -> UI : selects a scenario
-UI --> Player : shows a list of the cities
-Player -> UI : selects a city
-UI --> Player : shows a list of the actions the player can do
-Player -> UI : selects to list all stations
+UI --> Player : show available maps
+Player -> UI : select a map
+UI --> Player : show available scenarios
+Player -> UI : select a scenario
+
+UI --> Player : show available actions
+Player -> UI : select "List All Stations"
 
 UI -> CTRL : create controller
 activate CTRL
 
 CTRL -> Repos : getInstance()
-Repos --> CTRL : RepositorySingleton
+activate Repos
+Repos --> CTRL : Repositories
+deactivate Repos
 
 CTRL -> Repos : getStationRepository()
+activate Repos
 Repos --> CTRL : StationRepository
+deactivate Repos
+
+UI -> CTRL : setData(Scenario)
+activate Scenario
+CTRL -> Scenario : getMap()
+Scenario --> CTRL : Map
+deactivate Scenario
 
 CTRL -> StationRepo : getStations()
 activate StationRepo
 StationRepo --> CTRL : List<Station>
 deactivate StationRepo
 
-CTRL -> CTRL : sort stations (optional)
+CTRL -> CTRL : filter stations by scenario and map
 
-CTRL --> UI : list of stations
-deactivate CTRL
+alt stations list is not empty
+    CTRL --> UI : send filtered stations
+    UI --> Player : display station list\n(ID, Type, Position, Buildings, Cargo)
 
-UI --> Player : displays list of stations (ID, Type, Position, Buildings)
+    Player -> UI : select station
+    UI -> CTRL : send selected station
+    CTRL -> Station : get details
+    activate Station
+    Station --> CTRL : ID, Name, Type, Position, Cargo, Buildings
+    deactivate Station
+    CTRL --> UI : send station details
+    UI --> Player : display full station info
+
+else no stations found
+    CTRL --> UI : send empty list
+    UI --> Player : display message "No stations found"
+end
+
+destroy CTRL
 deactivate UI
 
 @enduml

@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":ListStationsController" as ctrl
+participant ":StationRepository"      as st
+
+autonumber 18
+
+activate ctrl
+
+    group Get Stations
+
+        ctrl -> st : getStations()
+        activate st
+        st --> ctrl : List<Station>
+        deactivate st
+
+    end
+
+@enduml

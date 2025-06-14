@@ -1,41 +1,98 @@
 @startuml
 skinparam packageStyle rectangle
 skinparam shadowing false
-skinparam linetype polyline
 skinparam classAttributeIconSize 0
 
-class ListStationsUI {
-    + run(): void
-}
-
-class ListStationsController {
-    - stationRepository: StationRepository
-    + listAllStations(): List<Station>
-}
-
-class StationRepository {
-    - stations: List<Station>
-    + getStations(): List<Station>
-}
-
 class Station {
-    - stationID: int
-    - stationType: String
-    - positionX: int
-    - positionY: int
-    - buildings: List<Building>
-    + getStationType(): String
-    + getPositionX(): int
-    + getPositionY(): int
-    + getBuildings(): List<Building>
+  - stationID: int
+  - name: String
+  - positionX: int
+  - positionY: int
+  - stationType: StationType
+  - buildings: List<Building>
+  - cargo: int
+  + getStationID(): int
+  + getName(): String
+  + getPositionX(): int
+  + getPositionY(): int
+  + getStationType(): StationType
+  + getBuildings(): List<Building>
+  + getCargo(): int
+}
+
+enum StationType {
+  DEPOT
+  STATION
+  TERMINAL
 }
 
 class Building {
-    - buildingType: String
-    + getBuildingType(): String
+  + getBuildingType(): String
 }
 
-ListStationsUI ..> ListStationsController
-ListStationsController ..> StationRepository
-Station --> "0..*" Building
+class ListStationsUI {
+  - map: Map
+  + run(): void
+  + getInput(): void
+}
+
+class ListStationsController {
+  - stationRepo: StationRepository
+  - currentScenario: Scenario
+  - currentMap: Map
+  - hasStations: boolean
+  + ListStationsController()
+  + setData(scenario: Scenario): void
+  + loadStations(): void
+  + showStationDetails(): void
+  + hasStations(): boolean
+}
+
+class StationRepository {
+  + getStations(): List<Station>
+  + getAvailableStationsByMapName(name: String): List<Station>
+}
+
+class Repositories <<singleton>> {
+  - instance: Repositories
+  - stationRepo: StationRepository
+  + getInstance(): Repositories
+  + getStationRepository(): StationRepository
+}
+
+class Map {
+  - name: String
+  - width: int
+  - height: int
+  - stations: List<Station>
+  + getName(): String
+  + getStations(): List<Station>
+}
+
+class Scenario {
+  - map: Map
+  + getMap(): Map
+}
+
+interface Runnable <<interface>> {
+  + run(): void
+}
+
+' Relationships with labels
+
+ListStationsUI ..|> Runnable : implements
+ListStationsUI ..> ListStationsController : uses
+
+ListStationsController ..> StationRepository : accesses
+ListStationsController ..> Scenario : receives from
+ListStationsController ..> Map : uses
+
+Repositories ..> StationRepository : provides
+
+Station --> Building : contains
+Station ..> StationType : has
+Station --> Map : belongs to
+
+Map --> Scenario : belongs to
+
 @enduml

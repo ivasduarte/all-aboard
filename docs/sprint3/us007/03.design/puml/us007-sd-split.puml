@@ -1,0 +1,65 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor       "Player"                   as Player
+participant ":ListStationsUI"         as UI
+participant ":ListStationsController" as CTRL
+
+activate Player
+
+Player -> UI  : start the simulation
+activate UI
+UI   --> Player : show maps
+Player -> UI  : select map
+UI   --> Player : show scenarios
+Player -> UI  : select scenario
+UI   --> Player : show actions
+Player -> UI  : select "List All Stations"
+
+UI -> CTRL : create()
+activate CTRL
+
+CTRL -> CTRL : setData(scenario)
+CTRL -> CTRL : loadStations()
+
+ref over CTRL
+    get station repository
+end
+
+ref over CTRL
+    get map
+end
+
+ref over CTRL
+    get stations
+end
+
+ref over CTRL
+    send stations list
+end
+
+alt list not empty
+    CTRL --> UI : filtered stations (by scenario and map)
+    UI   --> Player : display station list
+
+    Player -> UI : select station
+    UI -> CTRL : request station details
+
+    ref over CTRL
+        get station details
+    end
+
+    CTRL --> UI : station info
+    UI   --> Player : show station info
+else list empty
+    CTRL --> UI : empty list
+    UI   --> Player : "No stations found"
+end
+
+deactivate CTRL
+deactivate UI
+@enduml
