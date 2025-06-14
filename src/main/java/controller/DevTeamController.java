@@ -29,6 +29,7 @@ public class DevTeamController {
 
         data.add(FXCollections.observableArrayList("Iva Silva", "1241176", "1241176@isep.ipp.pt"));
         data.add(FXCollections.observableArrayList("João Ferreira", "1241166", "1241166@isep.ipp.pt"));
+        data.add(FXCollections.observableArrayList("Susana Loureiro", "1220804", "1220804@isep.ipp.pt"));
         data.add(FXCollections.observableArrayList("José Cardoso", "1241323", "1241323@isep.ipp.pt"));
         data.add(FXCollections.observableArrayList("Rafael Capão", "1241285", "1241285@isep.ipp.pt"));
 
