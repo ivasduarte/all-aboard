@@ -51,6 +51,10 @@ Here's the table sorted alphabetically:
 | **Transforming Industries**    | **Indústrias de transformação**  | Industries that process raw materials into finished products.                                                                  |  
 | **Unit Test**                  | **Teste unitário**               | A test that verifies the functionality of a unit of code.                                                                      |  
 | **Authentication**             | **Autenticação**                 | The process of verifying the identity of a user and their access rights to the system.                                         |
+| **AuthenticationController**   | **Controlador de Autenticação**  | A controller class that manages user authentication processes.                                                                  |
+| **AuthenticationUI**           | **Interface de Autenticação**    | A user interface class responsible for handling authentication interactions.                                                    |
+| **DTO**                        | **Objeto de Transferência de Dados** | A design pattern used to transfer data between different layers of the application.                                        |
+| **EditorUI**                   | **Interface do Editor**          | A user interface class for the editor role, providing map and scenario creation tools.                                         |
 | **Cargo Analysis**             | **Análise de Carga**             | Analysis of cargo types, revenue correlation, and linear regression for business optimization.                                 |
 | **CargoType**                  | **Tipo de Carga**               | Specific categories of cargo including passengers, mail, coal, iron ore, steel, and cars.                                      |
 | **Expenses**                   | **Despesas**                     | Costs incurred in running the railway system, including track maintenance, train maintenance, and fuel costs.                   |
@@ -69,3 +73,17 @@ Here's the table sorted alphabetically:
 | **StationStatistics**          | **Estatísticas da Estação**     | Data about station performance including average profit, passenger arrivals, and cargo distribution.                           |
 | **StationType**                | **Tipo de Estação**             | Categories of stations with different characteristics and capabilities.                                                        |
 | **YearFinancialResults**       | **Resultados Financeiros Anuais**| Annual financial performance including expenses and revenues.                                                                 |
+| **Depot**                      | **Depósito**                     | A type of station specialized in storing and maintaining trains.                                                               |
+| **RegularStation**             | **Estação Regular**             | A standard type of station that handles both passenger and cargo operations.                                                   |
+| **Terminal**                   | **Terminal**                     | A type of station that serves as an endpoint for train routes.                                                                 |
+| **UpgradeAStationController**  | **Controlador de Atualização de Estação** | A controller class that coordinates the station upgrade process.                                                      |
+| **UpgradeAStationUI**          | **Interface de Atualização de Estação** | A user interface class responsible for displaying and handling station upgrade interactions.                           |
+| **UpgradeStationService**      | **Serviço de Atualização de Estação** | A service class that handles the business logic for station upgrades.                                                  |
+| **PointOfRoute**               | **Ponto de Rota**               | A specific point along a train route, including position and station information.                                              |
+| **PortBehavior**               | **Comportamento de Porto**      | A specialized behavior for port-type industries in the simulation.                                                             |
+| **Restrictions**               | **Restrições**                  | A class that manages various types of restrictions in the simulation (historical, technological, temporal).                     |
+| **UserSession**                | **Sessão de Usuário**           | A class that manages the current user's session information and state.                                                         |
+| **ApplicationSession**         | **Sessão da Aplicação**         | A class that manages the overall application state and session information.                                                    |
+| **MenuItem**                   | **Item de Menu**                | A menu option that represents a specific action or feature in the application.                                                 |
+| **PlayerUI**                   | **Interface do Jogador**        | A user interface class for the player role, providing game interaction tools.                                                  |
+| **MainMenuUI**                 | **Interface do Menu Principal**  | The main menu interface that provides access to different application features.                                                |
