@@ -1,8 +1,10 @@
 package repositories;
 
 import domain.*;
+import presentation.SimulationUI;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,13 +14,18 @@ import java.util.Optional;
  */
 public class SimulatorRepository implements Serializable {
     private final List<Simulator> simulations;
+    private SimulationUI ui;
 
     /**
      * Creates a new SimulatorRepository instance.
      * Initializes an empty list to store simulations.
      */
     public SimulatorRepository(){
-        simulations = new java.util.ArrayList<>();
+        this.simulations = new ArrayList<>();
+    }
+
+    public void setUI(SimulationUI ui) {
+        this.ui = ui;
     }
 
     /**
@@ -29,15 +36,6 @@ public class SimulatorRepository implements Serializable {
      * @return The added or updated simulator
      */
     public Simulator add(Simulator sim){
-        Optional<Simulator> exist = findBy(sim.getSelectedMap(), sim.getSelectedScenario(), sim.getUser());
-
-        if(exist.isPresent()){
-            Simulator existSimulator = exist.get();
-            existSimulator.setCurrentYear(sim.getSelectedScenario().getCurrentYear());
-            existSimulator.setBudget(sim.getBudget());
-            return existSimulator;
-        }
-
         simulations.add(sim);
         return sim;
     }
@@ -52,26 +50,31 @@ public class SimulatorRepository implements Serializable {
      * @return An Optional containing the found simulator, or empty if not found
      */
     public Optional<Simulator> findBy(Map map, Scenario scenario, User user){
-        System.out.println("\n\n----------------- LOADING SIMULATION -----------------");
-        System.out.println("Map: " + map.getName());
-        System.out.println("Scenario: " + scenario.getScenarioName());
+        if (ui != null) {
+            ui.appendLog("\n\n----------------- LOADING SIMULATION -----------------");
+            ui.appendLog("Map: " + map.getName());
+            ui.appendLog("Scenario: " + scenario.getScenarioName());
 
-        String userEmail;
-        if (user != null) {
-            userEmail = user.getEmail();
-        } else {
-            userEmail = "null";
+            String userEmail;
+            if (user != null) {
+                userEmail = user.getEmail();
+            } else {
+                userEmail = "null";
+            }
+
+            ui.appendLog("User: " + userEmail);
         }
-
-        System.out.println("User: " + userEmail);
 
         for(Simulator sim : simulations){
             if(sim.getSelectedMap().equals(map) && sim.getSelectedScenario().getScenarioName().equals(scenario) && sim.getUser().equals(user)){
                 return Optional.of(sim);
             }
         }
-        System.out.println("No simulation found.");
-        System.out.println();
+
+        if (ui != null) {
+            ui.appendLog("No simulation found.");
+            ui.appendLog("");
+        }
         return Optional.empty();
     }
 
