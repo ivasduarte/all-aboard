@@ -3,6 +3,7 @@ package domain;
 import repositories.SimulatorRepository;
 import repositories.BuildingRepository;
 import repositories.StationRepository;
+import presentation.SimulationUI;
 
 import java.io.*;
 
@@ -15,6 +16,7 @@ public class SimulationSave implements Runnable, Serializable {
     private final SimulatorRepository simRep;
     private final StationRepository stRep;
     private final BuildingRepository bdRep;
+    private SimulationUI ui;
 
     /**
      * Creates a new SimulationSave instance with the specified file path and repositories.
@@ -31,6 +33,10 @@ public class SimulationSave implements Runnable, Serializable {
         this.bdRep = bdRep;
     }
 
+    public void setUI(SimulationUI ui) {
+        this.ui = ui;
+    }
+
     /**
      * Implementation of the Runnable interface.
      * Executes the save operation and handles any exceptions that may occur.
@@ -40,7 +46,11 @@ public class SimulationSave implements Runnable, Serializable {
         try {
             save(filePath);
         } catch (IOException e) {
-            System.out.println("Error saving simulation: " + e.getMessage());
+            if (ui != null) {
+                ui.appendLog("Error saving simulation: " + e.getMessage());
+            } else {
+                System.out.println("Error saving simulation: " + e.getMessage());
+            }
         }
     }
 
@@ -56,9 +66,17 @@ public class SimulationSave implements Runnable, Serializable {
             out.writeObject(simRep);
             out.writeObject(stRep);
             out.writeObject(bdRep);
-            System.out.println("\nSimulation data has been saved to " + filePath);
+            if (ui != null) {
+                ui.appendLog("\nSimulation data has been saved to " + filePath);
+            } else {
+                System.out.println("\nSimulation data has been saved to " + filePath);
+            }
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            if (ui != null) {
+                ui.appendLog("Error: " + e.getMessage());
+            } else {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 }

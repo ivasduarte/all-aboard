@@ -1,6 +1,7 @@
 package controller;
 
 import domain.*;
+import presentation.SimulationUI;
 import repositories.*;
 
 import java.io.Serializable;
@@ -36,6 +37,7 @@ public class SimulatorController implements Runnable, Serializable {
     private final Map map;
     private final Scenario scenario;
     private Simulator simulator;
+    private SimulationUI ui;
 
     /**
      * Constructs a new SimulatorController with the specified map and scenario.
@@ -48,13 +50,19 @@ public class SimulatorController implements Runnable, Serializable {
         this.scenario = scenario;
     }
 
+    public void setUI(SimulationUI ui) {
+        this.ui = ui;
+    }
+
     /**
      * Pauses the current simulation.
      * The simulation will stop at the next iteration until resumed.
      */
     public void pauseSimulation() {
         paused = true;
-        System.out.println("Simulation pause requested...");
+        if (ui != null) {
+            ui.appendLog("Simulation pause requested...");
+        }
     }
 
     /**
@@ -63,7 +71,9 @@ public class SimulatorController implements Runnable, Serializable {
      */
     public void resumeSimulation() {
         paused = false;
-        System.out.println("Simulation resumed...");
+        if (ui != null) {
+            ui.appendLog("Simulation resumed...");
+        }
     }
 
     /**
@@ -74,7 +84,9 @@ public class SimulatorController implements Runnable, Serializable {
         running = false;
         stopped = true;
         paused = false;
-        System.out.println("Simulation stop requested...");
+        if (ui != null) {
+            ui.appendLog("Simulation stop requested...");
+        }
     }
 
     /**
@@ -119,44 +131,279 @@ public class SimulatorController implements Runnable, Serializable {
             this.simulator = new Simulator(currentUser, map, scenario, scenario.getBudget(), scenario.getCurrentYear());
             simRep.add(simulator);
         }
-        displaySimulationHeader();
         return simulator;
     }
 
+    private void runSimulationLoop(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
+        int year = scenario.getCurrentYear();
+        int endYear = scenario.getRestrictions().getEndDate().getYear();
+        double currentCargoMultiplier = cargoMultiplier;
+
+        while (running && !stopped && year <= endYear) {
+            while (paused && !stopped) {
+                Thread.sleep(500);
+            }
+
+            Thread.sleep(SIMULATION_SLEEP_TIME);
+
+            if (!paused && !stopped) {
+                int totalEarnings = processYearSimulation(industries, trains, currentCargoMultiplier, costMultiplier);
+                scenario.addBudget(totalEarnings);
+                if (ui != null) {
+                    ui.updateSimulationStats(year, totalEarnings);
+                }
+                processFinancialResults();
+                updateStationDemand();
+                checkNewLocomotives(year);
+
+                if (events.contains("pandemic")) currentCargoMultiplier += PANDEMIC_RECOVERY_RATE;
+                year++;
+                scenario.setCurrentYear(year);
+            }
+        }
+
+        running = false;
+        if (year > endYear) {
+            if (ui != null) {
+                ui.appendLog("\n\nSIMULATION COMPLETED! End year reached.");
+            }
+        } else if (stopped) {
+            if (ui != null) {
+                ui.appendLog("\n\nSIMULATION STOPPED BY USER.");
+            }
+        }
+    }
+
+    private int processTrains(List<Train> trains, double costMultiplier) {
+        if (trains == null || trains.isEmpty()) {
+            return 0;
+        }
+
+        int totalEarned = 0, totalLost = 0;
+        for (Train train : trains) {
+            if (train.getRoute() != null && !train.getRoute().isEmpty()) {
+                boolean validRoute = true;
+                for (PointOfRoute point : train.getRoute()) {
+                    Station station = point.getStation();
+                    if (station.getMap() == null || !station.getMap().getName().equalsIgnoreCase(map.getName())) {
+                        validRoute = false;
+                        break;
+                    }
+                }
+
+                if (!validRoute) {
+                    continue;
+                }
+
+                int fuel = (int) (train.getLocomotive().getFuelCost() * costMultiplier);
+                int maintenance = (int) (train.getLocomotive().getMaintenanceCost() * costMultiplier);
+                int totalCost = fuel + maintenance;
+
+                double dist = train.calculateRouteDistance();
+                double bMulti = calculateStationBuildingMultiplier(train.getRoute().get(train.getRoute().size() - 1).getStation());
+                int earnings = simulateTrainTrip(train, costMultiplier);
+
+                totalEarned += earnings;
+                totalLost += totalCost;
+            }
+        }
+        int net = totalEarned - totalLost;
+        if (ui != null) {
+            ui.updateTrainStats(totalEarned, totalLost, net);
+        }
+        return net;
+    }
+
+    private int simulateTrainTrip(Train train, double costMultiplier) {
+        if (train.getRoute() == null || train.getRoute().isEmpty()) return 0;
+
+        List<PointOfRoute> route = train.getRoute();
+        int totalEarnings = 0;
+        int currentCargoLoad = 0;
+
+        for (int i = 0; i < route.size() - 1; i++) {
+            PointOfRoute currentPoint = route.get(i);
+            PointOfRoute nextPoint = route.get(i + 1);
+            Station from = currentPoint.getStation();
+            Station to = nextPoint.getStation();
+
+            if (from.getMap() == null || !from.getMap().getName().equalsIgnoreCase(map.getName()) ||
+                to.getMap() == null || !to.getMap().getName().equalsIgnoreCase(map.getName())) {
+                continue;
+            }
+
+            int availableCargo = from.getCargo();
+            int maxTrainCapacity = train.getNumberOfCarriages() * train.getCarriages().get(0).getMaxCargo();
+            int spaceAvailable = maxTrainCapacity - currentCargoLoad;
+
+            if (!train.isReadyToDepart(i, currentCargoLoad)) {
+                if (ui != null) {
+                    ui.updateTrainLoading(train.getLocomotive().getLocomotiveModel(),
+                                        currentPoint.getCargoMode().toString(),
+                                        from.getName(),
+                                        availableCargo,
+                                        currentCargoLoad);
+                }
+            }
+
+            while (!train.isReadyToDepart(i, currentCargoLoad)) {
+                int targetCargo = 0;
+                switch (currentPoint.getCargoMode()) {
+                    case FULL:
+                        targetCargo = maxTrainCapacity;
+                        break;
+                    case HALF:
+                        targetCargo = maxTrainCapacity / 2;
+                        break;
+                }
+                int cargoToLoad = Math.min(availableCargo, Math.abs(targetCargo - currentCargoLoad));
+                if (currentPoint.getCargoMode() == CargoMode.AVAILABLE) {
+                    cargoToLoad = Math.min(availableCargo, spaceAvailable);
+                }
+                if (cargoToLoad > 0) {
+                    from.removeCargo(cargoToLoad); // remove cargo from the station
+                    currentCargoLoad += cargoToLoad; // add cargo to the train
+                    if (ui != null) {
+                        ui.appendLog("\n\n[CARGO REMOVED] Train '" + train.getLocomotive().getLocomotiveModel() +
+                                "' removed " + cargoToLoad + " amount from station '" + from.getName() +
+                                "'.\nAvailable cargo at station: " + from.getCargo() +
+                                "\nTotal cargo on train: " + currentCargoLoad);
+                    }
+                }
+            }
+
+            if (ui != null) {
+                ui.appendLog("\n\n[TRAVEL] Train '" + train.getLocomotive().getLocomotiveModel() +
+                        "' left from '" + from.getName() + "' to '" + to.getName() +
+                        "' with " + currentCargoLoad + " amount of cargo.");
+            }
+
+            double distance = from.distanceTo(to);
+            double buildingMultiplier = calculateStationBuildingMultiplier(to);
+            int earnings = (int) (distance * ROUTE_EARNINGS_PER_STATION * buildingMultiplier * costMultiplier);
+
+            if (currentCargoLoad > 0) {
+                int cargoToDeliver = currentCargoLoad;
+                to.addDeliveredCargo(cargoToDeliver);
+                currentCargoLoad = 0;
+
+                if (ui != null) {
+                    ui.appendLog("\n\n[CARGO DELIVERED] Train '" + train.getLocomotive().getLocomotiveModel() +
+                            "' delivered " + cargoToDeliver + " amount of cargo to station '" + to.getName() +
+                            "'.");
+
+                    int deliveryBonus = cargoToDeliver * 10; // 10€ per unit delivered
+                    earnings += deliveryBonus;
+
+                    ui.appendLog("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
+                            "(Distance: " + (int) distance + ", Deliver bonus: " + deliveryBonus + "€)");
+                }
+            } else {
+                if (ui != null) {
+                    ui.appendLog("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
+                            "(Distance: " + (int) distance + ", No cargo to deliver.)");
+                }
+            }
+
+            totalEarnings += earnings;
+
+            if (ui != null) {
+                ui.appendLog("\n\n[ARRIVAL] Train '" + train.getLocomotive().getLocomotiveModel() +
+                        "' arrived at '" + to.getName() + "'.");
+            }
+        }
+
+        if (ui != null) {
+            ui.appendLog("\n\n[TRAVEL SUM] Train '" + train.getLocomotive().getLocomotiveModel() +
+                    "' completed its route.\nTotal revenue: " + totalEarnings + "€");
+        }
+
+        return totalEarnings;
+    }
+
+    private void processIndustry(Industry industry, double cargoMultiplier) {
+        int cargo = (int) (industry.getCargoAmount() * cargoMultiplier);
+        Station closestStation = findClosestStation(industry);
+        if (closestStation != null) {
+            int availableCapacity = closestStation.getMaxCargo() - closestStation.getCargo();
+            int cargoToAdd = Math.min(cargo, availableCapacity);
+            
+            if (cargoToAdd > 0) {
+                closestStation.addCargo(cargoToAdd);
+                if (ui != null) {
+                    ui.updateIndustryStats(industry, cargoToAdd);
+                    if (cargoToAdd < cargo) {
+                        ui.appendLog("\n[WARNING] Station '" + closestStation.getName() + 
+                                   "' reached maximum capacity. " + 
+                                   (cargo - cargoToAdd) + " cargo could not be added.");
+                    }
+                }
+            }
+        }
+    }
+
+    private double calculateStationBuildingMultiplier(Station station) {
+        if (station.getMap() == null || !station.getMap().getName().equalsIgnoreCase(map.getName())) {
+            return 1.0;
+        }
+
+        double m = 1.0;
+        for (Building b : station.getBuildings()) {
+            switch (b.getBuildingType()) {
+                case "PassengerTerminal":
+                    m += 0.2;
+                    break;
+                case "Warehouse":
+                    m += 0.1;
+                    break;
+            }
+        }
+        return m;
+    }
+
     private void displaySimulationHeader() {
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.println("\nSIMULATION STARTING IN SCENARIO " + scenario.getScenarioName() + ", FROM " + scenario.getRestrictions().getStartDate() + " TO " + scenario.getRestrictions().getEndDate());
-        System.out.println("\nYOUR CURRENT BUDGET IS " + scenario.getBudget().getBudget() + "€.");
-        displayHistoricalEvents();
+        if (ui != null) {
+            ui.appendLog("-------------------------------------------------------------------------");
+            ui.appendLog("\nSIMULATION STARTING IN SCENARIO " + scenario.getScenarioName() + ", FROM " + scenario.getRestrictions().getStartDate() + " TO " + scenario.getRestrictions().getEndDate());
+            ui.appendLog("\nYOUR CURRENT BUDGET IS " + scenario.getBudget().getBudget() + "€.");
+            displayHistoricalEvents();
+        }
     }
 
     private void displayHistoricalEvents() {
         List<String> historicalEvents = scenario.getRestrictions().getHistoricalEvents();
 
-        System.out.println("YOUR SIMULATION WILL BE CONTINUED WITH THE FOLLOWING EVENTS: ");
-        for (String event : historicalEvents) {
-            if (!event.equalsIgnoreCase("none")) {
-                System.out.print(event + " ");
+        if (ui != null) {
+            ui.appendLog("YOUR SIMULATION WILL BE CONTINUED WITH THE FOLLOWING EVENTS: ");
+            for (String event : historicalEvents) {
+                if (!event.equalsIgnoreCase("none")) {
+                    ui.appendLog(event);
+                }
             }
         }
-        System.out.println();
     }
 
     private void displayStats(int currentYear, int totalEarnings, Scenario scenario) {
-        System.out.println("\n\n------------STATS OF YEAR " + currentYear + "------------");
-        System.out.println("\nYOU'VE EARNED A TOTAL OF " + totalEarnings + "€.");
-        System.out.println("YOUR BUDGET IS NOW " + scenario.getBudget().getBudget() + "€.");
+        if (ui != null) {
+            ui.appendLog("\n\n------------STATS OF YEAR " + currentYear + "------------");
+            ui.appendLog("\nYOU'VE EARNED A TOTAL OF " + totalEarnings + "€.");
+            ui.appendLog("YOUR BUDGET IS NOW " + scenario.getBudget().getBudget() + "€.");
+        }
     }
 
     private void displayIndustryStats(Industry industry, int cargo) {
-        System.out.println("\n\n------------INDUSTRY STATS------------");
-        System.out.println("\nINDUSTRY '" + industry.getIndustryType() + "', LOCATED AT (" + industry.getPositionX() + "," + industry.getPositionY() +
-                ") HAS GENERATED " + cargo + " CARGO.");
+        if (ui != null) {
+            ui.appendLog("\n\n------------INDUSTRY STATS------------");
+            ui.appendLog("\nINDUSTRY '" + industry.getIndustryType() + "', LOCATED AT (" + industry.getPositionX() + "," + industry.getPositionY() +
+                    ") HAS GENERATED " + cargo + " CARGO.");
+        }
     }
 
     private void displayLocomotiveStats() {
-        System.out.println("\n\n------------LOCOMOTIVE STATS------------");
-        System.out.println("\n");
+        if (ui != null) {
+            ui.appendLog("\n\n------------LOCOMOTIVE STATS------------");
+            ui.appendLog("\n");
+        }
     }
 
     /**
@@ -194,7 +441,9 @@ public class SimulatorController implements Runnable, Serializable {
         try {
             runSimulationLoop(industries, trains, cargoMultiplier, costMultiplier, events);
         } catch (InterruptedException e) {
-            System.out.println("Simulation was interrupted.");
+            if (ui != null) {
+                ui.appendLog("Simulation was interrupted.");
+            }
         }
     }
 
@@ -209,85 +458,43 @@ public class SimulatorController implements Runnable, Serializable {
         return events.contains("war") ? WAR_COST_MULTIPLIER : 1.0;
     }
 
-    private void runSimulationLoop(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
-        int year = scenario.getCurrentYear();
-        int endYear = scenario.getRestrictions().getEndDate().getYear();
-        double currentCargoMultiplier = cargoMultiplier;
-
-        while (running && !stopped && year <= endYear) {
-            while (paused && !stopped) {
-                Thread.sleep(500);
-            }
-
-            Thread.sleep(SIMULATION_SLEEP_TIME);
-
-            if (!paused && !stopped) {
-                int totalEarnings = processYearSimulation(industries, trains, currentCargoMultiplier, costMultiplier);
-                scenario.addBudget(totalEarnings);
-                displayStats(year, totalEarnings, scenario);
-                processFinancialResults();
-                updateStationDemand();
-                checkNewLocomotives(year);
-
-                if (events.contains("pandemic")) currentCargoMultiplier += PANDEMIC_RECOVERY_RATE;
-                year++;
-                scenario.setCurrentYear(year);
-            }
-        }
-
-        running = false;
-        if (year > endYear) {
-            System.out.println("\n\nSIMULATION COMPLETED! End year reached.");
-        } else if (stopped) {
-            System.out.println("\n\nSIMULATION STOPPED BY USER.");
-        }
-    }
-
     private int processYearSimulation(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier) {
         int industryEarnings = processIndustries(industries, cargoMultiplier);
         int houseBlockEarnings = processHouseBlockCargo();
         int trainEarnings = processTrains(trains, costMultiplier);
-
         int totalEarnings = industryEarnings + houseBlockEarnings + trainEarnings;
 
-        System.out.println("\n\n--- YEAR SIMULATION SUMMARY ---");
-        System.out.println("INDUSTRIES CONTRIBUTION: " + industryEarnings + "€.");
-        System.out.println("HOUSE BLOCK EARNINGS: " + houseBlockEarnings + "€.");
-        System.out.println("\nTOTAL YEAR EARNINGS: " + totalEarnings + "€.");
+        if (ui != null) {
+            ui.appendLog("\n\n--- YEAR SIMULATION SUMMARY ---");
+            ui.appendLog("INDUSTRIES CONTRIBUTION: " + industryEarnings + "€.");
+            ui.appendLog("HOUSE BLOCK EARNINGS: " + houseBlockEarnings + "€.");
+            ui.appendLog("\nTOTAL YEAR EARNINGS: " + totalEarnings + "€.");
+        }
 
         return totalEarnings;
     }
 
     private int processIndustries(List<Industry> industries, double cargoMultiplier) {
-        int totalEarnings = 0;
         List<Station> userStations = getUserStationsForMap();
-
         if (userStations.isEmpty()) {
-            System.out.println("No user stations available for industry cargo generation");
+            if (ui != null) {
+                ui.appendLog("No user stations available for industry cargo generation");
+            }
             return 0;
         }
 
+        int totalEarnings = 0;
         for (Industry industry : industries) {
             List<Station> overlappingStations = findOverlappingStations(userStations, industry);
-
-            if (!overlappingStations.isEmpty()) {
-                int baseCargoAmount = getIndustryCargoAmount(industry);
-                int adjustedCargo = (int) (baseCargoAmount * cargoMultiplier);
-
-                if (adjustedCargo > 0) {
-                    Station targetStation = overlappingStations.get(0);
-                    int actualCargoAdded = addCargoToStationWithCapacity(targetStation, adjustedCargo);
-                    distributeIndustryCargoByType(targetStation, industry, actualCargoAdded);
-
-                    int industryEarnings = calculateIndustryEarnings(industry, actualCargoAdded);
-                    totalEarnings += industryEarnings;
-
-                    displayIndustryProcessingInfo(industry, actualCargoAdded, targetStation, industryEarnings);
+            if (overlappingStations.isEmpty()) {
+                if (ui != null) {
+                    ui.appendLog("\n[WARNING] No overlapping stations found for industry '" + 
+                               industry.getIndustryType() + "' at (" + 
+                               industry.getPositionX() + "," + industry.getPositionY() + ")");
                 }
-            } else {
-                System.out.println("\n[WARNING] No overlapping stations found for industry '" +
-                        industry.getIndustryType() + "' at (" + industry.getPositionX() + "," + industry.getPositionY() + ").");
+                continue;
             }
+            processIndustry(industry, cargoMultiplier);
         }
         return totalEarnings;
     }
@@ -431,14 +638,11 @@ public class SimulatorController implements Runnable, Serializable {
     }
 
     private void displayIndustryProcessingInfo(Industry industry, int cargoAdded, Station station, int earnings) {
-        System.out.println("\n\n------------INDUSTRY PROCESSING------------");
-        System.out.println("INDUSTRY '" + industry.getIndustryType() + "' at (" +
-                industry.getPositionX() + "," + industry.getPositionY() +
-                ") generated " + cargoAdded + " cargo.");
-        System.out.println("Cargo added to station '" + station.getName() + "'.");
-        System.out.println("Station now has " + station.getCargo() + " total cargo.");
-        System.out.println("Industry earnings: " + earnings + "€");
-        System.out.println("-------------------------------------------");
+        if (ui != null) {
+            ui.appendLog("\nProcessing industry: " + industry.getIndustryType());
+            ui.appendLog("Added " + cargoAdded + " cargo to station: " + station.getName());
+            ui.appendLog("Earnings from this industry: " + earnings + "€");
+        }
     }
 
     private int processHouseBlockCargo() {
@@ -456,175 +660,43 @@ public class SimulatorController implements Runnable, Serializable {
                 // distribute cargo among user's stations in this city
                 int cargoPerStation = cargo / cityStations.size();
                 int remainingCargo = cargo % cityStations.size();
+                int totalCargoAdded = 0;
 
                 for (int i = 0; i < cityStations.size(); i++) {
                     Station station = cityStations.get(i);
                     int stationCargo = cargoPerStation + (i < remainingCargo ? 1 : 0);
-                    station.addCargo(stationCargo);
-                    System.out.println("\n[HOUSE BLOCK] Station '" + station.getName() + "' now has a total of " + station.getCargo() + " cargo.");
+                    
+                    // Check available capacity
+                    int availableCapacity = station.getMaxCargo() - station.getCargo();
+                    int actualCargoToAdd = Math.min(stationCargo, availableCapacity);
+                    
+                    if (actualCargoToAdd > 0) {
+                        station.addCargo(actualCargoToAdd);
+                        totalCargoAdded += actualCargoToAdd;
+                        
+                        if (ui != null) {
+                            ui.appendLog("\n[HOUSE BLOCK] Station '" + station.getName() + 
+                                       "' received " + actualCargoToAdd + " cargo" +
+                                       (actualCargoToAdd < stationCargo ? 
+                                        " (could not add " + (stationCargo - actualCargoToAdd) + 
+                                        " cargo due to capacity limit)" : "") +
+                                       ". Total cargo: " + station.getCargo());
+                        }
+                    }
                 }
-                // add earnings from city operations
-                int cityEarnings = cargo * 3;
+                
+                // add earnings from city operations (only for cargo that was actually added)
+                int cityEarnings = totalCargoAdded * 3;
                 total += cityEarnings;
 
-                System.out.println("\nCITY '" + city.getName() + "' has " + blocks + " house blocks and generated " + cargo + " cargo.");
-                System.out.println("IT EARNED A TOTAL OF " + cityEarnings + "€.");
+                if (ui != null) {
+                    ui.appendLog("\nCITY '" + city.getName() + "' has " + blocks + " house blocks and generated " + cargo + " cargo.");
+                    ui.appendLog("Successfully added " + totalCargoAdded + " cargo to stations.");
+                    ui.appendLog("IT EARNED A TOTAL OF " + cityEarnings + "€.");
+                }
             }
         }
         return total;
-    }
-
-    private int processTrains(List<Train> trains, double costMultiplier) {
-        if (trains == null || trains.isEmpty()) {
-            return 0;
-        }
-
-        int totalEarned = 0, totalLost = 0;
-        for (Train train : trains) {
-            if (train.getRoute() != null && !train.getRoute().isEmpty()) {
-                boolean validRoute = true;
-                for (PointOfRoute point : train.getRoute()) {
-                    Station station = point.getStation();
-                    if (station.getMap() == null || !station.getMap().getName().equalsIgnoreCase(map.getName())) {
-                        validRoute = false;
-                        break;
-                    }
-                }
-
-                if (!validRoute) {
-                    continue;
-                }
-
-                int fuel = (int) (train.getLocomotive().getFuelCost() * costMultiplier);
-                int maintenance = (int) (train.getLocomotive().getMaintenanceCost() * costMultiplier);
-                int totalCost = fuel + maintenance;
-
-                double dist = train.calculateRouteDistance();
-                double bMulti = calculateStationBuildingMultiplier(train.getRoute().get(train.getRoute().size() - 1).getStation());
-                int earnings = simulateTrainTrip(train, costMultiplier);
-
-                totalEarned += earnings;
-                totalLost += totalCost;
-            } else {
-                displayLocomotiveStats();
-            }
-        }
-        int net = totalEarned - totalLost;
-        System.out.println("\n\nYOU'VE GAINED A TOTAL OF " + totalEarned + "€ FROM TRAINS.");
-        System.out.println("HOWEVER, YOU'VE LOST A TOTAL OF " + totalLost + "€.");
-        System.out.println("YOUR CURRENT BALANCE IS " + net + "€.");
-        return net;
-    }
-
-    private int simulateTrainTrip(Train train, double costMultiplier) {
-        if (train.getRoute() == null || train.getRoute().isEmpty()) return 0;
-
-        List<PointOfRoute> route = train.getRoute();
-        int totalEarnings = 0;
-        int currentCargoLoad = 0;
-
-        for (int i = 0; i < route.size() - 1; i++) {
-            PointOfRoute currentPoint = route.get(i);
-            PointOfRoute nextPoint = route.get(i + 1);
-            Station from = currentPoint.getStation();
-            Station to = nextPoint.getStation();
-
-            if (from.getMap() == null || !from.getMap().getName().equalsIgnoreCase(map.getName()) ||
-                to.getMap() == null || !to.getMap().getName().equalsIgnoreCase(map.getName())) {
-                continue;
-            }
-
-            int availableCargo = from.getCargo();
-            int maxTrainCapacity = train.getNumberOfCarriages() * train.getCarriages().get(0).getMaxCargo();
-            int spaceAvailable = maxTrainCapacity - currentCargoLoad;
-
-            if (!train.isReadyToDepart(i, currentCargoLoad)) {
-                System.out.println("\n\n[LOADING] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' waiting for cargo mode '" + currentPoint.getCargoMode() +
-                        "' at station '" + from.getName() + "'.\nAvailable cargo: " + availableCargo +
-                        "\nCurrent cargo on the train: " + currentCargoLoad);
-            }
-
-            while (!train.isReadyToDepart(i, currentCargoLoad)) {
-                int targetCargo = 0;
-                switch (currentPoint.getCargoMode()) {
-                    case FULL:
-                        targetCargo = maxTrainCapacity;
-                        break;
-                    case HALF:
-                        targetCargo = maxTrainCapacity / 2;
-                        break;
-                }
-                int cargoToLoad = Math.min(availableCargo, Math.abs(targetCargo - currentCargoLoad));
-                if (currentPoint.getCargoMode() == CargoMode.AVAILABLE) {
-                    cargoToLoad = Math.min(availableCargo, spaceAvailable);
-                }
-                if (cargoToLoad > 0) {
-                    from.removeCargo(cargoToLoad); // remove cargo from the station
-                    currentCargoLoad += cargoToLoad; // add cargo to the train
-                    System.out.println("\n\n[CARGO REMOVED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                            "' removed " + cargoToLoad + " amount from station '" + from.getName() +
-                            "'.\nAvailable cargo at station: " + from.getCargo() +
-                            "\nTotal cargo on train: " + currentCargoLoad);
-                }
-            }
-
-            System.out.println("\n\n[TRAVEL] Train '" + train.getLocomotive().getLocomotiveModel() +
-                    "' left from '" + from.getName() + "' to '" + to.getName() +
-                    "' with " + currentCargoLoad + " amount of cargo.");
-
-            double distance = from.distanceTo(to);
-            double buildingMultiplier = calculateStationBuildingMultiplier(to);
-            int earnings = (int) (distance * ROUTE_EARNINGS_PER_STATION * buildingMultiplier * costMultiplier);
-
-            if (currentCargoLoad > 0) {
-                int cargoToDeliver = currentCargoLoad;
-                to.addDeliveredCargo(cargoToDeliver);
-                currentCargoLoad = 0;
-
-                System.out.println("\n\n[CARGO DELIVERED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' delivered " + cargoToDeliver + " amount of cargo to station '" + to.getName() +
-                        "'.");
-
-                int deliveryBonus = cargoToDeliver * 10; // 10€ per unit delivered
-                earnings += deliveryBonus;
-
-                System.out.println("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
-                        "(Distance: " + (int) distance + ", Deliver bonus: " + deliveryBonus + "€)");
-            } else {
-                System.out.println("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
-                        "(Distance: " + (int) distance + ", No cargo to deliver.)");
-            }
-
-            totalEarnings += earnings;
-
-            System.out.println("\n\n[ARRIVAL] Train '" + train.getLocomotive().getLocomotiveModel() +
-                    "' arrived at '" + to.getName() + "'.");
-        }
-
-        System.out.println("\n\n[TRAVEL SUM] Train '" + train.getLocomotive().getLocomotiveModel() +
-                "' completed its route.\nTotal revenue: " + totalEarnings + "€");
-
-        return totalEarnings;
-    }
-
-    private double calculateStationBuildingMultiplier(Station station) {
-        if (station.getMap() == null || !station.getMap().getName().equalsIgnoreCase(map.getName())) {
-            return 1.0;
-        }
-
-        double m = 1.0;
-        for (Building b : station.getBuildings()) {
-            switch (b.getBuildingType()) {
-                case "PassengerTerminal":
-                    m += 0.2;
-                    break;
-                case "Warehouse":
-                    m += 0.1;
-                    break;
-            }
-        }
-        return m;
     }
 
     private void updateStationDemand() {
@@ -639,7 +711,9 @@ public class SimulatorController implements Runnable, Serializable {
         for (Locomotive l : locoRep.getAllLocomotives()) {
             if (l.getStartYear() == year && !locoRep.isAvailableToPlayer(l)) {
                 locoRep.unlockForPlayer(l);
-                System.out.println("New locomotive available: " + l.getLocomotiveModel());
+                if (ui != null) {
+                    ui.appendLog("New locomotive available: " + l.getLocomotiveModel());
+                }
             }
         }
     }
