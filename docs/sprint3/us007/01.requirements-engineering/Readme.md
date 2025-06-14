@@ -49,7 +49,7 @@ customs, post office, hotel (small or large), silo, liquid storage.
 ### 1.4. Found out Dependencies
 
 * There is a dependency with US005 - "Create a Station", it's necessary to have stations to list them.
-* There is a dependency with US006 - "Upgrade a selected Station", in order to verify the details from a station, it's necessary to have a option that can modify it.
+* There is a dependency with US006 - "Upgrade a Station", in order to verify the details from a station, it's necessary to have a option that can modify it.
 
 ### 1.5 Input and Output Data
 
@@ -67,8 +67,6 @@ customs, post office, hotel (small or large), silo, liquid storage.
 ### 1.6. System Sequence Diagram (SSD)
 
 ![System Sequence Diagram](svg/us007-system-sequence-diagram.svg)
-
-
 
 ### 1.7 Other Relevant Remarks
 

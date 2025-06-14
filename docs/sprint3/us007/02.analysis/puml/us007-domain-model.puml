@@ -1,63 +1,43 @@
 @startuml
 skinparam monochrome true
 skinparam packageStyle rectangle
-skinparam shadowing false
-
-
 skinparam classAttributeIconSize 0
-
-hide circle
 hide methods
+hide circle
 
 class Map {
-    - name
-    - width: int
-    - height: int
+  - name
+  - width: int
+  - height: int
 }
 
 class Scenario {
-    - name
-    - timeRestrictions
-    - technologicalRestrictions
-    - historicalRestrictions
-}
-
-class City {
-    - name
-    - position
-    - houseBlocks
-}
-
-class Player {
-    - name
-    - ID
-    - password
+  - name
 }
 
 class Station {
-    - id
-    - name
-    - type
-    - building
-    - cargoDemand
-    - cargoSupply
+  - stationID
+  - name
+  - positionX
+  - positionY
+  - type
+  - cargo
 }
 
 class Building {
-    - id
-    - type
+  - type
 }
 
-class Cargo {
-    - id
-    - type
+enum StationType {
+  DEPOT
+  STATION
+  TERMINAL
 }
 
-Map "1" -- "1" Scenario : defines
-Scenario "1" -- "*" City : contains
-City "1" - "*" Station : has
-Player "1" --> "1 *" Station : lists
-Station "1" --> "*" Building : contains
-Station "1" --> "*" Cargo : manages
+Scenario "1" -- "1" Map: has
+Map "1" -- "*" Station : contains
+Scenario "1" -- "*" Station : manages
+Station "1" -- "*" Building : has
+Station --> StationType : type
 
 @enduml

@@ -23,15 +23,15 @@
 
 According to the taken rationale, the conceptual classes promoted to software classes are: 
 
-* Player
-* Station
-* Building
+* `Player`
+* `Station`
+* `Building`
 
 
 Other software classes (i.e. Pure Fabrication) identified: 
 
-* UpgradeAStationUI  
-* UpgradeAStationController
+* `UpgradeAStationUI`  
+* `UpgradeAStationController`
 
 
 ## 3.2. Sequence Diagram (SD)
@@ -57,7 +57,7 @@ It uses Interaction Occurrence (a.k.a. Interaction Use).
 
 **Get Available Stations**
 
-![Sequence Diagram - Get Available Stations](svg/us006-sd-partial.get-available-stations.svg)
+![Sequence Diagram - Get Available Stations](svg/us006-sd-partial-get-available-stations.svg)
 
 
 **Get Building Repository**
@@ -73,7 +73,6 @@ It uses Interaction Occurrence (a.k.a. Interaction Use).
 **Get Building Type**
 
 ![Sequence Diagram - Get Building Type](svg/us006-sd-partial-get-building-type.svg)
-
 
 
 **Get Bugdet**

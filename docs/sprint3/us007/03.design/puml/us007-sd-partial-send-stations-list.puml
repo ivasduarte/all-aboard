@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":ListStationsController" as ctrl
+participant ":ListStationsUI"         as ui
+actor       "Player"                  as player
+
+autonumber 30
+
+activate ctrl
+activate player
+
+    group Send Stations List
+
+        alt list not empty
+            ctrl --> ui : send filtered stations (by scenario and map)
+            activate ui
+            ui --> player : display list
+        else list empty
+            ctrl --> ui : send empty list
+            ui --> player : "No stations found"
+            deactivate ui
+        end
+
+    end
+
+@enduml
