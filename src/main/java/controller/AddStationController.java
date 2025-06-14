@@ -13,14 +13,9 @@ import repositories.Repositories;
 import repositories.StationRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Controller class responsible for managing the addition of new stations to the railway system.
- * Handles user interface interactions and station creation logic.
- */
 public class AddStationController {
 
     @FXML
@@ -46,11 +41,6 @@ public class AddStationController {
     private Label stationPriceLbl;
 
     @FXML
-    private Slider XPosSli;
-    @FXML
-    private Slider YPosSli;
-
-    @FXML
     private TextField XPosTxt;
     @FXML
     private TextField YPosTxt;
@@ -58,11 +48,6 @@ public class AddStationController {
     private Map map;
     private Scenario scenario;
 
-    /**
-     * Sets the initial data for the station creation process.
-     * @param map The map where the station will be added
-     * @param scenario The current scenario being played
-     */
     public void setData(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
@@ -76,80 +61,40 @@ public class AddStationController {
 
         orientationCmb.setVisible(false);
         orientationLbl.setVisible(false);
-
         stationPriceLbl.setVisible(false);
-
-        XPosSli.setMin(1);
-        XPosSli.setMax(map.getWidth());
-        XPosSli.setValue(1);
-        XPosTxt.setText(String.valueOf(XPosSli.getValue()));
-
-        YPosSli.setMin(1);
-        YPosSli.setMax(map.getHeight());
-        YPosSli.setValue(1);
-        YPosTxt.setText(String.valueOf(YPosSli.getValue()));
     }
 
-    /**
-     * Initializes the controller and sets up event listeners for position sliders.
-     */
     @FXML
-    public void initialize() {
-        XPosSli.valueProperty().addListener((observable, oldValue, newValue) -> {
-            XPosTxt.setText(Double.toString(newValue.intValue()));
-        });
+    public void initialize() {}
 
-        YPosSli.valueProperty().addListener((observable, oldValue, newValue) -> {
-            YPosTxt.setText(Double.toString(newValue.intValue()));
-        });
-    }
-
-    /**
-     * Handles changes in the X position text field.
-     * Validates and updates the X position slider accordingly.
-     */
     @FXML
     public void handleXPosTxt() {
         try {
             int value = Integer.parseInt(XPosTxt.getText());
-
-            if (value > XPosSli.getMax())
-                XPosSli.setValue(XPosSli.getMax());
-            else if (value < XPosSli.getMin())
-                XPosSli.setValue(XPosSli.getMin());
-            else
-                XPosSli.setValue(value);
-
+            if (value < 1 || value > map.getWidth()) {
+                showAlert("Invalid X position", "X must be between 1 and " + map.getWidth());
+                XPosTxt.setText("");
+            }
         } catch (NumberFormatException e) {
-            XPosTxt.setText(String.valueOf(XPosSli.getValue()));
+            showAlert("Invalid input", "X must be a number");
+            XPosTxt.setText("");
         }
     }
 
-    /**
-     * Handles changes in the Y position text field.
-     * Validates and updates the Y position slider accordingly.
-     */
     @FXML
     public void handleYPosTxt() {
         try {
             int value = Integer.parseInt(YPosTxt.getText());
-
-            if (value > YPosSli.getMax())
-                YPosSli.setValue(YPosSli.getMax());
-            else if (value < YPosSli.getMin())
-                YPosSli.setValue(YPosSli.getMin());
-            else
-                YPosSli.setValue(value);
-
+            if (value < 1 || value > map.getHeight()) {
+                showAlert("Invalid Y position", "Y must be between 1 and " + map.getHeight());
+                YPosTxt.setText("");
+            }
         } catch (NumberFormatException e) {
-            YPosTxt.setText(String.valueOf(YPosSli.getValue()));
+            showAlert("Invalid input", "Y must be a number");
+            YPosTxt.setText("");
         }
     }
 
-    /**
-     * Handles changes in the station type selection.
-     * Updates the UI based on the selected station type.
-     */
     @FXML
     public void handleTypeChange() {
         Station.StationType stationType = stationTypeCmb.getValue();
@@ -157,15 +102,12 @@ public class AddStationController {
 
         if (stationType != null) {
             stationPriceLbl.setText("Station price: " + stationType.getPrice() + "€");
-            orientationCmb.setVisible(stationType.getSize() % 2 == 0);
-            orientationLbl.setVisible(stationType.getSize() % 2 == 0);
+            boolean needsOrientation = stationType.getSize() % 2 == 0;
+            orientationCmb.setVisible(needsOrientation);
+            orientationLbl.setVisible(needsOrientation);
         }
     }
 
-    /**
-     * Handles the station addition process.
-     * Validates inputs and creates a new station if all conditions are met.
-     */
     @FXML
     public void handleAddStation() {
         int mapID = -1;
@@ -181,7 +123,6 @@ public class AddStationController {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
         if (mapID == -1) {
-            System.out.println(mapID);
             errorAlert.setTitle("Map not valid");
             errorAlert.setContentText("The selected map isn't valid, select a valid map!");
             errorAlert.showAndWait();
@@ -209,8 +150,15 @@ public class AddStationController {
             return;
         }
 
-        int positionX = (int) XPosSli.getValue() - 1;
-        int positionY = (int) YPosSli.getValue() - 1;
+        int positionX, positionY;
+        try {
+            positionX = Integer.parseInt(XPosTxt.getText()) - 1;
+            positionY = Integer.parseInt(YPosTxt.getText()) - 1;
+        } catch (NumberFormatException e) {
+            showAlert("Invalid coordinates", "Please enter valid numeric coordinates for X and Y.");
+            return;
+        }
+
         Station.StationType stationType = stationTypeCmb.getValue();
         Station.Orientation stationOrientation = orientationCmb.getValue();
 
@@ -222,16 +170,12 @@ public class AddStationController {
         newStation.setOwnerPlayer(UserSession.getInstance().getUser().getEmail());
 
         if (!newStation.validatePosition(map, stationType.getSize() / 2)) {
-            errorAlert.setTitle("Position not valid");
-            errorAlert.setContentText("The station's range is out of bounds, enter a different position!");
-            errorAlert.showAndWait();
+            showAlert("Position not valid", "The station's range is out of bounds, enter a different position!");
             return;
         }
 
         if (!newStation.checkOverbuilding()) {
-            errorAlert.setTitle("Station overbuilding");
-            errorAlert.setContentText("The select position is already occupied by another station/industry or city!");
-            errorAlert.showAndWait();
+            showAlert("Station overbuilding", "The selected position is already occupied by another station/industry or city!");
             return;
         }
 
@@ -247,10 +191,6 @@ public class AddStationController {
         handleBackToMenu();
     }
 
-    /**
-     * Handles navigation back to the main menu.
-     * Closes the current window and opens the player menu.
-     */
     @FXML
     private void handleBackToMenu() {
         try {
@@ -273,16 +213,6 @@ public class AddStationController {
         }
     }
 
-    /**
-     * Adds a station to the specified map in the given scenario.
-     * @param map The map where the station will be added
-     * @param scenario The scenario in which the budget will be subtracted from
-     * @param positionX The X position of the station
-     * @param positionY The Y position of the station
-     * @param stationType The type of station to be added
-     * @param rotation The orientation of the station
-     * @return A message indicating the result of the operation
-     */
     public String AddStation(Map map, Scenario scenario, int positionX, int positionY, int stationType, String rotation) {
         int mapID = -1;
 
@@ -336,14 +266,6 @@ public class AddStationController {
         return "Station added successfully under the name " + stationName;
     }
 
-    /**
-     * Generates a unique name for a new station based on its properties.
-     * @param mapName The name of the map
-     * @param posX The X position of the station
-     * @param posY The Y position of the station
-     * @param type The type of the station
-     * @return A generated station name
-     */
     public String generateStationName(String mapName, int posX, int posY, String type) {
         List<City> cities = Repositories.getInstance().getCityRepository().getCitiesByMap(mapName);
         String stationName = type;
@@ -354,7 +276,7 @@ public class AddStationController {
 
             for (City city : cities) {
                 int cityX = city.getCenterX();
-                int cityY = city.getCenterX();
+                int cityY = city.getCenterY();
                 double distance = Math.sqrt(Math.pow(cityX - posX, 2) + Math.pow(cityY - posY, 2));
 
                 if (distance < smallestDistance) {
@@ -367,5 +289,12 @@ public class AddStationController {
         }
 
         return stationName;
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
