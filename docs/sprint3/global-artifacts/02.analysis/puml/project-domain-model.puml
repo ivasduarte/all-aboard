@@ -11,53 +11,32 @@ hide methods
 class Authentication {
     - password
     - userType
-    + validateUser()
-    + authenticate()
 }
 
 class Password {
     - value
     - isValid
-    + validate()
-    + encrypt()
 }
 
 class Editor {
     - name
     - password
-    + createMap()
-    + createScenario()
-    + saveMap()
-    + loadMap()
 }
 
 class Player {
     - name
     - password
-    + playSimulation()
-    + saveSimulation()
-    + loadSimulation()
 }
 
 class ProductOwner {
     - name
     - password
-    + definePriorities()
-    + validateRequirements()
 }
 
 class Simulator {
-    + startSimulation()
-    + pauseSimulation()
-    + stopSimulation()
 }
 
 class Simulation {
-    - currentTime
-    - status
-    + update()
-    + saveState()
-    + loadState()
 }
 
 class SimulationSave {
@@ -94,6 +73,11 @@ class Map {
     - name
     - width
     - height
+    - cellSizeKm
+    - scenarios
+    - stations
+    - cities
+    - industries
 }
 
 class City {
@@ -113,6 +97,12 @@ class Industry {
     - name
     - positionX
     - positionY
+    - mapID
+    - industryType
+    - cargoAmount
+    - storedIron
+    - storedCoal
+    - area
 }
 
 class IndustryType {
@@ -126,6 +116,11 @@ class Scenario {
     - technologicalRestrictions
     - historicalRestrictions
     - budget
+    - currentYear
+    - finalYear
+    - modificationRateFor
+    - productionRate
+    - trains
 }
 
 class TimeRestriction {
@@ -150,9 +145,21 @@ class Station {
     - positionY
     - orientation
     - buildings
-    - economicRadius
-    + calculateStatistics()
-    + updateCargoDistribution()
+    - ownerPlayer
+    - mapName
+    - scenarioName
+    - mapID
+    - name
+    - ironCargo
+    - coalCargo
+    - steelCargo
+    - hasIronStorage
+    - hasCoalStorage
+    - hasSteelStorage
+    - currentCargo
+    - maxCargo
+    - lastYearDeliveries
+    - demand
 }
 
 class StationType {
@@ -163,9 +170,7 @@ class Building {
     - buildingType
     - cost
     - effect
-    - constructionYear
-    + calculateMaintenanceCost()
-    + applyEffect()
+    - type
 }
 
 class BuildingType {
@@ -207,24 +212,19 @@ class Train {
     - purchaseDate
     - locomotive
     - carriages
-    - status
-    + calculateMaintenanceCost()
-    + updatePosition()
 }
 
 class Locomotive {
     - locomotiveModel
     - fuelType
     - speed
+    - maxSpeed
     - startYear
     - endYear
     - price
     - fuelCost
     - maintenanceCost
     - route
-    - currentFuel
-    + calculateFuelConsumption()
-    + checkMaintenance()
 }
 
 class LocomotiveType {
@@ -236,29 +236,24 @@ class LocomotiveType {
 class Carriage {
     - name
     - cargoType
+    - cargo
+    - maxCargo
+    - currentCargo
 }
 
 class YearFinancialResults {
     - expenses
     - revenues
-    - year
-    + calculateProfit()
-    + generateReport()
 }
 
 class Expenses {
     - trackMaintenance
     - trainMaintenance
     - fuelCost
-    - buildingMaintenance
-    + calculateTotal()
 }
 
 class Revenues {
     - cargoDeliveries
-    - passengerTickets
-    - otherIncome
-    + calculateTotal()
 }
 
 class StationStatistics {
@@ -267,16 +262,20 @@ class StationStatistics {
     - cargoDistribution
 }
 
-class CargoAnalysis {
-    - cargoType
-    - revenueCorrelation
-    - linearRegression
+class Budget {
+    - budget
 }
 
-class RouteAnalysis {
-    - shortestPath
-    - maintenanceRoute
-    - algorithmEfficiency
+class Date {
+    - year
+    - month
+    - day
+}
+
+enum CargoMode {
+    FULL
+    HALF
+    AVAILABLE
 }
 
 Authentication -- Password : validates >
@@ -285,83 +284,64 @@ Authentication -- Player : authenticates >
 Authentication -- ProductOwner : authenticates >
 
 Simulator -- Simulation : starts >
-Simulator -- Map : uses >
-Simulator -- Scenario : uses >
+Simulation -- Player: creates >
+Simulation -- Editor: creates >
+Simulation -- SimulationSave : saves >
+Simulation -- SimulationLoad : loads >
 
-Editor -- Map : creates >
-Editor -- Scenario : creates >
-Editor -- MapSave : performs >
-Editor -- MapLoad : performs >
-Editor -- ScenarioSave : performs >
-Editor -- ScenarioLoad : performs >
+Map *-- "0..*" City : contains >
+Map *-- "0..*" Industry : contains >
+Map *-- "0..*" Station : contains >
+Map *-- "0..*" Scenario : contains >
+Map -- MapSave : saves >
+Map -- MapLoad : loads >
 
-Player -- Simulation : plays >
-Player -- SimulationSave : performs >
-Player -- SimulationLoad : performs >
-Player -- Train : owns >
-Player -- Station : manages >
-Player -- YearFinancialResults : receives >
+City *-- "0..*" HouseBlock : contains >
+City -- "0..*" Cargo : generates/consumes >
 
-Map -- City : contains >
-Map -- Industry : contains >
-Map -- Station : contains >
-Map -- RailwayLine : contains >
+Industry "*" -- "1" IndustryType : has >
+Industry -- "0..*" Cargo : generates/processes >
 
-City -- HouseBlock : contains >
-City -- Cargo : generates >
-
-Industry -- IndustryType : has >
-Industry -- Cargo : produces >
-Industry -- Cargo : demands >
-Industry -- CargoType : handles >
-
-Scenario -- TimeRestriction : has >
-Scenario -- TechnologicalRestriction : has >
-Scenario -- HistoricalRestriction : has >
+Scenario -- Map : is created for >
+Scenario "1" -- "1" TimeRestriction : has >
+Scenario "1" -- "1" TechnologicalRestriction : has >
+Scenario "1" -- "1" HistoricalRestriction : has >
 Scenario -- Budget : has >
-Scenario -- Map : uses >
+Scenario -- Train : manages >
+Scenario -- ScenarioSave : saves >
+Scenario -- ScenarioLoad : loads >
 
-Station -- StationType : has >
-Station -- Building : contains >
-Station -- Cargo : handles >
-Station -- StationStatistics : generates >
-Station -- CargoAnalysis : analyzed by >
-Station -- Route : part of >
+Station o-- "0..*" Building : has >
+Station "*" - "1" StationType : has >
+Station -- StationStatistics : analyzes >
+Station -- CargoAnalysis : analyzes >
+Building "*" -- "1" BuildingType : has >
 
-Building -- BuildingType : has >
-Building -- Station : belongs to >
+RailwayLine -- "2" Station : connects >
+RailwayLine "*" - "1" RailwayLineType : has >
+Route *-- "2..*" Station : includes >
 
-Route -- Station : connects >
-Route -- RailwayLine : uses >
-Route -- RouteAnalysis : analyzed by >
-Route -- Train : assigned to >
-
-Train -- Locomotive : has >
-Train -- Carriage : has >
-Train -- Route : follows >
-Train -- Cargo : transports >
-
-Locomotive -- LocomotiveType : has >
-Locomotive -- Cargo : transports >
-Locomotive -- Route : follows >
-
-Carriage -- CargoType : carries >
-Carriage -- Train : belongs to >
+Player -- Station : builds >
+Player -- RailwayLine : builds >
+Player -- Train : buys >
+Player "1" -- "*" YearFinancialResults : gets >
 
 YearFinancialResults -- Expenses : has >
 YearFinancialResults -- Revenues : has >
-YearFinancialResults -- Player : belongs to >
 
-CargoAnalysis -- CargoType : analyzes >
-CargoAnalysis -- Station : analyzes >
-RouteAnalysis -- Route : analyzes >
-RouteAnalysis -- RailwayLine : considers >
+Train *-- "1" Locomotive : has >
+Train *-- "0..*" Carriage : has >
+Train -- Route : assigned to >
+Locomotive "*" -- "1" LocomotiveType : has >
 
-Simulation -- SimulationSave : saves to >
-Simulation -- SimulationLoad : loads from >
-Map -- MapSave : saves to >
-Map -- MapLoad : loads from >
-Scenario -- ScenarioSave : saves to >
-Scenario -- ScenarioLoad : loads from >
+Carriage "1" - "*" CargoType : has >
+Carriage -- Cargo : carries >
+Cargo "*" - "1" CargoType : has >
+Cargo -- CargoMode : has >
+
+Editor -- Map : creates >
+Editor -- Scenario : creates >
+
+TimeRestriction -- Date : uses >
 
 @enduml
