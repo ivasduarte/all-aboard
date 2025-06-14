@@ -10,6 +10,11 @@ import javafx.beans.property.BooleanProperty;
 import java.io.File;
 import java.util.Scanner;
 
+/**
+ * User interface for loading a saved scenario.
+ * Implements Runnable to support concurrent execution.
+ * Uses JavaFX properties to notify when a scenario is loaded.
+ */
 public class LoadScenarioUI implements Runnable {
 
     static Scanner ler = new Scanner(System.in);
@@ -17,13 +22,26 @@ public class LoadScenarioUI implements Runnable {
     private final SaveScenarioController controller = new SaveScenarioController();
     private final Map selectedMap;
 
-    // Propriedade estática para notificar quando um cenário é carregado
+    /**
+     * Static property to notify when a scenario is loaded.
+     * Used for JavaFX UI updates.
+     */
     public static final BooleanProperty scenarioLoaded = new SimpleBooleanProperty(false);
 
+    /**
+     * Creates a new LoadScenarioUI instance with the specified map.
+     *
+     * @param selectedMap The map to associate with the loaded scenario
+     */
     public LoadScenarioUI(Map selectedMap) {
         this.selectedMap = selectedMap;
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Displays available scenario files and handles user selection.
+     * Loads the selected scenario and notifies the UI of the change.
+     */
     @Override
     public void run() {
         File dir = new File("scenarios");

@@ -12,15 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * User interface for changing the type of an existing station.
+ * Implements Runnable to support concurrent execution.
+ */
 public class ChangeStationTypeUI implements Runnable {
     private Map map;
     private Scenario scenario;
 
+    /**
+     * Creates a new ChangeStationTypeUI instance with the specified map and scenario.
+     *
+     * @param map The map containing the station to be changed
+     * @param scenario The current scenario containing budget information
+     */
     public ChangeStationTypeUI(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
     }
 
+    /**
+     * Handles user input for changing a station's type.
+     * Displays available stations that can be upgraded.
+     * Collects station selection and new type information.
+     * Updates the station type and adjusts the scenario budget accordingly.
+     */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
@@ -103,6 +119,10 @@ public class ChangeStationTypeUI implements Runnable {
 
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Executes the station type change process.
+     */
     @Override
     public void run() {
         getInput();

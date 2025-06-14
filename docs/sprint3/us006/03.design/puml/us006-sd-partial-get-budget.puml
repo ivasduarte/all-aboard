@@ -3,7 +3,7 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-participant ":UpgradeStationUI" as ui
+participant ":UpgradeAStationUI" as ui
 participant ":Scenario" as s
 
 activate ui

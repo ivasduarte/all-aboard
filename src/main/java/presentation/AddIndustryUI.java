@@ -41,12 +41,15 @@ public class AddIndustryUI implements Runnable {
     }
 
     /**
-     * This method will be responsible to show the UI to user.
-     * This method will also collect all the inputs related to the industry and pass them to the controller.
-     * <p>
-     * Upon successful execution, a new industry is created, added to the selected
-     * map, and reported to the user. If errors occur during the input process,
-     * appropriate error messages are displayed to guide the user.
+     * Collects and validates user input for creating a new industry.
+     * This method handles the following steps:
+     * 1. Gets and validates the industry's position (X,Y coordinates)
+     * 2. Checks if the position is already occupied by another industry or city block
+     * 3. Prompts for and validates the industry type selection
+     * 4. Gets and validates the amount of cargo generated per year
+     *
+     * @return true if all inputs are valid and the position is available,
+     *         false if the position is already occupied
      */
     public boolean getInput() {
         Scanner sc = new Scanner(System.in);
@@ -120,7 +123,10 @@ public class AddIndustryUI implements Runnable {
 
     @Override
     /**
-     * This method will be responsible to show the UI related to adding an industry to the editor when this action is selected.
+     * Executes the industry addition process.
+     * This method displays the UI, collects user input, and attempts to create
+     * a new industry. If successful, it displays a success message; otherwise,
+     * it shows an error message.
      */
     public void run() {
         System.out.println("\n\n------------------------ Add Industry ------------------------");

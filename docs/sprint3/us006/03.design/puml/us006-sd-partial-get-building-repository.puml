@@ -3,7 +3,7 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-participant ":UpgradeStationController" as ctrl
+participant ":UpgradeAStationController" as ctrl
 participant ":Repositories" as reps
 participant ":BuildingRepository" as bd
 

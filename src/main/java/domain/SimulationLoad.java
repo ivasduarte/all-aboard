@@ -7,18 +7,39 @@ import repositories.BuildingRepository;
 
 import java.io.*;
 
+/**
+ * Class responsible for loading simulation data from saved files.
+ * Implements Runnable and Serializable interfaces to support concurrent execution and object persistence.
+ */
 public class SimulationLoad implements Runnable, Serializable {
     private final String filePath;
 
+    /**
+     * Creates a new SimulationLoad instance with the specified file path.
+     *
+     * @param filePath The path to the simulation save file
+     */
     public SimulationLoad(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Loads simulation data using the repositories from the Repositories singleton.
+     */
     @Override
     public void run() {
         load(Repositories.getInstance().getSimRep(), Repositories.getInstance().getStationRepository(), Repositories.getInstance().getBuildingRepository());
     }
 
+    /**
+     * Loads simulation data from a file into the specified repositories.
+     *
+     * @param simRep The simulator repository to load data into
+     * @param stRep The station repository to load data into
+     * @param bdRep The building repository to load data into
+     * @return true if the load operation was successful, false otherwise
+     */
     public boolean load(SimulatorRepository simRep, StationRepository stRep, BuildingRepository bdRep) {
         File file = new File(filePath);
 

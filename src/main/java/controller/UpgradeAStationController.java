@@ -64,15 +64,6 @@ public class UpgradeAStationController {
     }
 
     /**
-     * Retrieves all registered building types in the system.
-     *
-     * @return A list of all {@code BuildingType} objects available in the repository.
-     */
-    public List<BuildingType> getAvailableBuildingTypes() {
-        return buildingRepository.getBuildingTypes();
-    }
-
-    /**
      * Attempts to upgrade the given station with the specified building type,
      * considering the current simulation year.
      *
@@ -140,6 +131,17 @@ public class UpgradeAStationController {
         setStationComboBox();
     }
 
+    /**
+     * Gets a filtered list of available building types for a station based on:
+     * - Current year availability
+     * - Existing buildings (to prevent duplicates)
+     * - Mutual exclusivity rules (e.g., only one hotel type allowed)
+     * - Historical constraints (e.g., Telegraph not available after 1920)
+     *
+     * @param station     The station to check available buildings for.
+     * @param currentYear The current simulation year.
+     * @return A filtered list of building types that can be added to the station.
+     */
     public List<BuildingType> getFilteredAvailableBuildingTypes(Station station, int currentYear) {
         List<BuildingType> filteredBuildingTypes = new ArrayList<>();
         List<BuildingType> allTypes = buildingRepository.getBuildingTypes();
@@ -196,6 +198,14 @@ public class UpgradeAStationController {
         return filteredBuildingTypes;
     }
 
+    /**
+     * Deducts the cost of a building from the scenario's budget.
+     *
+     * @param station  The station being upgraded.
+     * @param Building The building type being added.
+     * @param Scenario The current scenario containing the budget.
+     * @return {@code true} if the budget was sufficient and deducted; {@code false} otherwise.
+     */
     public boolean DeductBudget(Station station, BuildingType Building, Scenario Scenario) {
         int currentBudget = Scenario.getBudget().getBudget();
         int buildingBudget = Building.getCost();
@@ -209,6 +219,10 @@ public class UpgradeAStationController {
         }
     }
 
+    /**
+     * Populates the station combo box with available stations from the current map and scenario.
+     * Updates the {@code hasStations} flag based on whether any stations are available.
+     */
     @FXML
     public void setStationComboBox() {
         List<Station> stationList = stationRepository.getStations();
@@ -226,6 +240,12 @@ public class UpgradeAStationController {
         stationComboBox.getItems().setAll(selectedStations);
     }
 
+    /**
+     * Updates the building combo box with available building types for the selected station.
+     * Filters buildings based on the current year and existing buildings at the station.
+     *
+     * @param event The action event that triggered this method.
+     */
     @FXML
     public void setBuildingComboBox(javafx.event.ActionEvent event) {
         Station station = stationComboBox.getValue();
@@ -241,16 +261,17 @@ public class UpgradeAStationController {
         buildingComboBox.getItems().setAll(buildings);
     }
 
-
+    /**
+     * Handles the upgrade action when the user clicks the upgrade button.
+     * Validates the selection, checks budget, and adds the building if all conditions are met.
+     */
     @FXML
     public void onUpgrade() {
-
         Budget budget = currentScenario.getBudget();
         Station station = stationComboBox.getValue();
 
         BuildingType selectedType = buildingComboBox.getValue();
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-
 
         if (station == null || selectedType == null) {
             labelTest.setText("Please select both a station and a building.");
@@ -275,10 +296,19 @@ public class UpgradeAStationController {
         handleBackToMenu();
     }
 
-    public boolean hasStations(){
+    /**
+     * Checks if there are any stations available for upgrade in the current scenario.
+     *
+     * @return {@code true} if there are stations available; {@code false} otherwise.
+     */
+    public boolean hasStations() {
         return hasStations;
     }
 
+    /**
+     * Handles navigation back to the player menu.
+     * Closes the current window and opens the player menu with the current scenario.
+     */
     @FXML
     private void handleBackToMenu() {
         try {

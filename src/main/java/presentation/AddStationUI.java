@@ -6,15 +6,31 @@ import domain.Station;
 import domain.Scenario;
 import java.util.Scanner;
 
+/**
+ * User interface for adding a new station to the map.
+ * Implements Runnable to support concurrent execution.
+ */
 public class AddStationUI implements Runnable {
     private Map map;
     private Scenario scenario;
 
+    /**
+     * Creates a new AddStationUI instance with the specified map and scenario.
+     *
+     * @param map The map where the station will be added
+     * @param scenario The current scenario containing budget information
+     */
     public AddStationUI(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
     }
 
+    /**
+     * Handles user input for adding a new station.
+     * Displays available station types and their prices.
+     * Collects station type, orientation (if applicable), and position information.
+     * Uses AddStationController to process the station addition.
+     */
     public void getInput() {
         Scanner sc = new Scanner(System.in);
 
@@ -50,6 +66,10 @@ public class AddStationUI implements Runnable {
         System.out.println(result);
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Executes the station addition process.
+     */
     @Override
     public void run() {
         getInput();

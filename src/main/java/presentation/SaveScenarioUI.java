@@ -8,16 +8,30 @@ import domain.Scenario;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * User interface for saving a scenario to a file.
+ * Implements Runnable to support concurrent execution.
+ */
 public class SaveScenarioUI implements Runnable {
 
     private final SaveScenarioController controller = new SaveScenarioController();
     private final Map selectedMap;
     Scanner ler = new Scanner(System.in);
 
+    /**
+     * Creates a new SaveScenarioUI instance with the specified map.
+     *
+     * @param selectedMap The map containing the scenarios to be saved
+     */
     public SaveScenarioUI(Map selectedMap) {
         this.selectedMap = selectedMap;
     }
 
+    /**
+     * Implementation of the Runnable interface.
+     * Displays available scenarios for the selected map and handles user selection.
+     * Saves the selected scenario to a file.
+     */
     @Override
     public void run() {
         List<Scenario> scenarios = selectedMap.getScenarios();

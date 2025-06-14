@@ -9,92 +9,75 @@ actor "Player" as Player
 participant ":UpgradeAStationUI" as UI
 participant ":UpgradeAStationController" as CTRL
 participant ":Scenario" as Scenario
-participant ":StationUpgradeService" as Service
 
 activate Player
 
 Player -> UI : start the simulation
 activate UI
-
-UI --> Player : shows a list of the available maps
-Player -> UI : selects a map
-UI --> Player : shows a list of the available scenarios
-Player -> UI : selects a scenario
-UI --> Player : shows a list of the cities
-Player -> UI : selects a city
-UI --> Player : shows a list of the actions the player can do
-Player -> UI : selects to upgrade a station
+UI --> Player : shows list of maps
+Player -> UI : selects map
+UI --> Player : shows list of scenarios
+Player -> UI : selects scenario
+UI --> Player : shows list of actions
+Player -> UI : selects “Upgrade Station”
 
 UI -> CTRL : create()
 activate CTRL
 
-        ref over CTRL
-            Get Station Repositories
-        end
-
-        ref over CTRL
-            Get Available Stations
-        end
-
-autonumber 17
-CTRL --> UI : send stations
-UI --> Player : show available stations
-Player -> UI : selects a station
-
-UI -> Scenario : getCurrentYear()
-activate Scenario
-Scenario --> UI : currentYear
-deactivate Scenario
-
-UI -> CTRL : removeObsoleteBuildings(station, currentYear)
-
-        ref over CTRL
-            Get Building Repository
-        end
-
-autonumber 27
-UI -> CTRL : getAvailableBuildingTypes()
-
-        ref over CTRL
-            Get Available Building Types
-        end
-
-
-UI --> Player : show filtered buildings
-Player -> UI : selects building type (e.g., "Large Hotel")
-
-autonumber 33
-UI -> CTRL : getBuildingType("Large Hotel")
-
-        ref over CTRL
-            Get Building Type
-        end
-
-        ref over UI
-            Get Budget
-        end
-
-autonumber 39
-UI -> CTRL : upgradeStation(station, "Large Hotel", currentYear)
-
-        ref over CTRL
-            Upgrade Station
-        end
-
-autonumber 42
-CTRL --> UI : result
-
-alt on success
-
-        ref over UI
-            Subtract Budegt
-        end
-
-autonumber 45
-  UI --> Player : Building added successfully
-else on failure
-  UI --> Player : Show error message
+ref over CTRL
+    Get Station Repositories
 end
 
+ref over CTRL
+    Get Available Stations
+end
+
+CTRL --> UI : send stations
+UI --> Player : show stations
+Player -> UI : selects station
+UI -> CTRL : send selected station
+
+CTRL -> Scenario : getCurrentYear()
+activate Scenario
+Scenario --> CTRL : currentYear
+deactivate Scenario
+
+CTRL -> CTRL : removeObsoleteBuildings(station, currentYear)
+
+ref over CTRL
+    Get Building Repository
+end
+
+ref over CTRL
+    Get Available Building Types
+end
+
+CTRL --> UI : send building types
+UI --> Player : show building options
+Player -> UI : selects building type (“Large Hotel”)
+
+ref over CTRL
+    Get Building Type
+end
+
+UI -> CTRL : request upgrade (station, building)
+
+ref over CTRL
+    Upgrade Station
+end
+
+alt on success
+    ref over CTRL
+        Subtract Budget
+    end
+
+    CTRL --> UI : Building added successfully
+    UI --> Player : Building added successfully
+else on failure
+    CTRL --> UI : Upgrade failed
+    UI --> Player : Show error message
+end
+
+deactivate CTRL
 deactivate UI
 @enduml

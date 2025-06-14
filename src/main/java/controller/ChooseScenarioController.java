@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * Controller class responsible for managing scenario selection in the railway system.
+ * Handles the user interface for choosing and loading scenarios.
+ */
 public class ChooseScenarioController {
     @FXML
     private ComboBox<Scenario> scenarioComboBox;
@@ -31,6 +35,10 @@ public class ChooseScenarioController {
 
     private Scenario currentScenario;
 
+    /**
+     * Initializes the controller and sets up event listeners.
+     * Updates the scenario list and listens for scenario loading events.
+     */
     @FXML
     public void initialize() {
         updateScenarioList();
@@ -45,6 +53,10 @@ public class ChooseScenarioController {
         });
     }
 
+    /**
+     * Updates the list of available scenarios in the combo box.
+     * Retrieves scenarios from the repository and populates the UI.
+     */
     private void updateScenarioList() {
         ScenarioRepository scenarioRepo = Repositories.getInstance().getScenarioRepository();
         List<Scenario> scenarios = scenarioRepo.getScenarioList();
@@ -59,6 +71,10 @@ public class ChooseScenarioController {
         scenarioComboBox.setOnAction(e -> updateScenarioInfo());
     }
 
+    /**
+     * Updates the displayed information about the selected scenario.
+     * Shows map name, budget, and date range information.
+     */
     @FXML
     private void updateScenarioInfo() {
         currentScenario = scenarioComboBox.getValue();
@@ -73,6 +89,10 @@ public class ChooseScenarioController {
         budgetLabel.setText("Budget: " + budget.getBudget() + "€");
     }
 
+    /**
+     * Displays an error alert with the specified message.
+     * @param msg The error message to display
+     */
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -81,13 +101,17 @@ public class ChooseScenarioController {
     }
 
     /**
-     * Atualiza a lista de cenários disponíveis no ComboBox.
-     * Este método pode ser chamado de outras classes quando um novo cenário é carregado.
+     * Refreshes the list of available scenarios in the combo box.
+     * Can be called from other classes when a new scenario is loaded.
      */
     public void refreshScenarioList() {
         updateScenarioList();
     }
 
+    /**
+     * Handles the continue action when a scenario is selected.
+     * Opens the player menu for the selected scenario.
+     */
     @FXML
     private void handleContinue() {
         if (currentScenario == null) {

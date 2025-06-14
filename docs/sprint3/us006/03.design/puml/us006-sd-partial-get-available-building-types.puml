@@ -3,7 +3,7 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-participant ":UpgradeStationController" as ctrl
+participant ":UpgradeAStationController" as ctrl
 participant ":BuildingRepository" as bd
 
 activate ctrl
@@ -16,6 +16,7 @@ autonumber 28
         activate bd
         bd --> ctrl : List<BuildingType>
         deactivate bd
+        ctrl -> ctrl : etFilteredAvailableBuildingTypes(Station station, int currentYear)
 
     end
 

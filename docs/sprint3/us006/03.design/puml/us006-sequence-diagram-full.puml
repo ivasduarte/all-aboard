@@ -23,8 +23,6 @@ UI --> Player : shows a list of the available maps
 Player -> UI : selects a map
 UI --> Player : shows a list of the available scenarios
 Player -> UI : selects a scenario
-UI --> Player : shows a list of the cities
-Player -> UI : selects a city
 UI --> Player : shows a list of the actions the player can do
 Player -> UI : selects to upgrade a station
 
@@ -41,7 +39,7 @@ activate Repos
 Repos --> CTRL : StationRepository
 deactivate Repos
 
-CTRL -> Station_REPO : getAvailableStationsByMapName(mapName)
+CTRL -> Station_REPO : getAvailableStations(mapName)
 activate Station_REPO
 Station_REPO --> CTRL : List<Station>
 deactivate Station_REPO
@@ -50,59 +48,57 @@ CTRL --> UI : send stations
 UI --> Player : show available stations
 Player -> UI : selects a station
 
-UI -> Scenario : getCurrentYear()
+UI -> CTRL: send selected station
 activate Scenario
-Scenario --> UI : currentYear
+CTRL -> Scenario: getCurrentYear()
+Scenario --> CTRL : currentYear
 deactivate Scenario
 
-UI -> CTRL : removeObsoleteBuildings(station, currentYear)
 CTRL -> Repos : getBuildingRepository()
 activate Repos
 Repos --> CTRL : BuildingRepository
 deactivate Repos
-CTRL -> Building_REPO : getBuildingType("Telephone")
-activate Building_REPO
-Building_REPO --> CTRL : BuildingType
-deactivate Building_REPO
 
-UI -> CTRL : getAvailableBuildingTypes()
 CTRL -> Building_REPO : getBuildingTypes()
 activate Building_REPO
 Building_REPO --> CTRL : List<BuildingType>
 deactivate Building_REPO
-CTRL --> UI : buildingTypes
+CTRL -> CTRL : getFilteredAvailableBuildingTypes(Station station, int currentYear)
+CTRL --> UI : send buildingTypes
 
 UI --> Player : show filtered buildings
-Player -> UI : selects building type (e.g., "Large Hotel")
+Player -> UI : selects building type
 
-UI -> CTRL : getBuildingTypeByName("Large Hotel")
-CTRL -> Building_REPO : getBuildingType("Large Hotel")
+UI -> CTRL : send selected building type
+CTRL -> Building_REPO : getBuildingType()
 activate Building_REPO
 Building_REPO --> CTRL : BuildingType
 deactivate Building_REPO
-CTRL --> UI : BuildingType
 
-UI -> Scenario : getBudget()
-activate Scenario
-Scenario --> UI : budget
-deactivate Scenario
 
-UI -> CTRL : upgradeStation(station, "Large Hotel", currentYear)
+CTRL -> CTRL : new Building(BuildingType)
+
 CTRL -> Service : upgradeStation(station, Building, currentYear)
 activate Service
-Service --> CTRL : success/failure
+Service -> Service: checkMutualExclusivity(List<Building> existingBuildings, String newType)
+Service -> Service: upgradeStation(Station station, Building building, int currentYear)
+Service --> CTRL : success / failure
 deactivate Service
-CTRL --> UI : result
 
 alt on success
-  UI -> Scenario : subtractBudget(cost)
+  CTRL -> Scenario : subtractBudget(Buildingcost)
   activate Scenario
-  Scenario --> UI : return success
+  Scenario --> CTRL : budget updated
   deactivate Scenario
+  CTRL --> UI : building added successfully
   UI --> Player : Building added successfully
 else on failure
-  UI --> Player : Show error message
+  CTRL --> UI : building not added
+    UI --> Player : display a message (Insufficient budget)
 end
 
+
+
+destroy CTRL
 deactivate UI
 @enduml
