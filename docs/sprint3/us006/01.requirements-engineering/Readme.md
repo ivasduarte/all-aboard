@@ -48,22 +48,19 @@ is no more available).
 **Input Data:**
 
 - Map
+- Scenario
 - Station
 - Building
 
 **Output Data:**
 
-- Display's the map, with all current stations
-- Display's the station, with the buildings available
-- Message of success indicating that the building has been added
-- Message of failure indicating that the building hasn't been added.
-
+- Display all stations available in the current combination of map/scenario.
+- Message of success indicating that the building has been added, deducting the price of building from the budget.
+- Failure message indicating that the building has not been added, if the budget is not sufficient.
 
 ### 1.6. System Sequence Diagram (SSD)
 
 ![System Sequence Diagram](svg/us006-system-sequence-diagram.svg)
-
-
 
 ### 1.7 Other Relevant Remarks
 

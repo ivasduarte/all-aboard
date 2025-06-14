@@ -64,15 +64,6 @@ public class UpgradeAStationController {
     }
 
     /**
-     * Retrieves all registered building types in the system.
-     *
-     * @return A list of all {@code BuildingType} objects available in the repository.
-     */
-    public List<BuildingType> getAvailableBuildingTypes() {
-        return buildingRepository.getBuildingTypes();
-    }
-
-    /**
      * Attempts to upgrade the given station with the specified building type,
      * considering the current simulation year.
      *

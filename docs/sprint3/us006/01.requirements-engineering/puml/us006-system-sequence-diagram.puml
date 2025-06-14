@@ -28,12 +28,6 @@ activate Player
     System --> Player : shows a list of the cities
     deactivate System
 
-    Player -> System : selects a city
-    activate System
-
-    System --> Player : shows a list of the actions the player can do
-    deactivate System
-
     Player -> System : selects to upgrade a station
     activate System
 
@@ -43,16 +37,15 @@ activate Player
     Player -> System : selects the station
     activate System
 
-    System --> Player : shows a list of existing buildings in the station and those who are available to build.
+    System --> Player : shows a list of available buildings to buy
 
-
-    System --> Player : requests the type of the building.
+    System --> Player : requests the type of the building
     deactivate System
 
     Player -> System : inserts the type of the building
     activate System
 
-    System --> Player : shows a message about the success of the operation, including the data received
+    System --> Player : shows a message about the success or failure of the operation, depending on the station's buildings and budget
     deactivate System
 
 @enduml

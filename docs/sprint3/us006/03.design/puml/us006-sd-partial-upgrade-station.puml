@@ -3,18 +3,20 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-participant ":UpgradeStationController" as ctrl
-participant ":UpgradeStationService" as sv
+participant ":UpgradeAStationController" as ctrl
+participant ":StationUpgradeService" as sv
 
 activate ctrl
 
 autonumber 39
--> ctrl : upgradeStation(station, "LargeHotel", currentYear)
+-> ctrl : upgradeStation(station, Building, currentYear)
 
     group Upgrade Station
 
         ctrl -> sv : upgradeStation(station, Building, currentYear)
         activate sv
+        sv --> sv: checkMutualExclusivity(List<Building> existingBuildings, String newType)
+        sv --> sv: upgradeStation(Station station, Building building, int currentYear)
         sv --> ctrl : success/failure
         deactivate ctrl
 

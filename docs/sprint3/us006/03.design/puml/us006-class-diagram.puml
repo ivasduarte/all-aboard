@@ -51,6 +51,12 @@ class UpgradeAStationController {
   + removeObsoleteBuildings(station: Station, year: int): void
 }
 
+enum StationType {
+  DEPOT
+  STATION
+  TERMINAL
+}
+
 class StationRepository {
   + getAvailableStationsByMapName(mapName: String): List<Station>
 }
@@ -95,6 +101,11 @@ class Map {
 }
 
 class Scenario {
+- budget: Budget
+- currentYear: int
++ getCurrentYear()
++ getBudget()
++ setBudget(Budget budget)
 }
 
 Station --> Building
@@ -105,6 +116,7 @@ UpgradeAStationUI ..|> Runnable
 UpgradeAStationController ..> StationUpgradeService
 UpgradeAStationController ..> StationRepository
 UpgradeAStationController ..> BuildingRepository
+Station ..> StationType
 
 Repositories ..> StationRepository
 Repositories ..> BuildingRepository
