@@ -4,35 +4,45 @@ skinparam packageStyle rectangle
 skinparam shadowing false
 
 participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
 participant ":DisplayMapController" as mapCTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
 participant "mapRepository\n:MapRepository" as mapRep
+participant ":MapMapper" as mapper
+participant ":MapDTO" as dto
 
 
-autonumber 3.1
+autonumber 10
 
 activate UI
-activate mapCTRL
+activate CTRL
 
 group Get Map List
-    mapCTRL -> reps : getInstance()
-    activate reps
-    reps --> mapCTRL : instance
-    deactivate reps
+    UI -> CTRL : getMapList()
 
-    mapCTRL -> PLAT : getMapRepository()
-    activate PLAT
-    PLAT --> mapCTRL : mapRep
-    deactivate PLAT
-
+    CTRL -> mapCTRL : getMapList()
+    autonumber 3.1
+    activate mapCTRL
     mapCTRL -> mapRep : getMapList()
     activate mapRep
-    mapRep --> mapCTRL : List<Map>
+    mapRep --> mapCTRL : mapList
     deactivate mapRep
 
-    mapCTRL --> UI : List<Map>
+    mapCTRL -> mapper : getMapListDTO(mapList)
+    activate mapper
+    loop for each map in list
+        mapper --> dto : MapDTO = toDTO(map)
+        activate dto
+        deactivate dto
+    end
+    mapper --> mapCTRL : mapDTOList
+    deactivate mapper
+
+    mapCTRL --> CTRL : mapDTOList
     deactivate mapCTRL
+    CTRL --> UI : mapDTOList
+    deactivate CTRL
 end
 
 

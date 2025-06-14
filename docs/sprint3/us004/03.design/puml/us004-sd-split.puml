@@ -10,9 +10,12 @@ actor "Editor" as Editor
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
 participant ":DisplayMapController" as mapCTRL
+participant ":MapMapper" as mapper
+participant ":MapDTO" as dto
 participant ":Restrictions" as Restrictions
-participant ":Budget" as Budget
 participant ":Scenario" as Scenario
+participant ":Budget" as Budget
+participant ":Map" as Map
 
 activate Editor
 Editor -> UI : requests to create a scenario
@@ -20,76 +23,103 @@ Editor -> UI : requests to create a scenario
 activate UI
 UI -> CTRL** : create()
 
-UI -> mapCTRL : getMapList()
+activate CTRL
+
+    ref over CTRL
+        Get Repositories
+    end ref
+
+autonumber 9
+UI -> CTRL : getMapList()
+
+CTRL -> mapCTRL : getMapList()
 activate mapCTRL
 
     ref over mapCTRL
         Get Map List
     end ref
 
+autonumber 16
+mapCTRL --> CTRL : mapDTOList
 deactivate mapCTRL
-
-autonumber 4
+CTRL --> UI : mapDTOList
+deactivate CTRL
 
 UI -> Editor : requests to select map from list
 deactivate UI
-Editor --> UI : selects map from list
+Editor -> UI : selects map from list
 activate UI
 
 UI -> Editor : request scenario data
 deactivate UI
-Editor --> UI : provides scenario data (name, dates, locomotive types, historical events)
+Editor -> UI : provides scenario data\n(name, dates, loco types, events)
 activate UI
 
-autonumber 10
-UI -> Restrictions** : new Restrictions(startDate, endDate, locoTypes, events)
+UI -> CTRL : restrictions
+activate CTRL
+CTRL -> Restrictions : new Restrictions(startDate, endDate, locoTypes, events)
 activate Restrictions
-Restrictions --> UI : restrictions
+Restrictions --> CTRL : restrictions
 deactivate Restrictions
 
-UI -> Restrictions : validate()
+CTRL -> Restrictions : validate()
 activate Restrictions
-Restrictions --> UI : validation result
+Restrictions -> Restrictions : validateTimeRestrictions()
+Restrictions -> Restrictions : validateLocomotiveTypes()
+Restrictions -> Restrictions : validateHistoricalRestrictions()
+Restrictions --> CTRL : validation result
 deactivate Restrictions
+
+CTRL --> UI : validation result
+deactivate CTRL
 
 alt restrictions not valid
     UI -> Editor : showError("Invalid restrictions provided")
     Editor --> UI : provides new restrictions
 end
 
-UI -> CTRL : createScenario(scenarioName, restrictions, map)
+UI -> CTRL : createScenario(scenarioName, restrictions)
 activate CTRL
 
     ref over CTRL
-        Get Scenario Repository
-    end
+        Get Map
+    end ref
 
-    ref over CTRL
-        Check Name Uniqueness
-    end
-
-CTRL -> Budget** : new Budget(1000)
+autonumber 36
+CTRL -> Budget : new Budget()
 activate Budget
 Budget --> CTRL : defaultBudget
 deactivate Budget
 
-CTRL -> Scenario** : new Scenario(name, restrictions, map, defaultBudget)
+CTRL -> Scenario : create(scenarioName, restrictions, map, defaultBudget)
 activate Scenario
+Scenario -> Scenario : validateName()
+alt name not valid
+    Scenario --> CTRL : throw IllegalArgumentException
+    deactivate Scenario
+    CTRL --> UI : "ERROR: " + e.getMessage()
+    deactivate CTRL
+    UI -> Editor : showError(result)
+    Editor --> UI : provides new name
 
-    ref over Scenario
-        Validate Scenario
-    end
+else name is valid
 
-Scenario --> CTRL : scenario
-deactivate Scenario
+    activate Scenario
+    activate CTRL
+    Scenario --> CTRL : scenario
+    deactivate Scenario
 
     ref over CTRL
         Add Scenario
-    end
+    end ref
 
-CTRL --> UI : result
-deactivate CTRL
-UI --> Editor : showSuccess(result)
-deactivate UI
+    autonumber 50
+    CTRL --> UI : "Scenario '" + scenarioName + "' created successfully."
+    deactivate CTRL
 
+    UI --> Editor : showSuccess(result)
+    deactivate UI
+end
+
+deactivate Editor
 @enduml

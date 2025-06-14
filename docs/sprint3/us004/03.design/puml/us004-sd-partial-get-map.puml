@@ -1,0 +1,19 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":CreateScenarioController" as CTRL
+participant "mapRepository\n:MapRepository" as mapRep
+
+autonumber 34
+activate CTRL
+
+    group Get Map
+        CTRL -> mapRep : getMap(mapDTO)
+        activate mapRep
+        mapRep --> CTRL : map
+        deactivate mapRep
+    end
+
+@enduml

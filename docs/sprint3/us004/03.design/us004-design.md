@@ -54,17 +54,17 @@ It uses Interaction Occurrence (a.k.a. Interaction Use).
 
 ![Sequence Diagram - Partial - Get Map List](svg/us004-sd-partial-get-map-list.svg)
 
-**Get Scenario Repository**
+**Get Repositories**
 
-![Sequence Diagram - Partial - Get Map](svg/us004-sd-partial-get-scenario-repository.svg)
+![Sequence Diagram - Partial - Get Repositories](svg/us004-sd-partial-get-repositories.svg)
 
 **Check Name Uniqueness**
 
 ![Sequence Diagram - Partial - Check Name Uniqueness](svg/us004-sd-partial-check-name-uniqueness.svg)
 
-**Validate Restrictions**
+**Get Map**
 
-![Sequence Diagram - Partial - Validate Restrictions](svg/us004-sd-partial-validate-restrictions.svg)
+![Sequence Diagram - Partial - Get Map](svg/us004-sd-partial-get-map.svg)
 
 **Add Scenario**
 

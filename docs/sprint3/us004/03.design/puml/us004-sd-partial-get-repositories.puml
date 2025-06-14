@@ -6,17 +6,21 @@ skinparam shadowing false
 participant ":CreateScenarioController" as CTRL
 participant ":Repositories" as reps
 participant "repositories\n:Repositories" as PLAT
-participant "scenarioRepository\n:ScenarioRepository" as Repo
 
-autonumber 6.1
+autonumber 3
 
 activate CTRL
 
-group Get Scenario Repository
+group Get Repositories
     CTRL -> reps : getInstance()
     activate reps
-    reps --> CTRL : repositories
+    reps --> CTRL : instance
     deactivate reps
+
+    CTRL -> PLAT : getMapRepository()
+    activate PLAT
+    PLAT --> CTRL : mapRepository
+    deactivate PLAT
 
     CTRL -> PLAT : getScenarioRepository()
     activate PLAT

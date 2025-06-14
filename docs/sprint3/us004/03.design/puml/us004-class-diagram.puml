@@ -139,6 +139,21 @@ class DisplayMapController {
     +getMapList(): List<Map>
 }
 
+class MapDTO {
+    -name: String
+    -width: int
+    -height: int
+    +MapDTO(name: String, width: int, height: int)
+    +getName(): String
+    +getWidth(): int
+    +getHeight(): int
+}
+
+class MapMapper {
+    +toDTO(map: Map): MapDTO
+    +toDomain(mapDTO: MapDTO): Map
+}
+
 Repositories --> Repositories : instance
 ApplicationSession --> ApplicationSession : instance
 UserSession --> UserSession : session
@@ -162,5 +177,8 @@ Scenario --> Map : map
 Map o--> "*" Scenario : scenarios
 ScenarioRepository "1" --> "*" Scenario : scenarios
 Map --> User : createdBy
+
+MapMapper ..> Map : converts
+MapMapper ..> MapDTO : converts
 
 @enduml

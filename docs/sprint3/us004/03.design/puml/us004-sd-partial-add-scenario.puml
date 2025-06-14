@@ -8,29 +8,26 @@ participant ":CreateScenarioController" as CTRL
 participant "scenarioRepository\n:ScenarioRepository" as Repo
 participant "map\n:Map" as Map
 participant ":Scenario" as Scenario
+participant ":Budget" as Budget
 
-autonumber 19
+autonumber 45
 
 activate UI
 activate CTRL
-
-Scenario --> CTRL : scenario
-deactivate Scenario
 
 group Add Scenario
     CTRL -> Repo : add(scenario)
     activate Repo
     Repo -> Repo : validateScenario(scenario)
-    Repo --> CTRL : void
+    Repo --> CTRL : scenario
     deactivate Repo
 
     CTRL -> Map : addNewScenario(scenario)
     activate Map
-    Map --> CTRL : void
+    Map --> CTRL : new scenario
     deactivate Map
 end
 
-CTRL --> UI : "Scenario '" + name + "' created successfully."
+CTRL --> UI : "Scenario '" + scenarioName + "' created successfully."
 deactivate CTRL
-
 @enduml

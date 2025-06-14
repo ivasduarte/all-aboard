@@ -3,33 +3,35 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
+actor "Editor"
 participant ":CreateScenarioUI" as UI
 participant ":CreateScenarioController" as CTRL
-participant "map\n:Map" as Map
 participant ":Scenario" as Scenario
 
-autonumber 6.5
+autonumber 38
 
+activate Editor
 activate UI
 activate CTRL
 
-group Check Name Uniqueness
-    CTRL -> Map : getScenarios()
-    activate Map
-    Map --> CTRL : List<Scenario>
-    deactivate Map
-
-    loop for each scenario in scenarios
-        CTRL -> Scenario : getScenarioName()
+    group Check Name Uniqueness
+        CTRL -> Scenario : create(scenarioName, restrictions, map, defaultBudget)
         activate Scenario
-        Scenario --> CTRL : name
-        deactivate Scenario
+        Scenario -> Scenario : validateName()
+        alt name not valid
+            Scenario --> CTRL : throw IllegalArgumentException
+            deactivate Scenario
+            CTRL --> UI : "ERROR: " + e.getMessage()
+            deactivate CTRL
+            UI -> Editor : showError(result)
+            Editor --> UI : provides new name
 
-        alt name equals scenarioName
-            CTRL --> UI : "ERROR: A scenario with this name already exists."
-            UI --> CTRL : new scenarioName
-        end
+        else name is valid
+
+            activate Scenario
+            activate CTRL
+            Scenario --> CTRL : scenario
+            deactivate Scenario
     end
-end
 
 @enduml
