@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a train in the simulation system.
+ * Contains information about the locomotive, carriages, route, and cargo operations.
+ * Implements Serializable to support object persistence.
+ */
 public class Train implements Serializable {
     private final Locomotive locomotive;
     private List<PointOfRoute> route;
@@ -14,6 +19,12 @@ public class Train implements Serializable {
 
     private int currentCargo = 0;
 
+    /**
+     * Creates a new Train instance with the specified locomotive and departure year.
+     *
+     * @param locomotive The locomotive for this train
+     * @param departureYear The year when the train will depart
+     */
     public Train(Locomotive locomotive, int departureYear) {
         this.locomotive = locomotive;
         this.route = new ArrayList<>();
@@ -21,6 +32,11 @@ public class Train implements Serializable {
         this.departureYear = departureYear;
     }
 
+    /**
+     * Calculates the arrival time based on the route distance, locomotive speed, and number of carriages.
+     *
+     * @return The calculated arrival time
+     */
     private double calculateArrivalTime() {
         double maxSpeed = locomotive.getMaxSpeed();
 
@@ -39,15 +55,30 @@ public class Train implements Serializable {
         return distance / effectiveSpeed;
     }
 
+    /**
+     * Gets the route of this train.
+     *
+     * @return The list of route points
+     */
     public List<PointOfRoute> getRoute() {
         return route;
     }
 
+    /**
+     * Sets the route for this train and recalculates the arrival time.
+     *
+     * @param pointOfRoutes The list of route points to set
+     */
     public void setRoute(List<PointOfRoute> pointOfRoutes) {
         this.route = new ArrayList<>(pointOfRoutes);
         this.arrivalTime = calculateArrivalTime();
     }
 
+    /**
+     * Sets the route using a list of stations, creating route points for each station.
+     *
+     * @param stations The list of stations to create the route from
+     */
     public void setRouteWithStations(List<Station> stations) {
         this.route = new ArrayList<>();
 
@@ -57,14 +88,29 @@ public class Train implements Serializable {
         this.arrivalTime = calculateArrivalTime();
     }
 
+    /**
+     * Gets the locomotive of this train.
+     *
+     * @return The locomotive object
+     */
     public Locomotive getLocomotive() {
         return locomotive;
     }
 
+    /**
+     * Gets the number of carriages in this train.
+     *
+     * @return The number of carriages
+     */
     public int getNumberOfCarriages() {
         return carriages.size();
     }
 
+    /**
+     * Gets the list of carriages in this train.
+     *
+     * @return The list of carriages
+     */
     public List<Carriage> getCarriages() {
         return carriages;
     }
@@ -75,6 +121,7 @@ public class Train implements Serializable {
      * If the new number is lower than the current number, removes carriages from the end.
      *
      * @param numberOfCarriages the new number of carriages
+     * @throws IllegalArgumentException if the number of carriages is negative
      */
     public void setNumberOfCarriages(int numberOfCarriages) {
         if (numberOfCarriages < 0) {
@@ -101,7 +148,11 @@ public class Train implements Serializable {
         }
     }
 
-
+    /**
+     * Calculates the total distance of the train's route.
+     *
+     * @return The total route distance
+     */
     public double calculateRouteDistance() {
         double distance = 0;
         for(int i = 0; i < route.size() - 1; i++) {
@@ -110,6 +161,11 @@ public class Train implements Serializable {
         return distance;
     }
 
+    /**
+     * Checks if the train is running on a double track.
+     *
+     * @return true if the train is on a double track, false otherwise
+     */
     public boolean isOnDoubleTrack() {
         if (route == null || route.size() < 2) return true;
 
@@ -123,6 +179,13 @@ public class Train implements Serializable {
         return true;
     }
 
+    /**
+     * Checks if there is a double track between two stations.
+     *
+     * @param from The starting station
+     * @param to The destination station
+     * @return true if there is a double track between the stations, false otherwise
+     */
     private boolean isDoubleTrackBetween(Station from, Station to) {
         int dx = from.getPositionX() - to.getPositionX();
         int dy = from.getPositionY() - to.getPositionY();
@@ -131,12 +194,25 @@ public class Train implements Serializable {
         return distance < 15;
     }
 
+    /**
+     * Sets the cargo mode for a specific point in the route.
+     *
+     * @param pointIndex The index of the route point
+     * @param mode The cargo mode to set
+     */
     public void setCargoMode(int pointIndex, CargoMode mode) {
         if (pointIndex >= 0 && pointIndex < route.size()) {
             route.get(pointIndex).setCargoMode(mode);
         }
     }
 
+    /**
+     * Checks if the train is ready to depart from a specific point in the route.
+     *
+     * @param pointIndex The index of the route point
+     * @param currentLoad The current cargo load
+     * @return true if the train is ready to depart, false otherwise
+     */
     public boolean isReadyToDepart(int pointIndex, int currentLoad) {
         if (pointIndex >= 0 && pointIndex < route.size()) {
             return route.get(pointIndex).isReadyToDepart(currentLoad, (carriages.size() * carriages.get(0).getMaxCargo()));
@@ -144,6 +220,12 @@ public class Train implements Serializable {
         return false;
     }
 
+    /**
+     * Collects cargo from a station based on the cargo mode of the route point.
+     *
+     * @param station The station to collect cargo from
+     * @param point The route point with cargo mode settings
+     */
     public void collectCargoFromStation(Station station, PointOfRoute point) {
         int availableCargo = station.getCargo();
         int trainCapacity = this.getRemainingCapacity();
@@ -194,6 +276,11 @@ public class Train implements Serializable {
         }
     }
 
+    /**
+     * Gets the total cargo capacity of the train.
+     *
+     * @return The total capacity
+     */
     public int getTotalCapacity(){
         int totalCapacity = 0;
         for(Carriage carriage : carriages) {
@@ -202,6 +289,11 @@ public class Train implements Serializable {
         return totalCapacity;
     }
 
+    /**
+     * Gets the remaining cargo capacity of the train.
+     *
+     * @return The remaining capacity
+     */
     public int getRemainingCapacity() {
         int totalCapacity = 0;
         for(Carriage carriage : carriages) {
@@ -210,6 +302,11 @@ public class Train implements Serializable {
         return totalCapacity - currentCargo;
     }
 
+    /**
+     * Adds cargo to the train.
+     *
+     * @param amount The amount of cargo to add
+     */
     public void addCargo(int amount){
         if(amount > 0){
             int remainingCapacity = getRemainingCapacity();
@@ -220,10 +317,20 @@ public class Train implements Serializable {
         }
     }
 
+    /**
+     * Gets the current cargo load of the train.
+     *
+     * @return The current cargo amount
+     */
     public int getCurrentCargo() {
         return currentCargo;
     }
 
+    /**
+     * Removes cargo from the train.
+     *
+     * @param amount The amount of cargo to remove
+     */
     public void removeCargo(int amount) {
         if (amount > 0) {
             this.currentCargo = Math.max(0, this.currentCargo - amount);
