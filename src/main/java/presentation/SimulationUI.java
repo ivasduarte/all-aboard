@@ -88,6 +88,12 @@ public class SimulationUI implements Runnable, Serializable {
         });
     }
 
+    /**
+     * Loads the FXML interface and initializes all UI components.
+     * Sets up the scene, labels, and buttons for the simulation interface.
+     *
+     * @throws IOException if there are issues loading the FXML file or initializing components
+     */
     private void loadFXML() throws IOException {
         try {
             // Create a new FXMLLoader
@@ -133,6 +139,10 @@ public class SimulationUI implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Handles the resume button click event.
+     * Resumes the simulation and updates the UI status.
+     */
     @FXML
     private void handleResume() {
         controller.resumeSimulation();
@@ -140,6 +150,10 @@ public class SimulationUI implements Runnable, Serializable {
         appendLog("Simulation resumed.");
     }
 
+    /**
+     * Handles the pause button click event.
+     * Pauses the simulation and updates the UI status.
+     */
     @FXML
     private void handlePause() {
         controller.pauseSimulation();
@@ -147,6 +161,10 @@ public class SimulationUI implements Runnable, Serializable {
         appendLog("Simulation paused. You can now navigate the menu.");
     }
 
+    /**
+     * Handles the stop button click event.
+     * Stops the simulation, saves the current state, and closes the window.
+     */
     @FXML
     private void handleStop() {
         controller.stopSimulation();
@@ -156,6 +174,9 @@ public class SimulationUI implements Runnable, Serializable {
         primaryStage.close();
     }
 
+    /**
+     * Displays the simulation header with scenario information and date range.
+     */
     private void displaySimulationHeader() {
         appendLog("-------------------------------------------------------------------------");
         appendLog("\nSIMULATION STARTING IN SCENARIO " + selectedScenario.getScenarioName() + 
@@ -165,6 +186,9 @@ public class SimulationUI implements Runnable, Serializable {
         displayHistoricalEvents();
     }
 
+    /**
+     * Displays the historical events that will affect the simulation.
+     */
     private void displayHistoricalEvents() {
         List<String> historicalEvents = selectedScenario.getRestrictions().getHistoricalEvents();
         appendLog("\nYOUR SIMULATION WILL BE CONTINUED WITH THE FOLLOWING EVENTS: ");
@@ -175,6 +199,12 @@ public class SimulationUI implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Updates the simulation statistics display with current year and earnings.
+     *
+     * @param currentYear The current year of the simulation
+     * @param totalEarnings The total earnings for the current period
+     */
     public void updateSimulationStats(int currentYear, int totalEarnings) {
         Platform.runLater(() -> {
             yearLabel.setText("Current Year: " + currentYear);
@@ -186,6 +216,12 @@ public class SimulationUI implements Runnable, Serializable {
         });
     }
 
+    /**
+     * Updates the industry statistics display with cargo generation information.
+     *
+     * @param industry The industry being updated
+     * @param cargo The amount of cargo generated
+     */
     public void updateIndustryStats(Industry industry, int cargo) {
         Platform.runLater(() -> {
             appendLog("\n------------INDUSTRY STATS------------");
@@ -195,6 +231,13 @@ public class SimulationUI implements Runnable, Serializable {
         });
     }
 
+    /**
+     * Updates the train statistics display with financial information.
+     *
+     * @param totalEarned Total amount earned from trains
+     * @param totalLost Total amount lost from trains
+     * @param net Current net balance
+     */
     public void updateTrainStats(int totalEarned, int totalLost, int net) {
         Platform.runLater(() -> {
             appendLog("\n------------TRAIN STATS------------");
@@ -204,6 +247,15 @@ public class SimulationUI implements Runnable, Serializable {
         });
     }
 
+    /**
+     * Updates the train loading information display.
+     *
+     * @param locomotiveModel The model of the locomotive
+     * @param cargoMode The type of cargo being loaded
+     * @param stationName The name of the station
+     * @param availableCargo The amount of cargo available
+     * @param currentCargoLoad The current cargo load on the train
+     */
     public void updateTrainLoading(String locomotiveModel, String cargoMode, String stationName, 
                                  int availableCargo, int currentCargoLoad) {
         Platform.runLater(() -> {
@@ -214,10 +266,21 @@ public class SimulationUI implements Runnable, Serializable {
         });
     }
 
+    /**
+     * Updates the status label with the current simulation status.
+     *
+     * @param status The new status to display
+     */
     private void updateStatus(String status) {
         Platform.runLater(() -> statusLabel.setText("Status: " + status));
     }
 
+    /**
+     * Appends a message to the log area.
+     * Ensures thread safety by using Platform.runLater.
+     *
+     * @param message The message to append to the log
+     */
     public void appendLog(String message) {
         if (logArea == null) {
             System.err.println("Log area not initialized: " + message);
@@ -233,6 +296,11 @@ public class SimulationUI implements Runnable, Serializable {
         });
     }
 
+    /**
+     * Displays an error message in a dialog box and logs it.
+     *
+     * @param message The error message to display
+     */
     private void showError(String message) {
         Platform.runLater(() -> {
             try {

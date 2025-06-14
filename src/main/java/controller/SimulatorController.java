@@ -50,6 +50,11 @@ public class SimulatorController implements Runnable, Serializable {
         this.scenario = scenario;
     }
 
+    /**
+     * Sets the UI instance for this controller.
+     *
+     * @param ui The SimulationUI instance to set
+     */
     public void setUI(SimulationUI ui) {
         this.ui = ui;
     }
@@ -134,6 +139,17 @@ public class SimulatorController implements Runnable, Serializable {
         return simulator;
     }
 
+    /**
+     * Runs the main simulation loop.
+     * Processes each year of the simulation, handling industries, trains, and events.
+     *
+     * @param industries List of industries to process
+     * @param trains List of trains to process
+     * @param cargoMultiplier Multiplier for cargo generation
+     * @param costMultiplier Multiplier for costs
+     * @param events List of historical events affecting the simulation
+     * @throws InterruptedException if the simulation is interrupted
+     */
     private void runSimulationLoop(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier, List<String> events) throws InterruptedException {
         int year = scenario.getCurrentYear();
         int endYear = scenario.getRestrictions().getEndDate().getYear();
@@ -399,6 +415,9 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Displays locomotive statistics in the UI.
+     */
     private void displayLocomotiveStats() {
         if (ui != null) {
             ui.appendLog("\n\n------------LOCOMOTIVE STATS------------");
@@ -426,10 +445,19 @@ public class SimulatorController implements Runnable, Serializable {
         SimulateGame();
     }
 
+    /**
+     * Checks if the simulation can be started based on the current year.
+     *
+     * @return true if the simulation can be started, false otherwise
+     */
     private boolean canStartSimulation() {
         return scenario.getCurrentYear() <= scenario.getRestrictions().getEndDate().getYear();
     }
 
+    /**
+     * Initializes and runs the simulation.
+     * Sets up initial parameters and starts the simulation loop.
+     */
     private void initializeAndRunSimulation() {
         List<String> events = scenario.getRestrictions().getHistoricalEvents();
         double cargoMultiplier = calculateCargoMultiplier(events);
@@ -447,6 +475,12 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Calculates the cargo multiplier based on historical events.
+     *
+     * @param events List of historical events
+     * @return The calculated cargo multiplier
+     */
     private double calculateCargoMultiplier(List<String> events) {
         double m = 1.0;
         if (events.contains("pandemic")) m *= PANDEMIC_INITIAL_MULTIPLIER;
