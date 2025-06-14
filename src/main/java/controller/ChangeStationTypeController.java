@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class responsible for managing station type changes.
+ * Handles the upgrade process of stations to higher types.
+ */
 public class ChangeStationTypeController {
     @FXML
     private Label labelPriceDiff;
@@ -40,6 +44,10 @@ public class ChangeStationTypeController {
     private Map currentMap;
     private boolean hasStations;
 
+    /**
+     * Sets the initial data for the station type change process.
+     * @param scenario The current scenario being played
+     */
     public void setData(Scenario scenario) {
         this.currentScenario = scenario;
         this.currentMap = scenario.getMap();
@@ -53,10 +61,9 @@ public class ChangeStationTypeController {
     }
 
     /**
-     * Change the type of the station into a higher one
-     *
-     * @param station the station which type is changing
-     * @param typeID  the new type for the station
+     * Changes the type of a station to a higher one.
+     * @param station The station whose type is being changed
+     * @param typeID The ID of the new station type
      * @return true if the change was successful, false otherwise
      */
     public boolean ChangeStationType(Station station, int typeID) {
@@ -64,10 +71,18 @@ public class ChangeStationTypeController {
         return true;
     }
 
+    /**
+     * Checks if there are any stations available for type change.
+     * @return true if there are stations available, false otherwise
+     */
     public boolean hasStations() {
         return hasStations;
     }
 
+    /**
+     * Populates the station combo box with available stations for type change.
+     * Only includes stations that are not of type TERMINAL.
+     */
     @FXML
     public void setStationComboBox() {
         List<Station> stations = Repositories.getInstance().getStationRepository().getStations();

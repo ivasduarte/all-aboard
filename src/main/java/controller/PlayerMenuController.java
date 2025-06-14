@@ -276,13 +276,12 @@ public class PlayerMenuController {
     }
 
     /**
-     * Handles the action of signing off from the current session and returning to the login screen.
+     * Handles the action to sign off from the current session.
      * <p>
-     * This method attempts to load the login interface from the "login.fxml" file and display
-     * it in a new window. If the login FXML file is not found or cannot be loaded, an appropriate
-     * error message is displayed on the `messageLabel`. The method also closes the current menu window
-     * after displaying the login screen. Any IO-related exceptions encountered during the process are
-     * logged, and an error message is shown to the user.
+     * This method navigates back to the login screen by loading the login interface
+     * from the corresponding FXML file. It closes the current menu window and opens
+     * the login window. If any errors occur during this process, they are logged and
+     * an appropriate error message is displayed on the `messageLabel`.
      */
     @FXML
     private void handleSignOffButton() {

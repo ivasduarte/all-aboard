@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Controller class responsible for managing the addition of new stations to the railway system.
+ * Handles user interface interactions and station creation logic.
+ */
 public class AddStationController {
 
     @FXML
@@ -54,6 +58,11 @@ public class AddStationController {
     private Map map;
     private Scenario scenario;
 
+    /**
+     * Sets the initial data for the station creation process.
+     * @param map The map where the station will be added
+     * @param scenario The current scenario being played
+     */
     public void setData(Map map, Scenario scenario) {
         this.map = map;
         this.scenario = scenario;
@@ -81,6 +90,9 @@ public class AddStationController {
         YPosTxt.setText(String.valueOf(YPosSli.getValue()));
     }
 
+    /**
+     * Initializes the controller and sets up event listeners for position sliders.
+     */
     @FXML
     public void initialize() {
         XPosSli.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -92,6 +104,10 @@ public class AddStationController {
         });
     }
 
+    /**
+     * Handles changes in the X position text field.
+     * Validates and updates the X position slider accordingly.
+     */
     @FXML
     public void handleXPosTxt() {
         try {
@@ -109,6 +125,10 @@ public class AddStationController {
         }
     }
 
+    /**
+     * Handles changes in the Y position text field.
+     * Validates and updates the Y position slider accordingly.
+     */
     @FXML
     public void handleYPosTxt() {
         try {
@@ -126,6 +146,10 @@ public class AddStationController {
         }
     }
 
+    /**
+     * Handles changes in the station type selection.
+     * Updates the UI based on the selected station type.
+     */
     @FXML
     public void handleTypeChange() {
         Station.StationType stationType = stationTypeCmb.getValue();
@@ -138,6 +162,10 @@ public class AddStationController {
         }
     }
 
+    /**
+     * Handles the station addition process.
+     * Validates inputs and creates a new station if all conditions are met.
+     */
     @FXML
     public void handleAddStation() {
         int mapID = -1;
@@ -219,6 +247,10 @@ public class AddStationController {
         handleBackToMenu();
     }
 
+    /**
+     * Handles navigation back to the main menu.
+     * Closes the current window and opens the player menu.
+     */
     @FXML
     private void handleBackToMenu() {
         try {
@@ -242,14 +274,14 @@ public class AddStationController {
     }
 
     /**
-     * Add a station in a map
-     *
-     * @param map         map of the station
-     * @param scenario    scenario in which the budget will be subtracted from
-     * @param positionX   station's X position
-     * @param positionY   station's Y position
-     * @param stationType station type
-     * @return return true if successfully added station, false otherwise
+     * Adds a station to the specified map in the given scenario.
+     * @param map The map where the station will be added
+     * @param scenario The scenario in which the budget will be subtracted from
+     * @param positionX The X position of the station
+     * @param positionY The Y position of the station
+     * @param stationType The type of station to be added
+     * @param rotation The orientation of the station
+     * @return A message indicating the result of the operation
      */
     public String AddStation(Map map, Scenario scenario, int positionX, int positionY, int stationType, String rotation) {
         int mapID = -1;
@@ -304,6 +336,14 @@ public class AddStationController {
         return "Station added successfully under the name " + stationName;
     }
 
+    /**
+     * Generates a unique name for a new station based on its properties.
+     * @param mapName The name of the map
+     * @param posX The X position of the station
+     * @param posY The Y position of the station
+     * @param type The type of the station
+     * @return A generated station name
+     */
     public String generateStationName(String mapName, int posX, int posY, String type) {
         List<City> cities = Repositories.getInstance().getCityRepository().getCitiesByMap(mapName);
         String stationName = type;
