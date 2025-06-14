@@ -282,10 +282,17 @@ Image: Load Scenario from File screen
 
 ## Player Role
 
-After logging in as a Player, you will have access to the Player Menu with the following options:
+After logging in as a Player, you will first need to choose a scenario to play with before accessing the Player Menu functionalities.
 
-![Player Menu](newImagesUserManual/playerMenu.png)
-Image 9: Player Menu
+Step 1: Select a scenario from the list of available scenarios.
+
+![Choose Scenario](newImagesUserManual/chooseScenario.jpeg)
+Image 9: Choose Scenario screen
+
+Step 2: After selecting a scenario, you will have access to the Player Menu with the following options:
+
+![Player Menu](newImagesUserManual/playerMenu.jpeg)
+Image 10: Player Menu
 
 ### Build Station
 
@@ -301,8 +308,12 @@ Step 4: If building a Station, select the center position (NE, SE, NW, SW).
 
 Step 5: The system will propose a name for the station based on the closest city.
 
-![Build Station](newImagesUserManual/buildStation.png)
-Image 10: Build Station screen
+![Build Station](newImagesUserManual/addStation.jpeg)
+Image 11: Build Station screen
+
+![Build Station Filled Fields](newImagesUserManual/addStationFilledFields.jpeg)
+
+![Build Station Success](newImagesUserManual/addStationSuccess.jpeg)
 
 ### Upgrade Station
 
@@ -312,10 +323,23 @@ Step 1: Select "Upgrade a Station" from the Player Menu.
 
 Step 2: Select a station from the list of available stations.
 
-Step 3: Select a building to add to the station from the list of available buildings.
+![Station Selection](newImagesUserManual/upgradeStation.jpeg)
+Image 12: Station Selection screen
 
-![Upgrade Station](newImagesUserManual/upgradeStation.png)
-Image 11: Upgrade Station screen
+Step 3: Select a building type to add to the station from the list of available building types.
+
+![Building Type Selection](newImagesUserManual/upgradeStationType.jpeg)
+Image 13: Building Type Selection screen
+
+Step 4: Select a specific building to add to the station from the list of available buildings of the selected type.
+
+![Upgrade Station](newImagesUserManual/upgradeStation.jpeg)
+Image 14: Upgrade Station screen
+
+Step 5: Confirm the upgrade. The system will display a success message once the station has been upgraded.
+
+![Upgrade Station Success](newImagesUserManual/upgradeStationSuccess.jpeg)
+Image 15: Upgrade Station Success screen
 
 ### Check Station Details
 
@@ -327,8 +351,8 @@ Step 2: Select a station from the list of available stations.
 
 Step 3: The system will display the station's details, including its buildings and the demand/supply cargoes.
 
-![Check Station Details](newImagesUserManual/checkStationDetails.png)
-Image 12: Check Station Details screen
+![Check Station Details](newImagesUserManual/stationList.jpeg)
+Image 16: Check Station Details screen
 
 ### Buy Locomotive
 
@@ -342,8 +366,11 @@ Step 3: The system will display the locomotive's details, including its model, f
 
 Step 4: Confirm the purchase.
 
-![Buy Locomotive](newImagesUserManual/buyLocomotive.png)
-Image 13: Buy Locomotive screen
+![Buy Locomotive](newImagesUserManual/buyLocomotive.jpeg)
+Image 17: Buy Locomotive screen
+
+![Buy Locomotive Success](newImagesUserManual/buyLocomotiveSuccess.jpeg)
+Image 18: Buy Locomotive Success screen
 
 ### Assign Train to Route
 
@@ -360,7 +387,7 @@ Step 4: For each station, select the cargoes to be picked up.
 Step 5: Confirm the route assignment.
 
 ![Assign Train to Route](newImagesUserManual/assignTrainToRoute.png)
-Image 14: Assign Train to Route screen
+Image 19: Assign Train to Route screen
 
 ### Start Simulation 
 
@@ -377,7 +404,7 @@ Step 4: Click **"Start"** to initiate the simulation process.
 Step 5: Monitor the trains as they move along their routes, picking up and delivering cargoes at each station.
 
 ![Start Simulation](newImagesUserManual/startSimulation.png)
-Image 15: Simulation in Progress screen
+Image 20: Simulation in Progress screen
 
 During the simulation, you can view real-time status updates for each train, including current location, cargo load, and estimated time to arrival at the next station.
 
