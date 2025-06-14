@@ -41,8 +41,6 @@ This filtering is implemented during graph construction, using a helper function
 - For **steam ("1")** and **diesel ("2")** trains, all lines are valid.
 - For **electric ("3")** trains, only lines marked as electrified (`lineType = "1"`) are included.
 
-Each line is checked exactly once during construction, so this filtering contributes `O(1)` time per edge, for a total of `O(E)` in the worst case.
-
 
 #### 2.3 Path Detection with DFS
 
@@ -64,7 +62,6 @@ This approach guarantees a correct answer because DFS explores **all reachable n
 #### 2.4 Pseudocode
 
 Below are the key algorithms implemented the US13, described in pseudocode.
-
 
 > **Legend for the "Type" column:**
 > - `A`: Assignment
@@ -108,11 +105,8 @@ n = |E|, the number of edges (railway lines) in the graph.
 | Add stationB to graph[stationA]                          | nOp + nI        |       
 | Add stationA to graph[stationB]                          | nOp + nI        |       
 | Return Graph                                             | 1R              | 
-|                                                          |                 |  
-|                                                          |                 |  
-| Total                                                    | 11n + 4         |  
 
-Time complexity: Θ(E)
+Time complexity: Θ(n)
 
 
 
@@ -146,17 +140,14 @@ V = number of vertices, E = number of edges.
 
 | Pseudocode                            | Type            | 
 |---------------------------------------|-----------------|
-| If current = end                      | nC              |       
+| If current = end                      | VC              |       
 | Return true                           | 1R              |
-| Add current to visited                | nOp + nI        |       
-| For each neighbor in graph[current]   | A(n+1) + C(n+1) |
-| If neighbor not in visited            | nC              |       
-| If dfs(graph, neighbor, end, visited) | nC              |
+| Add current to visited                | VOp + VI        |       
+| For each neighbor in graph[current]   | A(E+1) + C(E+1) |
+| If neighbor not in visited            | VC              |       
+| If dfs(graph, neighbor, end, visited) | VC              |
 | Return true                           | 1R              |
 | Return false                          | 1R              |
-|                                       |                 |  
-|                                       |                 |  
-| Total                                 | 7n + 5          | 
 
 Time complexity: Θ(V + E)
 
@@ -183,9 +174,7 @@ This function performs a constant-time validation to check whether a specific tr
 | If trainType = "3":                    | 1C      |       
 | Return lineType equals "1"             | 1C + 1R |
 | Return false                           | 1R      |
-|                                        |         |  
-|                                        |         |  
-| Total                                  | 2n + 4  |
+
 
 Time complexity: Θ(1)
 
@@ -241,7 +230,6 @@ Depending on the user's selection, the algorithm may consider:
 
 Below are the key algorithms implemented the US14, described in pseudocode.
 
-
 #### a) Connectivity check ('isConnected')
 
 This function performs a depth-first search (DFS) starting from a vertex with neighbors, and verifies if all reachable vertices are part of the same connected component. Only non-isolated vertices are considered.
@@ -261,14 +249,12 @@ V = number of vertices, E = number of edges. This function iterates over all ver
 |----------------------------------------------------|-----------------|
 | visited <- empty set                               | 1A              |       
 | start <- any vertex in graph with neighbors        | 1A + 1C         |       
-| DFS                                                | nOP             |       
-| For each vertex in graph:                          | A(n+1) + C(n+1) |       
-| If vertex has neighbors and vertex not in visited: | 2nC             |      
+| DFS                                                | VOP             |       
+| For each vertex in graph:                          | A(V+1) + C(V+1) |       
+| If vertex has neighbors and vertex not in visited: | 2VC             |      
 | Return False                                       | 1R              |       
 | Return True                                        | 1R              |    
-|                                                    |                 |  
-|                                                    |                 |  
-| Total                                              | 3n + 7          | 
+
 
 
 Time complexity: Θ(V + E)
@@ -293,9 +279,6 @@ n = |V|, the number of vertices.
 | If degree(vertex) mod 2 ≠ 0  | nC + nOP |    
 | odd <- odd + 1               | nOP      |       
 | Return odd                   | 1R       | 
-|                              |          |  
-|                              |          |  
-| Total                        | 4n + 2   | 
 
 Time complexity: Θ(V)
 
@@ -328,9 +311,6 @@ V = number of vertices and E = number of edges. Although this function contains 
 | Return "Eulerian path possible"                                  | 1R       |       
 | Else:                                                            | -        |      
 | Return "No Eulerian path - more than 2 vertices with odd degree" | 1R       | 
-|                                                                  |          |  
-|                                                                  |          |  
-| Total                                                            | 9        | 
 
 Time complexity: Θ(V + E)
 
