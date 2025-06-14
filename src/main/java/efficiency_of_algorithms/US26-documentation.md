@@ -134,9 +134,7 @@ V = number of vertices, E = number of edges.
 |-------------------------------------------------|------|
 | visited <- empty set                            | 1A   |       
 | Return dfs(graph, start, end, visited)          | 1R   | 
-|                                                 |      |  
-|                                                 |      |  
-| Total                                           | 2    |   
+
 
 | Pseudocode                            | Type            | 
 |---------------------------------------|-----------------|
