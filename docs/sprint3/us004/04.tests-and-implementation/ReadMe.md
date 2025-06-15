@@ -378,8 +378,11 @@ void testGetScenariosWithExactNameMatch() {
 package controller;
 
 import domain.*;
+import dto.MapDTO;
+import dto.MapMapper;
 import repositories.Repositories;
 import repositories.ScenarioRepository;
+import repositories.MapRepository;
 
 import java.util.List;
 
@@ -390,6 +393,7 @@ import java.util.List;
  */
 public class CreateScenarioController {
     private ScenarioRepository scenarioRepository;
+    private MapRepository mapRepository;
 
     /**
      * Creates a new scenario with the specified name, restrictions, and map.
@@ -404,18 +408,21 @@ public class CreateScenarioController {
      */
     public String createScenario(String name, Restrictions restrictions, Map map) {
         try {
-            UserSession userSession = ApplicationSession.getInstance().getCurrentSession();
             ScenarioRepository scenarioRepository = Repositories.getInstance().getScenarioRepository();
+            List<Scenario> scenarios = map.getScenarios();
 
-            if (scenarioRepository.existsByName(name)) {
-                return "ERROR: A scenario with this name already exists.";
+            for(Scenario scenario : scenarios)
+            {
+                if(scenario.getScenarioName().equalsIgnoreCase(name))
+                    return "ERROR: A scenario with this name already exists.";
             }
 
             Budget defaultBudget = new Budget(1000);
             Scenario scenario = new Scenario(name, restrictions, map, defaultBudget);
             scenarioRepository.add(scenario);
+            map.addNewScenario(scenario);
 
-            return "Scenario '" + name + "' created successfully.";
+            return "\nScenario '" + name + "' created successfully.";
         } catch (IllegalArgumentException e){
             return "ERROR: " + e.getMessage();
         } catch (Exception e){
@@ -439,6 +446,31 @@ public class CreateScenarioController {
     }
 
     /**
+     * Retrieves the {@code MapRepository} associated with this controller.
+     * If the repository has not been instantiated, it initializes it using the
+     * {@code Repositories} singleton, ensuring a single shared instance.
+     *
+     * @return The {@code MapRepository} instance used for managing maps.
+     */
+    private MapRepository getMapRepository() {
+        if(mapRepository == null) {
+            Repositories repo = Repositories.getInstance();
+            mapRepository = repo.getMapRepository();
+        }
+        return mapRepository;
+    }
+
+    /**
+     * Retrieves a list of all available maps as DTOs.
+     * This method converts the domain Map objects to MapDTO objects for presentation purposes.
+     *
+     * @return A list of MapDTO objects representing all available maps.
+     */
+    public List<MapDTO> getMapListDTO() {
+        return MapMapper.toDTO(getMapRepository().getMapList());
+    }
+
+    /**
      * Retrieves a list of all available scenarios from the repository.
      * The scenarios represent configurations defined for specific use cases
      * and include attributes such as name, restrictions, and associated map details.
@@ -450,6 +482,10 @@ public class CreateScenarioController {
     public List<Scenario> getScenarioList() {
         return getScenarioRepository().getScenarioList();
     }
+
+    public List<Scenario> getScenarioListByMap(Map map) {
+        return getScenarioRepository().getScenarioListByMap(map);
+    }
 }
 ```
 
@@ -459,23 +495,33 @@ public class CreateScenarioController {
 ```java
 package repositories;
 
+import domain.Map;
 import domain.Scenario;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import java.util.Scanner;
+
 
 /**
  * The {@code ScenarioRepository} class provides functionality to manage a collection of {@code Scenario} objects.
  * It allows adding, validating, retrieving, and checking the existence of scenarios by their names.
  */
-public class ScenarioRepository {
+public class ScenarioRepository implements Serializable {
+    static Scanner ler = new Scanner(System.in);
     private List<Scenario> scenarios;
 
     /**
      * Constructs a new instance of the {@code ScenarioRepository} class.
      * This constructor initializes an internal list for storing scenarios.
-     *
+     * <p>
      * The repository is designed to manage a collection of scenarios, providing
      * functionalities such as adding new scenarios, retrieving scenarios, validating
      * scenarios, and checking for the existence of a scenario by name.
@@ -489,10 +535,13 @@ public class ScenarioRepository {
      * This method validates the provided scenario using the {@code validateScenario} method
      * and, if valid, adds it to the internal list of scenarios.
      *
-     * @param scenario  The scenario to be added to the repository. Must not be null and must pass validation.
+     * @param scenario The scenario to be added to the repository. Must not be null and must pass validation.
      */
-    public void add(Scenario scenario){
-        if(validateScenario(scenario)){
+    public void add(Scenario scenario) {
+        if (scenario == null) {
+            throw new IllegalArgumentException("Scenario cannot be null");
+        }
+        if (validateScenario(scenario)) {
             scenarios.add(scenario);
         }
     }
@@ -501,12 +550,11 @@ public class ScenarioRepository {
      * Validates if the provided scenario is not already present in the repository's list of scenarios.
      * This method checks the repository's internal collection to ensure the scenario is unique.
      *
-     * @param scenario      The scenario to validate. Must not be null. The object's equality is checked 
-     *                      against existing scenarios in the repository.
-     * @return              true if the scenario does not already exist in the repository; false otherwise.
+     * @param scenario The scenario to validate. Must not be null. The object's equality is checked
+     *                 against existing scenarios in the repository.
+     * @return true if the scenario does not already exist in the repository; false otherwise.
      */
-    private boolean validateScenario(Scenario scenario){
-        System.out.println(!scenarios.contains(scenario));
+    private boolean validateScenario(Scenario scenario) {
         return !scenarios.contains(scenario);
     }
 
@@ -515,12 +563,15 @@ public class ScenarioRepository {
      * This method iterates through the stored scenarios and compares their names
      * (case-insensitively) with the provided name.
      *
-     * @param name      The name of the scenario to check. Must not be null.
-     * @return          true if a scenario with the specified name exists in the repository; false otherwise.
+     * @param name The name of the scenario to check. Must not be null.
+     * @return true if a scenario with the specified name exists in the repository; false otherwise.
      */
     public boolean existsByName(String name) {
-        for (int i = 0; i < scenarios.size(); i++){
-            if(scenarios.get(i).getScenarioName().equalsIgnoreCase(name)){
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        for (Scenario scenario : scenarios) {
+            if (scenario.getScenarioName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -529,15 +580,32 @@ public class ScenarioRepository {
 
     /**
      * Retrieves an unmodifiable list of all stored scenarios in the repository.
-     *
+     * <p>
      * This method returns a copy of the internal collection of scenarios,
      * ensuring that the returned list cannot be modified by the caller.
      *
-     * @return  An unmodifiable {@code List} of {@code Scenario} objects representing all scenarios
-     *          currently stored in the repository.
+     * @return An unmodifiable {@code List} of {@code Scenario} objects representing all scenarios
+     * currently stored in the repository.
      */
-    public List<Scenario> getScenarioList(){
+    public List<Scenario> getScenarioList() {
         return List.copyOf(scenarios);
+    }
+
+    /**
+     * Retrieves an unmodifiable list of scenarios associated with a specific map.
+     *
+     * @param map The map to filter scenarios by
+     * @return An unmodifiable list of scenarios associated with the specified map
+     */
+    public List<Scenario> getScenarioListByMap(Map map) {
+        List<Scenario> filteredScenarios = new ArrayList<>();
+
+        for (Scenario scenario : scenarios) {
+            if (scenario.getMap().equals(map)) {
+                filteredScenarios.add(scenario);
+            }
+        }
+        return List.copyOf(filteredScenarios);
     }
 
     /**
@@ -545,13 +613,118 @@ public class ScenarioRepository {
      * This method filters the internal list of scenarios by comparing their names
      * to the specified name and returns the first match if available.
      *
-     * @param name      The name of the scenario to retrieve. Must not be null.
-     * @return          An {@code Optional} containing the matching {@code Scenario}
-     *                  if a scenario with the specified name exists; otherwise, an 
-     *                  empty {@code Optional}.
+     * @param name The name of the scenario to retrieve. Must not be null.
+     * @return An {@code Optional} containing the matching {@code Scenario}
+     * if a scenario with the specified name exists; otherwise, an
+     * empty {@code Optional}.
      */
-    public Optional<Scenario> getScenarios(String name){
-        return scenarios.stream().filter(s -> s.getScenarioName().equals(name)).findFirst();
+    public Optional<Scenario> getScenarios(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        return scenarios.stream()
+                .filter(s -> s.getScenarioName().equalsIgnoreCase(name))
+                .findFirst();
+    }
+
+    /**
+     * Loads a scenario from a file and associates it with the selected map.
+     * Validates the scenario's map matches the selected map before loading.
+     *
+     * @param fileName The path to the file containing the scenario
+     * @param selectedMap The map to associate the loaded scenario with
+     * @return The loaded scenario
+     * @throws RuntimeException if there are issues reading the file or if the file contains invalid data
+     */
+    public Scenario loadScenarioFromFile(String fileName, Map selectedMap) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+            Object obj = in.readObject();
+
+            if (!(obj instanceof Scenario)) {
+                throw new IllegalArgumentException("File does not contain a valid Scenario.");
+            }
+
+            Scenario scenario = (Scenario) obj;
+
+            Map mapFromFile = scenario.getMap();
+
+            if (mapFromFile.getName().equalsIgnoreCase(selectedMap.getName())) {
+                if (!selectedMap.hasScenario(scenario)) {
+                    selectedMap.addNewScenario(scenario);
+                    if (!scenarios.contains(scenario)) {
+                        scenarios.add(scenario);
+                    }
+                    System.out.printf("\nSuccessfully loaded \"%s\" into map \"%s\".%n",
+                            scenario.getScenarioName(), selectedMap.getName());
+                } else {
+                    System.out.printf("Scenario \"%s\" already exists in this map.%n", scenario.getScenarioName());
+                }
+            } else {
+                System.out.printf("Scenario \"%s\" belongs to map \"%s\" and cannot be loaded into \"%s\".%n",
+                        scenario.getScenarioName(), mapFromFile.getName(), selectedMap.getName());
+            }
+            return scenario;
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Failed to load scenario from file: " + fileName, e);
+        }
+    }
+
+    /**
+     * Saves a scenario to a file.
+     * Validates the scenario before saving and handles file overwrite confirmation.
+     *
+     * @param scenario The scenario to save
+     * @throws IllegalArgumentException if the scenario is null or invalid
+     */
+    public void saveScenarioToFile(Scenario scenario) {
+        if (scenario == null) {
+            throw new IllegalArgumentException("Scenario is null.");
+        }
+        if (!scenario.validateName()) {
+            throw new IllegalArgumentException("Scenario name is invalid: " + scenario.getScenarioName());
+        }
+        if (!scenario.validateRestrictions()) {
+            throw new IllegalArgumentException("Scenario restrictions are invalid.");
+        }
+        if (!scenario.hasValidMap()) {
+            throw new IllegalArgumentException("Scenario map is invalid.");
+        }
+
+        String directory = "scenarios";
+        new File(directory).mkdirs();
+        String fileName = directory + "/" + scenario.getScenarioName() + ".ser";
+
+        File file = new File(fileName);
+        if (file.exists()) {
+            System.out.println("File already exists. Overwrite? (Y/N)");
+            String input = ler.nextLine();
+            if (!input.equalsIgnoreCase("Y")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+        }
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            out.writeObject(scenario);
+            System.out.println("Scenario saved successfully in: " + new File(fileName).getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Failed to save scenario: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves a scenario from the repository by its name.
+     *
+     * @param name The name of the scenario to retrieve
+     * @return The scenario with the specified name, or null if not found
+     */
+    public Scenario getScenarioByName(String name) {
+        for (Scenario scenario : scenarios) {
+            if (scenario.getScenarioName().equalsIgnoreCase(name)) {
+                return scenario;
+            }
+        }
+        return null;
     }
 }
 ```
