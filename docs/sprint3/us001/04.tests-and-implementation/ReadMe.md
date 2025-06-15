@@ -199,6 +199,9 @@ public class MapRepository implements Serializable {
      * @param map The Map instance to be added to the repository. It must not already exist in the collection.
      */
     public void add(Map map){
+        if (map == null) {
+            throw new IllegalArgumentException("Map cannot be null");
+        }
         if(validateMap(map)){
             maps.add(map);
         }
@@ -222,6 +225,9 @@ public class MapRepository implements Serializable {
      *         {@code false} otherwise.
      */
     public boolean existsByName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
         for (int i = 0; i < maps.size(); i++) {
             if (maps.get(i).getName().equalsIgnoreCase(name)) {
                 return true;
@@ -254,7 +260,10 @@ public class MapRepository implements Serializable {
      *              or an empty {@code Optional} if no match is found.
      */
     public Optional<Map> getMap(String name) {
-        return maps.stream().filter(m -> m.getName().equals(name)).findFirst();
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        return maps.stream().filter(m -> m.getName().equalsIgnoreCase(name)).findFirst();
     }
 
 }
