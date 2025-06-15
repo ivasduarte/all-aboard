@@ -1,7 +1,6 @@
 unnamed package
 controller
 domain
-dto
 maintenance_route_finder
 performance_testing
 presentation

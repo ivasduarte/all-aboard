@@ -40,9 +40,7 @@ public class MapSave implements Runnable, Serializable {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file, false));
 
-            Map mapToSave = new Map(map.getName(), map.getWidth(), map.getHeight(), map.getCellSizeKm());
-
-            out.writeObject(mapToSave);
+            out.writeObject(map);
             out.close();
 
             System.out.println("\n" + map.getName() + " has been saved!");

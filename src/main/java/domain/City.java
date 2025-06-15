@@ -6,14 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Represents a city in the railway system.
- * A city is a collection of blocks that can contain stations and industries.
- * 
- * This class manages:
- * - City layout and properties
- * - Block management and validation
- * - Station and industry placement
- * - City state persistence
+ * Represents a City consisting of a name, map details, a center position,
+ * and a collection of house blocks.
  */
 public class City implements Serializable {
     private final String name;

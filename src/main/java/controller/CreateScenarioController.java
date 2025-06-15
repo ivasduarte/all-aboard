@@ -106,14 +106,6 @@ public class CreateScenarioController {
         return getScenarioRepository().getScenarioList();
     }
 
-    /**
-     * Retrieves a list of scenarios associated with a specific map.
-     * This method filters the scenarios in the repository to return only those
-     * that are linked to the provided map.
-     *
-     * @param map The map for which to retrieve associated scenarios
-     * @return A list of Scenario objects that are associated with the specified map
-     */
     public List<Scenario> getScenarioListByMap(Map map) {
         return getScenarioRepository().getScenarioListByMap(map);
     }

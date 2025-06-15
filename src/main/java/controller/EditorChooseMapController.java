@@ -12,11 +12,6 @@ import ui.menu.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Controller class responsible for managing map selection in the editor interface.
- * Handles the retrieval and validation of maps, as well as creating menu options
- * for map-related operations in the editor.
- */
 public class EditorChooseMapController {
     private MapRepository mapRepository;
 

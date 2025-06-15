@@ -1,10 +1,5 @@
 package domain;
 
-/**
- * Represents a date with year, month, and day components.
- * This class provides functionality for date manipulation, validation,
- * and conversion between different date formats.
- */
 public class Date {
     /**
      * The year of the date.

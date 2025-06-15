@@ -276,8 +276,12 @@ public class PlayerMenuController {
     }
 
     /**
-     * Handles the sign off action by closing the current window and returning to the login screen.
-     * This method loads the login interface and displays it in a new window.
+     * Handles the action to sign off from the current session.
+     * <p>
+     * This method navigates back to the login screen by loading the login interface
+     * from the corresponding FXML file. It closes the current menu window and opens
+     * the login window. If any errors occur during this process, they are logged and
+     * an appropriate error message is displayed on the `messageLabel`.
      */
     @FXML
     private void handleSignOffButton() {
@@ -304,11 +308,6 @@ public class PlayerMenuController {
         }
     }
 
-    /**
-     * Handles the action of upgrading a station's type.
-     * This method loads the station type upgrade interface and initializes it with the current scenario data.
-     * If no stations are available, an error alert is displayed.
-     */
     @FXML
     private void handleUpgradeAStationType() {
         try {
@@ -345,11 +344,6 @@ public class PlayerMenuController {
         }
     }
 
-    /**
-     * Handles the action of assigning a train to a route.
-     * This method loads the route assignment interface and initializes it with the current scenario data.
-     * If no stations are available, an error alert is displayed.
-     */
     @FXML
     private void handleAssignRoute() {
         try {
