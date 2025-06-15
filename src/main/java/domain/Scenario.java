@@ -214,9 +214,6 @@ public class Scenario implements Serializable {
      * @return The new budget total after addition
      */
     public int addBudget(int amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("Amount cannot be negative");
-        }
         budget.setBudget(budget.getBudget() + amount);
         return budget.getBudget();
     }

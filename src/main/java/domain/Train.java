@@ -19,6 +19,10 @@ public class Train implements Serializable {
 
     private int currentCargo = 0;
 
+    private Station waitingAtStation;
+    private int waitingAtRouteIndex;
+    private boolean isWaiting;
+
     /**
      * Creates a new Train instance with the specified locomotive and departure year.
      *
@@ -133,7 +137,7 @@ public class Train implements Serializable {
         if (numberOfCarriages > currentSize) {
             // add new carriages
             for (int i = 0; i < numberOfCarriages - currentSize; i++) {
-                carriages.add(new Carriage(new Cargo(Cargo.Type.AUTO), 150, 0)); // default example
+                carriages.add(new Carriage(new Cargo(Cargo.Type.AUTO), 10, 0)); // default example
             }
         } else if (numberOfCarriages < currentSize) {
             // remove carriages from the end
@@ -365,6 +369,45 @@ public class Train implements Serializable {
             System.out.println("[DELIVERY] Unloaded " + toUnload + " cargo units at station " + station.getName());
         }
         return toUnload;
+    }
+
+    /**
+     * Sets the train to wait at a specific station and route index
+     */
+    public void setWaitingAtStation(Station station, int routeIndex) {
+        this.waitingAtStation = station;
+        this.waitingAtRouteIndex = routeIndex;
+        this.isWaiting = true;
+    }
+
+    /**
+     * Clears the waiting state when train is ready to proceed
+     */
+    public void clearWaitingState() {
+        this.waitingAtStation = null;
+        this.waitingAtRouteIndex = -1;
+        this.isWaiting = false;
+    }
+
+    /**
+     * Checks if train is currently waiting at a station
+     */
+    public boolean isWaitingAtStation() {
+        return isWaiting;
+    }
+
+    /**
+     * Gets the station where train is waiting
+     */
+    public Station getWaitingStation() {
+        return waitingAtStation;
+    }
+
+    /**
+     * Gets the route index where train is waiting
+     */
+    public int getWaitingRouteIndex() {
+        return waitingAtRouteIndex;
     }
 
     @Override

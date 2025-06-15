@@ -26,7 +26,7 @@ public class SimulatorController implements Runnable, Serializable {
     private final double PANDEMIC_RECOVERY_RATE = 0.1;
     private final double WAR_CARGO_MULTIPLIER = 1.5;
     private final double WAR_COST_MULTIPLIER = 1.65;
-    private final int ROUTE_EARNINGS_PER_STATION = 50;
+    private final int ROUTE_EARNINGS_PER_STATION = 10;
     private final int TRACK_MAINTENANCE_COST_PER_100KM = 25;
 
     private final ShowFinancialResultsController financialController = new ShowFinancialResultsController();
@@ -244,7 +244,7 @@ public class SimulatorController implements Runnable, Serializable {
             Station to = nextPoint.getStation();
 
             if (from.getMap() == null || !from.getMap().getName().equalsIgnoreCase(map.getName()) ||
-                to.getMap() == null || !to.getMap().getName().equalsIgnoreCase(map.getName())) {
+                    to.getMap() == null || !to.getMap().getName().equalsIgnoreCase(map.getName())) {
                 continue;
             }
 
@@ -255,14 +255,18 @@ public class SimulatorController implements Runnable, Serializable {
             if (!train.isReadyToDepart(i, currentCargoLoad)) {
                 if (ui != null) {
                     ui.updateTrainLoading(train.getLocomotive().getLocomotiveModel(),
-                                        currentPoint.getCargoMode().toString(),
-                                        from.getName(),
-                                        availableCargo,
-                                        currentCargoLoad);
+                            currentPoint.getCargoMode().toString(),
+                            from.getName(),
+                            availableCargo,
+                            currentCargoLoad);
                 }
             }
 
-            while (!train.isReadyToDepart(i, currentCargoLoad)) {
+            boolean trainReadyToDepart = train.isReadyToDepart(i, currentCargoLoad);
+
+            if (!trainReadyToDepart) {
+                train.setWaitingAtStation(from, i);
+
                 int targetCargo = 0;
                 switch (currentPoint.getCargoMode()) {
                     case FULL:
@@ -271,27 +275,52 @@ public class SimulatorController implements Runnable, Serializable {
                     case HALF:
                         targetCargo = maxTrainCapacity / 2;
                         break;
+                    case AVAILABLE:
+                        targetCargo = currentCargoLoad + Math.min(availableCargo, spaceAvailable);
+                        break;
                 }
-                int cargoToLoad = Math.min(availableCargo, Math.abs(targetCargo - currentCargoLoad));
+
+                int cargoToLoad = 0;
                 if (currentPoint.getCargoMode() == CargoMode.AVAILABLE) {
                     cargoToLoad = Math.min(availableCargo, spaceAvailable);
+                } else {
+                    int cargoNeeded = targetCargo - currentCargoLoad;
+                    if (availableCargo >= cargoNeeded) {
+                        cargoToLoad = cargoNeeded;
+                    } else {
+                        if (ui != null) {
+                            ui.appendLog("\n\n[WAITING] Train '" + train.getLocomotive().getLocomotiveModel() +
+                                    "' is waiting at '" + from.getName() + "' for " + (cargoNeeded - availableCargo) +
+                                    " more cargo units. Mode: " + currentPoint.getCargoMode().toString());
+                        }
+                        continue;
+                    }
                 }
+
                 if (cargoToLoad > 0) {
-                    from.removeCargo(cargoToLoad); // remove cargo from the station
-                    currentCargoLoad += cargoToLoad; // add cargo to the train
+                    from.removeCargo(cargoToLoad);
+                    currentCargoLoad += cargoToLoad;
                     if (ui != null) {
-                        ui.appendLog("\n\n[CARGO REMOVED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                                "' removed " + cargoToLoad + " amount from station '" + from.getName() +
+                        ui.appendLog("\n\n[CARGO LOADED] Train '" + train.getLocomotive().getLocomotiveModel() +
+                                "' loaded " + cargoToLoad + " units from station '" + from.getName() +
                                 "'.\nAvailable cargo at station: " + from.getCargo() +
                                 "\nTotal cargo on train: " + currentCargoLoad);
                     }
                 }
+
+                trainReadyToDepart = train.isReadyToDepart(i, currentCargoLoad);
+                if (!trainReadyToDepart) {
+                    if (ui != null) {
+                        ui.appendLog("\n\n[STILL WAITING] Train '" + train.getLocomotive().getLocomotiveModel() + "' still waiting at '" + from.getName() + "' for more cargo.");
+                    }
+                    continue;
+                } else {
+                    train.clearWaitingState();
+                }
             }
 
             if (ui != null) {
-                ui.appendLog("\n\n[TRAVEL] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' left from '" + from.getName() + "' to '" + to.getName() +
-                        "' with " + currentCargoLoad + " amount of cargo.");
+                ui.appendLog("\n\n[TRAVEL] Train '" + train.getLocomotive().getLocomotiveModel() + "' left from '" + from.getName() + "' to '" + to.getName() + "' with " + currentCargoLoad + " units of cargo.");
             }
 
             double distance = from.distanceTo(to);
@@ -304,34 +333,27 @@ public class SimulatorController implements Runnable, Serializable {
                 currentCargoLoad = 0;
 
                 if (ui != null) {
-                    ui.appendLog("\n\n[CARGO DELIVERED] Train '" + train.getLocomotive().getLocomotiveModel() +
-                            "' delivered " + cargoToDeliver + " amount of cargo to station '" + to.getName() +
-                            "'.");
+                    ui.appendLog("\n\n[CARGO DELIVERED] Train '" + train.getLocomotive().getLocomotiveModel() + "' delivered " + cargoToDeliver + " units of cargo to station '" + to.getName() + "'.");
 
-                    int deliveryBonus = cargoToDeliver * 10; // 10€ per unit delivered
+                    int deliveryBonus = cargoToDeliver * 10;
                     earnings += deliveryBonus;
 
-                    ui.appendLog("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
-                            "(Distance: " + (int) distance + ", Deliver bonus: " + deliveryBonus + "€)");
+                    ui.appendLog("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " + "(Distance: " + (int) distance + ", Delivery bonus: " + deliveryBonus + "€)");
                 }
             } else {
                 if (ui != null) {
-                    ui.appendLog("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " +
-                            "(Distance: " + (int) distance + ", No cargo to deliver.)");
+                    ui.appendLog("\n\n[REVENUE] Station '" + to.getName() + "': " + earnings + "€ " + "(Distance: " + (int) distance + ", No cargo to deliver.)");
                 }
             }
-
             totalEarnings += earnings;
 
             if (ui != null) {
-                ui.appendLog("\n\n[ARRIVAL] Train '" + train.getLocomotive().getLocomotiveModel() +
-                        "' arrived at '" + to.getName() + "'.");
+                ui.appendLog("\n\n[ARRIVAL] Train '" + train.getLocomotive().getLocomotiveModel() + "' arrived at '" + to.getName() + "'.");
             }
         }
 
         if (ui != null) {
-            ui.appendLog("\n\n[TRAVEL SUM] Train '" + train.getLocomotive().getLocomotiveModel() +
-                    "' completed its route.\nTotal revenue: " + totalEarnings + "€");
+            ui.appendLog("\n\n[ROUTE SUMMARY] Train '" + train.getLocomotive().getLocomotiveModel() + "' completed available segments of its route.\nTotal revenue: " + totalEarnings + "€");
         }
 
         return totalEarnings;
