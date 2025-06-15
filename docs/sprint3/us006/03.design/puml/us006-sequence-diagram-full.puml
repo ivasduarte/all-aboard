@@ -13,6 +13,7 @@ participant ":StationRepository" as Station_REPO
 participant ":BuildingRepository" as Building_REPO
 participant ":Scenario" as Scenario
 participant ":StationUpgradeService" as Service
+participant ":BuildingTypeMapper" as Mapper
 
 activate Player
 
@@ -49,10 +50,12 @@ UI --> Player : show available stations
 Player -> UI : selects a station
 
 UI -> CTRL: send selected station
-activate Scenario
 CTRL -> Scenario: getCurrentYear()
+activate Scenario
+
 Scenario --> CTRL : currentYear
 deactivate Scenario
+
 
 CTRL -> Repos : getBuildingRepository()
 activate Repos
@@ -63,8 +66,12 @@ CTRL -> Building_REPO : getBuildingTypes()
 activate Building_REPO
 Building_REPO --> CTRL : List<BuildingType>
 deactivate Building_REPO
-CTRL -> CTRL : getFilteredAvailableBuildingTypes(Station station, int currentYear)
-CTRL --> UI : send buildingTypes
+activate Mapper
+CTRL -> Mapper : toDTO(List<BuildingType>)
+Mapper --> CTRL : List<BuildingTypeDTO>
+deactivate Mapper
+CTRL --> UI : send buildingTypesDTO
+
 
 UI --> Player : show filtered buildings
 Player -> UI : selects building type

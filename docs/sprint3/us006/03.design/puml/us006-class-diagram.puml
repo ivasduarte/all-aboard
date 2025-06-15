@@ -108,6 +108,23 @@ class Scenario {
   + setBudget(Budget budget)
 }
 
+class BuildingTypeDTO  {
+  -name: String
+  -cost: int
+  -effect: String
+  -availableYear: int
+}
+
+class BuildingTypeMapper  {
+  +toDTO(BuildingType): BuildingTypeDTO
+  +toDomain(BuildingTypeDTO): BuildingType
+}
+
+BuildingTypeMapper --> BuildingType
+BuildingTypeMapper --> BuildingTypeDTO
+UpgradeAStationController ..> BuildingTypeMapper : uses
+
+
 
 Station --> Building : contains
 Building --> BuildingType : defined by
