@@ -39,6 +39,8 @@ class BuildingType {
 
 class StationUpgradeService {
   + upgradeStation(station: Station, building: Building, currentYear: int): boolean
+  + validateYear(String type, int year): boolean
+  + checkMutualExclusivity(List<Building> existingBuildings, String newType): String
 }
 
 class UpgradeAStationController {
