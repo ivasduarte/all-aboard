@@ -251,7 +251,8 @@ public class BuyLocomotiveController {
     }
 
     /**
-     * This method is responsible for making the "BACK" button functional.
+     * Handles the back button action.
+     * Closes the current window when the back button is clicked.
      */
     @FXML
     public void handleBackButton() {
@@ -259,7 +260,8 @@ public class BuyLocomotiveController {
     }
 
     /**
-     * This method is used so the player can return to the player menu.
+     * Navigates back to the player menu.
+     * Closes the current window and opens the player menu interface.
      */
     private void navigateToPlayerMenu() {
         try {

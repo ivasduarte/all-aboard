@@ -16,8 +16,19 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * User interface for managing the simulation.
+ * User interface for managing the simulation of a railway system.
  * Implements Runnable and Serializable to support concurrent execution and object persistence.
+ * 
+ * This class provides a graphical interface for:
+ * - Controlling simulation execution (start, pause, resume, stop)
+ * - Displaying real-time simulation statistics
+ * - Showing financial results and budget updates
+ * - Logging simulation events and activities
+ * - Managing train operations and cargo movements
+ * - Handling industry operations and cargo generation
+ * 
+ * The UI is built using JavaFX and provides interactive controls for users
+ * to monitor and control the simulation process.
  */
 public class SimulationUI implements Runnable, Serializable {
 
@@ -40,9 +51,11 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Creates a new SimulationUI instance with the specified map and scenario.
+     * Initializes the controller and sets up the UI for simulation management.
      *
-     * @param map The map to simulate
-     * @param scenario The scenario to simulate
+     * @param map The map to simulate, containing stations, industries, and routes
+     * @param scenario The scenario to simulate, containing simulation parameters and constraints
+     * @throws IllegalArgumentException if map or scenario is null
      */
     public SimulationUI(Map map, Scenario scenario) {
         this.selectedMap = map;
@@ -56,6 +69,16 @@ public class SimulationUI implements Runnable, Serializable {
      * Implementation of the Runnable interface.
      * Manages the simulation lifecycle including starting, pausing, resuming, and stopping.
      * Provides a graphical interface for controlling the simulation.
+     * 
+     * This method:
+     * - Initializes the JavaFX stage and scene
+     * - Loads the FXML interface
+     * - Sets up UI components and event handlers
+     * - Starts the simulation in a separate thread
+     * - Displays initial simulation information
+     * 
+     * @throws IllegalStateException if required components fail to initialize
+     * @throws IOException if there are issues loading the FXML file
      */
     @Override
     public void run() {
@@ -91,8 +114,17 @@ public class SimulationUI implements Runnable, Serializable {
     /**
      * Loads the FXML interface and initializes all UI components.
      * Sets up the scene, labels, and buttons for the simulation interface.
+     * 
+     * This method:
+     * - Creates and configures the FXMLLoader
+     * - Loads the FXML file
+     * - Initializes all UI components
+     * - Sets up event handlers
+     * - Configures the stage and scene
+     * - Displays initial simulation information
      *
-     * @throws IOException if there are issues loading the FXML file or initializing components
+     * @throws IOException if there are issues loading the FXML file
+     * @throws IllegalStateException if UI components fail to initialize
      */
     private void loadFXML() throws IOException {
         try {
@@ -142,6 +174,12 @@ public class SimulationUI implements Runnable, Serializable {
     /**
      * Handles the resume button click event.
      * Resumes the simulation and updates the UI status.
+     * 
+     * This method:
+     * - Resumes the simulation through the controller
+     * - Updates the UI status to "RUNNING"
+     * - Logs the resume action
+     * - Updates button states if necessary
      */
     @FXML
     private void handleResume() {
@@ -153,6 +191,12 @@ public class SimulationUI implements Runnable, Serializable {
     /**
      * Handles the pause button click event.
      * Pauses the simulation and updates the UI status.
+     * 
+     * This method:
+     * - Pauses the simulation through the controller
+     * - Updates the UI status to "PAUSED"
+     * - Logs the pause action
+     * - Updates button states if necessary
      */
     @FXML
     private void handlePause() {
@@ -164,6 +208,13 @@ public class SimulationUI implements Runnable, Serializable {
     /**
      * Handles the stop button click event.
      * Stops the simulation, saves the current state, and closes the window.
+     * 
+     * This method:
+     * - Stops the simulation through the controller
+     * - Saves the current simulation state
+     * - Updates the UI status to "STOPPED"
+     * - Logs the stop action
+     * - Closes the simulation window
      */
     @FXML
     private void handleStop() {
@@ -176,6 +227,12 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Displays the simulation header with scenario information and date range.
+     * 
+     * This method:
+     * - Shows the scenario name and date range
+     * - Displays the current budget
+     * - Shows historical events that will affect the simulation
+     * - Formats the information for clear presentation
      */
     private void displaySimulationHeader() {
         appendLog("-------------------------------------------------------------------------");
@@ -188,6 +245,12 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Displays the historical events that will affect the simulation.
+     * 
+     * This method:
+     * - Retrieves the list of historical events
+     * - Filters out "none" events
+     * - Formats and displays each event
+     * - Provides context for how events will affect the simulation
      */
     private void displayHistoricalEvents() {
         List<String> historicalEvents = selectedScenario.getRestrictions().getHistoricalEvents();
@@ -201,6 +264,12 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Updates the simulation statistics display with current year and earnings.
+     * 
+     * This method:
+     * - Updates the current year display
+     * - Shows total earnings for the period
+     * - Updates the budget display
+     * - Formats the information for clear presentation
      *
      * @param currentYear The current year of the simulation
      * @param totalEarnings The total earnings for the current period
@@ -218,6 +287,11 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Updates the industry statistics display with cargo generation information.
+     * 
+     * This method:
+     * - Shows the industry type and location
+     * - Displays the amount of cargo generated
+     * - Formats the information for clear presentation
      *
      * @param industry The industry being updated
      * @param cargo The amount of cargo generated
@@ -233,6 +307,12 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Updates the train statistics display with financial information.
+     * 
+     * This method:
+     * - Shows total earnings from trains
+     * - Displays total losses
+     * - Calculates and shows the net balance
+     * - Formats the information for clear presentation
      *
      * @param totalEarned Total amount earned from trains
      * @param totalLost Total amount lost from trains
@@ -249,6 +329,12 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Updates the train loading information display.
+     * 
+     * This method:
+     * - Shows the locomotive model and cargo mode
+     * - Displays the station name
+     * - Shows available cargo and current load
+     * - Formats the information for clear presentation
      *
      * @param locomotiveModel The model of the locomotive
      * @param cargoMode The type of cargo being loaded
@@ -268,6 +354,11 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Updates the status label with the current simulation status.
+     * 
+     * This method:
+     * - Updates the status label text
+     * - Ensures thread safety using Platform.runLater
+     * - Maintains UI responsiveness
      *
      * @param status The new status to display
      */
@@ -278,6 +369,12 @@ public class SimulationUI implements Runnable, Serializable {
     /**
      * Appends a message to the log area.
      * Ensures thread safety by using Platform.runLater.
+     * 
+     * This method:
+     * - Adds the message to the log area
+     * - Scrolls to the bottom of the log
+     * - Handles null log area gracefully
+     * - Ensures thread safety for UI updates
      *
      * @param message The message to append to the log
      */
@@ -298,6 +395,12 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Displays an error message in a dialog box and logs it.
+     * 
+     * This method:
+     * - Shows an error dialog with the message
+     * - Logs the error to the log area
+     * - Handles cases where the log area is not initialized
+     * - Ensures thread safety for UI updates
      *
      * @param message The error message to display
      */
@@ -324,6 +427,12 @@ public class SimulationUI implements Runnable, Serializable {
     /**
      * Saves the current simulation state to a file.
      * Uses a separate thread to perform the save operation.
+     * 
+     * This method:
+     * - Creates a SimulationSave instance
+     * - Sets up the UI reference
+     * - Starts the save operation in a new thread
+     * - Logs the save attempt
      */
     private void saveSimulation() {
         SimulationSave saver = new SimulationSave(DEFAULT_SIMULATION_FILE, 
@@ -337,8 +446,15 @@ public class SimulationUI implements Runnable, Serializable {
 
     /**
      * Attempts to load a previous simulation state from a file.
+     * 
+     * This method:
+     * - Creates a SimulationLoad instance
+     * - Sets up the UI reference
+     * - Attempts to load the simulation
+     * - Logs the result of the load attempt
      *
      * @return true if the simulation was successfully loaded, false otherwise
+     * @throws Exception if there are issues during the load process
      */
     private boolean loadSimulation() {
         try {

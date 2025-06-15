@@ -13,6 +13,14 @@ import java.util.stream.Collectors;
  * Controller class responsible for managing the simulation of the railway system.
  * Handles the execution, pausing, resuming, and stopping of simulations, as well as
  * processing financial results and managing train operations.
+ * 
+ * This controller implements Runnable and Serializable to support concurrent execution
+ * and object persistence. It manages the simulation lifecycle, including:
+ * - Train operations and cargo management
+ * - Industry processing and cargo generation
+ * - Financial calculations and budget management
+ * - Historical event processing
+ * - UI updates and user feedback
  */
 public class SimulatorController implements Runnable, Serializable {
     private final User currentUser = UserSession.getInstance().getUser();
@@ -190,6 +198,14 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Processes a list of trains and calculates their financial impact.
+     * Handles train operations including fuel costs, maintenance, and cargo delivery.
+     *
+     * @param trains List of trains to process
+     * @param costMultiplier Multiplier for cost calculations based on historical events
+     * @return Net earnings (total earned minus total costs) from train operations
+     */
     private int processTrains(List<Train> trains, double costMultiplier) {
         if (trains == null || trains.isEmpty()) {
             return 0;
@@ -230,6 +246,14 @@ public class SimulatorController implements Runnable, Serializable {
         return net;
     }
 
+    /**
+     * Simulates a single train trip along its route.
+     * Handles cargo loading, unloading, and financial calculations for each station.
+     *
+     * @param train The train to simulate
+     * @param costMultiplier Multiplier for cost calculations
+     * @return Total earnings from the train trip
+     */
     private int simulateTrainTrip(Train train, double costMultiplier) {
         if (train.getRoute() == null || train.getRoute().isEmpty()) return 0;
 
@@ -359,6 +383,13 @@ public class SimulatorController implements Runnable, Serializable {
         return totalEarnings;
     }
 
+    /**
+     * Processes an industry's cargo generation and distribution.
+     * Finds the closest station and adds generated cargo based on available capacity.
+     *
+     * @param industry The industry to process
+     * @param cargoMultiplier Multiplier for cargo generation based on historical events
+     */
     private void processIndustry(Industry industry, double cargoMultiplier) {
         int cargo = (int) (industry.getCargoAmount() * cargoMultiplier);
         Station closestStation = findClosestStation(industry);
@@ -380,6 +411,13 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Calculates the building multiplier for a station based on its buildings.
+     * Different buildings provide different multipliers for earnings.
+     *
+     * @param station The station to calculate the multiplier for
+     * @return The calculated multiplier value
+     */
     private double calculateStationBuildingMultiplier(Station station) {
         if (station.getMap() == null || !station.getMap().getName().equalsIgnoreCase(map.getName())) {
             return 1.0;
@@ -499,8 +537,9 @@ public class SimulatorController implements Runnable, Serializable {
 
     /**
      * Calculates the cargo multiplier based on historical events.
+     * Events like pandemics and wars affect cargo generation rates.
      *
-     * @param events List of historical events
+     * @param events List of historical events affecting the simulation
      * @return The calculated cargo multiplier
      */
     private double calculateCargoMultiplier(List<String> events) {
@@ -510,10 +549,27 @@ public class SimulatorController implements Runnable, Serializable {
         return m;
     }
 
+    /**
+     * Calculates the cost multiplier based on historical events.
+     * Events like wars affect operational costs.
+     *
+     * @param events List of historical events affecting the simulation
+     * @return The calculated cost multiplier
+     */
     private double calculateCostMultiplier(List<String> events) {
         return events.contains("war") ? WAR_COST_MULTIPLIER : 1.0;
     }
 
+    /**
+     * Processes the simulation for a single year.
+     * Handles industry cargo generation, train operations, and financial calculations.
+     *
+     * @param industries List of industries to process
+     * @param trains List of trains to process
+     * @param cargoMultiplier Multiplier for cargo generation
+     * @param costMultiplier Multiplier for cost calculations
+     * @return Total earnings for the year
+     */
     private int processYearSimulation(List<Industry> industries, List<Train> trains, double cargoMultiplier, double costMultiplier) {
         int industryEarnings = processIndustries(industries, cargoMultiplier);
         int houseBlockEarnings = processHouseBlockCargo();
@@ -530,6 +586,14 @@ public class SimulatorController implements Runnable, Serializable {
         return totalEarnings;
     }
 
+    /**
+     * Processes all industries in the simulation.
+     * Handles cargo generation and distribution to stations.
+     *
+     * @param industries List of industries to process
+     * @param cargoMultiplier Multiplier for cargo generation
+     * @return Total earnings from industry operations
+     */
     private int processIndustries(List<Industry> industries, double cargoMultiplier) {
         List<Station> userStations = getUserStationsForMap();
         if (userStations.isEmpty()) {
@@ -555,18 +619,37 @@ public class SimulatorController implements Runnable, Serializable {
         return totalEarnings;
     }
 
+    /**
+     * Retrieves all stations belonging to the current user for the current map.
+     *
+     * @return List of stations owned by the user
+     */
     private List<Station> getUserStationsForMap() {
         return stRep.getAvailableStationsByMapName(map.getName()).stream()
                 .filter(s -> s.getOwnerPlayer() != null && s.getOwnerPlayer().equals(currentUser.getEmail()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Finds stations that overlap with an industry's area.
+     *
+     * @param stations List of stations to check
+     * @param industry The industry to check for overlap
+     * @return List of stations that overlap with the industry
+     */
     private List<Station> findOverlappingStations(List<Station> stations, Industry industry) {
         return stations.stream()
                 .filter(station -> hasStationIndustryOverlap(station, industry))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Checks if a station overlaps with an industry's area.
+     *
+     * @param station The station to check
+     * @param industry The industry to check for overlap
+     * @return true if there is an overlap, false otherwise
+     */
     private boolean hasStationIndustryOverlap(Station station, Industry industry) {
         double industryRadius = (double) industry.getArea() / 2;
         int industryX = industry.getPositionX();
@@ -580,6 +663,12 @@ public class SimulatorController implements Runnable, Serializable {
                 bounds.minY > industryY + industryRadius);
     }
 
+    /**
+     * Calculates the bounds of a station's area.
+     *
+     * @param station The station to calculate bounds for
+     * @return StationBounds object containing the station's area boundaries
+     */
     private StationBounds getStationBounds(Station station) {
         int w, h, minX, minY;
 
@@ -618,6 +707,12 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Calculates the amount of cargo generated by an industry.
+     *
+     * @param industry The industry to calculate cargo for
+     * @return The amount of cargo generated
+     */
     private int getIndustryCargoAmount(Industry industry) {
         String industryType = String.valueOf(industry.getIndustryType());
 
@@ -636,6 +731,13 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Adds cargo to a station while respecting its capacity limits.
+     *
+     * @param station The station to add cargo to
+     * @param cargoToAdd The amount of cargo to add
+     * @return The amount of cargo actually added
+     */
     private int addCargoToStationWithCapacity(Station station, int cargoToAdd) {
         int currentCapacity = station.getCargo();
         int maxCapacity = station.getMaxCargo();
@@ -650,6 +752,13 @@ public class SimulatorController implements Runnable, Serializable {
         return actualCargoAdded;
     }
 
+    /**
+     * Distributes cargo from an industry to a station based on cargo type.
+     *
+     * @param station The station to distribute cargo to
+     * @param industry The industry generating the cargo
+     * @param cargoAmount The amount of cargo to distribute
+     */
     private void distributeIndustryCargoByType(Station station, Industry industry, int cargoAmount) {
         String industryType = String.valueOf(industry.getIndustryType());
 
@@ -678,6 +787,13 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Calculates earnings from industry operations.
+     *
+     * @param industry The industry to calculate earnings for
+     * @param cargoAmount The amount of cargo processed
+     * @return The calculated earnings
+     */
     private int calculateIndustryEarnings(Industry industry, int cargoAmount) {
         String industryType = String.valueOf(industry.getIndustryType());
 
@@ -755,6 +871,10 @@ public class SimulatorController implements Runnable, Serializable {
         return total;
     }
 
+    /**
+     * Updates the demand for cargo at all stations.
+     * This is called at the end of each simulation year.
+     */
     private void updateStationDemand() {
         for (Station s : stRep.getAvailableStationsByMapName(map.getName())) {
             int lastDelivered = s.getLastYearDeliveries();
@@ -763,6 +883,11 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Checks for new locomotives that become available in the current year.
+     *
+     * @param year The current simulation year
+     */
     private void checkNewLocomotives(int year) {
         for (Locomotive l : locoRep.getAllLocomotives()) {
             if (l.getStartYear() == year && !locoRep.isAvailableToPlayer(l)) {
@@ -774,6 +899,10 @@ public class SimulatorController implements Runnable, Serializable {
         }
     }
 
+    /**
+     * Processes financial results for the current simulation period.
+     * Updates the financial controller with current earnings and costs.
+     */
     private void processFinancialResults() {
         int maintenance = 0, fuel = 0, deliveries = 0, track = 0;
 
@@ -797,6 +926,12 @@ public class SimulatorController implements Runnable, Serializable {
         financialController.addFinancialResults(track, maintenance, fuel, deliveries);
     }
 
+    /**
+     * Finds the closest station to an industry.
+     *
+     * @param i The industry to find the closest station for
+     * @return The closest station, or null if no station is found
+     */
     private Station findClosestStation(Industry i) {
         Station closest = null;
         int minDist = Integer.MAX_VALUE;
@@ -813,29 +948,29 @@ public class SimulatorController implements Runnable, Serializable {
     }
 
     /**
-     * Gets the map associated with this simulation.
+     * Retrieves the current map being simulated.
      *
-     * @return The map being used in the simulation.
+     * @return The current map
      */
     public Map getMap() {
         return map;
     }
 
     /**
-     * Gets the scenario associated with this simulation.
+     * Retrieves the current scenario being simulated.
      *
-     * @return The scenario being used in the simulation.
+     * @return The current scenario
      */
     public Scenario getScenario() {
         return scenario;
     }
 
     /**
-     * Finds an existing simulation for the given map and scenario.
+     * Finds a simulator instance for the given map and scenario.
      *
-     * @param map The map to search for.
-     * @param scenario The scenario to search for.
-     * @return An Optional containing the found Simulator, or empty if none exists.
+     * @param map The map to search for
+     * @param scenario The scenario to search for
+     * @return Optional containing the found simulator, or empty if not found
      */
     public Optional<Simulator> findBy(Map map, Scenario scenario) {
         return simRep.findBy(map, scenario, currentUser);
@@ -844,7 +979,7 @@ public class SimulatorController implements Runnable, Serializable {
     /**
      * Saves the current simulation state.
      *
-     * @param simulator The simulator instance to save.
+     * @param simulator The simulator instance to save
      */
     public void saveSimulation(Simulator simulator) {
         simRep.add(simulator);

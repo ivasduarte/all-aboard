@@ -102,6 +102,11 @@ public class ChangeStationTypeController {
         stationComboBox.getItems().setAll(selectedStations);
     }
 
+    /**
+     * Handles the station type change process.
+     * Validates the selected station and new type, checks budget availability,
+     * and performs the type change if all conditions are met.
+     */
     @FXML
     public void changeStationType() {
         Station station = stationComboBox.getValue();
@@ -150,14 +155,19 @@ public class ChangeStationTypeController {
         handleBackToMenu();
     }
 
+    /**
+     * Populates the orientation combo box with available station orientations.
+     * Used when changing to a station type that requires orientation specification.
+     */
     @FXML
-    private void setOrientationComboBox(){
-
+    private void setOrientationComboBox() {
         orientationComboBox.getItems().setAll(Station.Orientation.values());
-
     }
 
-
+    /**
+     * Handles navigation back to the player menu.
+     * Closes the current window and opens the player menu interface.
+     */
     @FXML
     private void handleBackToMenu() {
         try {
@@ -180,11 +190,20 @@ public class ChangeStationTypeController {
         }
     }
 
+    /**
+     * Handles the event when a station is selected from the combo box.
+     * Updates the available station types based on the selected station.
+     */
     @FXML
     private void onStationSelected() {
         updateStationTypes();
     }
 
+    /**
+     * Updates the available station types in the combo box based on the selected station.
+     * Only shows station types that are higher than the current station type.
+     * Calculates and displays the price difference for the upgrade.
+     */
     private void updateStationTypes() {
         stationTypeComboBox.getItems().clear();
         labelPriceDiff.setText("");

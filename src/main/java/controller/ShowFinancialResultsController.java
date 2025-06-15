@@ -17,6 +17,11 @@ import repositories.Repositories;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Controller responsible for displaying and managing financial results of the simulation.
+ * This class manages the user interface for viewing maintenance costs, fuel costs,
+ * and cargo deliveries throughout the simulation years.
+ */
 public class ShowFinancialResultsController {
     private FinancialResultsRepository financialResultsRepository;
     private Scenario scenario;
@@ -235,7 +240,8 @@ public class ShowFinancialResultsController {
     }
 
     /**
-     * This method is used so the player can return to the player menu.
+     * Navigates back to the player menu.
+     * Loads the player menu interface and closes the current window.
      */
     private void navigateToPlayerMenu() {
         try {

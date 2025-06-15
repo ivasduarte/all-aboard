@@ -248,9 +248,9 @@ public class UpgradeAStationController {
 
     /**
      * Updates the building combo box with available building types for the selected station.
-     * Filters buildings based on the current year and existing buildings at the station.
+     * Filters building types based on the current year and existing buildings at the station.
      *
-     * @param event The action event that triggered this method.
+     * @param event The action event that triggered this method
      */
     @FXML
     public void setBuildingComboBox(javafx.event.ActionEvent event) {
@@ -268,8 +268,9 @@ public class UpgradeAStationController {
     }
 
     /**
-     * Handles the upgrade action when the user clicks the upgrade button.
-     * Validates the selection, checks budget, and adds the building if all conditions are met.
+     * Handles the station upgrade process.
+     * Validates the selected station and building type, checks budget availability,
+     * and performs the upgrade if all conditions are met.
      */
     @FXML
     public void onUpgrade() {
@@ -305,7 +306,7 @@ public class UpgradeAStationController {
     /**
      * Checks if there are any stations available for upgrade in the current scenario.
      *
-     * @return {@code true} if there are stations available; {@code false} otherwise.
+     * @return true if there are stations available, false otherwise
      */
     public boolean hasStations() {
         return hasStations;
@@ -313,7 +314,7 @@ public class UpgradeAStationController {
 
     /**
      * Handles navigation back to the player menu.
-     * Closes the current window and opens the player menu with the current scenario.
+     * Closes the current window and opens the player menu interface.
      */
     @FXML
     private void handleBackToMenu() {

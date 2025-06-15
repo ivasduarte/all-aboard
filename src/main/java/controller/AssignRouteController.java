@@ -137,6 +137,12 @@ public class AssignRouteController {
         alert.showAndWait();
     }
 
+    /**
+     * Validates if there are enough stations and trains available for route assignment.
+     * A valid configuration requires at least 2 stations and at least 1 train.
+     *
+     * @return true if there are enough stations and trains for route assignment, false otherwise
+     */
     public boolean checkValidation()
     {
         List<Station> stations = this.map.getStations();
@@ -145,6 +151,10 @@ public class AssignRouteController {
         return stations.size() >= 2 && !trains.isEmpty();
     }
 
+    /**
+     * Handles navigation back to the player menu.
+     * Closes the current window and opens the player menu interface.
+     */
     @FXML
     private void handleBackToMenu() {
         try {
@@ -196,6 +206,13 @@ public class AssignRouteController {
         displayStations(train, stations);
     }
 
+    /**
+     * Displays information about the stations in a train's route.
+     * Prints details including station name, position, cargo availability, and demand.
+     *
+     * @param train The train whose route stations are being displayed
+     * @param stations The list of stations in the train's route
+     */
     public void displayStations(Train train, List<Station> stations)
     {
         System.out.println("\n\n[ASSIGNED ROUTE] Train '" + train.getLocomotive().getLocomotiveModel() +
