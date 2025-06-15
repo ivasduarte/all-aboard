@@ -1,6 +1,8 @@
 package controller;
 
 import domain.*;
+import dto.BuildingTypeDTO;
+import dto.BuildingTypeMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -119,6 +121,10 @@ public class UpgradeAStationController {
                 }
             }
         }
+    }
+
+    public List<BuildingTypeDTO> getFilteredAvailableBuildingTypesDTO(Station station, int year) {
+        return BuildingTypeMapper.toDTO(getFilteredAvailableBuildingTypes(station, year));
     }
 
     public void setData(Scenario scenario) {

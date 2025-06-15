@@ -4,6 +4,7 @@ import controller.UpgradeAStationController;
 import domain.*;
 
 import domain.Map;
+import dto.BuildingTypeDTO;
 
 import java.util.List;
 import java.util.Scanner;
@@ -82,12 +83,11 @@ public class UpgradeAStationUI implements Runnable {
         controller.removeObsoleteBuildings(selectedStation, currentYear);
 
         System.out.println("\nAVAILABLE BUILDINGS TO ADD TO STATION: ");
-        List<BuildingType> availableBuildings = controller.getFilteredAvailableBuildingTypes(selectedStation, currentYear);
-
+        List<BuildingTypeDTO> availableBuildings = controller.getFilteredAvailableBuildingTypesDTO(selectedStation, currentYear);
         if (availableBuildings.isEmpty()) {
             System.out.println("No available buildings for this station at this time.");
         } else {
-            for (BuildingType bt : availableBuildings) {
+            for (BuildingTypeDTO bt : availableBuildings) {
                 System.out.println(bt.getName() + " | " + bt.getCost() + "€ | Effect: " + bt.getEffect());
             }
         }

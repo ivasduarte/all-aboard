@@ -42,4 +42,19 @@ public  class BuildingTypeMapper {
                 dto.getAvailableYear()
         );
     }
+
+    public static List<BuildingType> toDomain(List<BuildingTypeDTO> dtoList) {
+        List<BuildingType> result = new ArrayList<>();
+        if (dtoList == null) return result;
+
+        for (BuildingTypeDTO dto : dtoList) {
+            if (dto != null) {
+                BuildingType bt = toDomain(dto);
+                if (bt != null) {
+                    result.add(bt);
+                }
+            }
+        }
+        return result;
+    }
 }
