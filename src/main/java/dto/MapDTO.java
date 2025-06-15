@@ -1,5 +1,7 @@
 package dto;
 
+import domain.Map;
+
 import java.util.Objects;
 
 /**
@@ -28,6 +30,21 @@ public class MapDTO {
         this.cellSizeKm = cellSizeInKm;
         this.height = height;
         this.width = width;
+    }
+
+    /**
+     * Converts a Map entity to its corresponding MapDTO.
+     *
+     * @param map the Map entity to convert
+     * @return a new MapDTO with the same property values
+     */
+    public static MapDTO toDTO(Map map) {
+        return new MapDTO(
+                map.getName(),
+                map.getCellSizeKm(),
+                map.getHeight(),
+                map.getWidth()
+        );
     }
 
     /**

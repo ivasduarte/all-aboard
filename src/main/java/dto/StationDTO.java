@@ -15,7 +15,7 @@ public class StationDTO {
     private List<String> buildings;
 
     private String mapName;
-    private int    mapId;
+    private int mapId;
     private String scenarioName;
     private Station.Orientation orientation;
 
@@ -35,26 +35,91 @@ public class StationDTO {
     }
 
 
-    public int getStationID() { return id; }
+    public int getStationID() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getStationType() { return type; }
+    public String getStationType() {
+        return type;
+    }
 
-    public int getX() { return x; }
+    public int getX() {
+        return x;
+    }
 
-    public int getY() { return y; }
+    public int getY() {
+        return y;
+    }
 
-    public int getCargo() { return cargo; }
+    public int getCargo() {
+        return cargo;
+    }
 
-    public List<String> getBuildings() { return List.copyOf(buildings); }
+    public List<String> getBuildings() {
+        return List.copyOf(buildings);
+    }
 
-    public Station.Orientation getOrientation() { return orientation; }
+    public Station.Orientation getOrientation() {
+        return orientation;
+    }
 
-    public String getMapName()      { return mapName; }
+    public String getMapName() {
+        return mapName;
+    }
 
-    public int    getMapId()        { return mapId; }
+    public int getMapId() {
+        return mapId;
+    }
 
-    public String getScenarioName() { return scenarioName; }
+    public String getScenarioName() {
+        return scenarioName;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setOrientation(Station.Orientation orientation) {
+        this.orientation = orientation;
+    }
+
+    public void setScenarioName(String scenarioName) {
+        this.scenarioName = scenarioName;
+    }
+
+    public void setMapId(int mapId) {
+        this.mapId = mapId;
+    }
+
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
+    }
+
+    public void setBuildings(List<String> buildings) {
+        this.buildings = buildings;
+    }
+
+    public void setCargo(int cargo) {
+        this.cargo = cargo;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

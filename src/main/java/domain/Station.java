@@ -686,4 +686,12 @@ public class Station implements Serializable {
     public int getSteelCargo() {
         return steelCargo;
     }
+
+    public void setCargo(int cargo) {
+        this.cargo = cargo;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
