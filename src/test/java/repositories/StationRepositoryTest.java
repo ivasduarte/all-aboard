@@ -80,4 +80,44 @@ class StationRepositoryTest {
         repo.save(station2);
         repo.displayAllStations();
     }
+
+    @Test
+    void listAllStationsReturnsEmptyInitially() {
+        List<Station> stations = repo.getStations();
+        assertNotNull(stations);
+        assertTrue(stations.isEmpty());
+    }
+
+    @Test
+    void listAllStationsReturnsAddedStations() {
+        Station s1 = new Station("Map", 1, 0, 0,
+                Station.StationType.STATION, Station.Orientation.NE, "Alpha", "Sc1");
+        Station s2 = new Station("Map", 1, 10, 5,
+                Station.StationType.DEPOT,   Station.Orientation.SE, "Beta",  "Sc1");
+
+        repo.save(s1);
+        repo.save(s2);
+
+        List<Station> stations = repo.getStations();
+        assertEquals(2, stations.size());
+        assertTrue(stations.contains(s1));
+        assertTrue(stations.contains(s2));
+    }
+
+    @Test
+    void copyFromReplacesContent() {
+        StationRepository otherRepo = new StationRepository();
+        Station s = new Station("Map", 1, 5, 5,
+                Station.StationType.TERMINAL, Station.Orientation.NW, "X", "Scenario");
+
+        otherRepo.save(s);
+        repo.save(new Station("Map", 1, 0, 0,
+                Station.StationType.STATION, Station.Orientation.SE, "Old", "Scenario"));
+
+        repo.copyFrom(otherRepo);
+
+        List<Station> stations = repo.getStations();
+        assertEquals(1, stations.size());
+        assertEquals("X", stations.get(0).getName());
+    }
 }
