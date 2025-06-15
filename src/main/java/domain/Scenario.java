@@ -22,6 +22,7 @@ public class Scenario implements Serializable {
     private double productionRate;
 
     private List<Train> trains;
+
     /**
      * Creates a new Scenario instance with the specified name, restrictions, and map.
      * The constructor initializes the scenario's attributes and performs a validation
@@ -33,7 +34,7 @@ public class Scenario implements Serializable {
      * @param restrictions The restrictions associated with the scenario. Cannot be null.
      * @param map          The map linked to the scenario. Cannot be null.
      */
-    public Scenario(String name, Restrictions restrictions, Map map, Budget budget){
+    public Scenario(String name, Restrictions restrictions, Map map, Budget budget) {
         if (budget == null) {
             throw new IllegalArgumentException("Budget cannot be null");
         }
@@ -88,7 +89,9 @@ public class Scenario implements Serializable {
      *
      * @return The current year of the scenario.
      */
-    public int getCurrentYear() { return currentYear;}
+    public int getCurrentYear() {
+        return currentYear;
+    }
 
     /**
      * Retrieves the production rate.
@@ -104,14 +107,18 @@ public class Scenario implements Serializable {
      *
      * @return the current trains of the scenario.
      */
-    public List<Train> getTrains() {return trains;}
+    public List<Train> getTrains() {
+        return trains;
+    }
 
     /**
      * Change the current year of the scenario.
      *
      * @param currentYear The new year when changing.
      */
-    public void setCurrentYear(int currentYear) { this.currentYear = currentYear; }
+    public void setCurrentYear(int currentYear) {
+        this.currentYear = currentYear;
+    }
 
     /**
      * Validates the name of the scenario against specific constraints.
@@ -120,12 +127,12 @@ public class Scenario implements Serializable {
      *
      * @return true if the name satisfies all constraints; false otherwise.
      */
-    public boolean validateName(){
-        if(name == null || name.trim().isEmpty()) {
+    public boolean validateName() {
+        if (name == null || name.trim().isEmpty()) {
             return false;
-        } else if(name.length() > 15) {
+        } else if (name.length() > 15) {
             return false;
-        } else if(!name.matches("[A-Za-z0-9_]+")) {
+        } else if (!name.matches("[A-Za-z0-9_]+")) {
             return false;
         }
         return true;
@@ -138,7 +145,7 @@ public class Scenario implements Serializable {
      *
      * @return true if the restrictions exist and are valid; false otherwise.
      */
-    public boolean validateRestrictions(){
+    public boolean validateRestrictions() {
         return restrictions != null && restrictions.validate();
     }
 
@@ -149,7 +156,7 @@ public class Scenario implements Serializable {
      *
      * @return true if the map is not null; false otherwise.
      */
-    public boolean hasValidMap(){
+    public boolean hasValidMap() {
         return map != null;
     }
 
@@ -158,7 +165,9 @@ public class Scenario implements Serializable {
      *
      * @param map The map to be associated with this scenario
      */
-    public void setMap(Map map) { this.map = map; }
+    public void setMap(Map map) {
+        this.map = map;
+    }
 
     /**
      * Retrieves the budget associated with this scenario.
@@ -261,26 +270,25 @@ public class Scenario implements Serializable {
 
     /**
      * Compares this scenario with the specified object for equality.
-     * Two scenarios are considered equal if they have the same name,
-     * as scenario names should be unique identifiers within the system.
+     * Two scenarios are considered equal if they are created for the same map and
+     * have the same name, as scenario names should be unique identifiers within the map.
      *
-     * @param obj the object to be compared for equality with this scenario
+     * @param o the object to be compared for equality with this scenario
      * @return {@code true} if the specified object is equal to this scenario;
-     *         {@code false} otherwise
+     * {@code false} otherwise
      * @see #hashCode()
      */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Scenario scenario = (Scenario) obj;
-        return Objects.equals(name, scenario.name);
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Scenario scenario = (Scenario) o;
+        return Objects.equals(name, scenario.name) && Objects.equals(map, scenario.map);
     }
 
     /**
      * Returns the hash code value for this scenario.
-     * The hash code is computed based on the scenario's name to ensure
-     * that scenarios with the same name have the same hash code,
+     * The hash code is computed based on the scenario's name and map to ensure
+     * that scenarios with the same name and map have the same hash code,
      * maintaining the general contract of hashCode in relation to equals.
      *
      * @return a hash code value for this scenario
@@ -288,6 +296,6 @@ public class Scenario implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, map);
     }
 }
