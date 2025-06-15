@@ -33,13 +33,13 @@ $$
 where:
 - \( Y \) is the revenue (dependent variable)
 - \( X \) is the quantity of a cargo type (independent variable)
-- \( $\beta_0$ \), \( $\beta_1$ \) are the regression coefficients
+- \( beta_0 \), \( beta_1 \) are the regression coefficients
 - \( E \) is the random error term
 
 
 - The **Pearson correlation coefficient** \( r \) is used to measure the strength and direction of the linear relationship between each cargo type and the revenue.
 
-- The **least squares method** is used to estimate the regression parameters \( $\beta_0$ \) and \( $\beta_1$ \), minimizing the sum of squared residuals:
+- The **least squares method** is used to estimate the regression parameters \( beta_0 \) and \( beta_1 \), minimizing the sum of squared residuals:
 
 $$
 \text{SQE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = S_{yy} - \frac{S_{xy}^2}{S_{xx}}
