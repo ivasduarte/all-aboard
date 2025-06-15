@@ -235,7 +235,6 @@ Step 3: Select the type of industry from the available options.
 Image 8: Add Industry screen
 
 
-
 ### Load Map from File
 
 This feature allows you to load a map from a file when choosing a map at login.
@@ -388,6 +387,9 @@ Step 5: Confirm the route assignment.
 
 ![Assign Train to Route](newImagesUserManual/assignTrainToRoute.png)
 Image 19: Assign Train to Route screen
+
+![Assign Train to Route](newImagesUserManual/assignTrainToRouteSuccess.png)
+Image 20: Assign Train to Route with filled fields screen
 
 ### Start Simulation 
 
