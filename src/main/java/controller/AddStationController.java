@@ -45,11 +45,6 @@ public class AddStationController {
     @FXML
     private TextField YPosTxt;
 
-    @FXML
-    private Slider XPosSli;
-    @FXML
-    private Slider YPosSli;
-
     private Map map;
     private Scenario scenario;
 
@@ -67,47 +62,36 @@ public class AddStationController {
         orientationCmb.setVisible(false);
         orientationLbl.setVisible(false);
         stationPriceLbl.setVisible(false);
-
-        XPosSli.setMin(1);
-        YPosSli.setMin(1);
-        XPosSli.setMax(map.getWidth());
-        YPosSli.setMax(map.getWidth());
-        XPosSli.setValue(XPosSli.getMin());
-        YPosSli.setValue(YPosSli.getMin());
     }
 
     @FXML
-    public void initialize()
-    {
-        XPosSli.valueProperty().addListener((observable, oldValue, newValue) -> {
-            XPosTxt.setText(Integer.toString(newValue.intValue()));
-        });
+    public void initialize() {}
 
-        YPosSli.valueProperty().addListener((observable, oldValue, newValue) -> {
-            YPosTxt.setText(Integer.toString(newValue.intValue()));
-        });
-
-        XPosTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-            onCharacterTyped(XPosTxt, XPosSli);
-        });
-
-        YPosTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-            onCharacterTyped(YPosTxt, YPosSli);
-        });
+    @FXML
+    public void handleXPosTxt() {
+        try {
+            int value = Integer.parseInt(XPosTxt.getText());
+            if (value < 1 || value > map.getWidth()) {
+                showAlert("Invalid X position", "X must be between 1 and " + map.getWidth());
+                XPosTxt.setText("");
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Invalid input", "X must be a number");
+            XPosTxt.setText("");
+        }
     }
 
-    public void onCharacterTyped(TextField textField, Slider slider)
-    {
-        try{
-            int value = Integer.parseInt(textField.getText());
-
-            if(value < slider.getMin() || value > slider.getMax())
-                textField.setText(String.valueOf(slider.getValue()));
-            else
-                slider.setValue(value);
-
-        } catch (Exception e) {
-            textField.setText(String.valueOf(slider.getValue()));
+    @FXML
+    public void handleYPosTxt() {
+        try {
+            int value = Integer.parseInt(YPosTxt.getText());
+            if (value < 1 || value > map.getHeight()) {
+                showAlert("Invalid Y position", "Y must be between 1 and " + map.getHeight());
+                YPosTxt.setText("");
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Invalid input", "Y must be a number");
+            YPosTxt.setText("");
         }
     }
 
@@ -139,22 +123,30 @@ public class AddStationController {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
         if (mapID == -1) {
-            showAlert("Map not valid", "The selected map isn't valid, select a valid map!");
+            errorAlert.setTitle("Map not valid");
+            errorAlert.setContentText("The selected map isn't valid, select a valid map!");
+            errorAlert.showAndWait();
             return;
         }
 
         if (stationTypeCmb.getValue() == null) {
-            showAlert("Station type not valid", "Station type isn't valid, select a valid type before continuing!");
+            errorAlert.setTitle("Station type not valid");
+            errorAlert.setContentText("Station type isn't valid, select a valid type before continuing!");
+            errorAlert.showAndWait();
             return;
         }
 
         if (stationTypeCmb.getValue().getSize() % 2 == 0 && orientationCmb.getValue() == null) {
-            showAlert("Orientation not valid", "Orientation isn't valid, select a valid orientation before continuing!");
+            errorAlert.setTitle("Orientation not valid");
+            errorAlert.setContentText("Orientation isn't valid, select a valid orientation before continuing!");
+            errorAlert.showAndWait();
             return;
         }
 
         if (stationTypeCmb.getValue().getPrice() > scenario.getBudget().getBudget()) {
-            showAlert("Insufficient funds", "Your budget is too low to afford the desired station!");
+            errorAlert.setTitle("Insufficient funds");
+            errorAlert.setContentText("Your budget is too low to afford the desired station!");
+            errorAlert.showAndWait();
             return;
         }
 
@@ -164,12 +156,6 @@ public class AddStationController {
             positionY = Integer.parseInt(YPosTxt.getText()) - 1;
         } catch (NumberFormatException e) {
             showAlert("Invalid coordinates", "Please enter valid numeric coordinates for X and Y.");
-            return;
-        }
-
-        if(positionX < 0 || positionX >= map.getWidth() || positionY < 0 || positionY >= map.getWidth())
-        {
-            showAlert("Invalid coordinates", "Coordinates are out of bounds");
             return;
         }
 
