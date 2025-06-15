@@ -5,12 +5,9 @@ import domain.Station;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 public class StationMapper {
-
-    private StationMapper() {}
 
     public static StationDTO toDTO(Station station) {
         if (station == null) return null;
@@ -27,7 +24,11 @@ public class StationMapper {
                 station.getPositionX(),
                 station.getPositionY(),
                 station.getCargo(),
-                buildingTypes
+                buildingTypes,
+                station.getMapName(),
+                station.getMapID(),
+                station.getScenarioName(),
+                station.getOrientation()
         );
     }
 
@@ -46,19 +47,19 @@ public class StationMapper {
     }
 
     public static Station toDomain(StationDTO dto) {
-        if (dto == null) return null;
 
-        Station.StationType type = Station.StationType.fromString(dto.getStationType());
+
+        Station.StationType stationType = Station.StationType.fromString(dto.getStationType());
 
         return new Station(
-                "UNKNOWN_MAP",
-                -1,
+                dto.getMapName(),
+                dto.getMapId(),
                 dto.getX(),
                 dto.getY(),
-                type,
-                Station.Orientation.NE,
+                stationType,
+                dto.getOrientation(),
                 dto.getName(),
-                "UNKNOWN_SCENARIO"
+                dto.getScenarioName()
         );
     }
 

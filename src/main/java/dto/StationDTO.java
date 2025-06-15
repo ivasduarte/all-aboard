@@ -1,5 +1,7 @@
 package dto;
 
+import domain.Station;
+
 import java.util.List;
 
 public class StationDTO {
@@ -12,7 +14,12 @@ public class StationDTO {
     private int cargo;
     private List<String> buildings;
 
-    public StationDTO(int id, String name, String type, int x, int y, int cargo, List<String> buildings) {
+    private String mapName;
+    private int    mapId;
+    private String scenarioName;
+    private Station.Orientation orientation;
+
+    public StationDTO(int id, String name, String type, int x, int y, int cargo, List<String> buildings, String mapName, int mapId, String scenarioName, Station.Orientation orientation) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -20,6 +27,10 @@ public class StationDTO {
         this.y = y;
         this.cargo = cargo;
         this.buildings = buildings;
+        this.mapName = mapName;
+        this.mapId = mapId;
+        this.scenarioName = scenarioName;
+        this.orientation = orientation;
 
     }
 
@@ -37,5 +48,13 @@ public class StationDTO {
     public int getCargo() { return cargo; }
 
     public List<String> getBuildings() { return List.copyOf(buildings); }
+
+    public Station.Orientation getOrientation() { return orientation; }
+
+    public String getMapName()      { return mapName; }
+
+    public int    getMapId()        { return mapId; }
+
+    public String getScenarioName() { return scenarioName; }
 
 }
