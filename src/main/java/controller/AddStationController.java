@@ -99,13 +99,15 @@ public class AddStationController {
     public void onCharacterTyped(TextField textField, Slider slider)
     {
         try{
-            int value = Integer.parseInt(textField.getText());
+            if(!textField.getText().isEmpty())
+            {
+                int value = Integer.parseInt(textField.getText());
 
-            if(value < slider.getMin() || value > slider.getMax())
-                textField.setText(String.valueOf(slider.getValue()));
-            else
-                slider.setValue(value);
-
+                if(value < slider.getMin() || value > slider.getMax())
+                    textField.setText(String.valueOf(slider.getValue()));
+                else
+                    slider.setValue(value);
+            }
         } catch (Exception e) {
             textField.setText(String.valueOf(slider.getValue()));
         }
@@ -160,8 +162,8 @@ public class AddStationController {
 
         int positionX, positionY;
         try {
-            positionX = Integer.parseInt(XPosTxt.getText()) - 1;
-            positionY = Integer.parseInt(YPosTxt.getText()) - 1;
+            positionX = (int) XPosSli.getValue() - 1;
+            positionY = (int) YPosSli.getValue() - 1;
         } catch (NumberFormatException e) {
             showAlert("Invalid coordinates", "Please enter valid numeric coordinates for X and Y.");
             return;
