@@ -103,13 +103,21 @@ public class AddStationController {
             {
                 int value = Integer.parseInt(textField.getText());
 
-                if(value < slider.getMin() || value > slider.getMax())
-                    textField.setText(String.valueOf(slider.getValue()));
+                if(value < slider.getMin())
+                {
+                    textField.setText(String.valueOf((int)slider.getMin()));
+                    slider.setValue(slider.getMin());
+                }
+                else if(value > slider.getMax())
+                {
+                    textField.setText(String.valueOf((int)slider.getMax()));
+                    slider.setValue(slider.getMax());
+                }
                 else
                     slider.setValue(value);
             }
         } catch (Exception e) {
-            textField.setText(String.valueOf(slider.getValue()));
+            textField.setText(String.valueOf((int)slider.getValue()));
         }
     }
 
