@@ -4,6 +4,7 @@ package domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a scenario with a specific name, associated restrictions, and map details.
@@ -256,5 +257,37 @@ public class Scenario implements Serializable {
             throw new IllegalArgumentException("Modification rate cannot be negative");
         }
         this.modificationRateFor = modificationRateFor;
+    }
+
+    /**
+     * Compares this scenario with the specified object for equality.
+     * Two scenarios are considered equal if they have the same name,
+     * as scenario names should be unique identifiers within the system.
+     *
+     * @param obj the object to be compared for equality with this scenario
+     * @return {@code true} if the specified object is equal to this scenario;
+     *         {@code false} otherwise
+     * @see #hashCode()
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Scenario scenario = (Scenario) obj;
+        return Objects.equals(name, scenario.name);
+    }
+
+    /**
+     * Returns the hash code value for this scenario.
+     * The hash code is computed based on the scenario's name to ensure
+     * that scenarios with the same name have the same hash code,
+     * maintaining the general contract of hashCode in relation to equals.
+     *
+     * @return a hash code value for this scenario
+     * @see #equals(Object)
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

@@ -69,24 +69,31 @@ public class ScenarioRepositoryTest {
 
     @Test
     void testAddDuplicateScenario() {
+        repo = new ScenarioRepository();
+
         LocalDate startDate = LocalDate.of(1870, 1, 1);
         LocalDate endDate = LocalDate.of(1880, 12, 31);
         List<String> locomotiveTypes = Collections.singletonList("steam");
         List<String> historicalEvents = Collections.singletonList("none");
         Restrictions restrictions = new Restrictions(startDate, endDate, locomotiveTypes, historicalEvents, new ArrayList<>());
         Budget budget = new Budget(10000);
-        Scenario duplicateScenario = new Scenario("TestScenario1", restrictions, testMap, budget);
 
-        int initialSize = repo.getScenarioList().size();
+        Scenario firstScenario = new Scenario("TestScenario1", restrictions, testMap, budget);
+        repo.add(firstScenario);
+
+        int sizeAfterFirst = repo.getScenarioList().size();
+        assertEquals(1, sizeAfterFirst);
+
+        Scenario duplicateScenario = new Scenario("TestScenario1", restrictions, testMap, budget);
         repo.add(duplicateScenario);
 
-        assertEquals(initialSize, repo.getScenarioList().size());
+        assertEquals(sizeAfterFirst, repo.getScenarioList().size());
     }
 
     @Test
     void testExistsByName() {
         assertTrue(repo.existsByName("TestScenario1"));
-        assertTrue(repo.existsByName("testscenario1")); // Should be case insensitive
+        assertTrue(repo.existsByName("testscenario1"));
         assertFalse(repo.existsByName("NonExistentScenario"));
     }
 
