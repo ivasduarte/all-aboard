@@ -232,4 +232,83 @@ public class ScenarioTest {
         assertNotNull(retrievedPorts);
         assertTrue(retrievedPorts.isEmpty());
     }
+
+    @Test
+    void testGetCurrentYear() {
+        assertEquals(1870, validScenario.getCurrentYear());
+    }
+
+    @Test
+    void testSetCurrentYear() {
+        validScenario.setCurrentYear(1875);
+        assertEquals(1875, validScenario.getCurrentYear());
+    }
+
+    @Test
+    void testGetProductionRate_DefaultIsZero() {
+        assertEquals(0.0, validScenario.getProductionRate());
+    }
+
+    @Test
+    void testGetTrainsInitiallyEmpty() {
+        assertNotNull(validScenario.getTrains());
+        assertTrue(validScenario.getTrains().isEmpty());
+    }
+
+    @Test
+    void testAddNewTrain() {
+        Locomotive locomotive = new Locomotive("T1", "Steam", 1945, 99999, 284, 28, 78, 85);
+
+        Train train = new Train(locomotive, 2001);
+        validScenario.addNewTrain(train);
+        assertEquals(1, validScenario.getTrains().size());
+        assertTrue(validScenario.getTrains().contains(train));
+    }
+
+    @Test
+    void testSetAndGetModificationRateFor() {
+        validScenario.setModificationRateFor(1.5);
+        assertEquals(1.5, validScenario.getModificationRateFor());
+    }
+
+    @Test
+    void testSetNegativeModificationRateFor_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> validScenario.setModificationRateFor(-1.0));
+    }
+
+    @Test
+    void testEquals_SameName() {
+        Scenario another = new Scenario("TestScenario", validRestrictions, testMap, testBudget);
+        assertEquals(validScenario, another);
+    }
+
+    @Test
+    void testEquals_DifferentName() {
+        Scenario another = new Scenario("AnotherScenario", validRestrictions, testMap, testBudget);
+        assertNotEquals(validScenario, another);
+    }
+
+    @Test
+    void testEquals_NullObject() {
+        assertNotEquals(validScenario, null);
+    }
+
+    @Test
+    void testEquals_DifferentClass() {
+        assertNotEquals(validScenario, "TestScenario");
+    }
+
+    @Test
+    void testHashCode_SameName() {
+        Scenario another = new Scenario("TestScenario", validRestrictions, testMap, testBudget);
+        assertEquals(validScenario.hashCode(), another.hashCode());
+    }
+
+    @Test
+    void testSetMap() {
+        Map newMap = new Map("NewMap", 200, 200, 1);
+        validScenario.setMap(newMap);
+        assertEquals(newMap, validScenario.getMap());
+    }
+
 }
