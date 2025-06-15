@@ -67,22 +67,15 @@ public class ListStationsController {
 
 
     public List<StationDTO> getStationsDTOList() {
-
-        List<StationDTO> dtoList = new ArrayList<>();
+        List<StationDTO> result = new ArrayList<>();
 
         for (Station s : StationRepo.getStations()) {
-
-            if (s.getMapName().equalsIgnoreCase(currentMap.getName()) &&
-                    s.getScenarioName().equalsIgnoreCase(currentScenario.getScenarioName())) {
-
+            if (s.getMapName().equalsIgnoreCase(currentMap.getName())) {
                 StationDTO dto = StationMapper.toDTO(s);
-
-                if (dto != null) {
-                    dtoList.add(dto);
-                }
+                if (dto != null) result.add(dto);
             }
         }
-        return dtoList;
+        return result;
     }
 
 

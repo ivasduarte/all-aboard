@@ -12,14 +12,16 @@ public class ListStationsUI implements Runnable {
 
     private final ListStationsController controller;
     private final Scanner sc = new Scanner(System.in);
-    private Map map;
+    private Scenario scenario;
 
-    public ListStationsUI(Map map) {
+    public ListStationsUI(Scenario scenario) {
         this.controller = new ListStationsController();
-        this.map = map;
+        this.scenario = scenario;
     }
 
     private void listStations() {
+
+        controller.setData(scenario);
 
         List<StationDTO> stations = controller.getStationsDTOList();
 

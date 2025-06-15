@@ -108,7 +108,7 @@ public class PlayerUI implements Runnable {
         options.add(new MenuItem("Build a Station", new AddStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade a Station", new UpgradeAStationUI(currentMap, currentScenario)));
         options.add(new MenuItem("Upgrade Type of Station", new ChangeStationTypeUI(currentMap, currentScenario)));
-        options.add(new MenuItem("List All Stations", new ListStationsUI(currentMap)));
+        options.add(new MenuItem("List All Stations", new ListStationsUI(currentScenario)));
         options.add(new MenuItem("Buy a Locomotive", new BuyLocomotiveUI(currentMap, currentScenario)));
         options.add(new MenuItem("Assign a Train to a Route", new AssignRouteUI(currentMap, currentScenario)));
         options.add(new MenuItem("Play Simulation", new SimulationUI(currentMap, currentScenario)));

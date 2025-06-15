@@ -12,8 +12,8 @@ participant ":ListStationsController" as CTRL
 participant ":Repositories" as Repos
 participant ":StationRepository" as StationRepo
 participant ":Scenario" as Scenario
-participant ":Map" as Map
 participant ":Station" as Station
+participant  ":StationMapper" as Mapper
 
 activate Player
 
@@ -52,20 +52,18 @@ activate StationRepo
 StationRepo --> CTRL : List<Station>
 deactivate StationRepo
 
-CTRL -> CTRL : filter stations by scenario and map
+CTRL -> CTRL : filter stations by map
+
+CTRL -> Mapper: toDTO(List<Station> stations)
+Mapper -> CTRL: stationDTOList
 
 alt stations list is not empty
-    CTRL --> UI : send filtered stations
+    CTRL --> UI : send filtered stationsDTO
     UI --> Player : display station list\n(ID, Type, Position, Buildings, Cargo)
 
     Player -> UI : select station
-    UI -> CTRL : send selected station
-    CTRL -> Station : get details
-    activate Station
-    Station --> CTRL : ID, Name, Type, Position, Cargo, Buildings
-    deactivate Station
-    CTRL --> UI : send station details
-    UI --> Player : display full station info
+    UI --> Player : display full station info (from StationDTO)
+
 
 else no stations found
     CTRL --> UI : send empty list

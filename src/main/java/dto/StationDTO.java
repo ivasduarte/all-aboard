@@ -36,6 +36,6 @@ public class StationDTO {
 
     public int getCargo() { return cargo; }
 
-    public List<String> getBuildings() { return buildings; }
+    public List<String> getBuildings() { return List.copyOf(buildings); }
 
 }

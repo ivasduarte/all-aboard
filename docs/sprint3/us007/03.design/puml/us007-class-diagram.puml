@@ -20,6 +20,23 @@ class Station {
   + getCargo(): int
 }
 
+class StationDTO {
+  + getStationID(): int
+  + getName(): String
+  + getStationType(): String
+  + getX(): int
+  + getY(): int
+  + getCargo(): int
+  + getBuildings(): List<String>
+}
+
+class StationMapper {
+  + toDTO(Station): StationDTO
+  + toDTO(List<Station>): List<StationDTO>
+  + toDomain(StationDTO): Station
+  + toDomain(List<StationDTO>): List<Station>
+}
+
 enum StationType {
   DEPOT
   STATION
@@ -78,7 +95,9 @@ interface Runnable <<interface>> {
   + run(): void
 }
 
-' Relationships with labels
+
+ListStationsController ..> StationMapper : uses
+ListStationsUI ..> StationDTO : displays
 
 ListStationsUI ..|> Runnable : implements
 ListStationsUI ..> ListStationsController : uses
