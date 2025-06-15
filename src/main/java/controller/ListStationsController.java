@@ -4,6 +4,8 @@ import domain.Building;
 import domain.Map;
 import domain.Scenario;
 import domain.Station;
+import dto.StationDTO;
+import dto.StationMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -62,6 +64,27 @@ public class ListStationsController {
     public ListStationsController() {
         this.StationRepo = Repositories.getInstance().getStationRepository();
     }
+
+
+    public List<StationDTO> getStationsDTOList() {
+
+        List<StationDTO> dtoList = new ArrayList<>();
+
+        for (Station s : StationRepo.getStations()) {
+
+            if (s.getMapName().equalsIgnoreCase(currentMap.getName()) &&
+                    s.getScenarioName().equalsIgnoreCase(currentScenario.getScenarioName())) {
+
+                StationDTO dto = StationMapper.toDTO(s);
+
+                if (dto != null) {
+                    dtoList.add(dto);
+                }
+            }
+        }
+        return dtoList;
+    }
+
 
     /**
      * Initializes the controller by populating the select box with a list of stations

@@ -1,59 +1,45 @@
 package presentation;
 
 import controller.ListStationsController;
-import domain.Building;
 import domain.Map;
-import domain.Station;
+import domain.Scenario;
+import dto.StationDTO;
 
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * User Interface class responsible for listing all stations of a given map,
- * showing their type, position, buildings, and stored cargo.
- */
 public class ListStationsUI implements Runnable {
 
+    private final ListStationsController controller;
+    private final Scanner sc = new Scanner(System.in);
     private Map map;
 
-    static Scanner ler = new Scanner(System.in);
-
-
-    /**
-     * Constructs the UI with the specified map.
-     *
-     * @param map the map to filter stations by
-     */
     public ListStationsUI(Map map) {
+        this.controller = new ListStationsController();
         this.map = map;
     }
 
-    /**
-     * Gets input and displays all available stations on the specified map,
-     * along with their buildings and cargo stored.
-     */
-    public void getInput() {
-        List<Station> stations = map.getStations();
+    private void listStations() {
+
+        List<StationDTO> stations = controller.getStationsDTOList();
 
         if (stations.isEmpty()) {
-            System.out.println("No stations found");
+            System.out.println("No stations found.");
             return;
         }
 
         System.out.println("\n\n------------------------- List of Stations -------------------------");
-
         for (int i = 0; i < stations.size(); i++) {
-            Station station = stations.get(i);
-            System.out.println((i + 1) + ". " + station.getName() + " | ID: " + station.getStationID()
-                    + " | Type: " + station.getStationType().getDisplayName()
-                    + " | Position: (" + station.getPositionX() + ", " + station.getPositionY() + ")");
+            StationDTO dto = stations.get(i);
+            System.out.printf("%d. %s | ID: %d | Type: %s | Position: (%d,%d)%n",
+                    i + 1, dto.getName(), dto.getStationID(), dto.getStationType(), dto.getX(), dto.getY());
         }
 
         System.out.print("\nSelect a station by number: ");
-        int index;
+        int idx;
         try {
-            index = Integer.parseInt(ler.nextLine()) - 1;
-            if (index < 0 || index >= stations.size()) {
+            idx = Integer.parseInt(sc.nextLine()) - 1;
+            if (idx < 0 || idx >= stations.size()) {
                 System.out.println("Invalid selection.");
                 return;
             }
@@ -62,32 +48,25 @@ public class ListStationsUI implements Runnable {
             return;
         }
 
-        Station selectedStation = stations.get(index);
+        StationDTO sel = stations.get(idx);
 
         System.out.println("\n--- Station Details ---");
-        System.out.println("Name: " + selectedStation.getName());
-        System.out.println("ID: " + selectedStation.getStationID());
-        System.out.println("Type: " + selectedStation.getStationType());
-        System.out.println("Position: (" + selectedStation.getPositionX() + ", " + selectedStation.getPositionY() + ")");
+        System.out.printf("Name: %s%n", sel.getName());
+        System.out.printf("ID: %d%n",   sel.getStationID());
+        System.out.printf("Type: %s%n", sel.getStationType());
+        System.out.printf("Position: (%d,%d)%n", sel.getX(), sel.getY());
+        System.out.println("Cargo stored: " + sel.getCargo());
 
-        System.out.println("\nExisting buildings of this station: ");
-        List<Building> buildings = selectedStation.getBuildings();
-        if (buildings.isEmpty()) {
+        System.out.println("\nExisting buildings:");
+        if (sel.getBuildings().isEmpty()) {
             System.out.println("No buildings found");
         } else {
-            for (Building building : buildings) {
-                System.out.println("- " + building.getBuildingType());
-            }
+            sel.getBuildings().forEach(b -> System.out.println("- " + b));
         }
-
-        System.out.println("\nCargo stored: " + selectedStation.getCargo());
     }
 
-    /**
-     * Starts the execution of the UI for listing stations.
-     */
     @Override
     public void run() {
-        getInput();
+        listStations();
     }
 }
