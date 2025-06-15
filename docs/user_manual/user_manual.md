@@ -393,20 +393,33 @@ Image 19: Assign Train to Route screen
 
 This feature allows you to begin the operation of your assigned train routes, simulating the transportation of cargoes between the selected stations.
 
-Step 1: Select **"Start Simulation"** from the Player Menu.
+Step 1: Select **"Play Simulation"** from the Player Menu.
 
-Step 2: Review the list of assigned trains and their routes.
+Step 2: Monitor the trains as they move along their routes, picking up and delivering cargoes at each station.
 
-Step 3: Choose the train or trains you want to include in the simulation.
+![Start Simulation](newImagesUserManual/simulationBeg.png)
 
-Step 4: Click **"Start"** to initiate the simulation process.
-
-Step 5: Monitor the trains as they move along their routes, picking up and delivering cargoes at each station.
-
-![Start Simulation](newImagesUserManual/startSimulation.png)
-Image 20: Simulation in Progress screen
+Image 20: Start of simulation
 
 During the simulation, you can view real-time status updates for each train, including current location, cargo load, and estimated time to arrival at the next station.
+
+![Simulation Running Example](newImagesUserManual/simExample.png)
+
+Image 21: Example of simulation running.
+
+If wished, the player can pause simulation and navigate menu options while simulation is paused.
+
+![Paused Simulation](newImagesUserManual/simPaused.png)
+
+Image 22: Example of simulation paused, and Player Menu available for navigation.
+
+Once the player wishes to return to the simulation, they must click **the Resume** button.
+
+![Resume Simulation](newImagesUserManual/simResumed.png)
+
+Image 23: Example of resumed simulation.
+
+Once the player wishes to end and save the simulation, they must press the **Stop and Save** button and simulation will be automatically saved.
 
 # Troubleshooting
 
