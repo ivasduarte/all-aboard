@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class BuildingTypeMapper {
+public  class BuildingTypeMapper {
 
     private BuildingTypeMapper() {}
 
